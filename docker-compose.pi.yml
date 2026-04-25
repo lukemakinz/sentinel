@@ -1,0 +1,116 @@
+version: "3.9"
+
+# Raspberry Pi deployment — ARM64, SQLite (no postgres), production frontend
+# Run on Pi: ./deploy-pi.sh
+# Access: http://<pi-ip> from any device on your local network
+
+x-backend-base: &backend-base
+  build:
+    context: ./backend
+    dockerfile: Dockerfile.pi
+  volumes:
+    - ./backend:/app
+    - db_data:/app/db         # SQLite persisted here
+  env_file:
+    - .env
+  depends_on:
+    redis:
+      condition: service_healthy
+  restart: unless-stopped
+
+services:
+
+  redis:
+    image: redis:7-alpine
+    platform: linux/arm64/v8
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  backend:
+    <<: *backend-base
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py collectstatic --noinput &&
+             gunicorn sentinel.wsgi:application
+               --bind 0.0.0.0:8000
+               --workers 2
+               --timeout 120
+               --max-requests 1000
+               --max-requests-jitter 50"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - db_data:/app/db
+      - static_files:/app/staticfiles
+
+  celery_worker:
+    <<: *backend-base
+    command: >
+      celery -A sentinel worker
+        --loglevel=info
+        --concurrency=2
+        --max-memory-per-child=200000
+    depends_on:
+      backend:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  celery_beat:
+    <<: *backend-base
+    command: >
+      celery -A sentinel beat
+        --loglevel=info
+        --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    depends_on:
+      backend:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  ingester:
+    <<: *backend-base
+    command: python manage.py run_ingester
+    depends_on:
+      backend:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    platform: linux/arm64/v8
+    volumes:
+      - frontend_dist:/usr/share/nginx/html
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    platform: linux/arm64/v8
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.pi.conf:/etc/nginx/conf.d/default.conf:ro
+      - static_files:/var/www/static:ro
+      - frontend_dist:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+      - frontend
+    restart: unless-stopped
+
+volumes:
+  redis_data:
+  db_data:        # SQLite file — persists across restarts
+  static_files:   # Django collectstatic
+  frontend_dist:  # Built React app — served by nginx

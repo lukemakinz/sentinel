@@ -1,0 +1,118 @@
+from datetime import datetime, timezone
+from unittest.mock import patch, MagicMock
+
+from django.test import TestCase, override_settings
+
+from l1_filter.scanner import L1Scanner
+from l1_filter.models import L1Result
+
+
+MOCK_LONG = (True, {'direction': 'LONG', 'ema50': 1500, 'ema200': 1200})
+MOCK_PASS = (True, {})
+MOCK_FAIL = (False, {})
+MOCK_KILLZONE = (True, {'session': 'london'})
+MOCK_BTC      = (True, {'btc_trend': 'bullish'})
+MOCK_FUNDING  = (True, {'funding_rate': 0.0001})
+MOCK_ADX      = (True, {'adx_value': 28.5, 'atr': 50.0})
+MOCK_CVD      = (True, {'fvg_zone': (1490, 1510)})
+MOCK_SWEEP    = (True, {'swept_level': 1480.0, 'nearest_liquidity': 1480.0})
+MOCK_PREMIUM  = (True, {})
+MOCK_PATTERN  = (True, {})
+MOCK_SQUEEZE  = (True, {})
+MOCK_CHOCH    = (True, {})
+MOCK_DIVERG   = (True, {})
+MOCK_EMA_X    = (True, {})
+MOCK_VOLSPIKE = (True, {'volume_ratio': 2.1})
+MOCK_VWAP     = (True, {'vwap': 1495.0})
+
+ALL_PASS_PATCHES = {
+    'l1_filter.scanner.check_killzone':          MOCK_KILLZONE,
+    'l1_filter.scanner.check_htf_trend':         MOCK_LONG,
+    'l1_filter.scanner.check_btc_correlation':   MOCK_BTC,
+    'l1_filter.scanner.check_funding_rate':      MOCK_FUNDING,
+    'l1_filter.scanner.check_adx':               MOCK_ADX,
+    'l1_filter.scanner.check_liquidity_sweep':   MOCK_SWEEP,
+    'l1_filter.scanner.check_fvg_ob':            MOCK_CVD,
+    'l1_filter.scanner.check_premium_discount':  MOCK_PREMIUM,
+    'l1_filter.scanner.check_classical_pattern': MOCK_PATTERN,
+    'l1_filter.scanner.check_atr_squeeze':       MOCK_SQUEEZE,
+    'l1_filter.scanner.check_choch':             MOCK_CHOCH,
+    'l1_filter.scanner.check_momentum_divergence': MOCK_DIVERG,
+    'l1_filter.scanner.check_ema_crossover':     MOCK_EMA_X,
+    'l1_filter.scanner.check_volume_spike':      MOCK_VOLSPIKE,
+    'l1_filter.scanner.check_vwap':              MOCK_VWAP,
+}
+
+
+def apply_patches(test_func):
+    """Stack all gate patches onto a test method."""
+    for target, val in reversed(list(ALL_PASS_PATCHES.items())):
+        test_func = patch(target, return_value=val)(test_func)
+    return test_func
+
+
+@override_settings(TRADING_PAIRS=['BTCUSDT'])
+class L1ScannerTest(TestCase):
+    def setUp(self):
+        self.scanner = L1Scanner()
+        self.scanner._get_candles = MagicMock(return_value=[
+            {'open': 1000, 'high': 1010, 'low': 990, 'close': 1005, 'volume': 1000}
+        ] * 30)
+        self.scanner._get_latest_funding_rate = MagicMock(return_value=0.0001)
+
+    @apply_patches
+    def test_all_gates_pass_returns_trade_context(self, *mocks):
+        ctx = self.scanner.scan('BTCUSDT', now=datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc))
+        self.assertIsNotNone(ctx)
+        self.assertEqual(ctx['symbol'], 'BTCUSDT')
+        self.assertEqual(ctx['direction'], 'LONG')
+        self.assertIn('gates_a', ctx)
+        self.assertIn('gates_b', ctx)
+        self.assertIn('gates_c', ctx)
+
+    @apply_patches
+    def test_all_gates_pass_saves_l1result(self, *mocks):
+        self.scanner.scan('BTCUSDT', now=datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc))
+        result = L1Result.objects.get(symbol='BTCUSDT')
+        self.assertTrue(result.passed)
+
+    def test_htf_trend_fail_returns_none(self):
+        with patch('l1_filter.scanner.check_htf_trend', return_value=MOCK_FAIL):
+            ctx = self.scanner.scan('BTCUSDT')
+        self.assertIsNone(ctx)
+
+    def test_htf_trend_fail_saves_failed_l1result(self):
+        with patch('l1_filter.scanner.check_htf_trend', return_value=MOCK_FAIL):
+            self.scanner.scan('BTCUSDT')
+        result = L1Result.objects.get(symbol='BTCUSDT')
+        self.assertFalse(result.passed)
+
+    @patch('l1_filter.scanner.check_htf_trend', return_value=MOCK_LONG)
+    @patch('l1_filter.scanner.check_killzone', return_value=MOCK_FAIL)
+    def test_killzone_fail_returns_none(self, *_):
+        ctx = self.scanner.scan('BTCUSDT')
+        self.assertIsNone(ctx)
+
+    @apply_patches
+    def test_only_2_b_gates_pass_returns_none(self, *mocks):
+        # Override 3 B gates to fail
+        with patch('l1_filter.scanner.check_premium_discount', return_value=MOCK_FAIL), \
+             patch('l1_filter.scanner.check_classical_pattern', return_value=MOCK_FAIL), \
+             patch('l1_filter.scanner.check_atr_squeeze', return_value=MOCK_FAIL):
+            ctx = self.scanner.scan('BTCUSDT', now=datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc))
+        self.assertIsNone(ctx)
+
+    @apply_patches
+    def test_only_1_c_gate_passes_returns_none(self, *mocks):
+        with patch('l1_filter.scanner.check_momentum_divergence', return_value=MOCK_FAIL), \
+             patch('l1_filter.scanner.check_ema_crossover', return_value=MOCK_FAIL), \
+             patch('l1_filter.scanner.check_volume_spike', return_value=MOCK_FAIL), \
+             patch('l1_filter.scanner.check_vwap', return_value=MOCK_FAIL):
+            ctx = self.scanner.scan('BTCUSDT', now=datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc))
+        self.assertIsNone(ctx)
+
+    @apply_patches
+    def test_trade_context_contains_required_fields(self, *mocks):
+        ctx = self.scanner.scan('BTCUSDT', now=datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc))
+        for field in ('symbol', 'timestamp', 'direction', 'adx_value', 'funding_rate', 'regime'):
+            self.assertIn(field, ctx, f"Missing field: {field}")

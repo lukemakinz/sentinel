@@ -1,0 +1,139 @@
+from django.test import TestCase
+
+from l1_filter.gates_c import (
+    check_choch, check_momentum_divergence,
+    check_ema_crossover, check_volume_spike, check_vwap,
+)
+from l1_filter.tests.helpers import make_candles, uptrend, downtrend, trending_with_spike_volume
+
+
+def choch_long_candles():
+    """Structure: lower lows then a higher low (CHoCH bullish)."""
+    # Swing lows: 950, 940, 930 then 935 (higher low = CHoCH)
+    closes = [1000, 970, 1010, 950, 1010, 940, 1010, 935, 1050, 1060]
+    highs  = [1010, 980, 1020, 960, 1020, 950, 1020, 945, 1060, 1070]
+    lows   = [990,  960, 1000, 945, 1000, 935, 1000, 930, 1040, 1050]
+    return make_candles(closes, highs=highs, lows=lows)
+
+
+def choch_short_candles():
+    """Structure: higher highs then a lower high (CHoCH bearish)."""
+    closes = [1000, 1030, 990, 1050, 990, 1060, 990, 1055, 950, 940]
+    highs  = [1010, 1040, 1000, 1060, 1000, 1070, 1000, 1065, 960, 950]
+    lows   = [990,  1020, 980,  1040, 980,  1050, 980,  1045, 940, 930]
+    return make_candles(closes, highs=highs, lows=lows)
+
+
+def bullish_divergence_candles():
+    """Price makes lower low; RSI makes higher low — bullish divergence.
+
+    Structure needed for detect_divergence(lookback=20):
+    - First 10 of last-20 window: sharp drop (RSI hits floor ~5)
+    - Last 10 of last-20 window: choppy slow decline to new price low (RSI ~20-30)
+    RSI higher on second dip despite price being lower = bullish divergence.
+    """
+    preamble   = [1000.0] * 10                              # flat baseline → RSI ~50-100
+    pre_drop   = [1000 - i * 5  for i in range(10)]        # gentle decline, RSI ~40
+    sharp_drop = [950  - i * 12 for i in range(10)]        # sharp: 950→842, RSI → ~5
+    # Choppy decline to new price low (842): mixed up/down → keeps RSI above first dip
+    slow_drop  = [838, 835, 838, 832, 836, 829, 833, 826, 830, 820]
+    return make_candles(preamble + pre_drop + sharp_drop + slow_drop)
+
+
+def ema_crossover_long():
+    """EMA9 crosses above EMA21: first ranging, then strong surge."""
+    # Start with a flat/declining period, then strong uptrend forces EMA9 > EMA21
+    flat_part = [1000.0] * 15
+    surge_part = [1000 + i * 15 for i in range(15)]
+    closes = flat_part + surge_part
+    return make_candles(closes)
+
+
+def ema_crossover_short():
+    """EMA9 crosses below EMA21: surge up then strong drop."""
+    surge_part = [1000 + i * 15 for i in range(15)]
+    drop_part  = [1210 - i * 15 for i in range(15)]
+    closes = surge_part + drop_part
+    return make_candles(closes)
+
+
+class ChoCHTest(TestCase):
+    def test_bullish_choch_passes_for_long(self):
+        passed, data = check_choch(choch_long_candles(), 'LONG')
+        self.assertTrue(passed)
+
+    def test_bearish_choch_passes_for_short(self):
+        passed, data = check_choch(choch_short_candles(), 'SHORT')
+        self.assertTrue(passed)
+
+    def test_no_choch_fails(self):
+        passed, _ = check_choch(uptrend(20), 'SHORT')
+        self.assertFalse(passed)
+
+    def test_insufficient_data_fails(self):
+        passed, _ = check_choch(uptrend(3), 'LONG')
+        self.assertFalse(passed)
+
+
+class MomentumDivergenceTest(TestCase):
+    def test_bullish_divergence_passes_for_long(self):
+        passed, _ = check_momentum_divergence(bullish_divergence_candles(), 'LONG')
+        self.assertTrue(passed)
+
+    def test_insufficient_data_fails(self):
+        passed, _ = check_momentum_divergence(uptrend(10), 'LONG')
+        self.assertFalse(passed)
+
+
+class EMACrossoverTest(TestCase):
+    def test_bullish_crossover_passes_for_long(self):
+        passed, data = check_ema_crossover(ema_crossover_long(), 'LONG')
+        self.assertTrue(passed)
+
+    def test_bearish_crossover_passes_for_short(self):
+        passed, _ = check_ema_crossover(ema_crossover_short(), 'SHORT')
+        self.assertTrue(passed)
+
+    def test_no_crossover_fails(self):
+        # Flat trend — EMA9 never crosses EMA21
+        passed, _ = check_ema_crossover(uptrend(30), 'SHORT')
+        self.assertFalse(passed)
+
+    def test_insufficient_data_fails(self):
+        passed, _ = check_ema_crossover(uptrend(5), 'LONG')
+        self.assertFalse(passed)
+
+
+class VolumeSpikeTest(TestCase):
+    def test_volume_spike_passes(self):
+        passed, data = check_volume_spike(trending_with_spike_volume(30))
+        self.assertTrue(passed)
+        self.assertGreater(data['volume_ratio'], 1.5)
+
+    def test_no_spike_fails(self):
+        passed, _ = check_volume_spike(uptrend(30))
+        self.assertFalse(passed)
+
+    def test_insufficient_data_fails(self):
+        passed, _ = check_volume_spike(uptrend(5))
+        self.assertFalse(passed)
+
+
+class VWAPTest(TestCase):
+    def test_price_above_vwap_passes_for_long(self):
+        # Uptrend: last close above VWAP
+        passed, data = check_vwap(uptrend(50), 'LONG')
+        self.assertTrue(passed)
+        self.assertIsNotNone(data.get('vwap'))
+
+    def test_price_below_vwap_passes_for_short(self):
+        passed, _ = check_vwap(downtrend(50), 'SHORT')
+        self.assertTrue(passed)
+
+    def test_price_below_vwap_fails_for_long(self):
+        passed, _ = check_vwap(downtrend(50), 'LONG')
+        self.assertFalse(passed)
+
+    def test_insufficient_data_fails(self):
+        passed, _ = check_vwap(uptrend(5), 'LONG')
+        self.assertFalse(passed)

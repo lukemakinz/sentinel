@@ -1,0 +1,34 @@
+# Django
+Django>=5.1,<5.2
+djangorestframework>=3.15,<4.0
+django-cors-headers>=4.3,<5.0
+django-celery-beat>=2.6,<3.0
+gunicorn>=22.0,<23.0
+
+# Database
+psycopg2-binary>=2.9,<3.0
+django-timescaledb>=0.2
+
+# Celery + Redis
+celery>=5.4,<6.0
+redis>=5.0,<6.0
+
+# Binance
+python-binance>=1.0.19
+websockets>=12.0,<13.0
+aiohttp>=3.9,<4.0
+
+# Data analysis
+numpy>=1.26,<2.0
+pandas>=2.2,<3.0
+TA-Lib>=0.4.28
+
+# Agno (AI agent framework)
+agno>=1.0
+
+# Anthropic (Claude API)
+anthropic>=0.40,<1.0
+
+# Utilities
+python-decouple>=3.8,<4.0
+requests>=2.31,<3.0

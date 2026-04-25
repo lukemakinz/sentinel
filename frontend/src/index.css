@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#0a0a0b] text-gray-200 font-sans antialiased overflow-x-hidden m-0 p-0 h-screen;
+  }
+
+  #root {
+    @apply h-full;
+  }
+}
+
+@layer components {
+
+  /* Layout utilities */
+  .app-layout {
+    @apply flex h-screen overflow-hidden;
+    background: linear-gradient(135deg, #0a0a0b, #121214);
+  }
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    padding: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .page-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Glass panels */
+  .glass-panel {
+    background: rgba(21, 21, 24, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+  }
+
+  .glass-panel:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    background: rgba(26, 26, 30, 0.9);
+  }
+
+  /* Primary button */
+  .btn-primary {
+    background: linear-gradient(90deg, #D4AF37, #b8962d);
+    color: #0a0a0b;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.95);
+  }
+
+  /* Typography accents */
+  .text-glow-cyan {
+    background: linear-gradient(90deg, #00E5FF, #00b8cc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-glow-gold {
+    color: #D4AF37;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Base animations */
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite ease-in-out;
+}
