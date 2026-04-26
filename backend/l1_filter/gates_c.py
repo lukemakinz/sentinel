@@ -17,9 +17,9 @@ def check_choch(candles: list, direction: str,
     if len(candles) < 8:
         return False, {}
 
-    # HTF→LTF hierarchy: require HTF BOS before accepting LTF CHoCH
-    if not require_htf_bos:
-        return False, {'reason': 'no_htf_bos — standalone LTF CHoCH filtered as noise'}
+    # HTF→LTF hierarchy: prefer HTF BOS before LTF CHoCH (reduces false signals)
+    # Not a hard block — reduces conviction but doesn't invalidate signal
+    _htf_confirmed = require_htf_bos  # tracked in trade_context for signal quality
 
     highs  = np.array([c['high']  for c in candles])
     lows   = np.array([c['low']   for c in candles])

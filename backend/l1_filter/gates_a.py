@@ -63,15 +63,15 @@ def check_htf_trend(candles: list) -> tuple[bool, dict]:
             lh = swing_highs[-1][1] < swing_highs[-2][1]
             ll = swing_lows[-1][1]  < swing_lows[-2][1]
 
-            # Strong: 2 consecutive confirms. Weak: single. Only strong passes.
-            if (hh2 and hl) or (hh and hl2):
+            # Minimum 1 consecutive pair: single HH + single HL sufficient for bias
+            if hh and hl:
                 return True, {
                     'direction': 'LONG',
                     'basis': 'structure_HH_HL',
                     'last_hh': round(swing_highs[-1][1], 4),
                     'last_hl': round(swing_lows[-1][1], 4),
                 }
-            if (lh2 and ll) or (lh and ll2):
+            if lh and ll:
                 return True, {
                     'direction': 'SHORT',
                     'basis': 'structure_LH_LL',

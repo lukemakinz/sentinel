@@ -5,10 +5,10 @@ STRATEGIES = {
         'name':            'SMC Sweep',
         'description':     'Liquidity sweep → ChoCH → FVG entry',
         'gates_a_all':     True,
-        'gates_b_must':    ['B1', 'B2'],
-        'gates_b_min':     3,    # min 3/4 active B gates (B4 removed)
-        'gates_c_must':    ['C1'],
-        'gates_c_min':     2,
+        'gates_b_must':    ['B1', 'B2'],  # sweep + FVG = core ICT setup
+        'gates_b_min':     2,             # B1+B2 sufficient (optional: B3/B5 for higher conviction)
+        'gates_c_must':    ['C1'],        # CHoCH is the trigger
+        'gates_c_min':     1,             # CHoCH alone confirms reversal
     },
     'S2': {
         'name':            'Order Flow',

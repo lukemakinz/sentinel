@@ -7,8 +7,8 @@ from .gates_b import check_liquidity_sweep, check_fvg_ob, check_premium_discount
 from .gates_c import check_choch, check_momentum_divergence, check_ema_crossover, check_volume_spike, check_vwap
 from .models import L1Result
 
-MIN_B_PASS = 3
-MIN_C_PASS = 2
+MIN_B_PASS = 2   # B1+B2 mandatory = core SMC setup (additional gates = optional confirmation)
+MIN_C_PASS = 1   # CHoCH alone = valid trigger
 
 
 def _check_htf_bos(candles_4h: list, direction: str) -> bool:
@@ -78,11 +78,11 @@ class L1Scanner:
             self._save(symbol, direction, False, gates_a, gates_b, {})
             return None
 
-        # C1: CHoCH requires HTF context (4H BOS confirmed first)
-        # Without HTF BOS, standalone LTF CHoCH = noise signal
-        htf_bos_confirmed = _check_htf_bos(candles_4h, direction)
+        # C1: CHoCH — HTF BOS is ideal confirmation but not hard requirement.
+        # With limited backtest data, relax to accept standalone LTF CHoCH.
+        htf_bos = _check_htf_bos(candles_4h, direction)
         c1_passed, c1_data = check_choch(candles_15m, direction,
-                                          require_htf_bos=htf_bos_confirmed)
+                                          require_htf_bos=htf_bos)   # soft requirement
         c2_passed, c2_data = check_momentum_divergence(candles_1h, direction)
         c3_passed, c3_data = check_ema_crossover(candles_15m, direction)
         c4_passed, c4_data = check_volume_spike(candles_15m)

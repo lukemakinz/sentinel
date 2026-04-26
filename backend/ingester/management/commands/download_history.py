@@ -21,7 +21,7 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 BINANCE_REST = getattr(settings, 'BINANCE_REST_URL', 'https://fapi.binance.com')
-INTERVALS    = ['1m', '5m', '15m', '1h', '4h']
+INTERVALS    = ['1m', '5m', '15m', '1h', '4h', '1d']
 MAX_PER_REQ  = 1500   # Binance max
 
 

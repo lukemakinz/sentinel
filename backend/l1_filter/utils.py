@@ -122,6 +122,10 @@ def compute_choppiness_index(candles: list, period: int = 14) -> float:
 
 
 def is_trending(candles: list, period: int = 14) -> tuple[bool, float]:
-    """Returns (is_trending, choppiness_index). Trending when CI < 50."""
+    """
+    Returns (is_trending, choppiness_index).
+    Standard thresholds: CI < 38.2 = strong trend | CI 38.2-61.8 = moderate | CI > 61.8 = choppy.
+    We use 61.8 as the gate threshold (industry standard, not arbitrary 50).
+    """
     ci = compute_choppiness_index(candles, period)
-    return ci < 50.0, ci
+    return ci < 61.8, ci

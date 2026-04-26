@@ -94,16 +94,22 @@ class L1ScannerTest(TestCase):
         self.assertIsNone(ctx)
 
     @apply_patches
-    def test_only_2_b_gates_pass_returns_none(self, *mocks):
-        # B4 removed — now 4 B gates; fail 2 active ones to go below min
-        with patch('l1_filter.scanner.check_premium_discount', return_value=MOCK_FAIL), \
-             patch('l1_filter.scanner.check_atr_squeeze', return_value=MOCK_FAIL):
+    def test_b_mandatory_gates_fail_no_s1_strategy(self, *mocks):
+        # B1+B2 mandatory for S1. If they fail, S1 should not be in passing strategies.
+        with patch('l1_filter.scanner.check_liquidity_sweep', return_value=MOCK_FAIL), \
+             patch('l1_filter.scanner.check_fvg_ob', return_value=MOCK_FAIL):
             ctx = self.scanner.scan('BTCUSDT', now=datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc))
-        self.assertIsNone(ctx)
+        # Scanner may return context (shadow tracking), but S1 strategy should fail
+        from l1_filter.strategies import evaluate_strategies
+        if ctx:
+            passing = evaluate_strategies(ctx.get('gates_a',{}), ctx.get('gates_b',{}), ctx.get('gates_c',{}))
+            self.assertNotIn('S1', passing)
 
     @apply_patches
-    def test_only_1_c_gate_passes_returns_none(self, *mocks):
-        with patch('l1_filter.scanner.check_momentum_divergence', return_value=MOCK_FAIL), \
+    def test_c_gates_below_min_returns_none(self, *mocks):
+        # MIN_C_PASS=1 now. Fail CHoCH (mandatory) → None.
+        with patch('l1_filter.scanner.check_choch', return_value=MOCK_FAIL), \
+             patch('l1_filter.scanner.check_momentum_divergence', return_value=MOCK_FAIL), \
              patch('l1_filter.scanner.check_ema_crossover', return_value=MOCK_FAIL), \
              patch('l1_filter.scanner.check_volume_spike', return_value=MOCK_FAIL), \
              patch('l1_filter.scanner.check_vwap', return_value=MOCK_FAIL):

@@ -98,6 +98,15 @@ log "Running migrations..."
 python manage.py migrate --noinput 2>&1 | grep -E "Apply|OK|No migration" || true
 ok "Migrations done ✓"
 
+# ── Cleanup stale Celery Beat tasks (analysts/consensus removed from pipeline) ─
+log "Cleaning stale periodic tasks..."
+python manage.py shell -c "
+from django_celery_beat.models import PeriodicTask
+dead = ['run-fast-analysts','run-medium-analysts','run-llm-analyst','run-consensus']
+n, _ = PeriodicTask.objects.filter(name__in=dead).delete()
+if n: print(f'  Removed {n} stale tasks')
+" 2>/dev/null || true
+
 # ── Superuser (first run only) ───────────────────────────────────────────────
 USER_COUNT=$(python manage.py shell -c \
     "from django.contrib.auth.models import User; print(User.objects.count())" \

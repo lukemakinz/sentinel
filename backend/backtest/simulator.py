@@ -89,6 +89,7 @@ class BacktestSimulator:
         self.pending_orders.append(trade_params)
 
     def _check_pending_fills(self, candle: dict, ts: datetime):
+        candle = {k: float(v) if hasattr(v, '__float__') else v for k, v in candle.items()}
         filled = []
         for order in self.pending_orders:
             entry = order['entry_price']
@@ -141,6 +142,8 @@ class BacktestSimulator:
         self.open_positions.append(position)
 
     def _update_positions(self, candle: dict):
+        # Ensure all candle values are float (DB returns Decimal)
+        candle = {k: float(v) if hasattr(v, '__float__') else v for k, v in candle.items()}
         remaining = []
         for pos in self.open_positions:
             closed = self._check_position(pos, candle)
@@ -188,8 +191,8 @@ class BacktestSimulator:
         # Runner: chandelier or time-kill handles it — keep open
         return False
 
-    def _close_position(self, pos: dict, exit_price: float, reason: str):
-        exit_price = apply_slippage(exit_price, OrderType.MARKET, pos['side'])
+    def _close_position(self, pos: dict, exit_price, reason: str):
+        exit_price = apply_slippage(float(exit_price), OrderType.MARKET, pos['side'])
         fee = compute_fee(pos['quantity'] * exit_price, OrderType.MARKET)
 
         if pos['side'] == 'LONG':
@@ -229,10 +232,60 @@ class BacktestSimulator:
         return self.current_capital + unrealized
 
     def _load_candles(self) -> list[dict]:
+        """
+        Auto-selects the interval with best coverage of the requested date range.
+        Picks the interval whose candles span the most of [start_date, end_date].
+        """
         from ingester.models import Candle
+        from django.db.models import Min, Max
+
+        requested_days = (self.config.end_date - self.config.start_date).days
+        best_interval  = None
+        best_count     = 0
+        best_coverage  = 0.0
+
+        for interval in ('1h', '4h', '15m', '5m', '1m'):   # prefer 1h first
+            agg = Candle.objects.filter(
+                symbol=self.config.symbol,
+                interval=interval,
+                is_closed=True,
+                timestamp__gte=self.config.start_date,
+                timestamp__lt=self.config.end_date,
+            ).aggregate(cnt=__import__('django.db.models',fromlist=['Count']).Count('id'),
+                        first=Min('timestamp'), last=Max('timestamp'))
+
+            cnt = agg['cnt'] or 0
+            if cnt < 50:
+                continue
+
+            # Coverage = days spanned by available data vs requested range
+            if agg['first'] and agg['last']:
+                spanned = (agg['last'] - agg['first']).days
+                coverage = spanned / max(requested_days, 1)
+            else:
+                coverage = 0.0
+
+            if coverage > best_coverage or (coverage == best_coverage and cnt > best_count):
+                best_interval = interval
+                best_count    = cnt
+                best_coverage = coverage
+
+        if not best_interval:
+            logger.warning(
+                f"No candle data for {self.config.symbol} "
+                f"{self.config.start_date:%Y-%m-%d}–{self.config.end_date:%Y-%m-%d}. "
+                f"Run: python manage.py download_history --symbol {self.config.symbol} --years 1 --interval 1h"
+            )
+            return []
+
+        logger.info(
+            f"Backtest {self.config.symbol}: using {best_interval} "
+            f"({best_count:,} candles, {best_coverage:.0%} coverage)"
+        )
+        self._sim_interval = best_interval
         qs = Candle.objects.filter(
             symbol=self.config.symbol,
-            interval='1m',
+            interval=best_interval,
             is_closed=True,
             timestamp__gte=self.config.start_date,
             timestamp__lt=self.config.end_date,
