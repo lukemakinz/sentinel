@@ -184,27 +184,37 @@ class BinanceWebSocketClient:
 
     async def connect(self):
         """Connect to Binance WebSocket and start processing."""
-        url = self._build_stream_url()
         self.running = True
         reconnect_delay = 1
+        STALE_TIMEOUT = 90   # seconds — force reconnect if no message received
 
         while self.running:
+            # Rebuild URL each reconnect so new WatchedPairs are picked up
+            url = self._build_stream_url()
+            last_msg = asyncio.get_event_loop().time()
+
             try:
-                logger.info(f"Connecting to Binance WebSocket...")
+                logger.info(f"Connecting to Binance WebSocket ({len(self.pairs)} pairs)...")
                 async with websockets.connect(
                     url,
-                    ping_interval=180,
-                    ping_timeout=30,
+                    ping_interval=20,      # Binance keepalive < 30s
+                    ping_timeout=10,
+                    close_timeout=10,
                     max_size=2**20,
                 ) as ws:
                     logger.info(f"Connected — streaming {len(self.pairs)} pairs")
                     reconnect_delay = 1
 
-                    async for message in ws:
-                        if not self.running:
+                    while self.running:
+                        try:
+                            # Timeout = stale detection: if no msg in 90s → reconnect
+                            message = await asyncio.wait_for(ws.recv(), timeout=STALE_TIMEOUT)
+                            last_msg = asyncio.get_event_loop().time()
+                            data = json.loads(message)
+                            await self._process_message(data)
+                        except asyncio.TimeoutError:
+                            logger.warning(f"No data in {STALE_TIMEOUT}s — forcing reconnect")
                             break
-                        data = json.loads(message)
-                        await self._process_message(data)
 
             except websockets.exceptions.ConnectionClosed as e:
                 logger.warning(f"WebSocket disconnected: {e}. Reconnecting in {reconnect_delay}s...")
@@ -213,7 +223,7 @@ class BinanceWebSocketClient:
 
             if self.running:
                 await asyncio.sleep(reconnect_delay)
-                reconnect_delay = min(reconnect_delay * 2, 60)
+                reconnect_delay = min(reconnect_delay * 2, 30)   # max 30s backoff
 
     def stop(self):
         """Stop the WebSocket client."""

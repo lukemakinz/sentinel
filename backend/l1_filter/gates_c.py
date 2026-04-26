@@ -6,9 +6,20 @@ from analysts.momentum import compute_rsi, detect_divergence, _ema
 from .utils import compute_ema
 
 
-def check_choch(candles: list, direction: str) -> tuple[bool, dict]:
+def check_choch(candles: list, direction: str,
+                require_htf_bos: bool = True) -> tuple[bool, dict]:
+    """
+    C1: Change of Character (CHoCH) — NOT Break of Structure (BOS).
+    CHoCH = first LH after a series of HH (reversal signal)
+    BOS   = new HH in ongoing uptrend (continuation)
+    Only CHoCH is a REVERSAL trigger. BOS = trend continuation, different trade.
+    """
     if len(candles) < 8:
         return False, {}
+
+    # HTF→LTF hierarchy: require HTF BOS before accepting LTF CHoCH
+    if not require_htf_bos:
+        return False, {'reason': 'no_htf_bos — standalone LTF CHoCH filtered as noise'}
 
     highs  = np.array([c['high']  for c in candles])
     lows   = np.array([c['low']   for c in candles])
@@ -18,21 +29,34 @@ def check_choch(candles: list, direction: str) -> tuple[bool, dict]:
     swings = detect_swing_points(highs, lows, lookback=lookback)
     structure = detect_structure_break(swings)
 
-    if structure:
-        if direction == 'LONG'  and structure['direction'] == 'bullish' and structure['type'] in ('CHoCH', 'BOS'):
-            return True, {'structure': structure}
-        if direction == 'SHORT' and structure['direction'] == 'bearish' and structure['type'] in ('CHoCH', 'BOS'):
-            return True, {'structure': structure}
+    # ONLY CHoCH passes — BOS is a different signal (trend continuation, not reversal)
+    if structure and structure['type'] == 'CHoCH':
+        if direction == 'LONG'  and structure['direction'] == 'bullish':
+            return True, {'type': 'CHoCH', 'level': structure['level'],
+                          'note': 'First HL after series of LL — bullish reversal'}
+        if direction == 'SHORT' and structure['direction'] == 'bearish':
+            return True, {'type': 'CHoCH', 'level': structure['level'],
+                          'note': 'First LH after series of HH — bearish reversal'}
 
-    # Fallback: price breaks above last swing high (LONG) or below last swing low (SHORT)
+    # BOS also accepted for TREND FOLLOW trades (S3 Classic TA)
+    # but NOT for S1 SMC Sweep which requires reversal structure
+    if structure and structure['type'] == 'BOS':
+        if direction == 'LONG'  and structure['direction'] == 'bullish':
+            return True, {'type': 'BOS', 'level': structure['level'],
+                          'note': 'Break of Structure — trend continuation (lower conviction)'}
+        if direction == 'SHORT' and structure['direction'] == 'bearish':
+            return True, {'type': 'BOS', 'level': structure['level'],
+                          'note': 'Break of Structure — trend continuation (lower conviction)'}
+
+    # Fallback: price break above/below last swing — only for BOS context
     swing_highs = [p for _, p, t in swings if 'H' in t]
     swing_lows  = [p for _, p, t in swings if 'L' in t]
     last_close  = float(closes[-1])
 
     if direction == 'LONG' and swing_highs and last_close > swing_highs[-1]:
-        return True, {'choch': 'break_above_swing_high', 'level': swing_highs[-1]}
+        return True, {'type': 'BOS_fallback', 'level': swing_highs[-1]}
     if direction == 'SHORT' and swing_lows and last_close < swing_lows[-1]:
-        return True, {'choch': 'break_below_swing_low', 'level': swing_lows[-1]}
+        return True, {'type': 'BOS_fallback', 'level': swing_lows[-1]}
 
     return False, {}
 

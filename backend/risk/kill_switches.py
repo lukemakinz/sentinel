@@ -112,6 +112,12 @@ def check_kill_switches(symbol, side) -> tuple[bool, str]:
     if get_dd_size_multiplier() == 0.0:
         return False, "Portfolio drawdown -20% — trading halted"
 
+    # 12. Anti-revenge rules (cooldown, consecutive SL, session loss limit)
+    from .anti_revenge import check_anti_revenge
+    ar_ok, ar_reason = check_anti_revenge(symbol)
+    if not ar_ok:
+        return False, ar_reason
+
     return True, "All checks passed"
 
 

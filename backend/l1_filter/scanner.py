@@ -3,12 +3,35 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from .gates_a import check_killzone, check_htf_trend, check_btc_correlation, check_funding_rate, check_adx
-from .gates_b import check_liquidity_sweep, check_fvg_ob, check_premium_discount, check_classical_pattern, check_atr_squeeze
+from .gates_b import check_liquidity_sweep, check_fvg_ob, check_premium_discount, check_atr_squeeze
 from .gates_c import check_choch, check_momentum_divergence, check_ema_crossover, check_volume_spike, check_vwap
 from .models import L1Result
 
 MIN_B_PASS = 3
 MIN_C_PASS = 2
+
+
+def _check_htf_bos(candles_4h: list, direction: str) -> bool:
+    """Check if HTF (4H) has a confirmed Break of Structure in the given direction.
+    CHoCH on LTF without HTF BOS = false signal."""
+    if len(candles_4h) < 15:
+        return True  # insufficient data → don't block
+    try:
+        import numpy as np
+        from analysts.structure import detect_swing_points, detect_structure_break
+        highs  = np.array([c['high']  for c in candles_4h])
+        lows   = np.array([c['low']   for c in candles_4h])
+        swings = detect_swing_points(highs, lows, lookback=3)
+        struct = detect_structure_break(swings)
+        if struct is None:
+            return False
+        if direction == 'LONG'  and struct['direction'] == 'bullish':
+            return True
+        if direction == 'SHORT' and struct['direction'] == 'bearish':
+            return True
+        return False
+    except Exception:
+        return True  # on error, don't block
 
 
 class L1Scanner:
@@ -43,19 +66,23 @@ class L1Scanner:
             self._save(symbol, direction, False, gates_a, {}, {})
             return None
 
-        b1_passed, b1_data = check_liquidity_sweep(candles_1h, direction)
+        b1_passed, b1_data = check_liquidity_sweep(candles_1h, direction, symbol=symbol)
         b2_passed, b2_data = check_fvg_ob(candles_15m, direction)
-        b3_passed, b3_data = check_premium_discount(candles_4h, direction)
-        b4_passed, b4_data = check_classical_pattern(candles_1h, direction)
+        b3_passed, b3_data = check_premium_discount(candles_1h, direction, htf_candles=candles_4h)
+        # B4 (classical patterns) removed — redundant with B1+B2, adds noise
         b5_passed, b5_data = check_atr_squeeze(candles_1h)
 
-        gates_b = {'B1': b1_passed, 'B2': b2_passed, 'B3': b3_passed, 'B4': b4_passed, 'B5': b5_passed}
+        gates_b = {'B1': b1_passed, 'B2': b2_passed, 'B3': b3_passed, 'B5': b5_passed}
 
         if sum(gates_b.values()) < MIN_B_PASS:
             self._save(symbol, direction, False, gates_a, gates_b, {})
             return None
 
-        c1_passed, c1_data = check_choch(candles_15m, direction)
+        # C1: CHoCH requires HTF context (4H BOS confirmed first)
+        # Without HTF BOS, standalone LTF CHoCH = noise signal
+        htf_bos_confirmed = _check_htf_bos(candles_4h, direction)
+        c1_passed, c1_data = check_choch(candles_15m, direction,
+                                          require_htf_bos=htf_bos_confirmed)
         c2_passed, c2_data = check_momentum_divergence(candles_1h, direction)
         c3_passed, c3_data = check_ema_crossover(candles_15m, direction)
         c4_passed, c4_data = check_volume_spike(candles_15m)

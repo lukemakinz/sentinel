@@ -26,7 +26,7 @@ _Aktualizacja 2026-04-25: dodano Signal Evaluator, anti-revenge rules, doprecyzo
 
 ### 1.0.1 Model `Signal` — pełen lifecycle
 
-- [ ] Stworzyć model `Signal` w `l1_filter/models.py` (lub osobny `evaluator/`):
+- [x] Stworzyć model `Signal` w `l1_filter/models.py` (lub osobny `evaluator/`):
 
 ```python
 class Signal(models.Model):
@@ -71,15 +71,15 @@ class Signal(models.Model):
 
 ### 1.0.2 Shadow signal tracking (KRYTYCZNE)
 
-- [ ] **Każdy L1 PASS produkuje Signal**, niezależnie od L2 verdict
-- [ ] L2 REJECT → Signal.shadow=True, ale dalej tracking SL/TP outcome
-- [ ] Cel: po 200+ shadow signals porównaj win rate "L2 APPROVE" vs "L2 REJECT"
+- [x] **Każdy L1 PASS produkuje Signal**, niezależnie od L2 verdict
+- [x] L2 REJECT → Signal.shadow=True, ale dalej tracking SL/TP outcome
+- [x] Cel: po 200+ shadow signals porównaj win rate "L2 APPROVE" vs "L2 REJECT"
 - [ ] Jeśli REJECT win rate > APPROVE win rate → L2 niszczy wartość, redesign
 - [ ] Eksponować w dashboardzie: real PnL vs phantom PnL (gdyby brać wszystko)
 
 ### 1.0.3 Atrybucja per warstwa (statystyki)
 
-- [ ] Endpoint `/api/evaluator/stats` z breakdown:
+- [x] Endpoint `/api/evaluator/stats` z breakdown:
   - **Per strategy** (S1/S2/S3): win_rate, avg_R, expectancy, count
   - **Per session** (asian/london/ny): jw.
   - **Per regime** (trending/ranging/squeeze)
@@ -88,12 +88,12 @@ class Signal(models.Model):
   - **Per symbol**
   - **Per time-of-day** (binowane co godzinę)
   - **Per agent confidence bucket** (50-60, 60-70, 70-80, 80-100): faktyczny win rate vs declared confidence
-- [ ] **Calibration plot per agent**: jeśli agent mówi "APPROVE 80" a faktyczny win rate to 45% → agent overconfident → deweight
+- [x] **Calibration plot per agent**: jeśli agent mówi "APPROVE 80" a faktyczny win rate to 45% → agent overconfident → deweight
 - [ ] **Brier score per agent** — miara kalibracji predykcji probabilistycznych
 
 ### 1.0.4 MFE/MAE tracking — optymalizacja TP/SL
 
-- [ ] Co świecę 1m aktualizuj `max_favorable_excursion_r` i `max_adverse_excursion_r`
+- [x] Co świecę 1m aktualizuj `max_favorable_excursion_r` i `max_adverse_excursion_r`
 - [ ] Po 100+ trade'ach analiza:
   - Jeśli średnie MFE = 4R, ale TP1=1.5R → potencjalnie zostawiamy kasę na stole
   - Jeśli średnie MAE losers = -0.3R → SL za szeroki, można zacieśnić
@@ -116,15 +116,15 @@ class Signal(models.Model):
 
 ### 1.1.1 SL nigdy nie jest przesuwany dalej od entry
 
-- [ ] **Twarda reguła w `paper_engine.py` i przyszłym live executor:**
+- [x] **Twarda reguła w `paper_engine.py` i przyszłym live executor:**
   - Dozwolone: SL → BE (po TP1), SL trailing CLOSER do entry (tightening po nowym swing HL/LH)
   - Zabronione: SL przesunięty w stronę dalszą od entry — assert w kodzie, log warning
-- [ ] Jeśli cena dotknęła SL → close natychmiast, koniec dyskusji
-- [ ] **Nie ma "kontynuacji przez przesunięcie SL"** — to jest no-go w automatyce
+- [x] Jeśli cena dotknęła SL → close natychmiast, koniec dyskusji
+- [x] **Nie ma "kontynuacji przez przesunięcie SL"** — to jest no-go w automatyce
 
 ### 1.1.2 Re-entry logic (osobny trade, nie kontynuacja)
 
-- [ ] Po SL hit dozwolony NOWY trade na ten sam symbol jeśli:
+- [x] Po SL hit dozwolony NOWY trade na ten sam symbol jeśli:
   - Pełen L1 + L2 cycle PASS na czysto (nie skrót)
   - Cooldown ≥ 30 min od SL hit
   - Max 1 re-entry per setup (twardy licznik)
@@ -133,18 +133,18 @@ class Signal(models.Model):
 
 ### 1.1.3 Eskalujące blokady po stratach
 
-- [ ] **Per symbol:**
+- [x] **Per symbol:**
   - 2 SL z rzędu na tym samym symbolu w 24h → blokada symbolu na 24h
   - 3 SL z rzędu (rzadkie) → blokada symbolu na 7 dni + alert do review
-- [ ] **Per portfolio:**
+- [x] **Per portfolio:**
   - 3 SL z rzędu w portfelu (różne symbole) → daily soft halt (no new entries, otwarte zostają)
   - Reset licznika po pierwszym WIN
-- [ ] **Per session:**
+- [x] **Per session:**
   - Loss > 2R w jednej sesji (London/NY) → blokada do końca sesji
 
 ### 1.1.4 TP1 management — doprecyzowanie
 
-- [ ] **Obecne (`paper_engine.py`):** po TP1 SL → BE (statyczny do TP2)
+- [x] **Obecne (`paper_engine.py`):** po TP1 SL → BE (statyczny do TP2)
 - [ ] **Lepsze:** po TP1 SL → BE + fees, potem **trailing pod kolejne swing low (LONG) / high (SHORT)**
   - Statyczny BE marnuje runner gdy cena idzie dalej dynamicznie
   - Adaptacyjny trailing łapie więcej R z runnera
@@ -152,7 +152,7 @@ class Signal(models.Model):
 
 ### 1.1.5 Rate limiting na decyzjach
 
-- [ ] Max 1 trade per symbol per 4h
+- [x] Max 1 trade per symbol per 4h
 - [ ] Max 5 trade'ów per portfolio per 24h (anti-overtrading)
 - [ ] Te limity są oddzielne od MAX_OPEN_POSITIONS (concurrent) — to są flow limits
 
@@ -193,14 +193,14 @@ class Signal(models.Model):
 
 ### 3.1 FVG — właściwa implementacja
 
-- [ ] **Obecne:** `high[i] < low[i+2]` — to jest zwykły gap, nie FVG
-- [ ] **Wymagane:**
+- [x] **Obecne:** `high[i] < low[i+2]` — to jest zwykły gap, nie FVG
+- [x] **Wymagane:**
   - Displacement candle: ciało świecy > 1.5×ATR (impulsive move)
   - Volume spike na displacement (>1.5× avg volume)
   - Mitigation tracking: FVG "filled" gdy cena wróciła do 50%+ głębokości
   - Dodać `FVGZone(symbol, top, bottom, direction, filled, created_at)`
   - Entry tylko w niefilled FVG z potwierdzeniem reaction (reversal candle)
-- [ ] **Uwaga: kolizja logiczna z B5 (squeeze).** Squeeze = ATR contraction, displacement = ATR expansion.
+- [x] **Uwaga: kolizja logiczna z B5 (squeeze).** Squeeze = ATR contraction, displacement = ATR expansion.
   - Rozwiązanie: B5 (squeeze) i poprawne FVG działają w **różnych strategiach**:
     - S1 (SMC Sweep) → wymaga FVG z displacement (B2 strict)
     - S3 (Classic TA) → korzysta z B5 squeeze przed breakout
@@ -231,9 +231,9 @@ class Signal(models.Model):
 
 ### 3.4 CHoCH vs BOS — właściwe rozróżnienie + hierarchia
 
-- [ ] **Obecne:** fallback `price > last_swing_high` = BOS, nie CHoCH
-- [ ] **CHoCH** = pierwszy LH po serii HH (zmiana charakteru, reversal)
-- [ ] **BOS** = nowy HH w trendzie (kontynuacja)
+- [x] **Obecne:** fallback `price > last_swing_high` = BOS, nie CHoCH
+- [x] **CHoCH** = pierwszy LH po serii HH (zmiana charakteru, reversal)
+- [x] **BOS** = nowy HH w trendzie (kontynuacja)
 - [ ] **Hierarchia (KRYTYCZNE):**
   - HTF (1H/4H) BOS musi być POTWIERDZONY w kierunku trade'a → trade-along-trend
   - LTF (5m/15m) CHoCH staje się trigger entry'ego DOPIERO po HTF BOS
@@ -245,8 +245,8 @@ class Signal(models.Model):
 
 ### 3.5 Premium/Discount — prawdziwy SMC
 
-- [ ] **Obecne:** percentyl 10 ostatnich świec (local extreme, nie P/D)
-- [ ] **Prawdziwe SMC P/D:** 50% retracement HTF swinga
+- [x] **Obecne:** percentyl 10 ostatnich świec (local extreme, nie P/D)
+- [x] **Prawdziwe SMC P/D:** 50% retracement HTF swinga
   - Swing endpoints: ostatni HH i ostatni HL na 4H (bullish) lub LH/LL (bearish)
   - Algorytm: `detect_swing_points(candles_4h, lookback=10)` → najnowszy major swing
   - OTE zone: 62-79% retracement (Golden Pocket Fib)
@@ -256,8 +256,8 @@ class Signal(models.Model):
 
 ### 3.6 HTF Trend — struktura, nie EMA
 
-- [ ] **Obecne:** EMA50/200 crossover (1995 TA, opóźniony)
-- [ ] **Lepsze:** Higher Highs / Higher Lows na 1D + position vs PDA
+- [x] **Obecne:** EMA50/200 crossover (1995 TA, opóźniony)
+- [x] **Lepsze:** Higher Highs / Higher Lows na 1D + position vs PDA
   - Bullish structure: **minimum 3 swing pairs (HH+HL)** w ostatnich 30 candles 1D
   - Bearish structure: **minimum 3 swing pairs (LH+LL)** w ostatnich 30 candles 1D
   - Mniej niż 3 → "neutral/transition", brak HTF bias → A2 FAIL (nie wchodzimy)
@@ -485,3 +485,116 @@ Miesiąc 4: Paper trading minimum 3m z tracking dywergencji vs backtest;
 - **P4 (Agents):** każdy agent ma orthogonal input, calibration plot per agent generowany co tydzień
 - **P5 (Edge):** OI/liquidations/depth feed używane w gates, AMD framework jako routing
 - **P6 (Execution):** live executor przeszedł testnet 30 dni, zero rozbieżności z DB
+
+---
+
+## Priorytet 7 — Machine Learning na bazie Signal Evaluator (FUTURE — po P0-P6)
+
+> **Wymagania wstępne:** Signal Evaluator z 500+ sygnałami, backtest Sharpe > 1.5, stabilna kalibracja agentów (P4.2), paper trading min. 3 miesiące. **Bez tego ML tylko ukryje brak edge'u pod black-boxem.**
+
+### 7.0 Filozofia — dlaczego NIE pełen Reinforcement Learning
+
+- [ ] **NIE wdrażamy DQN/PPO/A3C jako primary decision maker.** Powody:
+  - Sample size: ~300 trade'ów/rok vs RL needs 100k+ episodes
+  - Non-stationarity: crypto regime shift co 3-6 miesięcy
+  - Reward hacking: każda funkcja reward jest exploitable
+  - Sim-to-real gap: RL trained on backtest fills crashuje na live
+  - Black box: niemożliwe do audytu / wytłumaczenia / debugowania po blowupie
+  - Catastrophic interference: jeden weekend flash crash niszczy 6-miesięczny model
+- [ ] **Filozofia:** ML siedzi NA WIERZCHU deterministycznego stack'a (L1/L2/L3), nie zastępuje go
+  - Determinizm zostaje dla auditability, ML dodaje calibration & sizing nuances
+
+### 7.1 Calibration loop (już zdefiniowane w P1.0.5 i P4.2 — to ETAP 0 ML)
+
+- [x] Brier score per agent (P4.2)
+- [x] Bayesian weight update w supervisorze
+- [x] Per-agent confidence calibration plot
+- To jest "RL lite" — online learning bez pathologii, działa od 100 sygnałów
+
+### 7.2 ETAP 1 — Supervised meta-classifier (uruchomić przy 500+ sygnałach)
+
+- [ ] **Model:** LightGBM lub XGBoost (gradient boosting)
+  - **Powód wyboru:** interpretable (`feature_importances_`), robust na małych danych, brak RL pathologies
+- [ ] **Features (input):**
+  - Gates state: `[a1..a5, b1..b5, c1..c5]` jako binary vector (15 bitów)
+  - Regime: one-hot `{trending, ranging, squeeze}`
+  - Session: one-hot `{asian, london_kz, ny_am, ny_pm, off}`
+  - HTF context: `htf_bias`, `htf_struct_strength` (z liczby HH/HL)
+  - Agent verdicts + confidences: 4 × (verdict_one_hot + confidence_float)
+  - Macro: `funding_rate`, `oi_change_pct`, `btc_correlation_30d`, `dxy_change_pct`
+  - Calendar: `time_of_day`, `day_of_week`, `hours_to_next_news`
+  - Portfolio state: `current_dd_pct`, `recent_trades_pnl_avg`, `correlation_heat`
+  - Price: `atr_percentile`, `volume_percentile`, `spread_pct`
+- [ ] **Target:** binary `outcome ∈ {WIN=1, LOSS=0}` (BREAKEVEN i PARTIAL_WIN klasyfikowane per pnl_r ≥ 0)
+- [ ] **Walk-forward training:** train na miesiącu N, test na N+1, retrain co tydzień
+- [ ] **Output:** `P(win | features)` ∈ [0, 1]
+- [ ] **Integracja w pipeline:**
+  - **Filter:** `P(win) < 0.45` → REJECT mimo APPROVE od agentów (defensywny)
+  - **Size scaler:** `size_multiplier *= (P(win) - 0.5) × 2` (clipped do [0, 1.5])
+  - **Logged jako separate field** w `Signal.meta_classifier_score` dla atrybucji
+- [ ] **Walidacja:**
+  - AUC-ROC > 0.55 na out-of-sample (powyżej random)
+  - Brier score < 0.24 (lepiej niż naiwne)
+  - Calibration plot: predicted vs actual win rate w binach
+  - Feature importances stabilne tydzień-do-tygodnia (jeśli tańczą = overfitting)
+- [ ] **Failsafe:**
+  - Auto-disable jeśli rolling 50-trade win rate filtrowanych signali < unfiltered win rate
+  - Manualne review co miesiąc, czy model się nie psuje
+
+### 7.3 ETAP 2 — Thompson Sampling dla strategy/gate-combo selection (12+ miesięcy)
+
+- [ ] **Konfiguracja jako contextual bandit** (nie pełny MDP):
+  - **Arms:** kombinacje `(strategia × regime × session)`
+    - Np. `(S1, trending, london_kz)`, `(S2, ranging, ny_am)`, ...
+    - ~3 strategie × 3 regimes × 4 sessions = 36 arms
+  - **Posterior:** Beta(α, β) per arm, gdzie α = wins+1, β = losses+1
+  - **Sampling:** thompson — sample win rate z posterior każdego arm, wybierz arm z najwyższym sample
+- [ ] **Reward:** realized R per trade (clipped do [-1, +5] żeby outliers nie dominowały)
+- [ ] **Update:** po każdym closed trade, posterior arm[k].update(reward)
+- [ ] **Dlaczego nie pełny RL:**
+  - Brak state-transitions → brak credit assignment problem
+  - Brak reward hacking (reward jest realized, naturalnie ograniczony)
+  - Sample-efficient (działa od 30 trade'ów per arm)
+  - Tłumaczalny: "wybrałem S1 bo posterior win rate 0.62 vs S2 0.51"
+- [ ] **Output:** zamiast egzekutować KAŻDY APPROVE od supervisora, system samplujе który arm gra w obecnym regime
+- [ ] **Cold start:** pierwsze 30 trade'ów per arm = pure exploration (random sampling z prior)
+
+### 7.4 ETAP 3 — Lightweight policy gradient (24+ miesięcy, OPCJONALNE)
+
+> **Tylko jeśli ETAP 1+2 udowodniły wartość, mamy 2000+ trade'ów, i Sharpe stable.**
+
+- [ ] **Action space MINIMALNA:**
+  - `size_multiplier` ∈ [0, 1.5] (continuous)
+  - `entry_timing_buffer` ∈ [0, 30] minut (delay limit order placement)
+  - **NIE entry/SL/TP** — te zostają deterministic (auditability)
+- [ ] **Algorithm:** PPO z małymi step sizes (lr=1e-5), KL constraint
+- [ ] **NIE deep RL** — płytki network (2 layers × 64 neurons), nie LSTM, nie attention
+- [ ] **State:** features z meta-classifier + jego output P(win)
+- [ ] **Reward:** realized R - 0.1 × max_drawdown_during_trade (penalty za drawdown w trakcie)
+- [ ] **Constraints:**
+  - Auto-rollback do poprzedniej wersji wag jeśli rolling 30-trade Sharpe spadnie o 30%
+  - Hard kill switch: jeśli 5 trade'ów z rzędu loss > 1R → freeze wagi, alert
+  - A/B test: 50% trade'ów wykonuje RL policy, 50% baseline (deterministic) — porównanie equity curves
+
+### 7.5 Co NIE robimy
+
+- [ ] ❌ RL na poziomie gates (np. "RL uczy się kiedy A2 PASS") — za granular, za mało danych
+- [ ] ❌ RL na tick-level execution — sim-to-real gap kills you
+- [ ] ❌ Deep RL (DQN, A3C, SAC) — too sample-hungry, too unstable
+- [ ] ❌ Replace deterministic L1/L3 RL-em — deterministic stack zostaje dla auditability
+- [ ] ❌ RL zanim mamy backtest Sharpe > 1.5 — RL nie zrobi z słabej strategii dobrej, tylko ukryje to pod black-boxem
+
+### 7.6 Tabela ML hierarchy
+
+| Etap | Technika | Min. trade'ów | Czas implementacji | Ryzyko |
+|------|----------|---------------|---------------------|--------|
+| 0 | Calibration loop (Brier + Bayesian) | 100 | 1 tydzień | Niskie |
+| 1 | Supervised meta-classifier (LightGBM) | 500 | 2-4 tygodnie | Niskie |
+| 2 | Thompson Sampling bandit | 1000 | 2 tygodnie | Średnie |
+| 3 | Policy gradient (lightweight PPO) | 2000+ | 2-3 miesiące | Wysokie |
+
+### 7.7 Definicja "DONE" dla P7
+
+- **7.2 Done:** Meta-classifier ma AUC > 0.55 OOS, calibration plot OK, działa w produkcji 3 miesiące, signal.meta_classifier_score logged
+- **7.3 Done:** Thompson Sampling zoperowany, posteriors per arm stabilne, system pokazuje regime-specific arm preferences
+- **7.4 Done:** PPO A/B-tested vs baseline na 200+ trade'ach, Sharpe RL ≥ Sharpe baseline (jeśli mniej — wyłączamy)

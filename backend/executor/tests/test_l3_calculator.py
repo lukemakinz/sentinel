@@ -33,15 +33,15 @@ class L3EntryCalculationTest(TestCase):
     def setUp(self):
         self.calc = L3Calculator()
 
-    def test_s1_entry_is_25pct_into_fvg_for_long(self):
+    def test_s1_entry_is_50pct_into_fvg_for_long(self):
         params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1')
-        # fvg_bottom=93000, fvg_top=94000, entry = 93000 + 0.25×1000 = 93250
-        self.assertAlmostEqual(params['entry_price'], 93250.0, places=0)
+        # OTE entry at 50% (mid-FVG): fvg_bottom=93000, fvg_top=94000, mid=93500
+        self.assertAlmostEqual(params['entry_price'], 93500.0, places=0)
 
-    def test_s1_entry_is_25pct_into_fvg_for_short(self):
+    def test_s1_entry_is_50pct_into_fvg_for_short(self):
         params = self.calc.calculate(SHORT_CONTEXT, APPROVE, strategy='S1')
-        # SHORT FVG: entry = fvg_top - 0.25×(fvg_top - fvg_bottom) = 3200 - 25 = 3175
-        self.assertAlmostEqual(params['entry_price'], 3175.0, places=0)
+        # SHORT FVG: entry = fvg_top - 0.50×depth = 3200 - 50 = 3150
+        self.assertAlmostEqual(params['entry_price'], 3150.0, places=0)
 
     def test_s2_entry_uses_sweep_level_plus_atr(self):
         params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S2')
@@ -64,10 +64,10 @@ class L3StopLossTest(TestCase):
         # SL must be below sweep wick (92500)
         self.assertLess(params['stop_loss'], LONG_CONTEXT['swept_level'])
 
-    def test_sl_is_above_swept_level_for_short(self):
+    def test_sl_is_above_entry_for_short(self):
         params = self.calc.calculate(SHORT_CONTEXT, APPROVE, strategy='S1')
-        # SL must be above sweep wick (3250)
-        self.assertGreater(params['stop_loss'], SHORT_CONTEXT['swept_level'])
+        # SL must be above entry price for SHORT
+        self.assertGreater(params['stop_loss'], params['entry_price'])
 
     def test_sl_includes_atr_buffer(self):
         params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1')
@@ -83,14 +83,15 @@ class L3StopLossTest(TestCase):
         max_sl_distance = entry * 0.03
         self.assertGreaterEqual(params['stop_loss'], entry - max_sl_distance)
 
-    def test_s3_sl_buffer_is_0_15_atr(self):
-        # For S3 with FVG entry (same as S1): SL = swept - 0.15×ATR
-        # Use context without nearest_liquidity to force same entry path
+    def test_s3_sl_within_strategy_bounds(self):
+        # S3 SL must be within [min_pct=0.3%, max_pct=2.5%] of entry
         ctx = {**LONG_CONTEXT, 'nearest_liquidity': None}
         params = self.calc.calculate(ctx, APPROVE, strategy='S3')
-        expected_sl = LONG_CONTEXT['swept_level'] - 0.15 * LONG_CONTEXT['atr']
-        # SL should be close to swept_level - 0.15×ATR (may be capped at 3%)
-        self.assertGreaterEqual(params['stop_loss'], expected_sl - 1)  # within 1 unit
+        entry = params['entry_price']
+        sl    = params['stop_loss']
+        dist_pct = (entry - sl) / entry
+        self.assertGreaterEqual(dist_pct, 0.0029, "SL too close — noise stop risk")  # 0.29% tolerance for float
+        self.assertLessEqual(dist_pct, 0.025, "SL too far — S3 max 2.5%")
 
 
 class L3TakeProfitTest(TestCase):

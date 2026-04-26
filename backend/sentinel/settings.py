@@ -25,8 +25,11 @@ INSTALLED_APPS = [
     'l1_filter',
     'l2_agents',
     'backtest',
-    'analysts',
-    'consensus',
+    'evaluator',
+    # analysts/ and consensus/ DISABLED — dead code, not in decision path.
+    # Models kept for historical data, apps removed from pipeline.
+    # 'analysts',
+    # 'consensus',
     'risk',
     'executor',
     'dashboard_api',
@@ -164,24 +167,11 @@ BINANCE_REST_URL = 'https://fapi.binance.com'
 from celery.schedules import crontab
 
 CELERY_BEAT_SCHEDULE = {
-    # Analysts
-    'run-fast-analysts': {
-        'task': 'analysts.run_fast_analysts',
-        'schedule': 60.0,  # every 1 min
-    },
-    'run-medium-analysts': {
-        'task': 'analysts.run_medium_analysts',
-        'schedule': 300.0,  # every 5 min
-    },
-    'run-llm-analyst': {
-        'task': 'analysts.run_llm_analyst',
-        'schedule': 3600.0,  # every 1 hour
-    },
-    # Consensus
-    'run-consensus': {
-        'task': 'consensus.run_consensus',
-        'schedule': 60.0,  # every 1 min
-    },
+    # analysts/ and consensus/ DISABLED — dead code removed from pipeline
+    # 'run-fast-analysts': {'task': 'analysts.run_fast_analysts', 'schedule': 60.0},
+    # 'run-medium-analysts': {'task': 'analysts.run_medium_analysts', 'schedule': 300.0},
+    # 'run-llm-analyst': {'task': 'analysts.run_llm_analyst', 'schedule': 3600.0},
+    # 'run-consensus': {'task': 'consensus.run_consensus', 'schedule': 60.0},
     # Position monitoring
     'monitor-positions': {
         'task': 'executor.monitor_positions',
@@ -208,6 +198,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'ingester.recalculate_whale_threshold',
         'schedule': 3600.0,  # every 1 hour
     },
+    'check-data-freshness': {
+        'task': 'ingester.check_data_freshness',
+        'schedule': 120.0,   # every 2 minutes — catches stale data fast
+    },
     'update-news-calendar': {
         'task': 'risk.update_news_calendar',
         'schedule': 21600.0,  # every 6 hours
@@ -219,10 +213,19 @@ CELERY_BEAT_SCHEDULE = {
     # Risk resets
     'daily-risk-reset': {
         'task': 'executor.daily_reset',
-        'schedule': crontab(hour=0, minute=0),  # midnight UTC
+        'schedule': crontab(hour=0, minute=0),
     },
     'weekly-risk-reset': {
         'task': 'executor.weekly_reset',
-        'schedule': crontab(hour=0, minute=0, day_of_week=1),  # Monday midnight
+        'schedule': crontab(hour=0, minute=0, day_of_week=1),
+    },
+    # EOD discipline
+    'eod-soft-block': {
+        'task': 'executor.block_new_entries_eod',
+        'schedule': crontab(hour=18, minute=0),  # 18:00 UTC — no new entries
+    },
+    'eod-force-close': {
+        'task': 'executor.force_close_all',
+        'schedule': crontab(hour=22, minute=0),  # 22:00 UTC — close all positions
     },
 }

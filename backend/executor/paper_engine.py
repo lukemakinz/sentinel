@@ -109,11 +109,23 @@ class PaperTradingEngine:
                 close_qty = position.quantity * 0.40
                 self._partial_close(position, close_qty, price, 'TP1')
                 position.tp1_hit = True
-                # Move SL to breakeven
-                position.stop_loss = position.entry_price
+                # Move SL to breakeven + fees (not just raw entry price)
+                fee_buffer = position.entry_price * 0.001  # 0.1% for fees
+                be_sl = position.entry_price + fee_buffer if position.side == 'LONG' \
+                        else position.entry_price - fee_buffer
+                # Adaptive: try to use structural swing low/high instead of raw BE
+                structural_sl = self._get_structural_sl(position, price)
+                if structural_sl:
+                    # Use max of BE and structural (always tighter, never further)
+                    if position.side == 'LONG':
+                        position.stop_loss = max(be_sl, structural_sl)
+                    else:
+                        position.stop_loss = min(be_sl, structural_sl)
+                else:
+                    position.stop_loss = be_sl
                 position.sl_moved_to_be = True
                 position.save()
-                logger.info(f"TP1 hit — SL moved to breakeven for {position.symbol}")
+                logger.info(f"TP1 hit — SL moved to {position.stop_loss:.2f} for {position.symbol}")
 
         # Take Profit 2 (close 40% of original — now corrected from 30%)
         if not position.tp2_hit and position.take_profit_2 and position.tp1_hit:
@@ -132,6 +144,29 @@ class PaperTradingEngine:
         if not position.tp1_hit and self._should_time_kill(position, price):
             self._close_position(position, price, 'TIME_KILL')
             return
+
+    def _get_structural_sl(self, position, current_price: float):
+        """Find last intermediate swing HL (LONG) or LH (SHORT) for adaptive SL after TP1."""
+        from ingester.models import Candle
+        from analysts.structure import detect_swing_points
+        import numpy as np
+
+        candles = list(Candle.objects.filter(
+            symbol=position.symbol, interval='15m', is_closed=True,
+        ).order_by('-timestamp').values('high', 'low')[:30])
+        if len(candles) < 10:
+            return None
+
+        highs = np.array([float(c['high']) for c in reversed(candles)])
+        lows  = np.array([float(c['low'])  for c in reversed(candles)])
+        swings = detect_swing_points(highs, lows, lookback=3)
+
+        if position.side == 'LONG':
+            hl_levels = [p for _, p, t in swings if t == 'HL' and p < current_price]
+            return max(hl_levels) if hl_levels else None
+        else:
+            lh_levels = [p for _, p, t in swings if t == 'LH' and p > current_price]
+            return min(lh_levels) if lh_levels else None
 
     def _check_chandelier(self, position, price):
         """Update and check chandelier trailing stop for the runner (20%)."""

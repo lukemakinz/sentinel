@@ -85,22 +85,44 @@ class MomentumDivergenceTest(TestCase):
         self.assertFalse(passed)
 
 
-class EMACrossoverTest(TestCase):
-    def test_bullish_crossover_passes_for_long(self):
-        passed, data = check_ema_crossover(ema_crossover_long(), 'LONG')
+class DeltaCandleTest(TestCase):
+    """C3 gate now uses Delta Candle (taker buy/sell pressure) instead of EMA crossover."""
+
+    def _candles_with_buy_pressure(self, n=25):
+        from l1_filter.tests.helpers import make_candles
+        closes  = [1000 + i * 5 for i in range(n)]
+        volumes = [1000.0] * n
+        # taker_buy_volume > 50% → net buy delta positive
+        buy_vols = [800.0] * n   # strong buyers
+        candles = make_candles(closes, volumes=volumes)
+        for i, c in enumerate(candles):
+            c['taker_buy_volume'] = buy_vols[i]
+        return candles
+
+    def _candles_with_sell_pressure(self, n=25):
+        from l1_filter.tests.helpers import make_candles
+        closes  = [2000 - i * 5 for i in range(n)]
+        volumes = [1000.0] * n
+        candles = make_candles(closes, volumes=volumes)
+        for i, c in enumerate(candles):
+            c['taker_buy_volume'] = 200.0  # sellers dominate
+        return candles
+
+    def test_buy_pressure_passes_for_long(self):
+        passed, data = check_ema_crossover(self._candles_with_buy_pressure(), 'LONG')
+        self.assertTrue(passed)
+        self.assertIn('net_delta', data)
+
+    def test_sell_pressure_passes_for_short(self):
+        passed, _ = check_ema_crossover(self._candles_with_sell_pressure(), 'SHORT')
         self.assertTrue(passed)
 
-    def test_bearish_crossover_passes_for_short(self):
-        passed, _ = check_ema_crossover(ema_crossover_short(), 'SHORT')
-        self.assertTrue(passed)
-
-    def test_no_crossover_fails(self):
-        # Flat trend — EMA9 never crosses EMA21
-        passed, _ = check_ema_crossover(uptrend(30), 'SHORT')
+    def test_buy_pressure_fails_for_short(self):
+        passed, _ = check_ema_crossover(self._candles_with_buy_pressure(), 'SHORT')
         self.assertFalse(passed)
 
     def test_insufficient_data_fails(self):
-        passed, _ = check_ema_crossover(uptrend(5), 'LONG')
+        passed, _ = check_ema_crossover(uptrend(3), 'LONG')
         self.assertFalse(passed)
 
 

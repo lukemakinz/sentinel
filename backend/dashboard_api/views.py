@@ -7,14 +7,14 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 
-from analysts.models import AnalystSignalRecord
-from consensus.models import ConsensusSignal
+# analysts/ and consensus/ removed from INSTALLED_APPS — imports disabled
+# from analysts.models import AnalystSignalRecord
+# from consensus.models import ConsensusSignal
 from executor.models import Position, Trade, AccountState
 from ingester.models import Candle
 from risk.models import RiskState, RiskEvent
 
 from .serializers import (
-    AnalystSignalSerializer, ConsensusSignalSerializer,
     PositionSerializer, TradeSerializer, AccountStateSerializer,
     RiskStateSerializer, RiskEventSerializer,
 )
@@ -42,35 +42,20 @@ def system_status(request):
 
 @api_view(['GET'])
 def conviction_scores(request):
-    """Current conviction scores for all pairs."""
-    result = {}
-    for symbol in settings.TRADING_PAIRS:
-        latest = ConsensusSignal.objects.filter(symbol=symbol).order_by('-timestamp').first()
-        if latest:
-            result[symbol] = ConsensusSignalSerializer(latest).data
-        else:
-            result[symbol] = {'symbol': symbol, 'conviction_score': 0, 'tier': 'NONE', 'bias': 'NEUTRAL'}
+    """Stub — analysts/consensus removed from pipeline. Returns empty."""
+    # analysts/ and consensus/ disabled — dead code removed from active pipeline.
+    # Real signal quality now tracked via /api/evaluator/stats/
+    from ingester.models import WatchedPair
+    pairs = WatchedPair.get_active_symbols()
+    result = {s: {'symbol': s, 'conviction_score': 0, 'tier': 'NONE', 'bias': 'NEUTRAL'}
+              for s in pairs}
     return Response(result)
 
 
 @api_view(['GET'])
 def analyst_signals(request):
-    """Latest signal from each analyst for all pairs."""
-    symbol = request.query_params.get('symbol', None)
-    result = {}
-
-    pairs = [symbol] if symbol else settings.TRADING_PAIRS
-    analyst_names = ['momentum', 'volume_flow', 'structure', 'sentiment', 'llm_narrative', 'cross_asset']
-
-    for pair in pairs:
-        result[pair] = {}
-        for name in analyst_names:
-            latest = AnalystSignalRecord.objects.filter(
-                analyst_name=name, symbol=pair,
-            ).order_by('-timestamp').first()
-            if latest:
-                result[pair][name] = AnalystSignalSerializer(latest).data
-    return Response(result)
+    """Stub — analysts removed from pipeline. Returns empty."""
+    return Response({})
 
 
 class PositionViewSet(viewsets.ReadOnlyModelViewSet):
@@ -453,6 +438,18 @@ def dismiss_signal(request, signal_id):
 
 
 @api_view(['GET'])
+def evaluator_stats(request):
+    """Signal evaluation stats — win rate per strategy/session/regime + agent calibration."""
+    from evaluator.stats import get_stats
+    filters = {}
+    if request.query_params.get('strategy'):
+        filters['strategy'] = request.query_params['strategy']
+    if request.query_params.get('symbol'):
+        filters['symbol'] = request.query_params['symbol']
+    return Response(get_stats(filters))
+
+
+@api_view(['GET'])
 def strategy_health(request):
     """Current strategy health metrics — rolling Sharpe, win rate, halt status."""
     from risk.strategy_monitor import check_strategy_health, compute_rolling_sharpe
@@ -566,17 +563,5 @@ def backtest_list(request):
 
 @api_view(['GET'])
 def consensus_history(request):
-    """Consensus signal history for charting."""
-    symbol = request.query_params.get('symbol', 'BTCUSDT')
-    hours = int(request.query_params.get('hours', 24))
-
-    signals = ConsensusSignal.objects.filter(
-        symbol=symbol,
-        timestamp__gte=timezone.now() - timedelta(hours=hours),
-    ).order_by('timestamp').values(
-        'timestamp', 'conviction_score', 'tier', 'bias',
-        'momentum_score', 'volume_flow_score', 'structure_score',
-        'sentiment_score', 'llm_narrative_score', 'cross_asset_score',
-    )
-
-    return Response(list(signals))
+    """Stub — consensus removed. Use /api/evaluator/stats/ for signal history."""
+    return Response([])

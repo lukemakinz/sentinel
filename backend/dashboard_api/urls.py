@@ -26,6 +26,7 @@ urlpatterns = [
     path('signals/', views.active_signals, name='signals'),
     path('signals/<int:signal_id>/enter/', views.enter_signal, name='signal-enter'),
     path('signals/<int:signal_id>/dismiss/', views.dismiss_signal, name='signal-dismiss'),
+    path('evaluator/stats/', views.evaluator_stats, name='evaluator-stats'),
     path('strategy/health/', views.strategy_health, name='strategy-health'),
     path('tax/', views.tax_events, name='tax-events'),
     path('backtest/run/', views.backtest_run, name='backtest-run'),

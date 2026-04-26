@@ -4,11 +4,11 @@ STRATEGIES = {
     'S1': {
         'name':            'SMC Sweep',
         'description':     'Liquidity sweep → ChoCH → FVG entry',
-        'gates_a_all':     True,                    # all A gates required
-        'gates_b_must':    ['B1', 'B2'],            # mandatory B gates
-        'gates_b_min':     3,                        # min B gates total
-        'gates_c_must':    ['C1'],                  # mandatory C gate (ChoCH)
-        'gates_c_min':     2,                        # min C gates total
+        'gates_a_all':     True,
+        'gates_b_must':    ['B1', 'B2'],
+        'gates_b_min':     3,    # min 3/4 active B gates (B4 removed)
+        'gates_c_must':    ['C1'],
+        'gates_c_min':     2,
     },
     'S2': {
         'name':            'Order Flow',

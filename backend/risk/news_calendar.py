@@ -5,8 +5,13 @@ from typing import Optional
 BLACKOUT_BEFORE = timedelta(hours=2)
 BLACKOUT_AFTER  = timedelta(hours=1)
 
-# Known high-impact events for 2026 (UTC times)
-_EVENTS_2026 = [
+# TODO: Replace with live API (Trading Economics / Forex Factory).
+# Hardcoded list disabled — random 2026 blackouts would corrupt backtest results.
+# Re-enable only when connected to real event feed.
+_EVENTS_2026: list = []  # was: 21 hardcoded 2026 events
+
+if False:  # archive — kept for reference
+    _EVENTS_2026_ARCHIVE = [
     # FOMC meetings
     {'name': 'FOMC', 'dt': '2026-01-29T19:00'},
     {'name': 'FOMC', 'dt': '2026-03-19T19:00'},

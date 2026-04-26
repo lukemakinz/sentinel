@@ -81,3 +81,37 @@ def weekly_reset():
     from risk.kill_switches import reset_weekly
     reset_weekly()
     logger.info("Weekly risk counters reset")
+
+
+@shared_task(name='executor.force_close_all')
+def force_close_all():
+    """Force close ALL open positions at 22:00 UTC — no overnight positions."""
+    from .models import Position
+    from .paper_engine import PaperTradingEngine
+    from django.utils import timezone
+
+    open_positions = Position.objects.filter(status='OPEN')
+    if not open_positions.exists():
+        return {'closed': 0}
+
+    engine = PaperTradingEngine()
+    closed = 0
+    for position in open_positions:
+        try:
+            engine._update_position_price(position)
+            engine._close_position(position, float(position.current_price), 'EOD_FORCE_CLOSE')
+            closed += 1
+        except Exception as e:
+            logger.error(f"Force close failed for {position.id}: {e}")
+
+    logger.info(f"EOD force close: {closed} position(s) closed")
+    return {'closed': closed}
+
+
+@shared_task(name='executor.block_new_entries_eod')
+def block_new_entries_eod():
+    """Soft block: log warning that no new entries should be opened after 18:00 UTC."""
+    from .models import Position
+    open_count = Position.objects.filter(status='OPEN').count()
+    logger.info(f"EOD soft block active (18:00 UTC) — {open_count} positions still open, no new entries")
+    # Hard enforcement is in check_kill_switches via killzone gate A1 (off-session = no new entries)

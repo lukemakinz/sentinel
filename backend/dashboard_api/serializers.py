@@ -1,20 +1,9 @@
 from rest_framework import serializers
-from analysts.models import AnalystSignalRecord
-from consensus.models import ConsensusSignal
 from executor.models import Position, Trade, AccountState
 from risk.models import RiskState, RiskEvent
 
-
-class AnalystSignalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AnalystSignalRecord
-        fields = '__all__'
-
-
-class ConsensusSignalSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ConsensusSignal
-        fields = '__all__'
+# analysts/ and consensus/ removed from INSTALLED_APPS
+# AnalystSignalSerializer and ConsensusSignalSerializer disabled
 
 
 class PositionSerializer(serializers.ModelSerializer):
@@ -54,14 +43,3 @@ class RiskEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = RiskEvent
         fields = '__all__'
-
-
-class SystemStatusSerializer(serializers.Serializer):
-    status = serializers.CharField()
-    trading_mode = serializers.CharField()
-    trading_pairs = serializers.ListField(child=serializers.CharField())
-    ingester_active = serializers.BooleanField()
-    total_candles = serializers.IntegerField()
-    latest_candle_time = serializers.DateTimeField(allow_null=True)
-    open_positions = serializers.IntegerField()
-    daily_pnl = serializers.FloatField()

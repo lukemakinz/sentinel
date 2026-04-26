@@ -90,6 +90,30 @@ def recalculate_whale_threshold():
         logger.info(f"Whale threshold updated: {symbol} = ${threshold:.2f}")
 
 
+@shared_task(name='ingester.check_data_freshness')
+def check_data_freshness():
+    """Watchdog: alert if no candle data in last 5 minutes."""
+    from .models import Candle
+    from datetime import timedelta
+
+    cutoff = timezone.now() - timedelta(minutes=5)
+    stale_symbols = []
+
+    for symbol in _active_symbols():
+        last = Candle.objects.filter(symbol=symbol, interval='1m').order_by('-timestamp').first()
+        if not last or last.timestamp < cutoff:
+            age = int((timezone.now() - last.timestamp).total_seconds() / 60) if last else 9999
+            stale_symbols.append({'symbol': symbol, 'age_minutes': age})
+            logger.error(f"⚠️ STALE DATA: {symbol} last candle {age}m ago — ingester may have dropped")
+
+    if stale_symbols:
+        logger.error(f"Data freshness FAIL: {len(stale_symbols)} symbols stale: {stale_symbols}")
+    else:
+        logger.debug("Data freshness OK — all symbols live")
+
+    return {'stale': stale_symbols}
+
+
 @shared_task(name='ingester.backfill_candles')
 def backfill_candles():
     """Backfill historical candles on startup — runs once."""

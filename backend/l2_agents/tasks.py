@@ -15,6 +15,13 @@ def run_l2_analysis(trade_context: dict) -> dict:
         decision = L2Orchestrator().run(trade_context)
         logger.info(f"L2 {symbol}: {decision['action']} ×{decision['size_multiplier']}")
 
+        # Create Signal record for EVERY L1 PASS (shadow=True if rejected)
+        try:
+            from evaluator.tracker import create_signal
+            create_signal(trade_context, decision, trade_params=None, executed=False)
+        except Exception as e:
+            logger.debug(f"Signal creation failed for {symbol}: {e}")
+
         # If approved, compute L3 trade parameters and attach to the just-saved DB record
         if decision['action'] == 'APPROVE':
             try:

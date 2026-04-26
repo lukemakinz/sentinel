@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from l1_filter.gates_b import (
     check_liquidity_sweep, check_fvg_ob,
-    check_premium_discount, check_classical_pattern, check_atr_squeeze,
+    check_premium_discount, check_atr_squeeze,
 )
 from l1_filter.tests.helpers import make_candles, uptrend, downtrend
 
@@ -24,12 +24,31 @@ def sweep_candles_short():
 
 
 def fvg_long_candles():
-    """Three candles creating a bullish FVG: candle[0].high < candle[2].low."""
-    # candle[i-2].high < candle[i].low  → bullish FVG
-    highs  = [1000, 1005, 1015, 1020, 1025]
-    lows   = [990,  995,  1008, 1012, 1016]
-    closes = [995,  1000, 1014, 1018, 1022]
-    return make_candles(closes, highs=highs, lows=lows)
+    """FVG with proper displacement: body > 1.5×ATR + volume spike + gap."""
+    # 17 stable pre-candles for ATR baseline (~10 range each)
+    pre_closes = [1000 + i * 0.5 for i in range(17)]
+    pre_highs  = [c + 5 for c in pre_closes]
+    pre_lows   = [c - 5 for c in pre_closes]
+    pre_vols   = [800.0] * 17
+
+    # 3-candle FVG setup: gap between c0.high=1010 and c2.low=1012
+    fvg_closes = [1009, 1040, 1043]
+    fvg_highs  = [1010, 1042, 1045]
+    fvg_lows   = [1005, 1007, 1012]   # c2.low=1012 > c0.high=1010 → bullish FVG!
+    fvg_opens  = [1008, 1009, 1041]   # c1 body=1040-1009=31 >> 1.5×ATR(10)=15
+    fvg_vols   = [800.0, 5000.0, 900.0]  # vol spike on displacement
+
+    # Pre opens: close - tiny offset
+    pre_opens = [c - 0.1 for c in pre_closes]
+    fvg_opens = [1008.0, 1009.0, 1041.0]  # c1 body = 1040-1009 = 31
+
+    all_closes = pre_closes + fvg_closes
+    all_highs  = pre_highs  + fvg_highs
+    all_lows   = pre_lows   + fvg_lows
+    all_vols   = pre_vols   + fvg_vols
+    all_opens  = pre_opens  + fvg_opens
+    return make_candles(all_closes, highs=all_highs, lows=all_lows,
+                        volumes=all_vols, opens=all_opens)
 
 
 class LiquiditySweepTest(TestCase):
@@ -95,24 +114,7 @@ class PremiumDiscountTest(TestCase):
         self.assertFalse(passed)
 
 
-class ClassicalPatternTest(TestCase):
-    def test_double_bottom_for_long(self):
-        # Two similar lows followed by recovery
-        closes = [1000, 950, 1000, 960, 1000, 1020, 1040]
-        lows   = [995,  940, 995,  950, 995,  1010, 1030]
-        passed, _ = check_classical_pattern(make_candles(closes, lows=lows), 'LONG')
-        self.assertTrue(passed)
-
-    def test_double_top_for_short(self):
-        closes = [1000, 1050, 1000, 1040, 1000, 980, 960]
-        highs  = [1005, 1060, 1005, 1050, 1005, 990, 970]
-        passed, _ = check_classical_pattern(make_candles(closes, highs=highs), 'SHORT')
-        self.assertTrue(passed)
-
-    def test_no_pattern_fails(self):
-        # Smooth monotonic uptrend — no double top/bottom
-        passed, _ = check_classical_pattern(uptrend(30), 'LONG')
-        self.assertFalse(passed)
+# ClassicalPatternTest removed — B4 gate deleted from pipeline
 
 
 class ATRSqueezeTest(TestCase):

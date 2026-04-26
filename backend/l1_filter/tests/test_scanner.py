@@ -34,7 +34,7 @@ ALL_PASS_PATCHES = {
     'l1_filter.scanner.check_liquidity_sweep':   MOCK_SWEEP,
     'l1_filter.scanner.check_fvg_ob':            MOCK_CVD,
     'l1_filter.scanner.check_premium_discount':  MOCK_PREMIUM,
-    'l1_filter.scanner.check_classical_pattern': MOCK_PATTERN,
+    # check_classical_pattern (B4) removed — redundant gate
     'l1_filter.scanner.check_atr_squeeze':       MOCK_SQUEEZE,
     'l1_filter.scanner.check_choch':             MOCK_CHOCH,
     'l1_filter.scanner.check_momentum_divergence': MOCK_DIVERG,
@@ -95,9 +95,8 @@ class L1ScannerTest(TestCase):
 
     @apply_patches
     def test_only_2_b_gates_pass_returns_none(self, *mocks):
-        # Override 3 B gates to fail
+        # B4 removed — now 4 B gates; fail 2 active ones to go below min
         with patch('l1_filter.scanner.check_premium_discount', return_value=MOCK_FAIL), \
-             patch('l1_filter.scanner.check_classical_pattern', return_value=MOCK_FAIL), \
              patch('l1_filter.scanner.check_atr_squeeze', return_value=MOCK_FAIL):
             ctx = self.scanner.scan('BTCUSDT', now=datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc))
         self.assertIsNone(ctx)

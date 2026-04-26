@@ -52,10 +52,10 @@ class HTFTrendTest(TestCase):
         passed, _ = check_htf_trend(uptrend(30))
         self.assertFalse(passed)
 
-    def test_returns_ema_values(self):
+    def test_returns_direction_and_basis(self):
         _, data = check_htf_trend(uptrend(250))
-        self.assertIn('ema50', data)
-        self.assertIn('ema200', data)
+        self.assertIn('direction', data)
+        self.assertIn('basis', data)   # 'structure_HH_HL' or 'ema_fallback'
 
 
 class BTCCorrelationTest(TestCase):

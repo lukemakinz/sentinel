@@ -20,9 +20,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('🏴‍☠️ SENTINEL Ingester starting...'))
 
-        # Backfill historical data first
-        self.stdout.write('Backfilling historical candles...')
-        backfill_candles()
+        # Backfill in background (don't block WebSocket start)
+        self.stdout.write('Scheduling historical candle backfill...')
+        try:
+            backfill_candles.delay()   # async via Celery
+        except Exception:
+            backfill_candles()         # fallback: sync if Celery not ready
 
         # Start WebSocket
         client = BinanceWebSocketClient()
