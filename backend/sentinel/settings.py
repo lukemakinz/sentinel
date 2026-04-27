@@ -144,7 +144,12 @@ MAX_RISK_PER_TRADE = float(os.environ.get('MAX_RISK_PER_TRADE', '0.005'))
 MAX_DAILY_DRAWDOWN = float(os.environ.get('MAX_DAILY_DRAWDOWN', '0.03'))
 MAX_WEEKLY_DRAWDOWN = float(os.environ.get('MAX_WEEKLY_DRAWDOWN', '0.07'))
 MAX_OPEN_POSITIONS = int(os.environ.get('MAX_OPEN_POSITIONS', '3'))
-MAX_LEVERAGE = int(os.environ.get('MAX_LEVERAGE', '5'))
+DEFAULT_MARGIN_MODE = os.environ.get('DEFAULT_MARGIN_MODE', 'isolated')
+MAX_LEVERAGE = int(os.environ.get('MAX_LEVERAGE', '10'))
+MAX_HIGH_CONVICTION_LEVERAGE = int(os.environ.get('MAX_HIGH_CONVICTION_LEVERAGE', '20'))
+MAX_MARGIN_PER_TRADE_PCT = float(os.environ.get('MAX_MARGIN_PER_TRADE_PCT', '0.15'))
+MIN_LIQUIDATION_BUFFER_R = float(os.environ.get('MIN_LIQUIDATION_BUFFER_R', '3.0'))
+MAINTENANCE_MARGIN_RATE = float(os.environ.get('MAINTENANCE_MARGIN_RATE', '0.005'))
 INITIAL_BALANCE = float(os.environ.get('INITIAL_BALANCE', '10000'))
 
 # Consensus weights

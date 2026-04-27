@@ -5,10 +5,46 @@ from analysts.structure import detect_swing_points, detect_order_blocks, detect_
 from .utils import compute_atr
 
 
+def _swept_level_has_htf_poi(swept_price: float, htf_candles: list,
+                              direction: str, tolerance: float = 0.005) -> bool:
+    """
+    Check if swept level coincides with a HTF Point of Interest (4H/1D FVG or OB).
+    Sweep + HTF POI = much higher probability of strong reaction.
+    """
+    if not htf_candles or len(htf_candles) < 5:
+        return True   # no data → don't filter
+    try:
+        import numpy as np
+        from analysts.structure import detect_order_blocks, detect_fvg
+        opens  = np.array([c['open']  for c in htf_candles])
+        closes = np.array([c['close'] for c in htf_candles])
+        highs  = np.array([c['high']  for c in htf_candles])
+        lows   = np.array([c['low']   for c in htf_candles])
+        vols   = np.array([c.get('volume', 1) for c in htf_candles])
+
+        obs  = detect_order_blocks(opens, closes, highs, lows, vols)
+        fvgs = detect_fvg(highs, lows, closes)
+
+        poi_type = 'bullish' if direction == 'LONG' else 'bearish'
+        for ob in obs:
+            if ob['type'] == f'{poi_type}_ob':
+                if ob['bottom'] * (1-tolerance) <= swept_price <= ob['top'] * (1+tolerance):
+                    return True
+        for gap in fvgs:
+            if gap['type'] == f'{poi_type}_fvg':
+                if gap['bottom'] * (1-tolerance) <= swept_price <= gap['top'] * (1+tolerance):
+                    return True
+        return False
+    except Exception:
+        return True  # on error, don't block
+
+
 def check_liquidity_sweep(candles: list, direction: str,
-                          symbol: str = None) -> tuple[bool, dict]:
+                          symbol: str = None,
+                          htf_candles: list = None) -> tuple[bool, dict]:
     """
     B1: Liquidity sweep against REAL structural levels (PDH/PDL/Asian Range/Equal levels).
+    Expert improvement: requires HTF POI confluence (4H/1D OB or FVG at sweep level).
     Falls back to swing-based detection if no real levels available.
     """
     if len(candles) < 10:
@@ -34,19 +70,23 @@ def check_liquidity_sweep(candles: list, direction: str,
                     swept = [l for l in levels if recent_low < l < last_close]
                     if swept:
                         target = min(swept, key=lambda l: abs(last_close - l))
+                        htf_ok = _swept_level_has_htf_poi(target, htf_candles, direction)
                         return True, {
                             'swept_level': target,
                             'nearest_liquidity': snap.nearest_above(last_close),
                             'sweep_type': 'PDH/PDL/Asian/Equal',
+                            'htf_poi_confluence': htf_ok,
                         }
                 else:
                     swept = [l for l in levels if last_close < l < recent_high]
                     if swept:
                         target = min(swept, key=lambda l: abs(last_close - l))
+                        htf_ok = _swept_level_has_htf_poi(target, htf_candles, direction)
                         return True, {
                             'swept_level': target,
                             'nearest_liquidity': snap.nearest_below(last_close),
                             'sweep_type': 'PDH/PDL/Asian/Equal',
+                            'htf_poi_confluence': htf_ok,
                         }
         except Exception:
             pass   # fall through to swing-based
@@ -98,20 +138,30 @@ def check_fvg_ob(candles: list, direction: str) -> tuple[bool, dict]:
         # Active bullish FVGs below current price (support)
         nearby = [f for f in active_fvgs if f.bottom <= current]
         if nearby:
-            fvg = max(nearby, key=lambda f: f.bottom)  # most recent below
+            fvg = sorted(
+                nearby,
+                key=lambda f: (0 if f.status == 'fresh' else 1, abs(current - f.top))
+            )[0]
             return True, {
                 'fvg_zone': (fvg.bottom, fvg.top),
                 'entry_ote': fvg.ote_entry,   # OTE = 50% mid
                 'fvg_type': 'displacement_fvg',
+                'fvg_status': fvg.status,
+                'fvg_fill_ratio': fvg.fill_ratio,
             }
     else:
         nearby = [f for f in active_fvgs if f.top >= current]
         if nearby:
-            fvg = min(nearby, key=lambda f: f.top)
+            fvg = sorted(
+                nearby,
+                key=lambda f: (0 if f.status == 'fresh' else 1, abs(current - f.bottom))
+            )[0]
             return True, {
                 'fvg_zone': (fvg.bottom, fvg.top),
                 'entry_ote': fvg.ote_entry,
                 'fvg_type': 'displacement_fvg',
+                'fvg_status': fvg.status,
+                'fvg_fill_ratio': fvg.fill_ratio,
             }
 
     # Fallback: Order Block (last opposing candle before strong move)
@@ -126,12 +176,12 @@ def check_fvg_ob(candles: list, direction: str) -> tuple[bool, dict]:
         bullish_obs = [ob for ob in obs if ob['type'] == 'bullish_ob' and ob['bottom'] <= current]
         if bullish_obs:
             ob = bullish_obs[0]
-            return True, {'fvg_zone': (ob['bottom'], ob['top']), 'fvg_type': 'order_block'}
+            return True, {'fvg_zone': (ob['bottom'], ob['top']), 'fvg_type': 'order_block', 'fvg_status': 'fresh', 'fvg_fill_ratio': 0.0}
     else:
         bearish_obs = [ob for ob in obs if ob['type'] == 'bearish_ob' and ob['top'] >= current]
         if bearish_obs:
             ob = bearish_obs[0]
-            return True, {'fvg_zone': (ob['bottom'], ob['top']), 'fvg_type': 'order_block'}
+            return True, {'fvg_zone': (ob['bottom'], ob['top']), 'fvg_type': 'order_block', 'fvg_status': 'fresh', 'fvg_fill_ratio': 0.0}
 
     return False, {}
 

@@ -18,6 +18,7 @@ class StrategyEvaluationTest(TestCase):
     def test_s1_passes_with_correct_gates(self):
         result = evaluate_strategies(ALL_A_PASS, B_S1_OK, C_S1_OK)
         self.assertIn('S1', result)
+        self.assertIn('S1A', result)
 
     def test_s1_fails_when_a3_missing(self):
         result = evaluate_strategies(ALL_A_FAIL, B_S1_OK, C_S1_OK)
@@ -60,6 +61,14 @@ class StrategyEvaluationTest(TestCase):
         # S1 requires all A, S3 requires A1+A2 — with all A passing both could pass
         result = evaluate_strategies(ALL_A_PASS, B_S1_OK, C_S1_OK)
         # S1 needs B1+B2+min3B+C1+min2C ← B_S1_OK+C_S1_OK satisfies
+        self.assertIn('S1', result)
+
+    def test_ctx_strategy_candidates_override_gate_projection(self):
+        ctx = {'strategy_candidates': ['S1A', 'S1B', 'S1C']}
+        result = evaluate_strategies(ALL_A_PASS, B_S1_OK, C_S1_OK, ctx=ctx)
+        self.assertIn('S1A', result)
+        self.assertIn('S1B', result)
+        self.assertIn('S1C', result)
         self.assertIn('S1', result)
 
     def test_no_strategy_passes_when_all_fail(self):

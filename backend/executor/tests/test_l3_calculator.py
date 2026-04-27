@@ -1,5 +1,6 @@
 """L3Calculator — all deterministic, no LLM, pure arithmetic."""
 from django.test import TestCase
+from django.test import override_settings
 
 from executor.l3_calculator import L3Calculator
 
@@ -27,6 +28,11 @@ SHORT_CONTEXT = {
 
 APPROVE = {'action': 'APPROVE', 'size_multiplier': 1.0}
 REJECT  = {'action': 'REJECT',  'size_multiplier': 0.0}
+HIGH_CONV_LONG_CONTEXT = {
+    **LONG_CONTEXT,
+    'gates_b': {'B1': True, 'B2': True, 'B3': True, 'B5': False},
+    'gates_c': {'C1': True, 'C2': True, 'C3': True, 'C4': False, 'C5': False},
+}
 
 
 class L3EntryCalculationTest(TestCase):
@@ -49,10 +55,21 @@ class L3EntryCalculationTest(TestCase):
         expected = LONG_CONTEXT['swept_level'] + 0.1 * LONG_CONTEXT['atr']
         self.assertAlmostEqual(params['entry_price'], expected, places=0)
 
+    def test_s1b_entry_is_shallower_than_mid_fvg(self):
+        params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1B')
+        self.assertGreater(params['entry_price'], LONG_CONTEXT['fvg_zone'][0])
+        self.assertLess(params['entry_price'], 93500.0)
+
     def test_s3_entry_uses_nearest_liquidity_adjusted(self):
         params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S3')
         self.assertIsNotNone(params)
         self.assertIn('entry_price', params)
+
+    def test_s1c_entry_blends_current_price_and_reclaim_limit(self):
+        ctx = {**LONG_CONTEXT, 'current_price': 93600.0}
+        params = self.calc.calculate(ctx, APPROVE, strategy='S1C')
+        self.assertGreater(params['entry_price'], 93400.0)
+        self.assertLess(params['entry_price'], 93600.0)
 
 
 class L3StopLossTest(TestCase):
@@ -92,6 +109,13 @@ class L3StopLossTest(TestCase):
         dist_pct = (entry - sl) / entry
         self.assertGreaterEqual(dist_pct, 0.0029, "SL too close — noise stop risk")  # 0.29% tolerance for float
         self.assertLessEqual(dist_pct, 0.025, "SL too far — S3 max 2.5%")
+
+    def test_loose_stop_profile_is_wider_than_tight(self):
+        tight = self.calc.calculate({**LONG_CONTEXT, 'stop_profile': 'tight'}, APPROVE, strategy='S1B')
+        loose = self.calc.calculate({**LONG_CONTEXT, 'stop_profile': 'loose'}, APPROVE, strategy='S1B')
+        tight_dist = tight['entry_price'] - tight['stop_loss']
+        loose_dist = loose['entry_price'] - loose['stop_loss']
+        self.assertGreater(loose_dist, tight_dist)
 
 
 class L3TakeProfitTest(TestCase):
@@ -133,6 +157,30 @@ class L3TakeProfitTest(TestCase):
         params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1')
         self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.20, places=2)
 
+    def test_s1a_leaves_half_as_runner(self):
+        params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1A')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.25, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.25, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.50, places=2)
+
+    def test_s1b_uses_more_aggressive_runner_profile(self):
+        params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1B')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.30, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.30, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.40, places=2)
+
+    def test_s1c_uses_reclaim_runner_profile(self):
+        params = self.calc.calculate({**LONG_CONTEXT, 'current_price': 93600.0}, APPROVE, strategy='S1C')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.15, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.25, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.60, places=2)
+
+    def test_s1c_time_kill_is_more_lenient_after_tp1(self):
+        from datetime import datetime, timezone, timedelta
+        opened = datetime.now(timezone.utc) - timedelta(hours=8)
+        result = self.calc.check_time_kill('LONG', opened, 93000.0, 92000.0, 93100.0, strategy='S1C', tp1_hit=True)
+        self.assertFalse(result)
+
 
 class L3RejectConditionsTest(TestCase):
     def setUp(self):
@@ -163,6 +211,25 @@ class L3RejectConditionsTest(TestCase):
         decision = {'action': 'APPROVE', 'size_multiplier': 0.5}
         params = self.calc.calculate(LONG_CONTEXT, decision, strategy='S1')
         self.assertEqual(params['size_multiplier'], 0.5)
+
+    @override_settings(MAX_LEVERAGE=10, MAX_HIGH_CONVICTION_LEVERAGE=20, MIN_LIQUIDATION_BUFFER_R=3.0)
+    def test_default_setup_uses_10x_leverage(self):
+        params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1')
+        self.assertEqual(params['leverage'], 10)
+        self.assertEqual(params['conviction'], 'STANDARD')
+
+    @override_settings(MAX_LEVERAGE=10, MAX_HIGH_CONVICTION_LEVERAGE=20, MIN_LIQUIDATION_BUFFER_R=3.0)
+    def test_high_conviction_setup_can_use_20x(self):
+        params = self.calc.calculate(HIGH_CONV_LONG_CONTEXT, APPROVE, strategy='S1')
+        self.assertEqual(params['leverage'], 20)
+        self.assertEqual(params['conviction'], 'HIGH_CONVICTION')
+        self.assertGreaterEqual(params['liquidation_buffer_r'], 3.0)
+
+    @override_settings(MAX_LEVERAGE=10, MAX_HIGH_CONVICTION_LEVERAGE=20, MIN_LIQUIDATION_BUFFER_R=6.0)
+    def test_high_conviction_falls_back_to_10x_when_20x_is_too_tight(self):
+        params = self.calc.calculate(HIGH_CONV_LONG_CONTEXT, APPROVE, strategy='S1')
+        self.assertEqual(params['leverage'], 10)
+        self.assertEqual(params['conviction'], 'STANDARD')
 
 
 class L3ChandelierTest(TestCase):

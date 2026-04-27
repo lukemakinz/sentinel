@@ -37,7 +37,7 @@ TRADE_PARAMS = {
 }
 
 
-@override_settings(INITIAL_BALANCE=10000, MAX_RISK_PER_TRADE=0.005)
+@override_settings(INITIAL_BALANCE=10000, MAX_RISK_PER_TRADE=0.005, MAX_LEVERAGE=10, MAX_MARGIN_PER_TRADE_PCT=0.15)
 class SimulatorTradeLifecycleTest(TestCase):
     def setUp(self):
         self.config = BacktestConfig(
@@ -60,7 +60,7 @@ class SimulatorTradeLifecycleTest(TestCase):
         self.assertEqual(len(self.sim.closed_trades), 1)
         self.assertLess(self.sim.closed_trades[0]['pnl'], 0)
 
-    def test_tp1_hit_closes_40pct_and_moves_sl(self):
+    def test_tp1_hit_closes_configured_ratio_and_moves_sl(self):
         self.sim._open_position(TRADE_PARAMS, datetime.now(timezone.utc))
         pos = self.sim.open_positions[0]
         initial_qty = pos['quantity']
@@ -72,9 +72,9 @@ class SimulatorTradeLifecycleTest(TestCase):
 
         self.assertTrue(pos['tp1_hit'])
         self.assertAlmostEqual(pos['quantity'], initial_qty * 0.60, places=6)
-        self.assertAlmostEqual(pos['stop_loss'], TRADE_PARAMS['entry_price'], places=0)
+        self.assertGreaterEqual(pos['stop_loss'], TRADE_PARAMS['entry_price'])
 
-    def test_tp2_hit_closes_40pct_more(self):
+    def test_tp2_hit_leaves_runner_from_configured_ratios(self):
         self.sim._open_position(TRADE_PARAMS, datetime.now(timezone.utc))
         pos = self.sim.open_positions[0]
         original_qty = pos['quantity']
@@ -87,6 +87,44 @@ class SimulatorTradeLifecycleTest(TestCase):
         pos = self.sim.open_positions[0]
         self.assertTrue(pos['tp2_hit'])
         self.assertAlmostEqual(pos['quantity'], original_qty * 0.20, places=6)
+        self.assertAlmostEqual(pos['stop_loss'], TRADE_PARAMS['take_profits'][0]['level'], places=0)
+
+    def test_partial_realization_is_recorded_in_closed_trade(self):
+        self.sim._open_position(TRADE_PARAMS, datetime.now(timezone.utc))
+        self.sim._update_positions(make_candle(95000, high=95000))
+        self.sim._update_positions(make_candle(96000, high=96000))
+        self.sim._update_positions(make_candle(94500, low=94400))
+
+        self.assertEqual(len(self.sim.closed_trades), 1)
+        trade = self.sim.closed_trades[0]
+        self.assertEqual(len(trade['partials']), 2)
+        self.assertGreater(trade['pnl'], 0)
+
+    def test_s1c_runner_trailing_can_raise_stop_after_tp1(self):
+        s1c_params = {
+            **TRADE_PARAMS,
+            'strategy': 'S1C',
+            'take_profits': [
+                {'level': 94000.0, 'ratio': 0.15, 'label': 'TP1', 'runner': False},
+                {'level': 95000.0, 'ratio': 0.25, 'label': 'TP2', 'runner': False},
+                {'level': None, 'ratio': 0.60, 'label': 'TP3', 'runner': True},
+            ],
+        }
+        self.sim._open_position(s1c_params, datetime.now(timezone.utc))
+        self.sim._update_positions(make_candle(94100, high=94100))
+        pos = self.sim.open_positions[0]
+        self.assertTrue(pos['tp1_hit'])
+        self.assertGreaterEqual(pos['stop_loss'], pos['entry_price'])
+
+    def test_stop_loss_has_priority_over_time_kill_when_same_candle_hits_both(self):
+        opened_at = datetime.now(timezone.utc) - timedelta(hours=9)
+        self.sim._open_position(TRADE_PARAMS, opened_at)
+
+        candle = make_candle(92000, low=92350)
+        self.sim._update_positions(candle)
+
+        self.assertEqual(len(self.sim.closed_trades), 1)
+        self.assertEqual(self.sim.closed_trades[0]['close_reason'], 'STOP_LOSS')
 
     def test_time_kill_closes_position_after_8h(self):
         opened_at = datetime.now(timezone.utc) - timedelta(hours=9)
@@ -110,6 +148,17 @@ class SimulatorTradeLifecycleTest(TestCase):
         self.assertEqual(len(self.sim.pending_orders), 0)
         self.assertEqual(len(self.sim.open_positions), 1)
 
+    def test_pending_order_does_not_fill_outside_entry_session(self):
+        created_at = datetime(2024, 1, 1, 14, 0, tzinfo=timezone.utc)
+        self.sim._add_pending_order(TRADE_PARAMS, created_at)
+        self.assertEqual(self.sim.pending_orders[0]['entry_session'], 'ny')
+
+        candle = make_candle(93500, low=93200, ts=datetime(2024, 1, 1, 17, 0, tzinfo=timezone.utc))
+        self.sim._check_pending_fills(candle, candle['timestamp'])
+
+        self.assertEqual(len(self.sim.pending_orders), 1)
+        self.assertEqual(len(self.sim.open_positions), 0)
+
     def test_position_size_respects_risk_per_trade(self):
         self.sim._open_position(TRADE_PARAMS, datetime.now(timezone.utc))
         pos = self.sim.open_positions[0]
@@ -118,6 +167,13 @@ class SimulatorTradeLifecycleTest(TestCase):
         r = TRADE_PARAMS['entry_price'] - TRADE_PARAMS['stop_loss']
         max_loss = pos['quantity'] * r
         self.assertAlmostEqual(max_loss, 10000 * 0.005, delta=5)
+
+    def test_position_margin_respects_cap(self):
+        aggressive = {**TRADE_PARAMS, 'leverage': 10, 'size_multiplier': 5.0}
+        self.sim._open_position(aggressive, datetime.now(timezone.utc))
+        pos = self.sim.open_positions[0]
+        self.assertLessEqual(pos['margin_used'], 10000 * 0.15 + 1e-6)
+        self.assertEqual(pos['margin_mode'], 'isolated')
 
     def test_no_position_opened_without_capital(self):
         self.sim.current_capital = 0

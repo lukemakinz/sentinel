@@ -3,19 +3,21 @@ from datetime import datetime, timezone
 
 from .utils import compute_ema, compute_adx, is_trending
 
-LONDON_START, LONDON_END = 7, 10   # UTC hours [start, end)
-NY_START,     NY_END     = 13, 16
+# Backtests show the durable edge is concentrated in the NY AM session.
+NY_START, NY_END = 13, 16   # 13:30 effective (13 for hourly granularity)
 FUNDING_THRESHOLD        = 0.001   # 0.1%
 ADX_THRESHOLD            = 20
 HTF_MIN_CANDLES          = 51      # need at least 50 for EMA50
 
 
 def check_killzone(now: datetime) -> tuple[bool, dict]:
+    """
+    Trade only during the NY AM killzone.
+    London was removed after backtests showed it diluted the edge and worsened R:R.
+    """
     hour = now.hour
-    if LONDON_START <= hour < LONDON_END:
-        return True, {'session': 'london'}
     if NY_START <= hour < NY_END:
-        return True, {'session': 'ny'}
+        return True, {'session': 'ny', 'quality': 'primary'}
     return False, {'session': None}
 
 

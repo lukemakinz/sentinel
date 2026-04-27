@@ -86,6 +86,24 @@ def compute_adx(candles: list, period: int = 14) -> float:
     return adx[-1] if adx else 0.0
 
 
+def compute_obv(candles: list) -> list:
+    """On-Balance Volume as cumulative running total."""
+    if not candles:
+        return []
+    obv = [0.0]
+    for i in range(1, len(candles)):
+        prev_close = candles[i - 1]['close']
+        close = candles[i]['close']
+        volume = float(candles[i].get('volume', 0.0))
+        if close > prev_close:
+            obv.append(obv[-1] + volume)
+        elif close < prev_close:
+            obv.append(obv[-1] - volume)
+        else:
+            obv.append(obv[-1])
+    return obv
+
+
 def compute_choppiness_index(candles: list, period: int = 14) -> float:
     """
     Choppiness Index — better regime detector than ADX.

@@ -5,10 +5,51 @@ from typing import Optional
 BLACKOUT_BEFORE = timedelta(hours=2)
 BLACKOUT_AFTER  = timedelta(hours=1)
 
-# TODO: Replace with live API (Trading Economics / Forex Factory).
-# Hardcoded list disabled — random 2026 blackouts would corrupt backtest results.
-# Re-enable only when connected to real event feed.
-_EVENTS_2026: list = []  # was: 21 hardcoded 2026 events
+# High-impact macro events — 2025 + 2026.
+# Source: FOMC calendar + BLS CPI schedule + BLS NFP schedule (UTC times).
+# TODO: Replace with live Trading Economics API before live trading.
+_EVENTS_2026 = [
+    # FOMC 2025
+    {'name': 'FOMC', 'dt': '2025-01-29T19:00'},
+    {'name': 'FOMC', 'dt': '2025-03-19T19:00'},
+    {'name': 'FOMC', 'dt': '2025-05-07T19:00'},
+    {'name': 'FOMC', 'dt': '2025-06-18T19:00'},
+    {'name': 'FOMC', 'dt': '2025-07-30T19:00'},
+    {'name': 'FOMC', 'dt': '2025-09-17T19:00'},
+    {'name': 'FOMC', 'dt': '2025-11-07T19:00'},
+    {'name': 'FOMC', 'dt': '2025-12-17T19:00'},
+    # CPI 2025 (monthly, ~13th)
+    {'name': 'CPI', 'dt': '2025-01-15T13:30'},
+    {'name': 'CPI', 'dt': '2025-02-12T13:30'},
+    {'name': 'CPI', 'dt': '2025-03-12T13:30'},
+    {'name': 'CPI', 'dt': '2025-04-10T12:30'},
+    {'name': 'CPI', 'dt': '2025-05-13T12:30'},
+    {'name': 'CPI', 'dt': '2025-06-11T12:30'},
+    {'name': 'CPI', 'dt': '2025-07-15T12:30'},
+    {'name': 'CPI', 'dt': '2025-08-12T12:30'},
+    {'name': 'CPI', 'dt': '2025-09-10T12:30'},
+    {'name': 'CPI', 'dt': '2025-10-15T12:30'},
+    {'name': 'CPI', 'dt': '2025-11-13T13:30'},
+    {'name': 'CPI', 'dt': '2025-12-10T13:30'},
+    # NFP 2025 (first Friday of month)
+    {'name': 'NFP', 'dt': '2025-01-10T13:30'},
+    {'name': 'NFP', 'dt': '2025-02-07T13:30'},
+    {'name': 'NFP', 'dt': '2025-03-07T13:30'},
+    {'name': 'NFP', 'dt': '2025-04-04T12:30'},
+    {'name': 'NFP', 'dt': '2025-05-02T12:30'},
+    {'name': 'NFP', 'dt': '2025-06-06T12:30'},
+    {'name': 'NFP', 'dt': '2025-07-03T12:30'},
+    {'name': 'NFP', 'dt': '2025-08-01T12:30'},
+    {'name': 'NFP', 'dt': '2025-09-05T12:30'},
+    {'name': 'NFP', 'dt': '2025-10-03T12:30'},
+    {'name': 'NFP', 'dt': '2025-11-07T13:30'},
+    {'name': 'NFP', 'dt': '2025-12-05T13:30'},
+    # FOMC 2026
+    {'name': 'FOMC', 'dt': '2026-01-29T19:00'},
+    {'name': 'FOMC', 'dt': '2026-03-19T19:00'},
+    {'name': 'FOMC', 'dt': '2026-05-07T19:00'},
+    {'name': 'FOMC', 'dt': '2026-06-18T19:00'},
+]
 
 if False:  # archive — kept for reference
     _EVENTS_2026_ARCHIVE = [

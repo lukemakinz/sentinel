@@ -281,7 +281,7 @@ def latest_scan(request, symbol):
     # Check which strategies pass with these gate results
     cutoff = timezone.now() - timedelta(hours=4)
     has_cvd = WhaleCVD.objects.filter(symbol=symbol, timestamp__gte=cutoff).exists()
-    passing_strategies = evaluate_strategies(gates_a, gates_b, gates_c, has_whale_cvd=has_cvd)
+    passing_strategies = evaluate_strategies(gates_a, gates_b, gates_c, has_whale_cvd=has_cvd, ctx=ctx)
 
     return Response({
         'symbol':              symbol,

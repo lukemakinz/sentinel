@@ -27,7 +27,7 @@ def scan_all_symbols():
     for symbol in WatchedPair.get_active_symbols():
         try:
             # Run full gate scan (all 15 gates)
-            ctx = scanner.scan(symbol)
+            ctx = scanner.scan(symbol, strategy=None)
 
             # Check if WhaleCVD data exists (required for S2)
             cutoff = timezone.now() - timedelta(hours=4)
@@ -38,7 +38,7 @@ def scan_all_symbols():
                 gates_b = ctx.get('gates_b', {})
                 gates_c = ctx.get('gates_c', {})
 
-                passing = evaluate_strategies(gates_a, gates_b, gates_c, has_whale_cvd=has_cvd)
+                passing = evaluate_strategies(gates_a, gates_b, gates_c, has_whale_cvd=has_cvd, ctx=ctx)
                 results[symbol] = passing or 'FAIL'
 
                 for strategy_id in passing:

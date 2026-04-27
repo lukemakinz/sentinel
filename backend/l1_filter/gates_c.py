@@ -2,8 +2,8 @@
 import numpy as np
 
 from analysts.structure import detect_swing_points, detect_structure_break, compute_vwap_bands
-from analysts.momentum import compute_rsi, detect_divergence, _ema
-from .utils import compute_ema
+from analysts.momentum import compute_rsi, detect_divergence, detect_divergence_extended, _ema
+from .utils import compute_ema, compute_obv
 
 
 def check_choch(candles: list, direction: str,
@@ -61,22 +61,51 @@ def check_choch(candles: list, direction: str,
     return False, {}
 
 
-def check_momentum_divergence(candles: list, direction: str) -> tuple[bool, dict]:
+def check_momentum_divergence(candles: list, direction: str,
+                               symbol: str = None) -> tuple[bool, dict]:
+    """
+    C2: Momentum divergence — RSI or CVD divergence at sweep point.
+    Expert improvement: CVD divergence (price lower low + CVD higher low) is
+    the strongest confirmation of absorption by institutions.
+    """
     if len(candles) < 20:
         return False, {}
 
+    # Primary: CVD divergence (if data available)
+    if symbol:
+        try:
+            from ingester.models import WhaleCVD
+            from django.utils import timezone
+            from datetime import timedelta
+            cutoff = timezone.now() - timedelta(hours=8)
+            cvd_values = list(WhaleCVD.objects.filter(symbol=symbol, timestamp__gte=cutoff)
+                              .order_by('timestamp').values_list('cumulative_delta', flat=True)[-20:])
+            if len(cvd_values) >= 10:
+                import numpy as np
+                cvd_arr   = np.array([float(v) for v in cvd_values], dtype=float)
+                closes_cvd = np.array([c['close'] for c in candles[-len(cvd_arr):]], dtype=float)
+                div = detect_divergence(closes_cvd, cvd_arr) or detect_divergence_extended(closes_cvd, cvd_arr)
+                if direction == 'LONG'  and div in {'bullish', 'bullish_hidden'}:
+                    return True, {'divergence': f'{div}_cvd', 'source': 'WhaleCVD'}
+                if direction == 'SHORT' and div in {'bearish', 'bearish_hidden'}:
+                    return True, {'divergence': f'{div}_cvd', 'source': 'WhaleCVD'}
+        except Exception:
+            pass
+
+    # Fallback: RSI divergence
+    import numpy as np
     closes = np.array([c['close'] for c in candles], dtype=float)
     rsi = compute_rsi(closes)
-
     if len(rsi) < 10:
         return False, {}
 
-    div = detect_divergence(closes, rsi)
-
-    if direction == 'LONG'  and div == 'bullish':
-        return True, {'divergence': 'bullish'}
-    if direction == 'SHORT' and div == 'bearish':
-        return True, {'divergence': 'bearish'}
+    div = detect_divergence(closes, rsi) or detect_divergence_extended(closes, rsi)
+    if direction == 'LONG'  and div in {'bullish', 'bullish_hidden'}:
+        strength = 'hidden' if 'hidden' in div else 'regular'
+        return True, {'divergence': f'{div}_rsi', 'source': 'RSI', 'strength': strength}
+    if direction == 'SHORT' and div in {'bearish', 'bearish_hidden'}:
+        strength = 'hidden' if 'hidden' in div else 'regular'
+        return True, {'divergence': f'{div}_rsi', 'source': 'RSI', 'strength': strength}
 
     return False, {}
 
@@ -151,3 +180,59 @@ def check_vwap(candles: list, direction: str) -> tuple[bool, dict]:
         return True, {'vwap': vwap}
 
     return False, {'vwap': vwap}
+
+
+def check_obv_confirmation(candles: list, direction: str) -> tuple[bool, dict]:
+    """
+    C6: OBV confirmation.
+    For continuation trades we want price trend and volume trend aligned.
+    """
+    if len(candles) < 12:
+        return False, {}
+
+    closes = [c['close'] for c in candles]
+    obv = compute_obv(candles)
+    if len(obv) < 8:
+        return False, {}
+
+    obv_ema = compute_ema(obv, 5)
+    price_ema = compute_ema(closes, 5)
+    if not obv_ema or not price_ema:
+        return False, {}
+
+    obv_slope_up = obv[-1] > obv[-4]
+    price_slope_up = closes[-1] > price_ema[-1]
+    obv_slope_down = obv[-1] < obv[-4]
+    price_slope_down = closes[-1] < price_ema[-1]
+
+    if direction == 'LONG' and obv[-1] > obv_ema[-1] and obv_slope_up and price_slope_up:
+        return True, {'obv': round(obv[-1], 2), 'obv_ema': round(obv_ema[-1], 2), 'signal': 'bullish_obv'}
+    if direction == 'SHORT' and obv[-1] < obv_ema[-1] and obv_slope_down and price_slope_down:
+        return True, {'obv': round(obv[-1], 2), 'obv_ema': round(obv_ema[-1], 2), 'signal': 'bearish_obv'}
+
+    return False, {'obv': round(obv[-1], 2), 'obv_ema': round(obv_ema[-1], 2)}
+
+
+def check_price_action_trigger(candles: list, direction: str) -> tuple[bool, dict]:
+    """
+    C7: Strong trigger candle.
+    We want a displacement-style close, not just a wick through structure.
+    """
+    if len(candles) < 3:
+        return False, {}
+
+    last = candles[-1]
+    prev = candles[-2]
+    candle_range = max(last['high'] - last['low'], 1e-9)
+    body = abs(last['close'] - last['open'])
+    body_ratio = body / candle_range
+    close_pos = (last['close'] - last['low']) / candle_range
+    breakout_up = last['close'] > prev['high']
+    breakout_down = last['close'] < prev['low']
+
+    if direction == 'LONG' and body_ratio >= 0.6 and close_pos >= 0.7 and breakout_up:
+        return True, {'body_ratio': round(body_ratio, 3), 'close_position': round(close_pos, 3), 'signal': 'bullish_displacement'}
+    if direction == 'SHORT' and body_ratio >= 0.6 and close_pos <= 0.3 and breakout_down:
+        return True, {'body_ratio': round(body_ratio, 3), 'close_position': round(close_pos, 3), 'signal': 'bearish_displacement'}
+
+    return False, {'body_ratio': round(body_ratio, 3), 'close_position': round(close_pos, 3)}

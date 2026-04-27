@@ -6,10 +6,10 @@ from l1_filter.tests.helpers import uptrend, downtrend, ranging
 
 
 class KillzoneTest(TestCase):
-    def test_london_open_passes(self):
+    def test_london_open_fails(self):
         passed, data = check_killzone(datetime(2026, 1, 1, 8, 30, tzinfo=timezone.utc))
-        self.assertTrue(passed)
-        self.assertEqual(data['session'], 'london')
+        self.assertFalse(passed)
+        self.assertIsNone(data['session'])
 
     def test_ny_open_passes(self):
         passed, data = check_killzone(datetime(2026, 1, 1, 14, 0, tzinfo=timezone.utc))
@@ -20,9 +20,9 @@ class KillzoneTest(TestCase):
         passed, _ = check_killzone(datetime(2026, 1, 1, 11, 0, tzinfo=timezone.utc))
         self.assertFalse(passed)
 
-    def test_london_boundary_start_passes(self):
+    def test_london_boundary_start_fails(self):
         passed, _ = check_killzone(datetime(2026, 1, 1, 7, 0, tzinfo=timezone.utc))
-        self.assertTrue(passed)
+        self.assertFalse(passed)
 
     def test_london_boundary_end_fails(self):
         passed, _ = check_killzone(datetime(2026, 1, 1, 10, 0, tzinfo=timezone.utc))

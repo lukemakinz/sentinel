@@ -3,21 +3,42 @@ from datetime import datetime, timezone
 from django.conf import settings
 
 # Strategy-specific ATR buffer multipliers for SL
-_SL_ATR_BUFFER = {'S1': 0.20, 'S2': 0.20, 'S3': 0.15}
+_SL_ATR_BUFFER = {'S1': 0.20, 'S1A': 0.20, 'S1B': 0.10, 'S1C': 0.16, 'S2': 0.20, 'S3': 0.15}
 
 # Per-strategy SL caps (% of entry price)
 # S1 scalp: tight (0.3-1.0%) | S2 order flow: medium (0.3-1.5%) | S3 classic: wider (0.3-2.5%)
-_SL_MIN_PCT = {'S1': 0.003, 'S2': 0.003, 'S3': 0.003}  # min 0.3% — noise stop protection
-_SL_MAX_PCT = {'S1': 0.015, 'S2': 0.020, 'S3': 0.025}  # max per strategy (1.5/2.0/2.5%)
+_SL_MIN_PCT = {'S1': 0.003, 'S1A': 0.003, 'S1B': 0.003, 'S1C': 0.003, 'S2': 0.003, 'S3': 0.003}
+_SL_MAX_PCT = {'S1': 0.015, 'S1A': 0.015, 'S1B': 0.012, 'S1C': 0.016, 'S2': 0.020, 'S3': 0.025}
 
 _MAX_SL_PCT = 0.03   # global hard cap (legacy — per-strategy caps take precedence)
-_TP1_R          = 1.5
-_TP2_R          = 3.0
 _MIN_RR         = 1.2    # TP1 must be >= 1.2R (always met since TP1 = 1.5R)
-_TP_RATIOS      = [0.40, 0.40, 0.20]   # TP1, TP2, runner
 _CHANDELIER_PERIOD = 22
 _CHANDELIER_ATR_MULT = 3.0
 _TIME_KILL_HOURS    = 8
+
+_TP_CONFIG = {
+    'S1':  {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.40, 0.40, 0.20]},
+    'S1A': {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.25, 0.25, 0.50]},
+    'S1B': {'tp1_r': 0.8, 'tp2_r': 2.4, 'ratios': [0.30, 0.30, 0.40]},
+    'S1C': {'tp1_r': 1.2, 'tp2_r': 3.2, 'ratios': [0.15, 0.25, 0.60]},
+    'S2':  {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.40, 0.40, 0.20]},
+    'S3':  {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.40, 0.40, 0.20]},
+}
+
+_TIME_KILL_CONFIG = {
+    'S1':  {'hours': 8, 'min_r_progress': 1.0},
+    'S1A': {'hours': 8, 'min_r_progress': 1.0},
+    'S1B': {'hours': 4, 'min_r_progress': 0.5},
+    'S1C': {'hours': 7, 'min_r_progress': 0.5},
+    'S2':  {'hours': 8, 'min_r_progress': 1.0},
+    'S3':  {'hours': 8, 'min_r_progress': 1.0},
+}
+
+_STOP_PROFILE_MULTIPLIERS = {
+    'tight':  {'atr': 0.80, 'min_pct': 0.90, 'max_pct': 0.85},
+    'medium': {'atr': 1.00, 'min_pct': 1.00, 'max_pct': 1.00},
+    'loose':  {'atr': 1.35, 'min_pct': 1.15, 'max_pct': 1.35},
+}
 
 
 class L3Calculator:
@@ -39,13 +60,16 @@ class L3Calculator:
             return None
 
         symbol = trade_context.get('symbol')
-        tps = self._take_profits(entry, direction, r, symbol=symbol)
+        tps = self._take_profits(entry, direction, r, symbol=symbol, strategy=strategy)
 
-        # Leverage safety: liquidation must be >= 2×R away
-        max_lev = getattr(settings, 'MAX_LEVERAGE', 5)
-        liq_dist = entry / max_lev
-        if liq_dist < 2 * r:
+        leverage, liq_price, liq_dist, conviction = self._select_leverage(
+            trade_context, l2_decision, entry, direction, r
+        )
+        if leverage is None:
             return None
+
+        entry_mode = trade_context.get('entry_mode', 'MARKET' if strategy == 'S1B' else 'LIMIT')
+        order_type = 'MARKET' if entry_mode in {'MARKET', 'HYBRID'} else 'LIMIT'
 
         return {
             'symbol':       trade_context.get('symbol', ''),
@@ -56,6 +80,14 @@ class L3Calculator:
             'r_value':      round(r, 4),
             'size_multiplier': size_mult,
             'strategy':     strategy,
+            'stop_profile': trade_context.get('stop_profile', 'medium'),
+            'leverage':     leverage,
+            'margin_mode':  getattr(settings, 'DEFAULT_MARGIN_MODE', 'isolated'),
+            'liquidation_price': round(liq_price, 4),
+            'liquidation_buffer_r': round(liq_dist / r, 4),
+            'conviction':   conviction,
+            'entry_mode':   entry_mode,
+            'order_type':   order_type,
         }
 
     # ── Entry ──────────────────────────────────────────────────────────────
@@ -66,7 +98,7 @@ class L3Calculator:
         swept    = float(ctx.get('swept_level') or 0)
         liq      = float(ctx.get('nearest_liquidity') or 0)
 
-        if strategy == 'S1':
+        if strategy in {'S1', 'S1A'}:
             if entry_ote:
                 # Use OTE entry from proper displacement FVG
                 return float(entry_ote)
@@ -76,6 +108,41 @@ class L3Calculator:
                 return bot + 0.50 * (top - bot) if direction == 'LONG' else top - 0.50 * (top - bot)
             # Fallback: just inside the sweep level
             return swept + atr * 0.1 if direction == 'LONG' else swept - atr * 0.1
+
+        if strategy == 'S1B':
+            current = float(ctx.get('current_price') or 0.0)
+            entry_mode = ctx.get('entry_mode', 'MARKET')
+            shallow_limit = None
+            if current > 0:
+                if fvg:
+                    bot, top = float(fvg[0]), float(fvg[1])
+                    shallow_limit = bot + 0.38 * (top - bot) if direction == 'LONG' else top - 0.38 * (top - bot)
+                if entry_mode == 'HYBRID' and shallow_limit is not None:
+                    return 0.33 * current + 0.67 * shallow_limit
+                if entry_mode == 'MARKET':
+                    return current
+                if entry_mode == 'LIMIT' and shallow_limit is not None:
+                    return shallow_limit
+                return current
+            if fvg:
+                bot, top = float(fvg[0]), float(fvg[1])
+                return bot + 0.38 * (top - bot) if direction == 'LONG' else top - 0.38 * (top - bot)
+            if liq > 0:
+                return liq * 1.002 if direction == 'LONG' else liq * 0.998
+            return swept + atr * 0.2 if direction == 'LONG' else swept - atr * 0.2
+
+        if strategy == 'S1C':
+            current = float(ctx.get('current_price') or 0.0)
+            if fvg:
+                bot, top = float(fvg[0]), float(fvg[1])
+                reclaim_limit = bot + 0.50 * (top - bot) if direction == 'LONG' else top - 0.50 * (top - bot)
+                if current > 0:
+                    return 0.25 * current + 0.75 * reclaim_limit
+                return reclaim_limit
+            if current > 0 and swept > 0:
+                reclaim_level = swept * (1.001 if direction == 'LONG' else 0.999)
+                return 0.25 * current + 0.75 * reclaim_level
+            return swept + atr * 0.15 if direction == 'LONG' else swept - atr * 0.15
 
         if strategy == 'S2':
             # Market order at ChoCH — use swept level + small buffer
@@ -89,10 +156,43 @@ class L3Calculator:
     # ── Stop Loss ──────────────────────────────────────────────────────────
 
     def _stop_loss(self, ctx: dict, entry: float, direction: str, atr: float, strategy: str) -> float:
-        buf   = _SL_ATR_BUFFER.get(strategy, 0.20)
+        stop_profile = str(ctx.get('stop_profile', 'medium')).lower()
+        profile = _STOP_PROFILE_MULTIPLIERS.get(stop_profile, _STOP_PROFILE_MULTIPLIERS['medium'])
+        buf   = _SL_ATR_BUFFER.get(strategy, 0.20) * profile['atr']
         swept = float(ctx.get('swept_level') or entry)
-        sl_min_pct = _SL_MIN_PCT.get(strategy, 0.003)
-        sl_max_pct = _SL_MAX_PCT.get(strategy, 0.010)
+        fvg   = ctx.get('fvg_zone')
+        sl_min_pct = _SL_MIN_PCT.get(strategy, 0.003) * profile['min_pct']
+        sl_max_pct = _SL_MAX_PCT.get(strategy, 0.010) * profile['max_pct']
+
+        if strategy == 'S1B' and fvg:
+            bot, top = float(fvg[0]), float(fvg[1])
+            if direction == 'LONG':
+                swept = min(swept, bot)
+                sl_raw = bot - buf * atr
+                sl_floor = entry * (1 - sl_max_pct)
+                sl_ceil  = entry * (1 - sl_min_pct)
+                return max(sl_raw, sl_floor) if sl_raw < sl_ceil else sl_ceil
+            else:
+                swept = max(swept, top)
+                sl_raw = top + buf * atr
+                sl_floor = entry * (1 + sl_min_pct)
+                sl_ceil  = entry * (1 + sl_max_pct)
+                return min(sl_raw, sl_ceil) if sl_raw > sl_floor else sl_floor
+
+        if strategy == 'S1C':
+            anchor = swept
+            if fvg:
+                bot, top = float(fvg[0]), float(fvg[1])
+                anchor = min(anchor, bot) if direction == 'LONG' else max(anchor, top)
+            if direction == 'LONG':
+                sl_raw = anchor - buf * atr
+                sl_floor = entry * (1 - sl_max_pct)
+                sl_ceil  = entry * (1 - sl_min_pct)
+                return max(sl_raw, sl_floor) if sl_raw < sl_ceil else sl_ceil
+            sl_raw = anchor + buf * atr
+            sl_floor = entry * (1 + sl_min_pct)
+            sl_ceil  = entry * (1 + sl_max_pct)
+            return min(sl_raw, sl_ceil) if sl_raw > sl_floor else sl_floor
 
         if direction == 'LONG':
             sl_raw = swept - buf * atr
@@ -109,12 +209,16 @@ class L3Calculator:
     # ── Take Profits ───────────────────────────────────────────────────────
 
     def _take_profits(self, entry: float, direction: str, r: float,
-                       symbol: str = None) -> list[dict]:
+                       symbol: str = None, strategy: str = 'S1') -> list[dict]:
         """
         TP targets: nearest real liquidity level preferred over mechanical R multiples.
         Falls back to 1.5R/3R when no liquidity data available.
         """
         tp1_level = tp2_level = None
+        tp_cfg = _TP_CONFIG.get(strategy, _TP_CONFIG['S1'])
+        tp1_r = tp_cfg['tp1_r']
+        tp2_r = tp_cfg['tp2_r']
+        tp_ratios = tp_cfg['ratios']
 
         # Try to use real liquidity levels as TP targets
         if symbol and r > 0:
@@ -136,15 +240,57 @@ class L3Calculator:
 
         # Fallback: mechanical R multiples
         if tp1_level is None:
-            tp1_level = entry + _TP1_R * r if direction == 'LONG' else entry - _TP1_R * r
+            tp1_level = entry + tp1_r * r if direction == 'LONG' else entry - tp1_r * r
         if tp2_level is None:
-            tp2_level = entry + _TP2_R * r if direction == 'LONG' else entry - _TP2_R * r
+            tp2_level = entry + tp2_r * r if direction == 'LONG' else entry - tp2_r * r
 
         return [
-            {'level': round(tp1_level, 4), 'ratio': _TP_RATIOS[0], 'label': 'TP1', 'runner': False},
-            {'level': round(tp2_level, 4), 'ratio': _TP_RATIOS[1], 'label': 'TP2', 'runner': False},
-            {'level': None, 'ratio': _TP_RATIOS[2], 'label': 'TP3', 'runner': True},
+            {'level': round(tp1_level, 4), 'ratio': tp_ratios[0], 'label': 'TP1', 'runner': False},
+            {'level': round(tp2_level, 4), 'ratio': tp_ratios[1], 'label': 'TP2', 'runner': False},
+            {'level': None, 'ratio': tp_ratios[2], 'label': 'TP3', 'runner': True},
         ]
+
+    def _select_leverage(self, ctx: dict, l2_decision: dict, entry: float,
+                          direction: str, r: float) -> tuple[int | None, float | None, float | None, str]:
+        default_lev = max(1, int(getattr(settings, 'MAX_LEVERAGE', 10)))
+        high_conv_lev = max(default_lev, int(getattr(settings, 'MAX_HIGH_CONVICTION_LEVERAGE', 20)))
+        min_buffer_r = float(getattr(settings, 'MIN_LIQUIDATION_BUFFER_R', 3.0))
+
+        is_high_conviction = self._is_high_conviction(ctx, l2_decision)
+        leverage = high_conv_lev if is_high_conviction else default_lev
+        conviction = 'HIGH_CONVICTION' if is_high_conviction else 'STANDARD'
+
+        liq_price = self._compute_liquidation_price(direction, entry, leverage)
+        liq_dist = abs(entry - liq_price)
+        if liq_dist >= min_buffer_r * r:
+            return leverage, liq_price, liq_dist, conviction
+
+        if leverage != default_lev:
+            liq_price = self._compute_liquidation_price(direction, entry, default_lev)
+            liq_dist = abs(entry - liq_price)
+            if liq_dist >= min_buffer_r * r:
+                return default_lev, liq_price, liq_dist, 'STANDARD'
+
+        return None, None, None, conviction
+
+    @staticmethod
+    def _is_high_conviction(ctx: dict, l2_decision: dict) -> bool:
+        if float(l2_decision.get('size_multiplier', 0.0)) < 1.0:
+            return False
+        gates_b = ctx.get('gates_b') or {}
+        gates_c = ctx.get('gates_c') or {}
+        passed_b = sum(1 for passed in gates_b.values() if passed)
+        passed_c = sum(1 for passed in gates_c.values() if passed)
+        return passed_b >= 3 and passed_c >= 3
+
+    @staticmethod
+    def _compute_liquidation_price(side: str, entry_price: float, leverage: int) -> float:
+        maintenance_margin = float(getattr(settings, 'MAINTENANCE_MARGIN_RATE', 0.005))
+        if leverage <= 0:
+            return 0.0
+        if side == 'LONG':
+            return entry_price * (1 - 1 / leverage + maintenance_margin)
+        return entry_price * (1 + 1 / leverage - maintenance_margin)
 
     # ── Chandelier Stop ────────────────────────────────────────────────────
 
@@ -161,15 +307,33 @@ class L3Calculator:
 
     @staticmethod
     def check_time_kill(direction: str, opened_at: datetime,
-                        entry: float, sl: float, current: float) -> bool:
+                        entry: float, sl: float, current: float,
+                        strategy: str = 'S1',
+                        tp1_hit: bool = False,
+                        tp2_hit: bool = False) -> bool:
+        cfg = _TIME_KILL_CONFIG.get(strategy, _TIME_KILL_CONFIG['S1'])
         age_hours = (datetime.now(timezone.utc) - opened_at).total_seconds() / 3600
-        if age_hours < _TIME_KILL_HOURS:
+
+        if strategy == 'S1B':
+            if age_hours >= 2:
+                if (direction == 'LONG' and current < entry) or (direction == 'SHORT' and current > entry):
+                    return True
+            if age_hours < cfg['hours']:
+                return False
+
+        if strategy == 'S1C':
+            if tp2_hit and age_hours < 12:
+                return False
+            if tp1_hit and age_hours < 10:
+                return False
+
+        if age_hours < cfg['hours']:
             return False
 
         r = abs(entry - sl)
-        one_r_level = entry + r if direction == 'LONG' else entry - r
-        hit_one_r = (
-            (direction == 'LONG'  and current >= one_r_level) or
-            (direction == 'SHORT' and current <= one_r_level)
+        min_progress_level = entry + cfg['min_r_progress'] * r if direction == 'LONG' else entry - cfg['min_r_progress'] * r
+        hit_required_progress = (
+            (direction == 'LONG'  and current >= min_progress_level) or
+            (direction == 'SHORT' and current <= min_progress_level)
         )
-        return not hit_one_r
+        return not hit_required_progress

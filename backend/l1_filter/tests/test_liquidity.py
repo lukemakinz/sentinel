@@ -49,15 +49,14 @@ class PDHPDLTest(TestCase):
 
 
 class AsianRangeTest(TestCase):
-    def test_asian_range_from_22_to_00_utc(self):
-        # Asian session: 22:00-00:00 UTC previous day
-        # Create 2 candles in asian session window
+    def test_asian_range_from_02_to_06_utc(self):
+        # Asian Range = 02:00-06:00 UTC same day (tight consolidation before London)
         make_candle('BTCUSDT', '1h', 103, 97, 100,
-                    datetime(2026, 1, 2, 22, 0, tzinfo=timezone.utc))
+                    datetime(2026, 1, 3, 2, 0, tzinfo=timezone.utc))
         make_candle('BTCUSDT', '1h', 101, 96, 99,
-                    datetime(2026, 1, 2, 23, 0, tzinfo=timezone.utc))
+                    datetime(2026, 1, 3, 3, 0, tzinfo=timezone.utc))
 
-        now = datetime(2026, 1, 3, 10, 0, tzinfo=timezone.utc)
+        now = datetime(2026, 1, 3, 8, 0, tzinfo=timezone.utc)  # London session
         hi, lo = compute_asian_range('BTCUSDT', now)
         self.assertAlmostEqual(hi, 103.0, places=1)
         self.assertAlmostEqual(lo, 96.0, places=1)

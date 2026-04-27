@@ -2,13 +2,36 @@
 
 STRATEGIES = {
     'S1': {
+        'name':            'SMC Sweep Legacy',
+        'description':     'Alias to S1A for backward compatibility',
+        'alias_for':       'S1A',
+    },
+    'S1A': {
         'name':            'SMC Sweep',
-        'description':     'Liquidity sweep → ChoCH → FVG entry',
+        'description':     'NY reversal: liquidity sweep → CHoCH → FVG entry',
         'gates_a_all':     True,
-        'gates_b_must':    ['B1', 'B2'],  # sweep + FVG = core ICT setup
-        'gates_b_min':     2,             # B1+B2 sufficient (optional: B3/B5 for higher conviction)
-        'gates_c_must':    ['C1'],        # CHoCH is the trigger
-        'gates_c_min':     1,             # CHoCH alone confirms reversal
+        'gates_b_must':    ['B1', 'B2'],
+        'gates_b_min':     2,
+        'gates_c_must':    ['C1'],
+        'gates_c_min':     2,
+    },
+    'S1B': {
+        'name':            'SMC Continuation',
+        'description':     'Continuation/retest: FVG + value + BOS/CHoCH confirmation',
+        'gates_a_all':     True,
+        'gates_b_must':    ['B2'],
+        'gates_b_min':     2,
+        'gates_c_must':    ['C1'],
+        'gates_c_min':     2,
+    },
+    'S1C': {
+        'name':            'SMC Reclaim',
+        'description':     'Sweep -> reclaim -> retest with hybrid execution',
+        'gates_a_all':     True,
+        'gates_b_must':    ['B1', 'B2'],
+        'gates_b_min':     2,
+        'gates_c_must':    ['C1'],
+        'gates_c_min':     2,
     },
     'S2': {
         'name':            'Order Flow',
@@ -35,11 +58,22 @@ STRATEGIES = {
 
 
 def evaluate_strategies(gates_a: dict, gates_b: dict, gates_c: dict,
-                         has_whale_cvd: bool = False) -> list[str]:
+                         has_whale_cvd: bool = False,
+                         ctx: dict | None = None) -> list[str]:
     """Return list of strategy IDs that pass with the given gate results."""
+    if ctx and ctx.get('strategy_candidates'):
+        candidates = list(ctx['strategy_candidates'])
+        if 'S1A' in candidates and 'S1' not in candidates:
+            candidates.append('S1')
+        return candidates
+
     passing = []
 
     for strategy_id, cfg in STRATEGIES.items():
+        if cfg.get('alias_for'):
+            if cfg['alias_for'] in passing:
+                passing.append(strategy_id)
+            continue
 
         # Gate A check
         if cfg.get('gates_a_all'):
@@ -72,4 +106,6 @@ def evaluate_strategies(gates_a: dict, gates_b: dict, gates_c: dict,
 
         passing.append(strategy_id)
 
+    if 'S1A' in passing and 'S1' not in passing:
+        passing.append('S1')
     return passing

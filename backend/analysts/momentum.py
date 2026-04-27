@@ -112,6 +112,55 @@ def detect_divergence(prices, indicators, lookback=20):
     return None
 
 
+def detect_divergence_extended(prices, indicators, lookback=20):
+    """
+    Detect regular and hidden divergence.
+    Returns one of:
+    - bullish
+    - bearish
+    - bullish_hidden
+    - bearish_hidden
+    - None
+    """
+    if len(prices) < lookback or len(indicators) < lookback:
+        return None
+
+    recent_prices = prices[-lookback:]
+    recent_ind = indicators[-lookback:]
+    half = lookback // 2
+
+    prev_prices = recent_prices[:half]
+    curr_prices = recent_prices[half:]
+    prev_ind = recent_ind[:half]
+    curr_ind = recent_ind[half:]
+
+    prev_low_idx = int(np.argmin(prev_prices))
+    curr_low_idx = int(np.argmin(curr_prices))
+    prev_high_idx = int(np.argmax(prev_prices))
+    curr_high_idx = int(np.argmax(curr_prices))
+
+    prev_price_low = float(prev_prices[prev_low_idx])
+    curr_price_low = float(curr_prices[curr_low_idx])
+    prev_ind_low = float(prev_ind[min(prev_low_idx, len(prev_ind) - 1)])
+    curr_ind_low = float(curr_ind[min(curr_low_idx, len(curr_ind) - 1)])
+
+    prev_price_high = float(prev_prices[prev_high_idx])
+    curr_price_high = float(curr_prices[curr_high_idx])
+    prev_ind_high = float(prev_ind[min(prev_high_idx, len(prev_ind) - 1)])
+    curr_ind_high = float(curr_ind[min(curr_high_idx, len(curr_ind) - 1)])
+
+    if curr_price_low < prev_price_low and curr_ind_low > prev_ind_low:
+        return 'bullish'
+    if curr_price_high > prev_price_high and curr_ind_high < prev_ind_high:
+        return 'bearish'
+    if curr_price_low > prev_price_low and curr_ind_low < prev_ind_low:
+        return 'bullish_hidden'
+    if curr_price_high < prev_price_high and curr_ind_high > prev_ind_high:
+        return 'bearish_hidden'
+
+    return None
+
+
 class MomentumAnalyst(BaseAnalyst):
     """Multi-timeframe momentum scoring using RSI and MACD alignment."""
 

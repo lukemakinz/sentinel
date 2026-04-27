@@ -1,8 +1,10 @@
 from django.test import TestCase
+from unittest.mock import patch
+import numpy as np
 
 from l1_filter.gates_c import (
     check_choch, check_momentum_divergence,
-    check_ema_crossover, check_volume_spike, check_vwap,
+    check_ema_crossover, check_volume_spike, check_vwap, check_obv_confirmation, check_price_action_trigger,
 )
 from l1_filter.tests.helpers import make_candles, uptrend, downtrend, trending_with_spike_volume
 
@@ -84,6 +86,17 @@ class MomentumDivergenceTest(TestCase):
         passed, _ = check_momentum_divergence(uptrend(10), 'LONG')
         self.assertFalse(passed)
 
+    def test_hidden_bullish_divergence_passes_for_long(self):
+        closes = [1000 - i * 5 for i in range(25)]
+        candles = make_candles(closes)
+        mocked_rsi = np.array([60, 58, 56, 54, 52, 50, 48, 46, 44, 42, 40])
+        with patch('l1_filter.gates_c.compute_rsi', return_value=mocked_rsi), \
+             patch('l1_filter.gates_c.detect_divergence', return_value=None), \
+             patch('l1_filter.gates_c.detect_divergence_extended', return_value='bullish_hidden'):
+            passed, data = check_momentum_divergence(candles, 'LONG')
+        self.assertTrue(passed)
+        self.assertIn('bullish_hidden', data['divergence'])
+
 
 class DeltaCandleTest(TestCase):
     """C3 gate now uses Delta Candle (taker buy/sell pressure) instead of EMA crossover."""
@@ -159,3 +172,47 @@ class VWAPTest(TestCase):
     def test_insufficient_data_fails(self):
         passed, _ = check_vwap(uptrend(5), 'LONG')
         self.assertFalse(passed)
+
+
+class OBVConfirmationTest(TestCase):
+    def test_obv_confirms_long_trend(self):
+        candles = trending_with_spike_volume(25)
+        passed, data = check_obv_confirmation(candles, 'LONG')
+        self.assertTrue(passed)
+        self.assertEqual(data['signal'], 'bullish_obv')
+
+    def test_obv_confirms_short_trend(self):
+        candles = downtrend(25)
+        for i, c in enumerate(candles):
+            c['volume'] = 1000 + i * 50
+        passed, data = check_obv_confirmation(candles, 'SHORT')
+        self.assertTrue(passed)
+        self.assertEqual(data['signal'], 'bearish_obv')
+
+    def test_obv_fails_when_insufficient_data(self):
+        passed, _ = check_obv_confirmation(uptrend(5), 'LONG')
+        self.assertFalse(passed)
+
+
+class PriceActionTriggerTest(TestCase):
+    def test_bullish_displacement_close_passes(self):
+        candles = make_candles(
+            [100, 101, 110],
+            opens=[99.5, 100.5, 102],
+            highs=[100.5, 101.5, 111],
+            lows=[99, 100, 101.5],
+        )
+        passed, data = check_price_action_trigger(candles, 'LONG')
+        self.assertTrue(passed)
+        self.assertEqual(data['signal'], 'bullish_displacement')
+
+    def test_bearish_displacement_close_passes(self):
+        candles = make_candles(
+            [110, 109, 100],
+            opens=[110.5, 109.5, 108],
+            highs=[111, 110, 108.5],
+            lows=[109.5, 108.5, 99],
+        )
+        passed, data = check_price_action_trigger(candles, 'SHORT')
+        self.assertTrue(passed)
+        self.assertEqual(data['signal'], 'bearish_displacement')

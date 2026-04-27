@@ -9,6 +9,7 @@ from .position_sizing import (
     calculate_take_profits, calculate_position_size
 )
 from .kill_switches import check_kill_switches, get_position_size_multiplier
+from executor.views import compute_liquidation_price
 
 logger = logging.getLogger(__name__)
 
@@ -44,8 +45,10 @@ class RiskManager:
         # Tier-based sizing
         if tier == 'HIGH_CONVICTION':
             size_factor = 1.0
+            leverage = getattr(settings, 'MAX_HIGH_CONVICTION_LEVERAGE', settings.MAX_LEVERAGE)
         elif tier == 'SIGNAL':
             size_factor = 0.6
+            leverage = settings.MAX_LEVERAGE
         else:
             return False, {'reason': f'Tier {tier} does not trigger trades'}
 
@@ -54,11 +57,17 @@ class RiskManager:
         tps = calculate_take_profits(current_price, sl, side)
         size = calculate_position_size(
             balance, effective_risk * size_factor,
-            current_price, sl, settings.MAX_LEVERAGE
+            current_price, sl, leverage
         )
+        max_margin_usd = balance * getattr(settings, 'MAX_MARGIN_PER_TRADE_PCT', 0.15)
+        max_notional = max_margin_usd * leverage
+        size = min(size, max_notional)
 
         if size <= 0:
             return False, {'reason': 'Calculated position size is zero'}
+
+        margin_used = size / leverage
+        liq_price = compute_liquidation_price(side, current_price, leverage)
 
         trade_params = {
             'symbol': symbol,
@@ -68,7 +77,10 @@ class RiskManager:
             'take_profits': tps,
             'position_size_usd': size,
             'quantity': size / current_price,
-            'leverage': settings.MAX_LEVERAGE,
+            'leverage': leverage,
+            'margin_mode': getattr(settings, 'DEFAULT_MARGIN_MODE', 'isolated'),
+            'margin_usd': margin_used,
+            'liquidation_price': liq_price,
             'risk_percent': effective_risk * size_factor,
             'atr': atr,
             'tier': tier,

@@ -1,6 +1,6 @@
 """Tests for proper FVG: displacement candle + mitigation tracking."""
 from django.test import TestCase
-from l1_filter.fvg import find_fvgs_with_displacement, FVGZone, is_fvg_mitigated
+from l1_filter.fvg import find_fvgs_with_displacement, FVGZone, is_fvg_mitigated, get_active_fvgs
 
 
 def make_candle(o, h, l, c, v=1000):
@@ -86,3 +86,25 @@ class FVGDisplacementTest(TestCase):
         fvg = FVGZone(bottom=100.0, top=110.0, direction='bullish')
         self.assertAlmostEqual(fvg.mid, 105.0)
         self.assertAlmostEqual(fvg.ote_entry, 105.0)  # 50% = mid
+
+    def test_active_fvg_marks_partial_fill(self):
+        candles = [
+            make_candle(100, 102, 98, 101, 1000),
+            make_candle(101, 115, 100, 114, 3000),
+            make_candle(115, 118, 115, 117, 1000),
+            make_candle(117, 118, 112, 116, 1000),  # shallow return into gap
+        ]
+        active = get_active_fvgs(candles, atr=5.0, direction='bullish')
+        self.assertEqual(len(active), 1)
+        self.assertIn(active[0].status, {'fresh', 'partial'})
+        self.assertLess(active[0].fill_ratio, 0.5)
+
+    def test_active_fvg_drops_stale_gap(self):
+        candles = [
+            make_candle(100, 102, 98, 101, 1000),
+            make_candle(101, 115, 100, 114, 3000),
+            make_candle(115, 118, 115, 117, 1000),
+            make_candle(117, 118, 104, 106, 1000),  # deep mitigation beyond 50%
+        ]
+        active = get_active_fvgs(candles, atr=5.0, direction='bullish')
+        self.assertEqual(len(active), 0)

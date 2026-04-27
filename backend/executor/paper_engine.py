@@ -53,6 +53,7 @@ class PaperTradingEngine:
             take_profit_2=tps[1]['level'] if len(tps) > 1 else None,
             take_profit_3=tps[2]['level'] if len(tps) > 2 else None,
             remaining_quantity=trade_params['quantity'],
+            strategy=trade_params.get('strategy', 'S1'),
             tier=trade_params.get('tier', ''),
             consensus_signal_id=consensus_signal.id if consensus_signal else None,
             analyst_snapshot=consensus_signal.analyst_details if consensus_signal else {},
@@ -221,6 +222,9 @@ class PaperTradingEngine:
             position.entry_price,
             position.stop_loss,
             price,
+            strategy=position.strategy,
+            tp1_hit=position.tp1_hit,
+            tp2_hit=position.tp2_hit,
         )
 
     def _partial_close(self, position, quantity, price, reason):

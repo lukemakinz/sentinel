@@ -54,13 +54,16 @@ def compute_pwh_pwl(symbol: str, now: datetime) -> tuple[Optional[float], Option
 
 
 def compute_asian_range(symbol: str, now: datetime) -> tuple[Optional[float], Optional[float]]:
-    """Asian Range High/Low — 22:00 to 00:00 UTC previous session."""
+    """
+    Asian Range High/Low — 02:00 to 06:00 UTC same day.
+    This is the "tight consolidation" window before London opens.
+    London sweeps this range (Judas Swing) before the real move.
+    """
     from ingester.models import Candle
 
-    # Previous Asian session: 22:00 UTC yesterday to 00:00 UTC today
-    today_midnight = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    asian_start    = today_midnight - timedelta(hours=2)   # 22:00 UTC yesterday
-    asian_end      = today_midnight                         # 00:00 UTC today
+    today = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    asian_start = today + timedelta(hours=2)   # 02:00 UTC today
+    asian_end   = today + timedelta(hours=6)   # 06:00 UTC today (before London at 07:00)
 
     candles = list(Candle.objects.filter(
         symbol=symbol, interval='1h', is_closed=True,
@@ -72,6 +75,56 @@ def compute_asian_range(symbol: str, now: datetime) -> tuple[Optional[float], Op
         return None, None
 
     return float(max(h for h, _ in candles)), float(min(l for _, l in candles))
+
+
+def check_london_judas_swing(symbol: str, direction: str, now: datetime,
+                              candles_recent: list) -> tuple[bool, dict]:
+    """
+    London Judas Swing filter (07-10 UTC):
+    London trade is ONLY valid if the sweep specifically hit Asian High (SHORT)
+    or Asian Low (LONG). This prevents entering on the fake move (Judas Swing)
+    that hasn't yet collected Asian Range liquidity.
+
+    If outside London session → always passes (no restriction).
+    If Asian Range not available → passes (no data to filter on).
+    """
+    if not (7 <= now.hour < 10):
+        return True, {'london_filter': 'not_london_session'}
+
+    asian_high, asian_low = compute_asian_range(symbol, now)
+    if asian_high is None or asian_low is None:
+        return True, {'london_filter': 'no_asian_range_data'}
+
+    if not candles_recent:
+        return True, {'london_filter': 'no_candle_data'}
+
+    # Check last 3 candles for Asian Range interaction
+    recent_low  = min(float(c.get('low',  candles_recent[-1]['close'])) for c in candles_recent[-3:])
+    recent_high = max(float(c.get('high', candles_recent[-1]['close'])) for c in candles_recent[-3:])
+    last_close  = float(candles_recent[-1]['close'])
+
+    TOLERANCE = 0.002   # 0.2% — allow slight overshoot
+
+    if direction == 'LONG':
+        # LONG: price must have swept Asian LOW and recovered above it
+        swept_asian_low = recent_low <= asian_low * (1 + TOLERANCE)
+        recovered       = last_close > asian_low
+        passed = swept_asian_low and recovered
+        return passed, {
+            'london_filter': 'asian_low_swept' if passed else 'asian_low_NOT_swept',
+            'asian_low': round(asian_low, 4),
+            'recent_low': round(recent_low, 4),
+        }
+    else:
+        # SHORT: price must have swept Asian HIGH and rejected below it
+        swept_asian_high = recent_high >= asian_high * (1 - TOLERANCE)
+        rejected         = last_close < asian_high
+        passed = swept_asian_high and rejected
+        return passed, {
+            'london_filter': 'asian_high_swept' if passed else 'asian_high_NOT_swept',
+            'asian_high': round(asian_high, 4),
+            'recent_high': round(recent_high, 4),
+        }
 
 
 def detect_equal_levels(prices: list[float], tolerance_pct: float = 0.2,

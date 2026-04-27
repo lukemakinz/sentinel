@@ -16,6 +16,8 @@ class FVGZone:
     direction: str          # 'bullish' | 'bearish'
     mitigated: bool = False
     created_idx: int = 0    # candle index when FVG formed
+    fill_ratio: float = 0.0
+    status: str = 'fresh'   # fresh | partial | stale
 
     @property
     def depth(self) -> float:
@@ -113,15 +115,24 @@ def get_active_fvgs(candles: list[dict], atr: float, direction: str) -> list[FVG
 
     active = []
     for fvg in relevant:
-        mitigated = False
+        max_fill_ratio = 0.0
         for j in range(fvg.created_idx + 3, len(candles)):
-            if direction == 'bullish' and lows[j] <= fvg.mid:
-                mitigated = True
-                break
-            if direction == 'bearish' and highs[j] >= fvg.mid:
-                mitigated = True
-                break
-        if not mitigated:
+            if direction == 'bullish':
+                intrusion = max(0.0, fvg.top - lows[j])
+            else:
+                intrusion = max(0.0, highs[j] - fvg.bottom)
+            fill_ratio = min(max(intrusion / max(fvg.depth, 1e-9), 0.0), 1.0)
+            max_fill_ratio = max(max_fill_ratio, fill_ratio)
+
+        fvg.fill_ratio = round(max_fill_ratio, 4)
+        if max_fill_ratio < 0.25:
+            fvg.status = 'fresh'
+        elif max_fill_ratio < 0.5:
+            fvg.status = 'partial'
+        else:
+            fvg.status = 'stale'
+
+        if fvg.status != 'stale':
             active.append(fvg)
 
     return active
