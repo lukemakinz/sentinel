@@ -79,6 +79,11 @@ class BTCCorrelationTest(TestCase):
         passed, _ = check_btc_correlation(uptrend(50), 'SHORT', 'ETHUSDT')
         self.assertFalse(passed)
 
+    def test_alt_can_soft_override_btc_when_local_trend_is_strong(self):
+        passed, data = check_btc_correlation(downtrend(50), 'LONG', 'SOLUSDT', symbol_candles=uptrend(50, start=100.0, step=2.0))
+        self.assertTrue(passed)
+        self.assertEqual(data['correlation_mode'], 'soft_alt_override')
+
 
 class FundingRateTest(TestCase):
     def test_normal_funding_passes(self):

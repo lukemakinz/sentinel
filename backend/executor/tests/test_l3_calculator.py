@@ -212,6 +212,44 @@ class L3RejectConditionsTest(TestCase):
         params = self.calc.calculate(LONG_CONTEXT, decision, strategy='S1')
         self.assertEqual(params['size_multiplier'], 0.5)
 
+    def test_s1c_high_quality_setup_gets_size_boost(self):
+        decision = {'action': 'APPROVE', 'size_multiplier': 1.0}
+        ctx = {
+            **LONG_CONTEXT,
+            'strategy': 'S1C',
+            'entry_mode': 'HYBRID',
+            'setup_score': 10,
+            'fvg_status': 'fresh',
+            'mtf_context': {
+                'state_4h': {'divergence_aligned': True},
+                'timing_15m': {'divergence_aligned': False},
+            },
+            'current_price': 93600.0,
+        }
+        params = self.calc.calculate(ctx, decision, strategy='S1C')
+        self.assertGreater(params['size_multiplier'], 1.0)
+        self.assertGreater(params['margin_cap_multiplier'], 1.0)
+        self.assertEqual(params['runner_profile'], 'extended')
+
+    def test_s1c_low_quality_setup_keeps_base_size(self):
+        decision = {'action': 'APPROVE', 'size_multiplier': 1.0}
+        ctx = {
+            **LONG_CONTEXT,
+            'strategy': 'S1C',
+            'entry_mode': 'LIMIT',
+            'setup_score': 6,
+            'fvg_status': 'partial',
+            'mtf_context': {
+                'state_4h': {'divergence_aligned': False},
+                'timing_15m': {'divergence_aligned': False},
+            },
+            'current_price': 93600.0,
+        }
+        params = self.calc.calculate(ctx, decision, strategy='S1C')
+        self.assertEqual(params['size_multiplier'], 1.0)
+        self.assertEqual(params['margin_cap_multiplier'], 1.0)
+        self.assertEqual(params['runner_profile'], 'standard')
+
     @override_settings(MAX_LEVERAGE=10, MAX_HIGH_CONVICTION_LEVERAGE=20, MIN_LIQUIDATION_BUFFER_R=3.0)
     def test_default_setup_uses_10x_leverage(self):
         params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1')

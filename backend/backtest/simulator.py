@@ -136,7 +136,9 @@ class BacktestSimulator:
 
         order_type = OrderType.MARKET if trade_params.get('order_type') == 'MARKET' else OrderType.LIMIT
         entry = apply_slippage(trade_params['entry_price'], order_type, trade_params['side'])
-        max_margin_pct = float(getattr(settings, 'MAX_MARGIN_PER_TRADE_PCT', 0.15))
+        base_margin_pct = float(getattr(settings, 'MAX_MARGIN_PER_TRADE_PCT', 0.15))
+        margin_cap_multiplier = float(trade_params.get('margin_cap_multiplier', 1.0))
+        max_margin_pct = min(base_margin_pct * margin_cap_multiplier, 0.25)
         max_margin_usd = self.current_capital * max_margin_pct
         max_notional = max_margin_usd * leverage
         quantity_by_margin = max_notional / entry if entry > 0 else 0.0
@@ -170,6 +172,7 @@ class BacktestSimulator:
             'strategy':     trade_params['strategy'],
             'stop_profile': trade_params.get('stop_profile', self.config.stop_profile),
             'entry_mode':   trade_params.get('entry_mode', 'LIMIT'),
+            'runner_profile': trade_params.get('runner_profile', 'standard'),
             'opened_at':    ts,
             'session':      session,
             'tp1_hit':      False,
@@ -238,6 +241,9 @@ class BacktestSimulator:
         self._update_trailing_stop(pos)
 
         # Time-kill check after intrabar SL/TP logic
+        if self._extended_runner_grace(pos):
+            return False
+
         if _calc.check_time_kill(
             side, pos['opened_at'], pos['initial_entry_price'], pos['initial_stop_loss'],
             price, strategy=pos.get('strategy', 'S1'),
@@ -320,14 +326,33 @@ class BacktestSimulator:
 
         best = float(pos.get('best_price', pos['entry_price']))
         side = pos['side']
+        runner_profile = pos.get('runner_profile', 'standard')
         if side == 'LONG':
-            trail_mult = 0.8 if pos.get('tp2_hit') else 1.1
+            if runner_profile == 'extended':
+                trail_mult = 1.35 if pos.get('tp2_hit') else 1.9
+            else:
+                trail_mult = 0.8 if pos.get('tp2_hit') else 1.1
             trail_stop = best - trail_mult * r
             pos['stop_loss'] = max(pos['stop_loss'], trail_stop)
         else:
-            trail_mult = 0.8 if pos.get('tp2_hit') else 1.1
+            if runner_profile == 'extended':
+                trail_mult = 1.35 if pos.get('tp2_hit') else 1.9
+            else:
+                trail_mult = 0.8 if pos.get('tp2_hit') else 1.1
             trail_stop = best + trail_mult * r
             pos['stop_loss'] = min(pos['stop_loss'], trail_stop)
+
+    @staticmethod
+    def _extended_runner_grace(pos: dict) -> bool:
+        if pos.get('strategy') != 'S1C' or pos.get('runner_profile') != 'extended':
+            return False
+
+        age_hours = (datetime.now(timezone.utc) - pos['opened_at']).total_seconds() / 3600
+        if pos.get('tp2_hit'):
+            return age_hours < 16
+        if pos.get('tp1_hit'):
+            return age_hours < 12 and pos.get('quantity', 0.0) > 0
+        return False
 
     # ── Helpers ────────────────────────────────────────────────────────────
 

@@ -8,6 +8,7 @@ NY_START, NY_END = 13, 16   # 13:30 effective (13 for hourly granularity)
 FUNDING_THRESHOLD        = 0.001   # 0.1%
 ADX_THRESHOLD            = 20
 HTF_MIN_CANDLES          = 51      # need at least 50 for EMA50
+ALT_FLEX_SYMBOLS         = {'SOLUSDT', 'BNBUSDT', 'XRPUSDT'}
 
 
 def check_killzone(now: datetime) -> tuple[bool, dict]:
@@ -100,7 +101,8 @@ def check_htf_trend(candles: list) -> tuple[bool, dict]:
     return False, {'reason': 'no_clear_structural_trend'}
 
 
-def check_btc_correlation(btc_candles: list, direction: str, symbol: str) -> tuple[bool, dict]:
+def check_btc_correlation(btc_candles: list, direction: str, symbol: str,
+                          symbol_candles: list | None = None) -> tuple[bool, dict]:
     if symbol == 'BTCUSDT':
         return True, {'btc_trend': 'self'}
 
@@ -117,12 +119,28 @@ def check_btc_correlation(btc_candles: list, direction: str, symbol: str) -> tup
     btc_bullish = ema9[-1] > ema21[-1]
     btc_trend = 'bullish' if btc_bullish else 'bearish'
 
+    if symbol in ALT_FLEX_SYMBOLS and symbol_candles and len(symbol_candles) >= 21:
+        local_closes = [c['close'] for c in symbol_candles]
+        local_ema9 = compute_ema(local_closes, 9)
+        local_ema21 = compute_ema(local_closes, 21)
+        if local_ema9 and local_ema21:
+            local_bullish = local_ema9[-1] > local_ema21[-1]
+            local_trend = 'bullish' if local_bullish else 'bearish'
+            if direction == 'LONG' and local_bullish and not btc_bullish:
+                separation = (local_ema9[-1] - local_ema21[-1]) / max(local_ema21[-1], 1e-9)
+                if separation >= 0.003:
+                    return True, {'btc_trend': btc_trend, 'correlation_mode': 'soft_alt_override', 'local_trend': local_trend}
+            if direction == 'SHORT' and not local_bullish and btc_bullish:
+                separation = (local_ema21[-1] - local_ema9[-1]) / max(local_ema21[-1], 1e-9)
+                if separation >= 0.003:
+                    return True, {'btc_trend': btc_trend, 'correlation_mode': 'soft_alt_override', 'local_trend': local_trend}
+
     if direction == 'LONG'  and not btc_bullish:
         return False, {'btc_trend': btc_trend}
     if direction == 'SHORT' and btc_bullish:
         return False, {'btc_trend': btc_trend}
 
-    return True, {'btc_trend': btc_trend}
+    return True, {'btc_trend': btc_trend, 'correlation_mode': 'strict'}
 
 
 def check_funding_rate(funding_rate: float, direction: str) -> tuple[bool, dict]:

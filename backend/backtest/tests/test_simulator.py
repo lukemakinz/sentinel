@@ -104,6 +104,7 @@ class SimulatorTradeLifecycleTest(TestCase):
         s1c_params = {
             **TRADE_PARAMS,
             'strategy': 'S1C',
+            'runner_profile': 'extended',
             'take_profits': [
                 {'level': 94000.0, 'ratio': 0.15, 'label': 'TP1', 'runner': False},
                 {'level': 95000.0, 'ratio': 0.25, 'label': 'TP2', 'runner': False},
@@ -115,6 +116,17 @@ class SimulatorTradeLifecycleTest(TestCase):
         pos = self.sim.open_positions[0]
         self.assertTrue(pos['tp1_hit'])
         self.assertGreaterEqual(pos['stop_loss'], pos['entry_price'])
+
+    def test_extended_runner_grace_applies_after_tp1(self):
+        pos = {
+            'strategy': 'S1C',
+            'runner_profile': 'extended',
+            'opened_at': datetime.now(timezone.utc) - timedelta(hours=11),
+            'tp1_hit': True,
+            'tp2_hit': False,
+            'quantity': 0.5,
+        }
+        self.assertTrue(self.sim._extended_runner_grace(pos))
 
     def test_stop_loss_has_priority_over_time_kill_when_same_candle_hits_both(self):
         opened_at = datetime.now(timezone.utc) - timedelta(hours=9)

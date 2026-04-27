@@ -64,7 +64,7 @@ class L1Scanner:
         post_ny_continuation = 16 <= now.hour < 18
         session_window = 'ny_continuation' if post_ny_continuation else a1_data.get('session')
 
-        a3_passed, a3_data = check_btc_correlation(btc_candles, direction, symbol)
+        a3_passed, a3_data = check_btc_correlation(btc_candles, direction, symbol, symbol_candles=candles_1h)
         a4_passed, a4_data = check_funding_rate(funding, direction)
         a5_passed, a5_data = check_adx(candles_1h)
 

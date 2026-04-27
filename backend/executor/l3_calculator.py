@@ -50,7 +50,8 @@ class L3Calculator:
 
         direction = trade_context['direction']
         atr       = float(trade_context.get('atr') or 100.0)
-        size_mult = float(l2_decision.get('size_multiplier', 1.0))
+        base_size_mult = float(l2_decision.get('size_multiplier', 1.0))
+        size_mult = base_size_mult * self._setup_size_multiplier(trade_context, strategy)
 
         entry = self._entry(trade_context, direction, strategy, atr)
         sl    = self._stop_loss(trade_context, entry, direction, atr, strategy)
@@ -60,6 +61,7 @@ class L3Calculator:
             return None
 
         symbol = trade_context.get('symbol')
+        runner_profile = self._runner_profile(trade_context, strategy)
         tps = self._take_profits(entry, direction, r, symbol=symbol, strategy=strategy)
 
         leverage, liq_price, liq_dist, conviction = self._select_leverage(
@@ -79,6 +81,8 @@ class L3Calculator:
             'take_profits': tps,
             'r_value':      round(r, 4),
             'size_multiplier': size_mult,
+            'margin_cap_multiplier': self._margin_cap_multiplier(trade_context, strategy),
+            'runner_profile': runner_profile,
             'strategy':     strategy,
             'stop_profile': trade_context.get('stop_profile', 'medium'),
             'leverage':     leverage,
@@ -89,6 +93,62 @@ class L3Calculator:
             'entry_mode':   entry_mode,
             'order_type':   order_type,
         }
+
+    @staticmethod
+    def _setup_size_multiplier(ctx: dict, strategy: str) -> float:
+        if strategy != 'S1C':
+            return 1.0
+
+        score = int(ctx.get('setup_score') or 0)
+        entry_mode = ctx.get('entry_mode')
+        fvg_status = ctx.get('fvg_status')
+        mtf = ctx.get('mtf_context') or {}
+        h4_div = mtf.get('state_4h', {}).get('divergence_aligned', False)
+        timing_div = mtf.get('timing_15m', {}).get('divergence_aligned', False)
+
+        if score >= 10 and entry_mode == 'HYBRID' and fvg_status == 'fresh':
+            return 1.5 if (h4_div or timing_div) else 1.35
+        if score >= 8 and entry_mode == 'HYBRID':
+            return 1.25
+        return 1.0
+
+    @staticmethod
+    def _margin_cap_multiplier(ctx: dict, strategy: str) -> float:
+        if strategy != 'S1C':
+            return 1.0
+
+        score = int(ctx.get('setup_score') or 0)
+        entry_mode = ctx.get('entry_mode')
+        fvg_status = ctx.get('fvg_status')
+        mtf = ctx.get('mtf_context') or {}
+        h4_div = mtf.get('state_4h', {}).get('divergence_aligned', False)
+        timing_div = mtf.get('timing_15m', {}).get('divergence_aligned', False)
+
+        if score >= 10 and entry_mode == 'HYBRID' and fvg_status == 'fresh' and (h4_div or timing_div):
+            return 1.35
+        if score >= 8 and entry_mode == 'HYBRID':
+            return 1.20
+        return 1.0
+
+    @staticmethod
+    def _runner_profile(ctx: dict, strategy: str) -> str:
+        if strategy != 'S1C':
+            return 'standard'
+
+        score = int(ctx.get('setup_score') or 0)
+        entry_mode = ctx.get('entry_mode')
+        fvg_status = ctx.get('fvg_status')
+        symbol = ctx.get('symbol', '')
+        mtf = ctx.get('mtf_context') or {}
+        h4_div = mtf.get('state_4h', {}).get('divergence_aligned', False)
+        timing_div = mtf.get('timing_15m', {}).get('divergence_aligned', False)
+
+        is_alt = symbol in {'SOLUSDT', 'ETHUSDT', 'BNBUSDT'}
+        if score >= 10 and entry_mode == 'HYBRID' and fvg_status == 'fresh' and (h4_div or timing_div):
+            return 'extended'
+        if is_alt and score >= 8 and entry_mode == 'HYBRID':
+            return 'extended'
+        return 'standard'
 
     # ── Entry ──────────────────────────────────────────────────────────────
 
