@@ -84,6 +84,102 @@
     text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
   }
 
+  .auth-shell {
+    @apply min-h-screen relative overflow-hidden;
+    background:
+      radial-gradient(circle at top left, rgba(0, 229, 255, 0.12), transparent 32%),
+      radial-gradient(circle at bottom right, rgba(212, 175, 55, 0.12), transparent 28%),
+      linear-gradient(135deg, #09090b 0%, #101014 55%, #0b0b0d 100%);
+  }
+
+  .auth-layout {
+    @apply relative z-10 min-h-screen grid gap-8 px-6 py-8 md:px-10 lg:grid-cols-[1.2fr_0.8fr] lg:px-14 lg:py-12;
+    align-items: center;
+  }
+
+  .auth-brand-panel,
+  .auth-form-panel {
+    @apply p-8 md:p-10;
+  }
+
+  .auth-brand-panel {
+    @apply flex flex-col justify-between gap-10;
+    min-height: 540px;
+  }
+
+  .auth-form-panel {
+    @apply max-w-xl w-full justify-self-stretch lg:justify-self-end flex flex-col gap-8;
+  }
+
+  .auth-brand-badge {
+    @apply inline-flex items-center gap-3 rounded-full border border-white/10 bg-black/20 px-4 py-2 w-fit;
+  }
+
+  .auth-feature-grid {
+    @apply grid gap-4 md:grid-cols-2;
+  }
+
+  .auth-feature-card {
+    @apply rounded-2xl border border-white/5 bg-black/20 px-4 py-4 flex items-start gap-3;
+  }
+
+  .auth-field {
+    @apply flex flex-col gap-2;
+  }
+
+  .auth-field-label {
+    @apply text-[11px] font-mono uppercase tracking-[0.28em] text-gray-500;
+  }
+
+  .auth-input {
+    @apply w-full rounded-2xl border border-white/10 bg-[#0d0d10]/80 px-4 py-3 text-sm text-white outline-none transition-all;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+  }
+
+  .auth-input::placeholder {
+    color: rgba(156, 163, 175, 0.45);
+  }
+
+  .auth-input:focus {
+    border-color: rgba(0, 229, 255, 0.35);
+    box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.08);
+  }
+
+  .auth-error {
+    @apply rounded-2xl border border-[#ef4444]/20 bg-[#ef4444]/10 px-4 py-3 text-sm text-[#fca5a5] flex items-start gap-2;
+  }
+
+  .auth-submit {
+    @apply w-full rounded-2xl py-3.5 text-sm uppercase tracking-[0.22em] font-black;
+  }
+
+  .auth-submit:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+
+  .auth-ambient {
+    @apply absolute rounded-full pointer-events-none;
+    filter: blur(120px);
+    opacity: 0.14;
+  }
+
+  .auth-ambient-cyan {
+    width: 320px;
+    height: 320px;
+    background: #00E5FF;
+    top: -80px;
+    left: -60px;
+  }
+
+  .auth-ambient-gold {
+    width: 280px;
+    height: 280px;
+    background: #D4AF37;
+    right: -40px;
+    bottom: -40px;
+  }
+
   /* Custom Scrollbar */
   ::-webkit-scrollbar {
     width: 6px;

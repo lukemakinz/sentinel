@@ -1,14 +1,23 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from . import auth_views
 from executor import views as executor_views
 
 router = DefaultRouter()
 router.register(r'positions', views.PositionViewSet, basename='position')
 router.register(r'trades', views.TradeViewSet, basename='trade')
+router.register(r'exchange-orders', views.ExchangeOpenOrderViewSet, basename='exchange-order')
 
 urlpatterns = [
+    path('auth/token/', auth_views.obtain_token, name='auth-token'),
+    path('auth/token/rotate/', auth_views.rotate_token, name='auth-token-rotate'),
+    path('auth/token/revoke/', auth_views.revoke_token, name='auth-token-revoke'),
     path('status/', views.system_status, name='system-status'),
+    path('exchange/state/', views.exchange_live_state, name='exchange-live-state'),
+    path('exchange/integration/', views.exchange_integration_status, name='exchange-integration-status'),
+    path('exchange/sync/', views.exchange_sync_now, name='exchange-sync-now'),
+    path('exchange/transfer-profit/', views.exchange_transfer_profit, name='exchange-transfer-profit'),
     path('conviction/', views.conviction_scores, name='conviction-scores'),
     path('analysts/', views.analyst_signals, name='analyst-signals'),
     path('performance/', views.performance, name='performance'),

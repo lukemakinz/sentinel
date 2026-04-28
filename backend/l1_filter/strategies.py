@@ -45,13 +45,33 @@ STRATEGIES = {
         'whale_cvd_required': True,                  # needs WhaleCVD data
     },
     'S3': {
-        'name':            'Classic TA',
-        'description':     'EMA crossover + RSI + S/R level',
+        'name':            'Breakout Pullback',
+        'description':     'Intraday continuation: breakout -> pullback -> displacement re-entry',
         'gates_a_all':     False,
         'gates_a_must':    ['A1', 'A2'],             # killzone + HTF trend
         'gates_b_must':    ['B3'],                   # premium/discount as S/R
         'gates_b_min':     2,
         'gates_c_must':    ['C2', 'C3'],             # RSI divergence + EMA align
+        'gates_c_min':     2,
+    },
+    'S4': {
+        'name':            'Opening Range Breakout',
+        'description':     'NY ORB momentum scalp: first 30m range -> breakout -> fast follow-through',
+        'gates_a_all':     False,
+        'gates_a_must':    ['A1', 'A2', 'A5'],
+        'gates_b_must':    [],
+        'gates_b_min':     0,
+        'gates_c_must':    ['C7'],
+        'gates_c_min':     2,
+    },
+    'S5': {
+        'name':            'Trend Pullback ATR',
+        'description':     '4H trend + 15m pullback + rebound candle + ATR runner',
+        'gates_a_all':     False,
+        'gates_a_must':    ['A2'],
+        'gates_b_must':    [],
+        'gates_b_min':     0,
+        'gates_c_must':    ['C4', 'C7'],
         'gates_c_min':     2,
     },
 }

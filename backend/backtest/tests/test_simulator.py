@@ -117,6 +117,41 @@ class SimulatorTradeLifecycleTest(TestCase):
         self.assertTrue(pos['tp1_hit'])
         self.assertGreaterEqual(pos['stop_loss'], pos['entry_price'])
 
+    def test_s5_moves_stop_to_break_even_after_half_r(self):
+        s5_params = {
+            **TRADE_PARAMS,
+            'strategy': 'S5',
+            'take_profits': [
+                {'level': 94100.0, 'ratio': 0.30, 'label': 'TP1', 'runner': False},
+                {'level': 94950.0, 'ratio': 0.30, 'label': 'TP2', 'runner': False},
+                {'level': None, 'ratio': 0.40, 'label': 'TP3', 'runner': True},
+            ],
+        }
+        self.sim._open_position(s5_params, datetime.now(timezone.utc))
+        self.sim._update_positions(make_candle(93750, high=93750, low=93450))
+        pos = self.sim.open_positions[0]
+        self.assertGreaterEqual(pos['stop_loss'], pos['entry_price'])
+        self.assertFalse(pos['tp1_hit'])
+
+    def test_s5_runner_trailing_raises_stop_after_tp1(self):
+        s5_params = {
+            **TRADE_PARAMS,
+            'strategy': 'S5',
+            'take_profits': [
+                {'level': 94000.0, 'ratio': 0.30, 'label': 'TP1', 'runner': False},
+                {'level': 94950.0, 'ratio': 0.30, 'label': 'TP2', 'runner': False},
+                {'level': None, 'ratio': 0.40, 'label': 'TP3', 'runner': True},
+            ],
+        }
+        self.sim._open_position(s5_params, datetime.now(timezone.utc))
+        self.sim._update_positions(make_candle(94100, high=94100, low=93450))
+        pos = self.sim.open_positions[0]
+        stop_after_tp1 = pos['stop_loss']
+        self.sim._update_positions(make_candle(94600, high=94600, low=94050))
+        pos = self.sim.open_positions[0]
+        self.assertTrue(pos['tp1_hit'])
+        self.assertGreater(pos['stop_loss'], stop_after_tp1)
+
     def test_extended_runner_grace_applies_after_tp1(self):
         pos = {
             'strategy': 'S1C',
@@ -186,6 +221,12 @@ class SimulatorTradeLifecycleTest(TestCase):
         pos = self.sim.open_positions[0]
         self.assertLessEqual(pos['margin_used'], 10000 * 0.15 + 1e-6)
         self.assertEqual(pos['margin_mode'], 'isolated')
+
+    def test_fixed_notional_cap_limits_position_size(self):
+        self.sim.config.fixed_notional_per_trade = 10.0
+        self.sim._open_position(TRADE_PARAMS, datetime.now(timezone.utc))
+        pos = self.sim.open_positions[0]
+        self.assertLessEqual(pos['position_size_usd'], 10.0 + 1e-6)
 
     def test_no_position_opened_without_capital(self):
         self.sim.current_capital = 0

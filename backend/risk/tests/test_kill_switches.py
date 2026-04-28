@@ -1,7 +1,8 @@
 """DD-based size scaling replaces consecutive-loss logic."""
 from django.test import TestCase, override_settings
 from executor.models import AccountState
-from risk.kill_switches import get_dd_size_multiplier, get_risk_state
+from risk.kill_switches import get_dd_size_multiplier, get_risk_state, check_kill_switches
+from risk.models import RiskState
 
 
 def make_account(balance, peak):
@@ -45,3 +46,26 @@ class DDBasedSizeMultiplierTest(TestCase):
     def test_3pct_dd_still_full_size(self):
         make_account(9700, 10000)
         self.assertAlmostEqual(get_dd_size_multiplier(), 1.0)
+
+    @override_settings(MAX_DAILY_PORTFOLIO_DRAWDOWN=0.20)
+    def test_daily_portfolio_equity_halt_triggers_at_20pct(self):
+        AccountState.objects.create(
+            balance=10000, equity=8000,
+            peak_equity=10000, total_trades=0,
+            winning_trades=0, losing_trades=0,
+            total_pnl=0, max_drawdown=20,
+        )
+        RiskState.objects.create(
+            pk=1,
+            daily_start_equity=10000,
+            daily_pnl=0,
+            weekly_pnl=0,
+            consecutive_losses=0,
+            is_daily_stopped=False,
+            is_weekly_stopped=False,
+            position_size_multiplier=1.0,
+            current_open_positions=0,
+        )
+        allowed, reason = check_kill_switches('BTCUSDT', 'LONG')
+        self.assertFalse(allowed)
+        self.assertIn('portfolio drawdown', reason.lower())

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Position, Trade, AccountState
+from .models import Position, Trade, AccountState, ExchangeOpenOrder
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
@@ -17,3 +17,10 @@ class TradeAdmin(admin.ModelAdmin):
 class AccountStateAdmin(admin.ModelAdmin):
     list_display = ['balance', 'equity', 'unrealized_pnl', 'total_trades', 'winning_trades', 'max_drawdown', 'updated_at']
     ordering = ['-updated_at']
+
+
+@admin.register(ExchangeOpenOrder)
+class ExchangeOpenOrderAdmin(admin.ModelAdmin):
+    list_display = ['symbol', 'side', 'order_type', 'price', 'size', 'status', 'updated_at']
+    list_filter = ['symbol', 'side', 'status']
+    ordering = ['symbol', 'order_id']

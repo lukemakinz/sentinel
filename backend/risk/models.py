@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class RiskState(models.Model):
@@ -11,6 +12,8 @@ class RiskState(models.Model):
     is_weekly_stopped = models.BooleanField(default=False)
     position_size_multiplier = models.FloatField(default=1.0)  # Reduced after losses
     current_open_positions = models.IntegerField(default=0)
+    daily_start_equity = models.FloatField(default=0)
+    daily_start_date = models.DateField(default=timezone.now)
 
     class Meta:
         verbose_name = 'Risk State'
@@ -31,6 +34,7 @@ class RiskEvent(models.Model):
         ('MAX_POSITIONS', 'Max Positions Reached'),
         ('POSITION_OPENED', 'Position Opened'),
         ('POSITION_CLOSED', 'Position Closed'),
+        ('DAILY_PORTFOLIO_STOP', 'Daily Portfolio Stop'),
     ]
 
     timestamp = models.DateTimeField(auto_now_add=True)

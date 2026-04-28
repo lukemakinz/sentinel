@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { usePolling } from '../hooks/usePolling';
 import { fetchStatus, fetchSignals } from '../api';
-import { LayoutDashboard, Monitor, BookOpen, BarChart3, ShieldAlert, Activity, Database, Briefcase, FlaskConical, HelpCircle } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { LayoutDashboard, Monitor, BookOpen, BarChart3, ShieldAlert, Activity, Database, Briefcase, FlaskConical, HelpCircle, LogOut, UserCircle2 } from 'lucide-react';
 
 const NAV_ITEMS = [
     { path: '/', label: 'Command Center', icon: LayoutDashboard },
@@ -15,6 +16,7 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar() {
+    const { auth, logout } = useAuth();
     const { data: status } = usePolling(fetchStatus, 10000);
     const [signalCount, setSignalCount] = useState(0);
     useEffect(() => {
@@ -72,6 +74,26 @@ export default function Sidebar() {
             </nav>
 
             <div className="p-5 border-t border-[#27272A] relative z-10 bg-[#0a0a0b]/50 backdrop-blur-md">
+                <div className="mb-4 rounded-xl border border-white/5 bg-black/20 px-3 py-3">
+                    <div className="flex items-center justify-between gap-3">
+                        <div className="flex items-center gap-2 min-w-0">
+                            <UserCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                            <div className="min-w-0">
+                                <p className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-mono">Operator</p>
+                                <p className="text-sm text-white truncate">{auth?.username || 'authenticated'}</p>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={logout}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-[11px] font-mono uppercase tracking-[0.2em] text-gray-300 transition-all hover:border-[#00E5FF]/30 hover:text-[#00E5FF]"
+                        >
+                            <LogOut className="w-3.5 h-3.5" />
+                            Exit
+                        </button>
+                    </div>
+                </div>
+
                 <div className="flex flex-col gap-3 font-mono text-xs">
                     <div className="flex items-center justify-between group">
                         <div className="flex items-center gap-2 text-gray-400 group-hover:text-white transition-colors">

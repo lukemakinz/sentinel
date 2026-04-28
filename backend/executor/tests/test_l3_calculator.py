@@ -50,10 +50,9 @@ class L3EntryCalculationTest(TestCase):
         self.assertAlmostEqual(params['entry_price'], 3150.0, places=0)
 
     def test_s2_entry_uses_sweep_level_plus_atr(self):
-        params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S2')
-        # S2 entry: swept_level + 0.1×ATR for LONG (just above sweep)
-        expected = LONG_CONTEXT['swept_level'] + 0.1 * LONG_CONTEXT['atr']
-        self.assertAlmostEqual(params['entry_price'], expected, places=0)
+        ctx = {**LONG_CONTEXT, 'current_price': 93600.0, 'entry_mode': 'MARKET'}
+        params = self.calc.calculate(ctx, APPROVE, strategy='S2')
+        self.assertAlmostEqual(params['entry_price'], 93600.0, places=0)
 
     def test_s1b_entry_is_shallower_than_mid_fvg(self):
         params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S1B')
@@ -61,9 +60,36 @@ class L3EntryCalculationTest(TestCase):
         self.assertLess(params['entry_price'], 93500.0)
 
     def test_s3_entry_uses_nearest_liquidity_adjusted(self):
-        params = self.calc.calculate(LONG_CONTEXT, APPROVE, strategy='S3')
+        params = self.calc.calculate({**LONG_CONTEXT, 'current_price': 93600.0, 'entry_mode': 'HYBRID'}, APPROVE, strategy='S3')
         self.assertIsNotNone(params)
         self.assertIn('entry_price', params)
+
+    def test_s4_entry_uses_current_price_on_breakout(self):
+        ctx = {
+            **LONG_CONTEXT,
+            'current_price': 93650.0,
+            'opening_range_high': 93500.0,
+            'opening_range_low': 93100.0,
+            'opening_range_mid': 93300.0,
+            'entry_mode': 'MARKET',
+        }
+        params = self.calc.calculate(ctx, APPROVE, strategy='S4')
+        self.assertAlmostEqual(params['entry_price'], 93650.0, places=0)
+
+    def test_s5_entry_uses_reclaim_close(self):
+        ctx = {
+            **LONG_CONTEXT,
+            'symbol': 'BTCUSDT',
+            'current_price': 93650.0,
+            's5_trigger_high': 93640.0,
+            's5_trigger_low': 93480.0,
+            's5_atr_15m': 120.0,
+            's5_reclaim_price': 93520.0,
+            's5_symbol_profile': 'BTCUSDT',
+            'entry_mode': 'MARKET',
+        }
+        params = self.calc.calculate(ctx, APPROVE, strategy='S5')
+        self.assertAlmostEqual(params['entry_price'], 93520.0, places=0)
 
     def test_s1c_entry_blends_current_price_and_reclaim_limit(self):
         ctx = {**LONG_CONTEXT, 'current_price': 93600.0}
@@ -116,6 +142,19 @@ class L3StopLossTest(TestCase):
         tight_dist = tight['entry_price'] - tight['stop_loss']
         loose_dist = loose['entry_price'] - loose['stop_loss']
         self.assertGreater(loose_dist, tight_dist)
+
+    def test_s4_sl_anchors_to_opening_range_for_long(self):
+        ctx = {
+            **LONG_CONTEXT,
+            'current_price': 93650.0,
+            'opening_range_high': 93500.0,
+            'opening_range_low': 93100.0,
+            'opening_range_mid': 93300.0,
+            'entry_mode': 'MARKET',
+        }
+        params = self.calc.calculate(ctx, APPROVE, strategy='S4')
+        self.assertLess(params['stop_loss'], params['entry_price'])
+        self.assertGreater(params['stop_loss'], 93000.0)
 
 
 class L3TakeProfitTest(TestCase):
@@ -174,6 +213,68 @@ class L3TakeProfitTest(TestCase):
         self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.15, places=2)
         self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.25, places=2)
         self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.60, places=2)
+
+    def test_s2_uses_faster_tp_profile(self):
+        ctx = {**LONG_CONTEXT, 'current_price': 93600.0, 'entry_mode': 'MARKET'}
+        params = self.calc.calculate(ctx, APPROVE, strategy='S2')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.35, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.35, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.30, places=2)
+
+    def test_s3_uses_breakout_tp_profile(self):
+        ctx = {**LONG_CONTEXT, 'current_price': 93600.0, 'entry_mode': 'HYBRID'}
+        params = self.calc.calculate(ctx, APPROVE, strategy='S3')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.30, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.30, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.40, places=2)
+
+    def test_s4_uses_fast_scalp_tp_profile(self):
+        ctx = {
+            **LONG_CONTEXT,
+            'current_price': 93650.0,
+            'opening_range_high': 93500.0,
+            'opening_range_low': 93100.0,
+            'opening_range_mid': 93300.0,
+            'entry_mode': 'HYBRID',
+        }
+        params = self.calc.calculate(ctx, APPROVE, strategy='S4')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.35, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.25, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.40, places=2)
+
+    def test_s5_uses_runner_friendly_tp_profile(self):
+        ctx = {
+            **LONG_CONTEXT,
+            'current_price': 93650.0,
+            's5_trigger_high': 93640.0,
+            's5_trigger_low': 93480.0,
+            's5_atr_15m': 120.0,
+            's5_reclaim_price': 93520.0,
+            's5_symbol_profile': 'BTCUSDT',
+            'entry_mode': 'MARKET',
+        }
+        params = self.calc.calculate(ctx, APPROVE, strategy='S5')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.30, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.25, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.45, places=2)
+        self.assertGreater(params['take_profits'][0]['level'], params['entry_price'])
+
+    def test_s5_eth_uses_faster_tp_profile(self):
+        ctx = {
+            **LONG_CONTEXT,
+            'symbol': 'ETHUSDT',
+            'current_price': 93650.0,
+            's5_trigger_high': 93640.0,
+            's5_trigger_low': 93480.0,
+            's5_atr_15m': 120.0,
+            's5_reclaim_price': 93520.0,
+            's5_symbol_profile': 'ETHUSDT',
+            'entry_mode': 'MARKET',
+        }
+        params = self.calc.calculate(ctx, APPROVE, strategy='S5')
+        self.assertAlmostEqual(params['take_profits'][0]['ratio'], 0.35, places=2)
+        self.assertAlmostEqual(params['take_profits'][1]['ratio'], 0.25, places=2)
+        self.assertAlmostEqual(params['take_profits'][2]['ratio'], 0.40, places=2)
 
     def test_s1c_time_kill_is_more_lenient_after_tp1(self):
         from datetime import datetime, timezone, timedelta

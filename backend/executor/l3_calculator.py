@@ -3,12 +3,12 @@ from datetime import datetime, timezone
 from django.conf import settings
 
 # Strategy-specific ATR buffer multipliers for SL
-_SL_ATR_BUFFER = {'S1': 0.20, 'S1A': 0.20, 'S1B': 0.10, 'S1C': 0.16, 'S2': 0.20, 'S3': 0.15}
+_SL_ATR_BUFFER = {'S1': 0.20, 'S1A': 0.20, 'S1B': 0.10, 'S1C': 0.16, 'S2': 0.20, 'S3': 0.15, 'S4': 0.10, 'S5': 0.20}
 
 # Per-strategy SL caps (% of entry price)
 # S1 scalp: tight (0.3-1.0%) | S2 order flow: medium (0.3-1.5%) | S3 classic: wider (0.3-2.5%)
-_SL_MIN_PCT = {'S1': 0.003, 'S1A': 0.003, 'S1B': 0.003, 'S1C': 0.003, 'S2': 0.003, 'S3': 0.003}
-_SL_MAX_PCT = {'S1': 0.015, 'S1A': 0.015, 'S1B': 0.012, 'S1C': 0.016, 'S2': 0.020, 'S3': 0.025}
+_SL_MIN_PCT = {'S1': 0.003, 'S1A': 0.003, 'S1B': 0.003, 'S1C': 0.003, 'S2': 0.003, 'S3': 0.003, 'S4': 0.0025, 'S5': 0.003}
+_SL_MAX_PCT = {'S1': 0.015, 'S1A': 0.015, 'S1B': 0.012, 'S1C': 0.016, 'S2': 0.020, 'S3': 0.025, 'S4': 0.012, 'S5': 0.015}
 
 _MAX_SL_PCT = 0.03   # global hard cap (legacy — per-strategy caps take precedence)
 _MIN_RR         = 1.2    # TP1 must be >= 1.2R (always met since TP1 = 1.5R)
@@ -21,8 +21,10 @@ _TP_CONFIG = {
     'S1A': {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.25, 0.25, 0.50]},
     'S1B': {'tp1_r': 0.8, 'tp2_r': 2.4, 'ratios': [0.30, 0.30, 0.40]},
     'S1C': {'tp1_r': 1.2, 'tp2_r': 3.2, 'ratios': [0.15, 0.25, 0.60]},
-    'S2':  {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.40, 0.40, 0.20]},
-    'S3':  {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.40, 0.40, 0.20]},
+    'S2':  {'tp1_r': 1.0, 'tp2_r': 2.2, 'ratios': [0.35, 0.35, 0.30]},
+    'S3':  {'tp1_r': 0.9, 'tp2_r': 2.1, 'ratios': [0.30, 0.30, 0.40]},
+    'S4':  {'tp1_r': 1.0, 'tp2_r': 2.4, 'ratios': [0.35, 0.25, 0.40]},
+    'S5':  {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.30, 0.30, 0.40]},
 }
 
 _TIME_KILL_CONFIG = {
@@ -30,8 +32,10 @@ _TIME_KILL_CONFIG = {
     'S1A': {'hours': 8, 'min_r_progress': 1.0},
     'S1B': {'hours': 4, 'min_r_progress': 0.5},
     'S1C': {'hours': 7, 'min_r_progress': 0.5},
-    'S2':  {'hours': 8, 'min_r_progress': 1.0},
-    'S3':  {'hours': 8, 'min_r_progress': 1.0},
+    'S2':  {'hours': 3, 'min_r_progress': 0.4},
+    'S3':  {'hours': 4, 'min_r_progress': 0.4},
+    'S4':  {'hours': 3, 'min_r_progress': 0.15},
+    'S5':  {'hours': 6, 'min_r_progress': 0.15},
 }
 
 _STOP_PROFILE_MULTIPLIERS = {
@@ -205,13 +209,47 @@ class L3Calculator:
             return swept + atr * 0.15 if direction == 'LONG' else swept - atr * 0.15
 
         if strategy == 'S2':
-            # Market order at ChoCH — use swept level + small buffer
-            return swept + 0.1 * atr if direction == 'LONG' else swept - 0.1 * atr
+            current = float(ctx.get('current_price') or 0.0)
+            if current > 0:
+                if fvg:
+                    bot, top = float(fvg[0]), float(fvg[1])
+                    reclaim = bot + 0.25 * (top - bot) if direction == 'LONG' else top - 0.25 * (top - bot)
+                    return 0.7 * current + 0.3 * reclaim if ctx.get('entry_mode') == 'HYBRID' else current
+                return current
+            return swept + 0.05 * atr if direction == 'LONG' else swept - 0.05 * atr
 
-        # S3: Classic TA — limit near S/R (use nearest liquidity as S/R proxy)
+        if strategy == 'S4':
+            current = float(ctx.get('current_price') or 0.0)
+            or_high = float(ctx.get('opening_range_high') or 0.0)
+            or_low = float(ctx.get('opening_range_low') or 0.0)
+            breakout_level = or_high if direction == 'LONG' else or_low
+            if current > 0 and breakout_level > 0:
+                if ctx.get('entry_mode') == 'HYBRID':
+                    return 0.45 * current + 0.55 * breakout_level
+                return current
+            if breakout_level > 0:
+                buffer = 0.02 * atr
+                return breakout_level + buffer if direction == 'LONG' else breakout_level - buffer
+            return swept + 0.04 * atr if direction == 'LONG' else swept - 0.04 * atr
+
+        if strategy == 'S5':
+            reclaim_price = float(ctx.get('s5_reclaim_price') or 0.0)
+            if reclaim_price > 0:
+                return reclaim_price
+            current = float(ctx.get('current_price') or 0.0)
+            return current if current > 0 else swept
+
+        # S3: breakout pullback intraday
+        current = float(ctx.get('current_price') or 0.0)
+        if fvg:
+            bot, top = float(fvg[0]), float(fvg[1])
+            pullback = bot + 0.33 * (top - bot) if direction == 'LONG' else top - 0.33 * (top - bot)
+            if current > 0:
+                return 0.6 * current + 0.4 * pullback if ctx.get('entry_mode') == 'HYBRID' else current
+            return pullback
         if liq > 0:
-            return liq * 1.005 if direction == 'LONG' else liq * 0.995
-        return swept + 0.1 * atr if direction == 'LONG' else swept - 0.1 * atr
+            return liq * 1.002 if direction == 'LONG' else liq * 0.998
+        return swept + 0.08 * atr if direction == 'LONG' else swept - 0.08 * atr
 
     # ── Stop Loss ──────────────────────────────────────────────────────────
 
@@ -254,6 +292,58 @@ class L3Calculator:
             sl_ceil  = entry * (1 + sl_max_pct)
             return min(sl_raw, sl_ceil) if sl_raw > sl_floor else sl_floor
 
+        if strategy == 'S2':
+            anchor = entry
+            if fvg:
+                bot, top = float(fvg[0]), float(fvg[1])
+                anchor = bot if direction == 'LONG' else top
+            elif swept and swept != entry:
+                anchor = swept
+
+            if direction == 'LONG':
+                sl_raw = min(anchor, entry - 0.55 * atr) - buf * atr
+                sl_floor = entry * (1 - sl_max_pct)
+                sl_ceil  = entry * (1 - sl_min_pct)
+                return max(sl_raw, sl_floor) if sl_raw < sl_ceil else sl_ceil
+            sl_raw = max(anchor, entry + 0.55 * atr) + buf * atr
+            sl_floor = entry * (1 + sl_min_pct)
+            sl_ceil  = entry * (1 + sl_max_pct)
+            return min(sl_raw, sl_ceil) if sl_raw > sl_floor else sl_floor
+
+        if strategy == 'S4':
+            or_high = float(ctx.get('opening_range_high') or 0.0)
+            or_low = float(ctx.get('opening_range_low') or 0.0)
+            or_mid = float(ctx.get('opening_range_mid') or 0.0)
+            if direction == 'LONG':
+                anchor = or_mid or or_low or min(entry, swept)
+                sl_raw = min(anchor, entry - 0.35 * atr) - buf * atr
+                sl_floor = entry * (1 - sl_max_pct)
+                sl_ceil  = entry * (1 - sl_min_pct)
+                return max(sl_raw, sl_floor) if sl_raw < sl_ceil else sl_ceil
+            anchor = or_mid or or_high or max(entry, swept)
+            sl_raw = max(anchor, entry + 0.35 * atr) + buf * atr
+            sl_floor = entry * (1 + sl_min_pct)
+            sl_ceil  = entry * (1 + sl_max_pct)
+            return min(sl_raw, sl_ceil) if sl_raw > sl_floor else sl_floor
+
+        if strategy == 'S5':
+            trigger_low = float(ctx.get('s5_trigger_low') or 0.0)
+            trigger_high = float(ctx.get('s5_trigger_high') or 0.0)
+            atr_15m = float(ctx.get('s5_atr_15m') or atr)
+            symbol_profile = ctx.get('s5_symbol_profile') or ctx.get('symbol')
+            atr_buffer = 0.2 if symbol_profile == 'BTCUSDT' else 0.28 if symbol_profile == 'ETHUSDT' else 0.2
+            if direction == 'LONG':
+                anchor = trigger_low if trigger_low > 0 else entry - 0.5 * atr_15m
+                sl_raw = anchor - atr_buffer * atr_15m
+                sl_floor = entry * (1 - sl_max_pct)
+                sl_ceil  = entry * (1 - sl_min_pct)
+                return max(sl_raw, sl_floor) if sl_raw < sl_ceil else sl_ceil
+            anchor = trigger_high if trigger_high > 0 else entry + 0.5 * atr_15m
+            sl_raw = anchor + atr_buffer * atr_15m
+            sl_floor = entry * (1 + sl_min_pct)
+            sl_ceil  = entry * (1 + sl_max_pct)
+            return min(sl_raw, sl_ceil) if sl_raw > sl_floor else sl_floor
+
         if direction == 'LONG':
             sl_raw = swept - buf * atr
             # Apply per-strategy bounds
@@ -275,7 +365,7 @@ class L3Calculator:
         Falls back to 1.5R/3R when no liquidity data available.
         """
         tp1_level = tp2_level = None
-        tp_cfg = _TP_CONFIG.get(strategy, _TP_CONFIG['S1'])
+        tp_cfg = self._tp_profile(strategy, symbol)
         tp1_r = tp_cfg['tp1_r']
         tp2_r = tp_cfg['tp2_r']
         tp_ratios = tp_cfg['ratios']
@@ -309,6 +399,15 @@ class L3Calculator:
             {'level': round(tp2_level, 4), 'ratio': tp_ratios[1], 'label': 'TP2', 'runner': False},
             {'level': None, 'ratio': tp_ratios[2], 'label': 'TP3', 'runner': True},
         ]
+
+    @staticmethod
+    def _tp_profile(strategy: str, symbol: str | None) -> dict:
+        if strategy == 'S5':
+            if symbol == 'ETHUSDT':
+                return {'tp1_r': 1.3, 'tp2_r': 2.6, 'ratios': [0.35, 0.25, 0.40]}
+            if symbol == 'BTCUSDT':
+                return {'tp1_r': 1.6, 'tp2_r': 3.2, 'ratios': [0.30, 0.25, 0.45]}
+        return _TP_CONFIG.get(strategy, _TP_CONFIG['S1'])
 
     def _select_leverage(self, ctx: dict, l2_decision: dict, entry: float,
                           direction: str, r: float) -> tuple[int | None, float | None, float | None, str]:

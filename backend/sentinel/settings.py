@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'django_celery_beat',
     # Sentinel apps
@@ -114,6 +115,13 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
@@ -141,9 +149,11 @@ OPENAI_API_KEY    = os.environ.get('OPENAI_API_KEY', '')
 
 # Risk params
 MAX_RISK_PER_TRADE = float(os.environ.get('MAX_RISK_PER_TRADE', '0.005'))
-MAX_DAILY_DRAWDOWN = float(os.environ.get('MAX_DAILY_DRAWDOWN', '0.03'))
+MAX_DAILY_DRAWDOWN = float(os.environ.get('MAX_DAILY_DRAWDOWN', '0.20'))
+MAX_DAILY_PORTFOLIO_DRAWDOWN = float(os.environ.get('MAX_DAILY_PORTFOLIO_DRAWDOWN', '0.20'))
 MAX_WEEKLY_DRAWDOWN = float(os.environ.get('MAX_WEEKLY_DRAWDOWN', '0.07'))
 MAX_OPEN_POSITIONS = int(os.environ.get('MAX_OPEN_POSITIONS', '3'))
+PROFIT_TO_SPOT_RATIO = float(os.environ.get('PROFIT_TO_SPOT_RATIO', '0.10'))
 DEFAULT_MARGIN_MODE = os.environ.get('DEFAULT_MARGIN_MODE', 'isolated')
 MAX_LEVERAGE = int(os.environ.get('MAX_LEVERAGE', '10'))
 MAX_HIGH_CONVICTION_LEVERAGE = int(os.environ.get('MAX_HIGH_CONVICTION_LEVERAGE', '20'))
@@ -151,6 +161,13 @@ MAX_MARGIN_PER_TRADE_PCT = float(os.environ.get('MAX_MARGIN_PER_TRADE_PCT', '0.1
 MIN_LIQUIDATION_BUFFER_R = float(os.environ.get('MIN_LIQUIDATION_BUFFER_R', '3.0'))
 MAINTENANCE_MARGIN_RATE = float(os.environ.get('MAINTENANCE_MARGIN_RATE', '0.005'))
 INITIAL_BALANCE = float(os.environ.get('INITIAL_BALANCE', '10000'))
+EXCHANGE_NAME = os.environ.get('EXCHANGE_NAME', 'kucoin').lower()
+LIVE_TRADING_ENABLED = os.environ.get('LIVE_TRADING_ENABLED', 'False').lower() in ('true', '1')
+KUCOIN_API_KEY = os.environ.get('KUCOIN_API_KEY', '')
+KUCOIN_API_SECRET = os.environ.get('KUCOIN_API_SECRET', '')
+KUCOIN_API_PASSPHRASE = os.environ.get('KUCOIN_API_PASSPHRASE', '')
+KUCOIN_FUTURES_REST_URL = os.environ.get('KUCOIN_FUTURES_REST_URL', 'https://api-futures.kucoin.com')
+KUCOIN_FUTURES_WS_URL = os.environ.get('KUCOIN_FUTURES_WS_URL', 'wss://wsapi-futures.kucoin.com')
 
 # Consensus weights
 CONSENSUS_WEIGHTS = {

@@ -47,6 +47,48 @@ def compute_rsi(closes, period=14):
     return np.array(rsi_values) if rsi_values else np.array([50.0])
 
 
+def compute_connors_rsi(closes, rsi_period=3, streak_rsi_period=2, rank_period=100):
+    """
+    Connors RSI = average of:
+    - short RSI of closes
+    - RSI of up/down streak length
+    - percentile rank of the latest 1-bar return
+    """
+    closes = np.array(closes, dtype=float)
+    if len(closes) < max(rank_period + 2, rsi_period + 2, streak_rsi_period + 2):
+        return np.array([50.0])
+
+    price_rsi = compute_rsi(closes, period=rsi_period)
+
+    streaks = [0.0]
+    for idx in range(1, len(closes)):
+        if closes[idx] > closes[idx - 1]:
+            streaks.append(streaks[-1] + 1 if streaks[-1] > 0 else 1)
+        elif closes[idx] < closes[idx - 1]:
+            streaks.append(streaks[-1] - 1 if streaks[-1] < 0 else -1)
+        else:
+            streaks.append(0.0)
+    streak_rsi = compute_rsi(np.array(streaks, dtype=float), period=streak_rsi_period)
+
+    one_bar_returns = np.diff(closes)
+    ranks = []
+    for idx in range(rank_period, len(one_bar_returns)):
+        window = one_bar_returns[idx - rank_period:idx]
+        latest = one_bar_returns[idx]
+        rank = float(np.sum(window < latest) / len(window) * 100.0) if len(window) else 50.0
+        ranks.append(rank)
+    if not ranks:
+        return np.array([50.0])
+
+    min_len = min(len(price_rsi), len(streak_rsi), len(ranks))
+    crsi = (
+        price_rsi[-min_len:]
+        + streak_rsi[-min_len:]
+        + np.array(ranks[-min_len:], dtype=float)
+    ) / 3.0
+    return crsi if len(crsi) > 0 else np.array([50.0])
+
+
 def compute_macd(closes, fast=12, slow=26, signal=9):
     """Calculate MACD, signal line, and histogram."""
     if len(closes) < slow + signal:

@@ -10,13 +10,14 @@ from rest_framework.response import Response
 # analysts/ and consensus/ removed from INSTALLED_APPS — imports disabled
 # from analysts.models import AnalystSignalRecord
 # from consensus.models import ConsensusSignal
-from executor.models import Position, Trade, AccountState
+from executor.models import Position, Trade, AccountState, ExchangeOpenOrder
+from executor.tasks import sync_live_exchange_state, transfer_profit_reserve_to_spot
 from ingester.models import Candle
 from risk.models import RiskState, RiskEvent
 
 from .serializers import (
     PositionSerializer, TradeSerializer, AccountStateSerializer,
-    RiskStateSerializer, RiskEventSerializer,
+    RiskStateSerializer, RiskEventSerializer, ExchangeOpenOrderSerializer,
 )
 
 
@@ -36,8 +37,69 @@ def system_status(request):
         'total_candles': Candle.objects.count(),
         'latest_candle_time': latest_candle.timestamp if latest_candle else None,
         'open_positions': Position.objects.filter(status='OPEN').count(),
+        'open_exchange_orders': ExchangeOpenOrder.objects.filter(status='active').count(),
         'daily_pnl': risk_state.daily_pnl,
     })
+
+
+@api_view(['GET'])
+def exchange_live_state(request):
+    """Latest normalized exchange snapshot persisted in local models."""
+    account = AccountState.objects.order_by('-updated_at').first()
+    exchange_positions = Position.objects.filter(source='exchange', status='OPEN')
+    exchange_orders = ExchangeOpenOrder.objects.filter(source='exchange').order_by('symbol', 'order_id')
+
+    return Response({
+        'account': AccountStateSerializer(account).data if account else None,
+        'positions': PositionSerializer(exchange_positions, many=True).data,
+        'open_orders': ExchangeOpenOrderSerializer(exchange_orders, many=True).data,
+        'positions_count': exchange_positions.count(),
+        'open_orders_count': exchange_orders.filter(status='active').count(),
+    })
+
+
+@api_view(['GET'])
+def exchange_integration_status(request):
+    """Operational readiness for the configured live exchange integration."""
+    from ingester.models import WatchedPair
+    from executor.exchange_adapters import get_exchange_adapter
+
+    adapter = get_exchange_adapter()
+    active_symbols = WatchedPair.get_active_symbols()
+
+    return Response({
+        'exchange': settings.EXCHANGE_NAME,
+        'adapter': adapter.name,
+        'live_trading_enabled': settings.LIVE_TRADING_ENABLED,
+        'credentials_configured': adapter.credentials_configured(),
+        'profit_to_spot_ratio': float(getattr(settings, 'PROFIT_TO_SPOT_RATIO', 0.10)),
+        'active_symbols': active_symbols,
+        'supported_symbol_count': len(active_symbols),
+        'rest_url': getattr(settings, 'KUCOIN_FUTURES_REST_URL', ''),
+        'ws_url': getattr(settings, 'KUCOIN_FUTURES_WS_URL', ''),
+    })
+
+
+@api_view(['POST'])
+def exchange_sync_now(request):
+    """Trigger an immediate live exchange sync through the existing execution task."""
+    result = sync_live_exchange_state()
+    return Response(result, status=status.HTTP_200_OK if result.get('ok') else status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def exchange_transfer_profit(request):
+    """Trigger a manual futures -> spot reserve transfer."""
+    raw_amount = request.data.get('amount_usd')
+    amount_usd = None
+    if raw_amount not in (None, ''):
+        try:
+            amount_usd = float(raw_amount)
+        except (TypeError, ValueError):
+            return Response({'ok': False, 'error': 'invalid_amount_usd'}, status=status.HTTP_400_BAD_REQUEST)
+
+    result = transfer_profit_reserve_to_spot(amount_usd=amount_usd)
+    return Response(result, status=status.HTTP_200_OK if result.get('ok') else status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -72,6 +134,17 @@ class PositionViewSet(viewsets.ReadOnlyModelViewSet):
 class TradeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TradeSerializer
     queryset = Trade.objects.all()
+
+
+class ExchangeOpenOrderViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ExchangeOpenOrderSerializer
+
+    def get_queryset(self):
+        qs = ExchangeOpenOrder.objects.all()
+        symbol_filter = self.request.query_params.get('symbol')
+        if symbol_filter:
+            qs = qs.filter(symbol=symbol_filter.upper())
+        return qs
 
 
 @api_view(['GET'])

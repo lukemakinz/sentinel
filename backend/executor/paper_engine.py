@@ -326,9 +326,13 @@ class PaperTradingEngine:
                 balance=settings.INITIAL_BALANCE,
                 equity=settings.INITIAL_BALANCE,
                 peak_equity=settings.INITIAL_BALANCE,
+                spot_reserve_balance=0.0,
             )
 
-        state.balance += pnl_change
+        reserve_ratio = float(getattr(settings, 'PROFIT_TO_SPOT_RATIO', 0.10))
+        reserve_transfer = pnl_change * reserve_ratio if pnl_change > 0 else 0.0
+        state.spot_reserve_balance += reserve_transfer
+        state.balance += (pnl_change - reserve_transfer)
         open_positions = Position.objects.filter(status='OPEN')
         state.unrealized_pnl = sum(p.unrealized_pnl for p in open_positions)
         state.equity = state.balance + state.unrealized_pnl

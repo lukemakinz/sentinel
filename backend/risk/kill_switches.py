@@ -18,14 +18,55 @@ def get_risk_state():
     return state
 
 
+def _current_equity() -> float:
+    from executor.models import AccountState
+    state = AccountState.objects.order_by('-updated_at').first()
+    if state:
+        return float(state.equity)
+    return float(getattr(settings, 'INITIAL_BALANCE', 0.0))
+
+
+def sync_daily_equity_baseline(current_equity: float | None = None):
+    state = get_risk_state()
+    today = timezone.now().date()
+    current_equity = float(current_equity if current_equity is not None else _current_equity())
+    if state.daily_start_date != today or state.daily_start_equity <= 0:
+        state.daily_start_date = today
+        state.daily_start_equity = current_equity
+        state.is_daily_stopped = False
+        state.save(update_fields=['daily_start_date', 'daily_start_equity', 'is_daily_stopped', 'updated_at'])
+
+
+def get_daily_equity_drawdown() -> float:
+    state = get_risk_state()
+    current_equity = _current_equity()
+    sync_daily_equity_baseline(current_equity)
+    baseline = float(state.daily_start_equity or current_equity)
+    if baseline <= 0:
+        return 0.0
+    return -(baseline - current_equity) / baseline * 100.0
+
+
 def check_kill_switches(symbol, side) -> tuple[bool, str]:
     """
     Check all kill switches before opening a position.
     Returns (allowed, reason).
     """
     state = get_risk_state()
+    sync_daily_equity_baseline()
 
-    # 1. Daily drawdown > 3%
+    # 1. Daily portfolio equity drawdown
+    daily_equity_dd = get_daily_equity_drawdown()
+    daily_portfolio_limit_pct = float(getattr(settings, 'MAX_DAILY_PORTFOLIO_DRAWDOWN', 0.20)) * 100
+    if state.is_daily_stopped:
+        return False, f"Daily stop active (equity DD: {daily_equity_dd:.2f}%)"
+    if daily_equity_dd <= -daily_portfolio_limit_pct:
+        state.is_daily_stopped = True
+        state.save(update_fields=['is_daily_stopped', 'updated_at'])
+        _log_event('DAILY_PORTFOLIO_STOP', symbol, f"Daily equity drawdown {daily_equity_dd:.2f}% exceeded {daily_portfolio_limit_pct:.2f}%")
+        return False, "Daily portfolio drawdown limit hit"
+
+    # 2. Daily trade PnL guard
     if state.is_daily_stopped:
         return False, f"Daily stop active (PnL: {state.daily_pnl:+.2f}%)"
 
@@ -35,7 +76,7 @@ def check_kill_switches(symbol, side) -> tuple[bool, str]:
         _log_event('DAILY_STOP', symbol, f"Daily drawdown {state.daily_pnl:.2f}% exceeded {settings.MAX_DAILY_DRAWDOWN*100}%")
         return False, "Daily drawdown limit hit"
 
-    # 2. Weekly drawdown > 7%
+    # 3. Weekly drawdown > 7%
     if state.is_weekly_stopped:
         return False, f"Weekly stop active (PnL: {state.weekly_pnl:+.2f}%)"
 
@@ -45,25 +86,25 @@ def check_kill_switches(symbol, side) -> tuple[bool, str]:
         _log_event('WEEKLY_STOP', symbol, f"Weekly drawdown {state.weekly_pnl:.2f}%")
         return False, "Weekly drawdown limit hit"
 
-    # 3. Max open positions
+    # 4. Max open positions
     from executor.models import Position
     open_positions = Position.objects.filter(status='OPEN').count()
     if open_positions >= settings.MAX_OPEN_POSITIONS:
         return False, f"Max positions reached ({open_positions}/{settings.MAX_OPEN_POSITIONS})"
 
-    # 4. Only one position per symbol
+    # 5. Only one position per symbol
     symbol_positions = Position.objects.filter(symbol=symbol, status='OPEN').count()
     if symbol_positions > 0:
         return False, f"Already have open position on {symbol}"
 
-    # 5. Correlation check (BTC + ETH = no more crypto)
+    # 6. Correlation check (BTC + ETH = no more crypto)
     if open_positions >= 2:
         open_symbols = list(Position.objects.filter(status='OPEN').values_list('symbol', flat=True))
         crypto_count = len(open_symbols)
         if crypto_count >= 2:
             return False, "Correlation limit: already 2 crypto positions open"
 
-    # 6. Volatility spike check
+    # 7. Volatility spike check
     from .position_sizing import get_atr_for_symbol
     atr = get_atr_for_symbol(symbol)
     if atr:
@@ -82,7 +123,7 @@ def check_kill_switches(symbol, side) -> tuple[bool, str]:
                 # Only allow high conviction trades during volatility
                 return False, "Volatility spike — only HIGH_CONVICTION trades allowed"
 
-    # 7. Funding rate check
+    # 8. Funding rate check
     from ingester.models import FundingRate
     latest_funding = FundingRate.objects.filter(symbol=symbol).order_by('-timestamp').first()
     if latest_funding and abs(float(latest_funding.funding_rate)) > 0.001:
@@ -91,28 +132,28 @@ def check_kill_switches(symbol, side) -> tuple[bool, str]:
             _log_event('FUNDING_BLOCK', symbol, f"Funding {float(latest_funding.funding_rate):.6f} blocks {side}")
             return False, f"Funding rate too high to go {side}"
 
-    # 8. News calendar blackout
+    # 9. News calendar blackout
     from .news_calendar import is_news_blackout
     if is_news_blackout():
         return False, "News blackout window — high-impact event nearby"
 
-    # 9. Portfolio heat (BTC-beta exposure)
+    # 10. Portfolio heat (BTC-beta exposure)
     from .portfolio_heat import check_portfolio_heat
     heat_ok, heat_reason = check_portfolio_heat()
     if not heat_ok:
         return False, heat_reason
 
-    # 10. Strategy health (rolling Sharpe)
+    # 11. Strategy health (rolling Sharpe)
     from .strategy_monitor import check_strategy_health
     health_ok, health_reason = check_strategy_health()
     if not health_ok:
         return False, health_reason
 
-    # 11. DD-based size multiplier (halt if 0)
+    # 12. DD-based size multiplier (halt if 0)
     if get_dd_size_multiplier() == 0.0:
         return False, "Portfolio drawdown -20% — trading halted"
 
-    # 12. Anti-revenge rules (cooldown, consecutive SL, session loss limit)
+    # 13. Anti-revenge rules (cooldown, consecutive SL, session loss limit)
     from .anti_revenge import check_anti_revenge
     ar_ok, ar_reason = check_anti_revenge(symbol)
     if not ar_ok:
@@ -177,6 +218,8 @@ def reset_daily():
     state = get_risk_state()
     state.daily_pnl = 0
     state.is_daily_stopped = False
+    state.daily_start_date = timezone.now().date()
+    state.daily_start_equity = _current_equity()
     state.save()
 
 

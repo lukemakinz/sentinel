@@ -1,11 +1,38 @@
 import axios from 'axios';
+import { getAuthToken, notifyUnauthorized } from './auth';
 
 // Empty VITE_API_URL = relative URLs (works behind nginx on Pi/prod)
 // Set VITE_API_URL=http://localhost:8000 only for local dev without nginx
 const API_BASE = import.meta.env.VITE_API_URL || '';
 const api = axios.create({ baseURL: `${API_BASE}/api` });
 
+api.interceptors.request.use((config) => {
+    const token = getAuthToken();
+    if (token) {
+        config.headers.Authorization = `Token ${token}`;
+    }
+    return config;
+});
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error?.response?.status === 401 && !String(error.config?.url || '').includes('/auth/token/')) {
+            notifyUnauthorized();
+        }
+        return Promise.reject(error);
+    },
+);
+
+export const loginWithToken = (username, password) => api.post('/auth/token/', { username, password });
+export const rotateToken = () => api.post('/auth/token/rotate/');
+export const revokeToken = () => api.post('/auth/token/revoke/');
+
 export const fetchStatus = () => api.get('/status/');
+export const fetchExchangeState = () => api.get('/exchange/state/');
+export const fetchExchangeIntegration = () => api.get('/exchange/integration/');
+export const triggerExchangeSync = () => api.post('/exchange/sync/');
+export const transferExchangeProfit = (amountUsd) => api.post('/exchange/transfer-profit/', amountUsd == null ? {} : { amount_usd: amountUsd });
 export const fetchConviction = () => api.get('/conviction/');
 export const fetchAnalysts = (symbol) => api.get('/analysts/', { params: { symbol } });
 export const fetchPositions = (status) => api.get('/positions/', { params: { status } });

@@ -27,6 +27,7 @@ class BacktestConfig:
     initial_capital: float = 10000.0
     risk_per_trade:  float = 0.005   # 0.5% per trade
     stop_profile:    str = 'medium'
+    fixed_notional_per_trade: float | None = None
 
 
 class BacktestSimulator:
@@ -141,6 +142,9 @@ class BacktestSimulator:
         max_margin_pct = min(base_margin_pct * margin_cap_multiplier, 0.25)
         max_margin_usd = self.current_capital * max_margin_pct
         max_notional = max_margin_usd * leverage
+        fixed_notional = float(self.config.fixed_notional_per_trade or 0.0)
+        if fixed_notional > 0:
+            max_notional = min(max_notional, fixed_notional)
         quantity_by_margin = max_notional / entry if entry > 0 else 0.0
         quantity = min(quantity_by_risk, quantity_by_margin)
         if quantity <= 0:
@@ -204,6 +208,15 @@ class BacktestSimulator:
         price = candle['close']
         high, low = candle['high'], candle['low']
         side = pos['side']
+
+        if pos.get('strategy') == 'S5' and not pos.get('tp1_hit'):
+            half_r_level = pos['entry_price'] + 0.5 * pos['r_value'] if side == 'LONG' else pos['entry_price'] - 0.5 * pos['r_value']
+            if (side == 'LONG' and high >= half_r_level) or (side == 'SHORT' and low <= half_r_level):
+                fee_buffer = abs(pos['entry_price']) * 0.0005
+                if side == 'LONG':
+                    pos['stop_loss'] = max(pos['stop_loss'], pos['entry_price'] + fee_buffer)
+                else:
+                    pos['stop_loss'] = min(pos['stop_loss'], pos['entry_price'] - fee_buffer)
 
         # Stop Loss
         if (side == 'LONG'  and low  <= pos['stop_loss']) or \
@@ -316,8 +329,9 @@ class BacktestSimulator:
         })
 
     def _update_trailing_stop(self, pos: dict):
-        """Give S1C runner more room while still locking in structure-based progress."""
-        if pos.get('strategy') != 'S1C' or not pos.get('tp1_hit'):
+        """Manage runner stop for strategies that let winners stretch intraday."""
+        strategy = pos.get('strategy')
+        if strategy not in {'S1C', 'S5'} or not pos.get('tp1_hit'):
             return
 
         r = float(pos.get('r_value') or 0.0)
@@ -327,18 +341,17 @@ class BacktestSimulator:
         best = float(pos.get('best_price', pos['entry_price']))
         side = pos['side']
         runner_profile = pos.get('runner_profile', 'standard')
+        if strategy == 'S5':
+            trail_mult = 0.5 if pos.get('tp2_hit') else 0.9
+        elif runner_profile == 'extended':
+            trail_mult = 1.35 if pos.get('tp2_hit') else 1.9
+        else:
+            trail_mult = 0.8 if pos.get('tp2_hit') else 1.1
+
         if side == 'LONG':
-            if runner_profile == 'extended':
-                trail_mult = 1.35 if pos.get('tp2_hit') else 1.9
-            else:
-                trail_mult = 0.8 if pos.get('tp2_hit') else 1.1
             trail_stop = best - trail_mult * r
             pos['stop_loss'] = max(pos['stop_loss'], trail_stop)
         else:
-            if runner_profile == 'extended':
-                trail_mult = 1.35 if pos.get('tp2_hit') else 1.9
-            else:
-                trail_mult = 0.8 if pos.get('tp2_hit') else 1.1
             trail_stop = best + trail_mult * r
             pos['stop_loss'] = min(pos['stop_loss'], trail_stop)
 
@@ -357,9 +370,11 @@ class BacktestSimulator:
     # ── Helpers ────────────────────────────────────────────────────────────
 
     def _should_scan(self, ts: datetime) -> bool:
+        fast_scan_strategies = {'S4', 'S5'}
+        scan_interval = timedelta(minutes=15) if self.config.strategy in fast_scan_strategies else L1_SCAN_INTERVAL
         if self._last_l1_scan is None:
             return True
-        return (ts - self._last_l1_scan) >= L1_SCAN_INTERVAL
+        return (ts - self._last_l1_scan) >= scan_interval
 
     def _current_equity(self) -> float:
         unrealized = 0.0
@@ -393,7 +408,13 @@ class BacktestSimulator:
         best_count     = 0
         best_coverage  = 0.0
 
-        for interval in ('1h', '4h', '15m', '5m', '1m'):   # prefer 1h first
+        fast_scan_strategies = {'S4', 'S5'}
+        interval_priority = (
+            ('15m', '5m', '1h', '4h', '1m')
+            if self.config.strategy in fast_scan_strategies
+            else ('1h', '4h', '15m', '5m', '1m')
+        )
+        for interval in interval_priority:
             agg = Candle.objects.filter(
                 symbol=self.config.symbol,
                 interval=interval,
@@ -458,7 +479,8 @@ class BacktestSimulator:
                       .order_by('-timestamp')[:limit])
                 return [
                     {'open': float(c.open), 'high': float(c.high),
-                     'low':  float(c.low),  'close': float(c.close), 'volume': float(c.volume)}
+                     'low':  float(c.low),  'close': float(c.close), 'volume': float(c.volume),
+                     'timestamp': c.timestamp}
                     for c in reversed(list(qs))
                 ]
 

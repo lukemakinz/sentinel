@@ -8,6 +8,7 @@ import SignalCard from '../components/SignalCard';
 import SessionCountdown from '../components/SessionCountdown';
 import WatchlistManager from '../components/WatchlistManager';
 import SystemStats from '../components/SystemStats';
+import ExchangeControlPanel from '../components/ExchangeControlPanel';
 import { Activity, Radio, Cpu, Bell, Radar } from 'lucide-react';
 
 const PAIRS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT'];
@@ -56,6 +57,10 @@ export default function Dashboard() {
 
             {/* ── SYSTEM STATS BAR ── */}
             <SystemStats />
+
+            <div className="mt-6 mb-8">
+                <ExchangeControlPanel />
+            </div>
 
             {/* ── SIGNAL FEED ── */}
             <div className="flex flex-col gap-3 mb-2">

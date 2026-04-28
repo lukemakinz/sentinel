@@ -123,6 +123,7 @@ class AccountState(models.Model):
     total_pnl = models.FloatField(default=0)
     max_drawdown = models.FloatField(default=0)
     peak_equity = models.FloatField(default=0)
+    spot_reserve_balance = models.FloatField(default=0)
 
     class Meta:
         ordering = ['-updated_at']
@@ -130,3 +131,24 @@ class AccountState(models.Model):
     def __str__(self):
         wr = (self.winning_trades / self.total_trades * 100) if self.total_trades > 0 else 0
         return f"Balance: ${self.balance:,.2f} | WR: {wr:.0f}%"
+
+
+class ExchangeOpenOrder(models.Model):
+    """Normalized snapshot of open orders currently resting on the exchange."""
+    order_id = models.CharField(max_length=100, unique=True, db_index=True)
+    client_oid = models.CharField(max_length=100, blank=True, default='')
+    symbol = models.CharField(max_length=20, db_index=True)
+    side = models.CharField(max_length=5, choices=Position.SIDE_CHOICES)
+    order_type = models.CharField(max_length=20, blank=True, default='')
+    price = models.FloatField(default=0)
+    size = models.FloatField(default=0)
+    status = models.CharField(max_length=20, default='active')
+    source = models.CharField(max_length=20, default='exchange')
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['symbol', 'order_id']
+        indexes = [models.Index(fields=['symbol', 'status'])]
+
+    def __str__(self):
+        return f"{self.symbol} {self.side} {self.order_type} {self.status}"
