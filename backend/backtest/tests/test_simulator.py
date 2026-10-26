@@ -3,7 +3,7 @@ from datetime import datetime, timezone, timedelta
 from unittest.mock import patch, MagicMock
 from django.test import TestCase, override_settings
 
-from backtest.simulator import BacktestSimulator, BacktestConfig
+from backtest.simulator import BacktestSimulator, BacktestConfig, last_closed_open_time
 
 
 def make_candle(close, high=None, low=None, volume=1000, ts=None):
@@ -153,15 +153,57 @@ class SimulatorTradeLifecycleTest(TestCase):
         self.assertGreater(pos['stop_loss'], stop_after_tp1)
 
     def test_extended_runner_grace_applies_after_tp1(self):
+        now = datetime(2026, 1, 2, 12, tzinfo=timezone.utc)
         pos = {
             'strategy': 'S1C',
             'runner_profile': 'extended',
-            'opened_at': datetime.now(timezone.utc) - timedelta(hours=11),
+            'opened_at': now - timedelta(hours=11),
             'tp1_hit': True,
             'tp2_hit': False,
             'quantity': 0.5,
         }
-        self.assertTrue(self.sim._extended_runner_grace(pos))
+        self.assertTrue(self.sim._extended_runner_grace(pos, now=now))
+
+    def test_historical_time_kill_uses_candle_timestamp(self):
+        opened_at = datetime(2024, 1, 1, 10, 0, tzinfo=timezone.utc)
+        self.sim._open_position(TRADE_PARAMS, opened_at)
+
+        # Six minutes later is not an eight-hour-old trade, regardless of the
+        # wall clock date on which the backtest is executed.
+        candle = make_candle(93300, ts=opened_at + timedelta(minutes=6))
+        self.sim._update_positions(candle)
+
+        self.assertEqual(len(self.sim.open_positions), 1)
+
+    def test_higher_timeframe_candle_must_be_closed_at_scan_time(self):
+        as_of = datetime(2026, 8, 3, 7, 15, tzinfo=timezone.utc)
+
+        self.assertEqual(
+            last_closed_open_time(as_of, '1h'),
+            datetime(2026, 8, 3, 6, 15, tzinfo=timezone.utc),
+        )
+        self.assertEqual(
+            last_closed_open_time(as_of, '4h'),
+            datetime(2026, 8, 3, 3, 15, tzinfo=timezone.utc),
+        )
+
+    def test_setup_id_deduplicates_persistent_structural_event(self):
+        ts = datetime(2026, 8, 3, 14, 0, tzinfo=timezone.utc)
+        context = {
+            'strategy': 'S1CF', 'direction': 'LONG',
+            'swept_level': 100.0, 'fvg_zone': [101.0, 102.0],
+        }
+
+        self.assertEqual(self.sim._setup_id(context, ts), self.sim._setup_id(context, ts + timedelta(minutes=15)))
+        self.assertNotEqual(self.sim._setup_id(context, ts), self.sim._setup_id(context, ts + timedelta(days=1)))
+
+    def test_exit_slippage_is_adverse(self):
+        self.sim._open_position(TRADE_PARAMS, datetime.now(timezone.utc))
+        position = self.sim.open_positions[0]
+        self.sim._close_position(position, TRADE_PARAMS['entry_price'], 'TEST')
+
+        self.assertLess(self.sim.closed_trades[0]['exit_price'], TRADE_PARAMS['entry_price'])
+        self.assertLess(self.sim.closed_trades[0]['pnl'], 0)
 
     def test_stop_loss_has_priority_over_time_kill_when_same_candle_hits_both(self):
         opened_at = datetime.now(timezone.utc) - timedelta(hours=9)
@@ -228,6 +270,14 @@ class SimulatorTradeLifecycleTest(TestCase):
         pos = self.sim.open_positions[0]
         self.assertLessEqual(pos['position_size_usd'], 10.0 + 1e-6)
 
+    def test_s1cf_clone_scans_every_fifteen_minutes(self):
+        self.sim.config.strategy = 'S1CF'
+        start = datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc)
+        self.sim._last_l1_scan = start
+
+        self.assertFalse(self.sim._should_scan(start + timedelta(minutes=14)))
+        self.assertTrue(self.sim._should_scan(start + timedelta(minutes=15)))
+
     def test_no_position_opened_without_capital(self):
         self.sim.current_capital = 0
         self.sim._open_position(TRADE_PARAMS, datetime.now(timezone.utc))
@@ -257,3 +307,27 @@ class SimulatorRunTest(TestCase):
              patch.object(sim, '_scan_l1', return_value=None):
             result = sim.run()
         self.assertIsInstance(result, BacktestMetrics)
+
+    def test_run_force_closes_position_at_end_of_test(self):
+        config = BacktestConfig(
+            symbol='BTCUSDT', strategy='S1',
+            start_date=datetime(2024, 1, 1, tzinfo=timezone.utc),
+            end_date=datetime(2024, 1, 2, tzinfo=timezone.utc),
+        )
+        sim = BacktestSimulator(config)
+        candles = [
+            make_candle(93250, high=93300, low=93100,
+                        ts=datetime(2024, 1, 1, 14, 0, tzinfo=timezone.utc)),
+            make_candle(93300, high=93400, low=93150,
+                        ts=datetime(2024, 1, 1, 14, 1, tzinfo=timezone.utc)),
+        ]
+
+        with patch.object(sim, '_load_candles', return_value=candles), \
+             patch.object(sim, '_scan_l1', return_value=TRADE_CONTEXT), \
+             patch('backtest.simulator._calc.calculate',
+                   return_value={**TRADE_PARAMS, 'order_type': 'MARKET'}):
+            result = sim.run()
+
+        self.assertEqual(result.total_trades, 1)
+        self.assertEqual(result.trades[0]['close_reason'], 'END_OF_TEST')
+        self.assertFalse(sim.open_positions)

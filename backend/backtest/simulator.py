@@ -17,6 +17,23 @@ _calc = L3Calculator()
 PENDING_ORDER_TTL = timedelta(hours=4)   # Cancel limit if not filled in 4h
 L1_SCAN_INTERVAL  = timedelta(hours=1)   # Run L1 every hour
 
+_INTERVAL_DURATION = {
+    '1m': timedelta(minutes=1),
+    '5m': timedelta(minutes=5),
+    '15m': timedelta(minutes=15),
+    '1h': timedelta(hours=1),
+    '4h': timedelta(hours=4),
+    '1d': timedelta(days=1),
+}
+
+
+def last_closed_open_time(as_of: datetime, interval: str) -> datetime:
+    """Latest candle open whose full interval is known at ``as_of``."""
+    try:
+        return as_of - _INTERVAL_DURATION[interval]
+    except KeyError as exc:
+        raise ValueError(f'Unsupported candle interval: {interval}') from exc
+
 
 @dataclass
 class BacktestConfig:
@@ -39,6 +56,7 @@ class BacktestSimulator:
         self.closed_trades:   list[dict] = []
         self.equity_curve:    list[float] = [config.initial_capital]
         self._last_l1_scan:   Optional[datetime] = None
+        self._seen_setup_ids: set[tuple] = set()
 
     # ── Public API ─────────────────────────────────────────────────────────
 
@@ -53,31 +71,45 @@ class BacktestSimulator:
             # Cancel expired pending orders
             self._expire_pending_orders(ts)
 
-            # Try to fill pending limit orders
-            self._check_pending_fills(candle, ts)
-
-            # Update open positions (SL/TP/time-kill)
-            self._update_positions(candle)
-
-            # Run L1 scanner once per hour
+            # At a candle open, all earlier candles are closed and a new
+            # decision can be made.  The order is then exposed to THIS candle;
+            # processing the candle first used to skip the first bar after a
+            # signal.
             if self._should_scan(ts):
                 trade_context = self._scan_l1(ts)
                 if trade_context:
-                    trade_context['stop_profile'] = self.config.stop_profile
-                    execution_strategy = trade_context.get('strategy', self.config.strategy)
-                    trade_params = _calc.calculate(
-                        trade_context,
-                        {'action': 'APPROVE', 'size_multiplier': 1.0},
-                        strategy=execution_strategy,
-                    )
-                    if trade_params:
-                        if trade_params.get('order_type') == 'MARKET':
-                            self._open_position(trade_params, ts)
-                        else:
-                            self._add_pending_order(trade_params, ts)
+                    setup_id = self._setup_id(trade_context, ts)
+                    if setup_id not in self._seen_setup_ids:
+                        trade_context['stop_profile'] = self.config.stop_profile
+                        execution_strategy = trade_context.get('strategy', self.config.strategy)
+                        trade_params = _calc.calculate(
+                            trade_context,
+                            {'action': 'APPROVE', 'size_multiplier': 1.0},
+                            strategy=execution_strategy,
+                        )
+                        if trade_params:
+                            trade_params['setup_id'] = setup_id
+                            self._seen_setup_ids.add(setup_id)
+                            if trade_params.get('order_type') == 'MARKET':
+                                self._open_position(trade_params, ts)
+                            else:
+                                self._add_pending_order(trade_params, ts)
                 self._last_l1_scan = ts
 
+            # A newly-created order is now active for the current candle.
+            self._check_pending_fills(candle, ts)
+            self._update_positions(candle)
+
             self.equity_curve.append(self._current_equity())
+
+        # A backtest must settle every position inside its declared window.
+        # Leaving the final loser open would inflate win rate and net P&L.
+        if candles_1m and self.open_positions:
+            final_candle = candles_1m[-1]
+            for pos in list(self.open_positions):
+                self._close_position(pos, float(final_candle['close']), 'END_OF_TEST')
+            self.open_positions = []
+            self.equity_curve.append(self.current_capital)
 
         return BacktestMetrics.from_trades(
             self.closed_trades,
@@ -186,6 +218,7 @@ class BacktestSimulator:
             'realized_pnl': 0.0,
             'partial_exits': [],
             'best_price': entry,
+            'setup_id':     trade_params.get('setup_id'),
         }
         self.open_positions.append(position)
 
@@ -200,6 +233,16 @@ class BacktestSimulator:
                 pos['best_price'] = min(float(pos.get('best_price', pos['entry_price'])), candle['low'])
             closed = self._check_position(pos, candle)
             if not closed:
+                exit_side = 'SHORT' if pos['side'] == 'LONG' else 'LONG'
+                marked_exit = apply_slippage(candle['close'], OrderType.MARKET, exit_side)
+                remaining_qty = pos['quantity']
+                exit_fee = compute_fee(remaining_qty * marked_exit, OrderType.MARKET)
+                entry_fee_share = max(pos.get('fees', 0.0) - pos.get('fees_realized', 0.0), 0.0)
+                if pos['side'] == 'LONG':
+                    open_pnl = (marked_exit - pos['entry_price']) * remaining_qty
+                else:
+                    open_pnl = (pos['entry_price'] - marked_exit) * remaining_qty
+                pos['unrealized_pnl'] = pos.get('realized_pnl', 0.0) + open_pnl - exit_fee - entry_fee_share
                 remaining.append(pos)
         self.open_positions = remaining
 
@@ -254,13 +297,14 @@ class BacktestSimulator:
         self._update_trailing_stop(pos)
 
         # Time-kill check after intrabar SL/TP logic
-        if self._extended_runner_grace(pos):
+        if self._extended_runner_grace(pos, now=candle['timestamp']):
             return False
 
         if _calc.check_time_kill(
             side, pos['opened_at'], pos['initial_entry_price'], pos['initial_stop_loss'],
             price, strategy=pos.get('strategy', 'S1'),
-            tp1_hit=pos.get('tp1_hit', False), tp2_hit=pos.get('tp2_hit', False)
+            tp1_hit=pos.get('tp1_hit', False), tp2_hit=pos.get('tp2_hit', False),
+            now=candle['timestamp'],
         ):
             self._close_position(pos, price, 'TIME_KILL')
             return True
@@ -269,7 +313,10 @@ class BacktestSimulator:
         return False
 
     def _close_position(self, pos: dict, exit_price, reason: str):
-        exit_price = apply_slippage(float(exit_price), OrderType.MARKET, pos['side'])
+        # Closing direction is the opposite of the position direction. Passing
+        # the position side here used to make exit slippage favourable.
+        exit_side = 'SHORT' if pos['side'] == 'LONG' else 'LONG'
+        exit_price = apply_slippage(float(exit_price), OrderType.MARKET, exit_side)
         remaining_qty = pos['quantity']
         fee = compute_fee(remaining_qty * exit_price, OrderType.MARKET)
         entry_fee_share = max(pos.get('fees', 0.0) - pos.get('fees_realized', 0.0), 0.0)
@@ -301,6 +348,7 @@ class BacktestSimulator:
             'opened_at':    pos.get('opened_at'),
             'session':      pos.get('session', 'unknown'),
             'partials':     pos.get('partial_exits', []),
+            'setup_id':     pos.get('setup_id'),
         })
 
     def _record_partial(self, pos: dict, price: float, ratio: float, label: str):
@@ -310,6 +358,8 @@ class BacktestSimulator:
         if close_qty <= 0:
             return
 
+        exit_side = 'SHORT' if pos['side'] == 'LONG' else 'LONG'
+        price = apply_slippage(float(price), OrderType.MARKET, exit_side)
         fee = compute_fee(close_qty * price, OrderType.MARKET)
         entry_fee_share = pos.get('fees', 0.0) * (close_qty / max(pos['initial_quantity'], 1e-9))
         if pos['side'] == 'LONG':
@@ -331,7 +381,7 @@ class BacktestSimulator:
     def _update_trailing_stop(self, pos: dict):
         """Manage runner stop for strategies that let winners stretch intraday."""
         strategy = pos.get('strategy')
-        if strategy not in {'S1C', 'S5'} or not pos.get('tp1_hit'):
+        if strategy not in {'S1C', 'S1CF', 'S1CF_OB', 'S5'} or not pos.get('tp1_hit'):
             return
 
         r = float(pos.get('r_value') or 0.0)
@@ -356,11 +406,12 @@ class BacktestSimulator:
             pos['stop_loss'] = min(pos['stop_loss'], trail_stop)
 
     @staticmethod
-    def _extended_runner_grace(pos: dict) -> bool:
-        if pos.get('strategy') != 'S1C' or pos.get('runner_profile') != 'extended':
+    def _extended_runner_grace(pos: dict, now: datetime | None = None) -> bool:
+        if pos.get('strategy') not in {'S1C', 'S1CF', 'S1CF_OB'} or pos.get('runner_profile') != 'extended':
             return False
 
-        age_hours = (datetime.now(timezone.utc) - pos['opened_at']).total_seconds() / 3600
+        now = now or datetime.now(timezone.utc)
+        age_hours = (now - pos['opened_at']).total_seconds() / 3600
         if pos.get('tp2_hit'):
             return age_hours < 16
         if pos.get('tp1_hit'):
@@ -370,7 +421,7 @@ class BacktestSimulator:
     # ── Helpers ────────────────────────────────────────────────────────────
 
     def _should_scan(self, ts: datetime) -> bool:
-        fast_scan_strategies = {'S4', 'S5'}
+        fast_scan_strategies = {'S1CF', 'S1CF_OB', 'S4', 'S5'}
         scan_interval = timedelta(minutes=15) if self.config.strategy in fast_scan_strategies else L1_SCAN_INTERVAL
         if self._last_l1_scan is None:
             return True
@@ -381,6 +432,21 @@ class BacktestSimulator:
         for pos in self.open_positions:
             unrealized += pos.get('unrealized_pnl', 0)
         return self.current_capital + unrealized
+
+    def _setup_id(self, context: dict, ts: datetime) -> tuple:
+        """Stable one-attempt identifier for a persistent structural event."""
+        fvg = context.get('fvg_zone') or ()
+        rounded_fvg = tuple(round(float(x), 8) for x in fvg)
+        swept = context.get('swept_level')
+        return (
+            self.config.symbol,
+            context.get('strategy', self.config.strategy),
+            context.get('direction'),
+            ts.date().isoformat(),
+            self._session_for_timestamp(ts),
+            round(float(swept), 8) if swept is not None else None,
+            rounded_fvg,
+        )
 
     @staticmethod
     def _session_for_timestamp(ts: datetime) -> str:
@@ -408,7 +474,7 @@ class BacktestSimulator:
         best_count     = 0
         best_coverage  = 0.0
 
-        fast_scan_strategies = {'S4', 'S5'}
+        fast_scan_strategies = {'S1CF', 'S1CF_OB', 'S4', 'S5'}
         interval_priority = (
             ('15m', '5m', '1h', '4h', '1m')
             if self.config.strategy in fast_scan_strategies
@@ -473,9 +539,10 @@ class BacktestSimulator:
 
             def _get_candles(self, symbol, interval, limit):
                 from ingester.models import Candle
+                cutoff = last_closed_open_time(self._ts, interval)
                 qs = (Candle.objects
                       .filter(symbol=symbol, interval=interval,
-                              is_closed=True, timestamp__lt=self._ts)
+                              is_closed=True, timestamp__lte=cutoff)
                       .order_by('-timestamp')[:limit])
                 return [
                     {'open': float(c.open), 'high': float(c.high),
@@ -484,12 +551,27 @@ class BacktestSimulator:
                     for c in reversed(list(qs))
                 ]
 
+            def _get_latest_funding_rate(self, symbol):
+                from ingester.models import FundingRate
+                try:
+                    fr = (FundingRate.objects
+                          .filter(symbol=symbol, timestamp__lt=self._ts)
+                          .latest('timestamp'))
+                    return float(fr.funding_rate)
+                except FundingRate.DoesNotExist:
+                    return 0.0
+
             def _save(self, *args, **kwargs):
                 pass  # Don't save to DB during backtest
 
         try:
             scanner = HistoricalScanner(self.config.symbol, ts)
-            return scanner.scan(self.config.symbol, now=ts, strategy=self.config.strategy)
+            context = scanner.scan(self.config.symbol, now=ts, strategy=self.config.strategy)
+            if context:
+                # Used by L3 to build every auxiliary snapshot at the same
+                # historical timestamp instead of at wall-clock "now".
+                context['timestamp'] = ts.isoformat()
+            return context
         except Exception as e:
             logger.debug(f"L1 scan error at {ts}: {e}")
             return None
