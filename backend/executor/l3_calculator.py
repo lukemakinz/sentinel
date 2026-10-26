@@ -3,12 +3,12 @@ from datetime import datetime, timezone
 from django.conf import settings
 
 # Strategy-specific ATR buffer multipliers for SL
-_SL_ATR_BUFFER = {'S1': 0.20, 'S1A': 0.20, 'S1B': 0.10, 'S1C': 0.16, 'S2': 0.20, 'S3': 0.15, 'S4': 0.10, 'S5': 0.20}
+_SL_ATR_BUFFER = {'S1': 0.20, 'S1A': 0.20, 'S1B': 0.10, 'S1C': 0.16, 'S1CF': 0.16, 'S1CF_OB': 0.16, 'S2': 0.20, 'S3': 0.15, 'S4': 0.10, 'S5': 0.20, 'S12AI': 0.20}
 
 # Per-strategy SL caps (% of entry price)
 # S1 scalp: tight (0.3-1.0%) | S2 order flow: medium (0.3-1.5%) | S3 classic: wider (0.3-2.5%)
-_SL_MIN_PCT = {'S1': 0.003, 'S1A': 0.003, 'S1B': 0.003, 'S1C': 0.003, 'S2': 0.003, 'S3': 0.003, 'S4': 0.0025, 'S5': 0.003}
-_SL_MAX_PCT = {'S1': 0.015, 'S1A': 0.015, 'S1B': 0.012, 'S1C': 0.016, 'S2': 0.020, 'S3': 0.025, 'S4': 0.012, 'S5': 0.015}
+_SL_MIN_PCT = {'S1': 0.003, 'S1A': 0.003, 'S1B': 0.003, 'S1C': 0.003, 'S1CF': 0.003, 'S1CF_OB': 0.003, 'S2': 0.003, 'S3': 0.003, 'S4': 0.0025, 'S5': 0.003, 'S12AI': 0.003}
+_SL_MAX_PCT = {'S1': 0.015, 'S1A': 0.015, 'S1B': 0.012, 'S1C': 0.016, 'S1CF': 0.016, 'S1CF_OB': 0.016, 'S2': 0.020, 'S3': 0.025, 'S4': 0.012, 'S5': 0.015, 'S12AI': 0.015}
 
 _MAX_SL_PCT = 0.03   # global hard cap (legacy — per-strategy caps take precedence)
 _MIN_RR         = 1.2    # TP1 must be >= 1.2R (always met since TP1 = 1.5R)
@@ -21,10 +21,13 @@ _TP_CONFIG = {
     'S1A': {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.25, 0.25, 0.50]},
     'S1B': {'tp1_r': 0.8, 'tp2_r': 2.4, 'ratios': [0.30, 0.30, 0.40]},
     'S1C': {'tp1_r': 1.2, 'tp2_r': 3.2, 'ratios': [0.15, 0.25, 0.60]},
+    'S1CF': {'tp1_r': 1.2, 'tp2_r': 3.2, 'ratios': [0.15, 0.25, 0.60]},
+    'S1CF_OB': {'tp1_r': 1.2, 'tp2_r': 3.2, 'ratios': [0.15, 0.25, 0.60]},
     'S2':  {'tp1_r': 1.0, 'tp2_r': 2.2, 'ratios': [0.35, 0.35, 0.30]},
     'S3':  {'tp1_r': 0.9, 'tp2_r': 2.1, 'ratios': [0.30, 0.30, 0.40]},
     'S4':  {'tp1_r': 1.0, 'tp2_r': 2.4, 'ratios': [0.35, 0.25, 0.40]},
     'S5':  {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.30, 0.30, 0.40]},
+    'S12AI': {'tp1_r': 1.5, 'tp2_r': 3.0, 'ratios': [0.25, 0.25, 0.50]},
 }
 
 _TIME_KILL_CONFIG = {
@@ -32,10 +35,13 @@ _TIME_KILL_CONFIG = {
     'S1A': {'hours': 8, 'min_r_progress': 1.0},
     'S1B': {'hours': 4, 'min_r_progress': 0.5},
     'S1C': {'hours': 7, 'min_r_progress': 0.5},
+    'S1CF': {'hours': 7, 'min_r_progress': 0.5},
+    'S1CF_OB': {'hours': 7, 'min_r_progress': 0.5},
     'S2':  {'hours': 3, 'min_r_progress': 0.4},
     'S3':  {'hours': 4, 'min_r_progress': 0.4},
     'S4':  {'hours': 3, 'min_r_progress': 0.15},
     'S5':  {'hours': 6, 'min_r_progress': 0.15},
+    'S12AI': {'hours': 8, 'min_r_progress': 0.5},
 }
 
 _STOP_PROFILE_MULTIPLIERS = {
@@ -66,7 +72,14 @@ class L3Calculator:
 
         symbol = trade_context.get('symbol')
         runner_profile = self._runner_profile(trade_context, strategy)
-        tps = self._take_profits(entry, direction, r, symbol=symbol, strategy=strategy)
+        tps = self._take_profits(
+            entry,
+            direction,
+            r,
+            symbol=symbol,
+            strategy=strategy,
+            as_of=trade_context.get('timestamp'),
+        )
 
         leverage, liq_price, liq_dist, conviction = self._select_leverage(
             trade_context, l2_decision, entry, direction, r
@@ -75,7 +88,11 @@ class L3Calculator:
             return None
 
         entry_mode = trade_context.get('entry_mode', 'MARKET' if strategy == 'S1B' else 'LIMIT')
-        order_type = 'MARKET' if entry_mode in {'MARKET', 'HYBRID'} else 'LIMIT'
+        # HYBRID computes a pullback/reclaim price.  Treating that synthetic
+        # price as an immediate market fill creates an impossible favourable
+        # execution in both backtests and live order payloads.  It must rest as
+        # a limit unless the strategy explicitly selected MARKET.
+        order_type = 'MARKET' if entry_mode == 'MARKET' else 'LIMIT'
 
         return {
             'symbol':       trade_context.get('symbol', ''),
@@ -100,7 +117,7 @@ class L3Calculator:
 
     @staticmethod
     def _setup_size_multiplier(ctx: dict, strategy: str) -> float:
-        if strategy != 'S1C':
+        if strategy not in {'S1C', 'S1CF', 'S1CF_OB'}:
             return 1.0
 
         score = int(ctx.get('setup_score') or 0)
@@ -118,7 +135,7 @@ class L3Calculator:
 
     @staticmethod
     def _margin_cap_multiplier(ctx: dict, strategy: str) -> float:
-        if strategy != 'S1C':
+        if strategy not in {'S1C', 'S1CF', 'S1CF_OB'}:
             return 1.0
 
         score = int(ctx.get('setup_score') or 0)
@@ -136,7 +153,7 @@ class L3Calculator:
 
     @staticmethod
     def _runner_profile(ctx: dict, strategy: str) -> str:
-        if strategy != 'S1C':
+        if strategy not in {'S1C', 'S1CF', 'S1CF_OB'}:
             return 'standard'
 
         score = int(ctx.get('setup_score') or 0)
@@ -162,7 +179,7 @@ class L3Calculator:
         swept    = float(ctx.get('swept_level') or 0)
         liq      = float(ctx.get('nearest_liquidity') or 0)
 
-        if strategy in {'S1', 'S1A'}:
+        if strategy in {'S1', 'S1A', 'S12AI'}:
             if entry_ote:
                 # Use OTE entry from proper displacement FVG
                 return float(entry_ote)
@@ -195,7 +212,7 @@ class L3Calculator:
                 return liq * 1.002 if direction == 'LONG' else liq * 0.998
             return swept + atr * 0.2 if direction == 'LONG' else swept - atr * 0.2
 
-        if strategy == 'S1C':
+        if strategy in {'S1C', 'S1CF', 'S1CF_OB'}:
             current = float(ctx.get('current_price') or 0.0)
             if fvg:
                 bot, top = float(fvg[0]), float(fvg[1])
@@ -277,7 +294,7 @@ class L3Calculator:
                 sl_ceil  = entry * (1 + sl_max_pct)
                 return min(sl_raw, sl_ceil) if sl_raw > sl_floor else sl_floor
 
-        if strategy == 'S1C':
+        if strategy in {'S1C', 'S1CF', 'S1CF_OB'}:
             anchor = swept
             if fvg:
                 bot, top = float(fvg[0]), float(fvg[1])
@@ -359,7 +376,8 @@ class L3Calculator:
     # ── Take Profits ───────────────────────────────────────────────────────
 
     def _take_profits(self, entry: float, direction: str, r: float,
-                       symbol: str = None, strategy: str = 'S1') -> list[dict]:
+                       symbol: str = None, strategy: str = 'S1',
+                       as_of: datetime | str | None = None) -> list[dict]:
         """
         TP targets: nearest real liquidity level preferred over mechanical R multiples.
         Falls back to 1.5R/3R when no liquidity data available.
@@ -374,7 +392,9 @@ class L3Calculator:
         if symbol and r > 0:
             try:
                 from l1_filter.liquidity import LiquiditySnapshot
-                snap   = LiquiditySnapshot.build(symbol)
+                if isinstance(as_of, str):
+                    as_of = datetime.fromisoformat(as_of.replace('Z', '+00:00'))
+                snap   = LiquiditySnapshot.build(symbol, now=as_of)
                 levels = snap.all_levels()
 
                 if direction == 'LONG':
@@ -413,6 +433,9 @@ class L3Calculator:
                           direction: str, r: float) -> tuple[int | None, float | None, float | None, str]:
         default_lev = max(1, int(getattr(settings, 'MAX_LEVERAGE', 10)))
         high_conv_lev = max(default_lev, int(getattr(settings, 'MAX_HIGH_CONVICTION_LEVERAGE', 20)))
+        context_cap = max(1, int(ctx.get('max_leverage') or high_conv_lev))
+        default_lev = min(default_lev, context_cap)
+        high_conv_lev = min(high_conv_lev, context_cap)
         min_buffer_r = float(getattr(settings, 'MIN_LIQUIDATION_BUFFER_R', 3.0))
 
         is_high_conviction = self._is_high_conviction(ctx, l2_decision)
@@ -469,9 +492,11 @@ class L3Calculator:
                         entry: float, sl: float, current: float,
                         strategy: str = 'S1',
                         tp1_hit: bool = False,
-                        tp2_hit: bool = False) -> bool:
+                        tp2_hit: bool = False,
+                        now: datetime | None = None) -> bool:
         cfg = _TIME_KILL_CONFIG.get(strategy, _TIME_KILL_CONFIG['S1'])
-        age_hours = (datetime.now(timezone.utc) - opened_at).total_seconds() / 3600
+        now = now or datetime.now(timezone.utc)
+        age_hours = (now - opened_at).total_seconds() / 3600
 
         if strategy == 'S1B':
             if age_hours >= 2:
@@ -480,7 +505,7 @@ class L3Calculator:
             if age_hours < cfg['hours']:
                 return False
 
-        if strategy == 'S1C':
+        if strategy in {'S1C', 'S1CF', 'S1CF_OB'}:
             if tp2_hit and age_hours < 12:
                 return False
             if tp1_hit and age_hours < 10:

@@ -49,6 +49,13 @@ class L3EntryCalculationTest(TestCase):
         # SHORT FVG: entry = fvg_top - 0.50×depth = 3200 - 50 = 3150
         self.assertAlmostEqual(params['entry_price'], 3150.0, places=0)
 
+    def test_s12ai_uses_real_mid_fvg_limit_and_context_leverage_cap(self):
+        ctx = {**LONG_CONTEXT, 'entry_mode': 'LIMIT', 'max_leverage': 5}
+        params = self.calc.calculate(ctx, APPROVE, strategy='S12AI')
+        self.assertAlmostEqual(params['entry_price'], 93500.0, places=0)
+        self.assertEqual(params['order_type'], 'LIMIT')
+        self.assertLessEqual(params['leverage'], 5)
+
     def test_s2_entry_uses_sweep_level_plus_atr(self):
         ctx = {**LONG_CONTEXT, 'current_price': 93600.0, 'entry_mode': 'MARKET'}
         params = self.calc.calculate(ctx, APPROVE, strategy='S2')
@@ -63,6 +70,15 @@ class L3EntryCalculationTest(TestCase):
         params = self.calc.calculate({**LONG_CONTEXT, 'current_price': 93600.0, 'entry_mode': 'HYBRID'}, APPROVE, strategy='S3')
         self.assertIsNotNone(params)
         self.assertIn('entry_price', params)
+
+    def test_hybrid_pullback_is_a_resting_limit_not_a_synthetic_market_fill(self):
+        params = self.calc.calculate(
+            {**LONG_CONTEXT, 'current_price': 93600.0, 'entry_mode': 'HYBRID'},
+            APPROVE,
+            strategy='S1C',
+        )
+
+        self.assertEqual(params['order_type'], 'LIMIT')
 
     def test_s4_entry_uses_current_price_on_breakout(self):
         ctx = {
@@ -96,6 +112,15 @@ class L3EntryCalculationTest(TestCase):
         params = self.calc.calculate(ctx, APPROVE, strategy='S1C')
         self.assertGreater(params['entry_price'], 93400.0)
         self.assertLess(params['entry_price'], 93600.0)
+
+    def test_s1cf_clone_keeps_s1c_execution_geometry(self):
+        ctx = {**LONG_CONTEXT, 'current_price': 93600.0}
+        original = self.calc.calculate(ctx, APPROVE, strategy='S1C')
+        clone = self.calc.calculate(ctx, APPROVE, strategy='S1CF')
+
+        self.assertEqual(clone['entry_price'], original['entry_price'])
+        self.assertEqual(clone['stop_loss'], original['stop_loss'])
+        self.assertEqual(clone['take_profits'], original['take_profits'])
 
 
 class L3StopLossTest(TestCase):

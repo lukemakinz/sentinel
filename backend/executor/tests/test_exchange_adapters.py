@@ -71,6 +71,48 @@ class ExchangeAdapterTest(TestCase):
         self.assertEqual(orders[0]['symbol'], 'ETHUSDT')
         self.assertEqual(orders[0]['side'], 'SHORT')
 
+    def test_normalize_recent_fills_maps_contract_symbol(self):
+        adapter = KuCoinFuturesAdapter()
+        fills = adapter.normalize_recent_fills({
+            'data': [{
+                'tradeId': 't-1',
+                'orderId': 'o-1',
+                'symbol': 'XBTUSDTM',
+                'side': 'buy',
+                'price': '68000',
+                'size': '2',
+                'value': '136000',
+                'fee': '1.2',
+                'realizedPnl': '5.5',
+                'liquidity': 'taker',
+                'tradeTime': '1714473600000',
+            }]
+        })
+        self.assertEqual(fills[0]['symbol'], 'BTCUSDT')
+        self.assertEqual(fills[0]['side'], 'LONG')
+        self.assertEqual(fills[0]['trade_id'], 't-1')
+
+    def test_normalize_recent_closed_orders_maps_contract_symbol(self):
+        adapter = KuCoinFuturesAdapter()
+        orders = adapter.normalize_recent_closed_orders({
+            'data': [{
+                'id': 'o-2',
+                'clientOid': 'client-2',
+                'symbol': 'ETHUSDTM',
+                'side': 'sell',
+                'type': 'limit',
+                'price': '2500',
+                'size': '3',
+                'filledSize': '1',
+                'status': 'done',
+                'cancelReason': '',
+                'updatedAt': '1714473600000',
+            }]
+        })
+        self.assertEqual(orders[0]['symbol'], 'ETHUSDT')
+        self.assertEqual(orders[0]['side'], 'SHORT')
+        self.assertEqual(orders[0]['order_id'], 'o-2')
+
     @override_settings(KUCOIN_API_KEY='', KUCOIN_API_SECRET='', KUCOIN_API_PASSPHRASE='')
     def test_kucoin_adapter_maps_symbol_before_submission(self):
         WatchedPair.objects.create(symbol='BTCUSDT', active=True)

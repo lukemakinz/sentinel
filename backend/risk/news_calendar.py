@@ -87,6 +87,18 @@ def _parse_events() -> list[dict]:
     return events
 
 
+def macro_events_between(
+    start: datetime,
+    end: datetime,
+) -> list[dict]:
+    """Inclusive-exclusive [start, end) macro events for backtests."""
+    if start.tzinfo is None:
+        start = start.replace(tzinfo=timezone.utc)
+    if end.tzinfo is None:
+        end = end.replace(tzinfo=timezone.utc)
+    return [e for e in _parse_events() if start <= e['datetime'] < end]
+
+
 def get_events_today(now: Optional[datetime] = None) -> list[dict]:
     """Return events whose blackout window overlaps with today."""
     if now is None:

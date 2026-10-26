@@ -1,5 +1,6 @@
 """Celery tasks for trade execution and position monitoring."""
 import logging
+from datetime import datetime, timezone
 from celery import shared_task
 
 logger = logging.getLogger(__name__)
@@ -162,7 +163,7 @@ def sync_live_exchange_state():
     """Fetch live futures account overview and open positions from the exchange."""
     from django.conf import settings
     from .exchange_adapters import get_exchange_adapter
-    from .models import AccountState, Position, ExchangeOpenOrder
+    from .models import AccountState, Position, ExchangeOpenOrder, ExchangeFill, ExchangeClosedOrder
 
     if not settings.LIVE_TRADING_ENABLED:
         return {'ok': False, 'reason': 'live_trading_disabled'}
@@ -171,18 +172,28 @@ def sync_live_exchange_state():
     overview = adapter.get_account_overview('USDT')
     positions = adapter.get_positions()
     open_orders = adapter.get_open_orders()
+    fills = adapter.get_recent_fills()
+    closed_orders = adapter.get_recent_closed_orders()
     payload = {
         'overview_ok': overview.ok,
         'positions_ok': positions.ok,
         'orders_ok': open_orders.ok,
+        'fills_ok': fills.ok,
+        'closed_orders_ok': closed_orders.ok,
         'overview': overview.payload,
         'positions': positions.payload,
         'open_orders': open_orders.payload,
+        'fills': fills.payload,
+        'closed_orders': closed_orders.payload,
         'normalized_positions': adapter.normalize_positions(positions.payload) if positions.ok else [],
         'normalized_open_orders': adapter.normalize_open_orders(open_orders.payload) if open_orders.ok else [],
+        'normalized_fills': adapter.normalize_recent_fills(fills.payload) if fills.ok else [],
+        'normalized_closed_orders': adapter.normalize_recent_closed_orders(closed_orders.payload) if closed_orders.ok else [],
     }
     normalized_positions = payload['normalized_positions']
     normalized_open_orders = payload['normalized_open_orders']
+    normalized_fills = payload['normalized_fills']
+    normalized_closed_orders = payload['normalized_closed_orders']
     if overview.ok:
         data = overview.payload.get('data', {}) if isinstance(overview.payload, dict) else {}
         balance = float(data.get('availableBalance') or 0.0)
@@ -270,10 +281,51 @@ def sync_live_exchange_state():
             if local_order.order_id not in active_order_ids:
                 local_order.status = 'stale'
                 local_order.save(update_fields=['status', 'updated_at'])
+
+    if fills.ok:
+        for fill in normalized_fills:
+            filled_at = datetime.fromtimestamp(fill['filled_at_ms'] / 1000, tz=timezone.utc) if fill.get('filled_at_ms') else datetime.now(timezone.utc)
+            ExchangeFill.objects.update_or_create(
+                trade_id=fill['trade_id'],
+                defaults={
+                    'order_id': fill.get('order_id', ''),
+                    'symbol': fill.get('symbol') or '',
+                    'side': fill.get('side') or 'LONG',
+                    'price': float(fill.get('price') or 0.0),
+                    'size': float(fill.get('size') or 0.0),
+                    'value': float(fill.get('value') or 0.0),
+                    'fee': float(fill.get('fee') or 0.0),
+                    'pnl': float(fill.get('pnl') or 0.0),
+                    'liquidity': str(fill.get('liquidity') or ''),
+                    'source': 'exchange',
+                    'filled_at': filled_at,
+                },
+            )
+    if closed_orders.ok:
+        for order in normalized_closed_orders:
+            closed_at = datetime.fromtimestamp(order['closed_at_ms'] / 1000, tz=timezone.utc) if order.get('closed_at_ms') else datetime.now(timezone.utc)
+            ExchangeClosedOrder.objects.update_or_create(
+                order_id=order['order_id'],
+                defaults={
+                    'client_oid': order.get('client_oid', ''),
+                    'symbol': order.get('symbol') or '',
+                    'side': order.get('side') or 'LONG',
+                    'order_type': str(order.get('order_type') or ''),
+                    'price': float(order.get('price') or 0.0),
+                    'size': float(order.get('size') or 0.0),
+                    'filled_size': float(order.get('filled_size') or 0.0),
+                    'status': str(order.get('status') or 'done'),
+                    'cancel_reason': str(order.get('cancel_reason') or ''),
+                    'source': 'exchange',
+                    'closed_at': closed_at,
+                },
+            )
     logger.info(
-        "Live exchange sync: overview_ok=%s positions_ok=%s orders_ok=%s",
+        "Live exchange sync: overview_ok=%s positions_ok=%s orders_ok=%s fills_ok=%s closed_orders_ok=%s",
         overview.ok,
         positions.ok,
         open_orders.ok,
+        fills.ok,
+        closed_orders.ok,
     )
-    return {'ok': overview.ok and positions.ok and open_orders.ok, 'payload': payload}
+    return {'ok': overview.ok and positions.ok and open_orders.ok and fills.ok and closed_orders.ok, 'payload': payload}

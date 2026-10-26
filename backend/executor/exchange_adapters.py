@@ -38,6 +38,12 @@ class BaseExchangeAdapter:
     def get_positions(self) -> ExchangeOrderResult:
         raise NotImplementedError
 
+    def get_recent_fills(self, symbol: str | None = None) -> ExchangeOrderResult:
+        raise NotImplementedError
+
+    def get_recent_closed_orders(self, symbol: str | None = None) -> ExchangeOrderResult:
+        raise NotImplementedError
+
     def transfer_profit_to_spot(self, amount_usd: float) -> ExchangeOrderResult:
         raise NotImplementedError
 
@@ -54,6 +60,12 @@ class BaseExchangeAdapter:
         return payload.get('data', []) if isinstance(payload, dict) else []
 
     def normalize_positions(self, payload: dict) -> list[dict]:
+        return payload.get('data', []) if isinstance(payload, dict) else []
+
+    def normalize_recent_fills(self, payload: dict) -> list[dict]:
+        return payload.get('data', []) if isinstance(payload, dict) else []
+
+    def normalize_recent_closed_orders(self, payload: dict) -> list[dict]:
         return payload.get('data', []) if isinstance(payload, dict) else []
 
 
@@ -142,6 +154,24 @@ class KuCoinFuturesAdapter(BaseExchangeAdapter):
     def get_positions(self) -> ExchangeOrderResult:
         return self._request('GET', '/api/v2/position')
 
+    def get_recent_fills(self, symbol: str | None = None) -> ExchangeOrderResult:
+        endpoint = '/api/v1/recentFills'
+        if symbol:
+            contract = self._resolve_contract(symbol)
+            if not contract:
+                return ExchangeOrderResult(False, {'error': f"Unsupported KuCoin futures symbol: {symbol}"})
+            endpoint += f"?symbol={contract['symbol']}"
+        return self._request('GET', endpoint)
+
+    def get_recent_closed_orders(self, symbol: str | None = None) -> ExchangeOrderResult:
+        endpoint = '/api/v1/recentDoneOrders'
+        if symbol:
+            contract = self._resolve_contract(symbol)
+            if not contract:
+                return ExchangeOrderResult(False, {'error': f"Unsupported KuCoin futures symbol: {symbol}"})
+            endpoint += f"?symbol={contract['symbol']}"
+        return self._request('GET', endpoint)
+
     def get_account_overview(self, currency: str = 'USDT') -> ExchangeOrderResult:
         return self._request('GET', f'/api/v1/account-overview?currency={currency}')
 
@@ -206,6 +236,63 @@ class KuCoinFuturesAdapter(BaseExchangeAdapter):
                 'leverage': int(float(pos.get('realLeverage') or pos.get('leverage') or 1)),
             })
         return normalized
+
+    def normalize_recent_fills(self, payload: dict) -> list[dict]:
+        raw = payload.get('data') if isinstance(payload, dict) else None
+        fills = raw if isinstance(raw, list) else []
+        normalized = []
+        for fill in fills:
+            symbol = self._from_contract_symbol(fill.get('symbol'))
+            side = 'LONG' if str(fill.get('side', '')).lower() == 'buy' else 'SHORT'
+            size = float(fill.get('size') or fill.get('qty') or 0.0)
+            price = float(fill.get('price') or 0.0)
+            value = float(fill.get('value') or (size * price))
+            trade_time_raw = fill.get('tradeTime') or fill.get('createdAt') or fill.get('ts')
+            try:
+                trade_time_ms = int(float(trade_time_raw))
+            except (TypeError, ValueError):
+                trade_time_ms = 0
+            normalized.append({
+                'trade_id': str(fill.get('tradeId') or fill.get('id') or ''),
+                'order_id': str(fill.get('orderId') or ''),
+                'symbol': symbol or fill.get('symbol'),
+                'side': side,
+                'price': price,
+                'size': size,
+                'value': value,
+                'fee': float(fill.get('fee') or fill.get('fixFee') or 0.0),
+                'pnl': float(fill.get('realizedPnl') or fill.get('pnl') or 0.0),
+                'liquidity': str(fill.get('liquidity') or fill.get('role') or ''),
+                'filled_at_ms': trade_time_ms,
+            })
+        return [item for item in normalized if item['trade_id']]
+
+    def normalize_recent_closed_orders(self, payload: dict) -> list[dict]:
+        raw = payload.get('data') if isinstance(payload, dict) else None
+        orders = raw if isinstance(raw, list) else []
+        normalized = []
+        for order in orders:
+            symbol = self._from_contract_symbol(order.get('symbol'))
+            side = 'LONG' if str(order.get('side', '')).lower() == 'buy' else 'SHORT'
+            closed_at_raw = order.get('updatedAt') or order.get('createdAt') or order.get('orderTime') or order.get('ts')
+            try:
+                closed_at_ms = int(float(closed_at_raw))
+            except (TypeError, ValueError):
+                closed_at_ms = 0
+            normalized.append({
+                'order_id': str(order.get('id') or order.get('orderId') or ''),
+                'client_oid': str(order.get('clientOid') or ''),
+                'symbol': symbol or order.get('symbol'),
+                'side': side,
+                'order_type': str(order.get('type') or '').upper(),
+                'price': float(order.get('price') or 0.0),
+                'size': float(order.get('size') or 0.0),
+                'filled_size': float(order.get('filledSize') or order.get('dealSize') or 0.0),
+                'status': str(order.get('status') or order.get('state') or 'done'),
+                'cancel_reason': str(order.get('cancelReason') or ''),
+                'closed_at_ms': closed_at_ms,
+            })
+        return [item for item in normalized if item['order_id']]
 
     @staticmethod
     def _resolve_contract(symbol: str) -> dict | None:

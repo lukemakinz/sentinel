@@ -66,6 +66,7 @@ class Position(models.Model):
 class Trade(models.Model):
     """Completed trade record for journal."""
     symbol = models.CharField(max_length=20, db_index=True)
+    strategy = models.CharField(max_length=5, default='S1', db_index=True)
     side = models.CharField(max_length=5)
     entry_price = models.FloatField()
     exit_price = models.FloatField()
@@ -149,6 +150,54 @@ class ExchangeOpenOrder(models.Model):
     class Meta:
         ordering = ['symbol', 'order_id']
         indexes = [models.Index(fields=['symbol', 'status'])]
+
+    def __str__(self):
+        return f"{self.symbol} {self.side} {self.order_type} {self.status}"
+
+
+class ExchangeFill(models.Model):
+    """Normalized history of fills synced from the live exchange."""
+    trade_id = models.CharField(max_length=100, unique=True, db_index=True)
+    order_id = models.CharField(max_length=100, blank=True, default='', db_index=True)
+    symbol = models.CharField(max_length=20, db_index=True)
+    side = models.CharField(max_length=5, choices=Position.SIDE_CHOICES)
+    price = models.FloatField(default=0)
+    size = models.FloatField(default=0)
+    value = models.FloatField(default=0)
+    fee = models.FloatField(default=0)
+    pnl = models.FloatField(default=0)
+    liquidity = models.CharField(max_length=20, blank=True, default='')
+    source = models.CharField(max_length=20, default='exchange')
+    filled_at = models.DateTimeField(db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-filled_at', '-trade_id']
+        indexes = [models.Index(fields=['symbol', '-filled_at'])]
+
+    def __str__(self):
+        return f"{self.symbol} {self.side} fill {self.size} @ {self.price}"
+
+
+class ExchangeClosedOrder(models.Model):
+    """Normalized snapshot/history of completed or canceled exchange orders."""
+    order_id = models.CharField(max_length=100, unique=True, db_index=True)
+    client_oid = models.CharField(max_length=100, blank=True, default='')
+    symbol = models.CharField(max_length=20, db_index=True)
+    side = models.CharField(max_length=5, choices=Position.SIDE_CHOICES)
+    order_type = models.CharField(max_length=20, blank=True, default='')
+    price = models.FloatField(default=0)
+    size = models.FloatField(default=0)
+    filled_size = models.FloatField(default=0)
+    status = models.CharField(max_length=20, default='done')
+    cancel_reason = models.CharField(max_length=50, blank=True, default='')
+    source = models.CharField(max_length=20, default='exchange')
+    closed_at = models.DateTimeField(db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-closed_at', '-order_id']
+        indexes = [models.Index(fields=['symbol', 'status', '-closed_at'])]
 
     def __str__(self):
         return f"{self.symbol} {self.side} {self.order_type} {self.status}"

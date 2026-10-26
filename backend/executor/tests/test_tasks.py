@@ -3,7 +3,7 @@ from unittest.mock import patch
 from django.test import TestCase, override_settings
 
 from executor.exchange_adapters import ExchangeOrderResult
-from executor.models import AccountState, Position, ExchangeOpenOrder
+from executor.models import AccountState, Position, ExchangeOpenOrder, ExchangeFill, ExchangeClosedOrder
 from executor.tasks import transfer_profit_reserve_to_spot, sync_live_exchange_state
 
 
@@ -27,6 +27,8 @@ class ExecutorTaskTest(TestCase):
         adapter.get_account_overview.return_value = ExchangeOrderResult(True, {'code': '200000', 'data': {'availableBalance': 123}})
         adapter.get_positions.return_value = ExchangeOrderResult(True, {'code': '200000', 'data': [{'symbol': 'XBTUSDTM'}]})
         adapter.get_open_orders.return_value = ExchangeOrderResult(True, {'code': '200000', 'data': {'items': []}})
+        adapter.get_recent_fills.return_value = ExchangeOrderResult(True, {'code': '200000', 'data': [{'tradeId': 'fill-1'}]})
+        adapter.get_recent_closed_orders.return_value = ExchangeOrderResult(True, {'code': '200000', 'data': [{'id': 'done-1'}]})
         adapter.normalize_positions.return_value = [{
             'symbol': 'BTCUSDT',
             'side': 'LONG',
@@ -49,6 +51,32 @@ class ExecutorTaskTest(TestCase):
             'size': 3.0,
             'status': 'active',
         }]
+        adapter.normalize_recent_fills.return_value = [{
+            'trade_id': 'fill-1',
+            'order_id': 'order-1',
+            'symbol': 'BTCUSDT',
+            'side': 'LONG',
+            'price': 68510.0,
+            'size': 0.01,
+            'value': 685.1,
+            'fee': 0.5,
+            'pnl': 1.5,
+            'liquidity': 'taker',
+            'filled_at_ms': 1714473600000,
+        }]
+        adapter.normalize_recent_closed_orders.return_value = [{
+            'order_id': 'done-1',
+            'client_oid': 'client-2',
+            'symbol': 'BTCUSDT',
+            'side': 'SHORT',
+            'order_type': 'LIMIT',
+            'price': 69000.0,
+            'size': 0.01,
+            'filled_size': 0.0,
+            'status': 'done',
+            'cancel_reason': 'IOC_CANCELLED',
+            'closed_at_ms': 1714473600000,
+        }]
 
         result = sync_live_exchange_state()
 
@@ -56,6 +84,8 @@ class ExecutorTaskTest(TestCase):
         adapter.get_account_overview.assert_called_once_with('USDT')
         adapter.get_positions.assert_called_once_with()
         adapter.get_open_orders.assert_called_once_with()
+        adapter.get_recent_fills.assert_called_once_with()
+        adapter.get_recent_closed_orders.assert_called_once_with()
         state = AccountState.objects.get()
         self.assertEqual(state.balance, 123.0)
         position = Position.objects.get(source='exchange', status='OPEN')
@@ -64,3 +94,9 @@ class ExecutorTaskTest(TestCase):
         order = ExchangeOpenOrder.objects.get(order_id='order-1')
         self.assertEqual(order.symbol, 'ETHUSDT')
         self.assertEqual(order.status, 'active')
+        fill = ExchangeFill.objects.get(trade_id='fill-1')
+        self.assertEqual(fill.symbol, 'BTCUSDT')
+        self.assertEqual(fill.order_id, 'order-1')
+        closed_order = ExchangeClosedOrder.objects.get(order_id='done-1')
+        self.assertEqual(closed_order.symbol, 'BTCUSDT')
+        self.assertEqual(closed_order.status, 'done')
