@@ -32,6 +32,7 @@ export default function TradeJournal({ trades }) {
                         <tr className="bg-[#0a0a0b]/80 border-b border-white/5 backdrop-blur-md">
                             <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Temporal Sig</th>
                             <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Protocol</th>
+                            <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Symbol</th>
                             <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Vector</th>
                             <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-widest">Execution</th>
                             <th className="p-4 text-xs font-semibold text-gray-400 uppercase tracking-widest border-r border-white/5">Resolution</th>
@@ -54,6 +55,11 @@ export default function TradeJournal({ trades }) {
                                         <div className="font-mono text-[10px] text-gray-500 mt-1">
                                             {new Date(trade.exit_time).toLocaleTimeString()}
                                         </div>
+                                    </td>
+                                    <td className="p-4">
+                                        <span className="inline-flex items-center rounded border border-[#00E5FF]/25 bg-[#00E5FF]/10 px-2 py-1 font-mono text-[10px] font-bold tracking-widest text-[#00E5FF]">
+                                            {trade.strategy || 'S1'}
+                                        </span>
                                     </td>
                                     <td className="p-4 font-mono font-bold text-white tracking-wider">{trade.symbol}</td>
                                     <td className="p-4">

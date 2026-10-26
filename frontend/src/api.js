@@ -31,13 +31,15 @@ export const revokeToken = () => api.post('/auth/token/revoke/');
 export const fetchStatus = () => api.get('/status/');
 export const fetchExchangeState = () => api.get('/exchange/state/');
 export const fetchExchangeIntegration = () => api.get('/exchange/integration/');
+export const fetchExchangeChart = (symbol, interval = '15m', limit = 200) =>
+    api.get('/exchange/chart/', { params: { symbol, interval, limit } });
 export const triggerExchangeSync = () => api.post('/exchange/sync/');
 export const transferExchangeProfit = (amountUsd) => api.post('/exchange/transfer-profit/', amountUsd == null ? {} : { amount_usd: amountUsd });
 export const fetchConviction = () => api.get('/conviction/');
 export const fetchAnalysts = (symbol) => api.get('/analysts/', { params: { symbol } });
 export const fetchPositions = (status) => api.get('/positions/', { params: { status } });
-export const fetchTrades = () => api.get('/trades/');
-export const fetchPerformance = () => api.get('/performance/');
+export const fetchTrades = (strategy) => api.get('/trades/', { params: strategy && strategy !== 'ALL' ? { strategy } : {} });
+export const fetchPerformance = (strategy) => api.get('/performance/', { params: strategy && strategy !== 'ALL' ? { strategy } : {} });
 export const fetchRisk = () => api.get('/risk/');
 export const fetchConsensusHistory = (symbol, hours = 24) =>
     api.get('/consensus/history/', { params: { symbol, hours } });

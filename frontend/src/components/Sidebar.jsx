@@ -5,14 +5,24 @@ import { fetchStatus, fetchSignals } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { LayoutDashboard, Monitor, BookOpen, BarChart3, ShieldAlert, Activity, Database, Briefcase, FlaskConical, HelpCircle, LogOut, UserCircle2 } from 'lucide-react';
 
-const NAV_ITEMS = [
-    { path: '/', label: 'Command Center', icon: LayoutDashboard },
-    { path: '/positions', label: 'Monitor', icon: Monitor },
-    { path: '/journal', label: 'Trade Journal', icon: BookOpen },
-    { path: '/analytics', label: 'Analytics Hub', icon: BarChart3 },
-    { path: '/risk', label: 'Risk Controls', icon: ShieldAlert },
-    { path: '/backtest', label: 'Backtest Lab', icon: FlaskConical },
-    { path: '/how-it-works', label: 'Jak działa', icon: HelpCircle },
+const NAV_GROUPS = [
+    {
+        label: 'Operate',
+        items: [
+            { path: '/', label: 'Command Center', icon: LayoutDashboard },
+            { path: '/positions', label: 'Monitor', icon: Monitor },
+            { path: '/risk', label: 'Risk Controls', icon: ShieldAlert },
+        ],
+    },
+    {
+        label: 'Research',
+        items: [
+            { path: '/backtest', label: 'Backtest Lab', icon: FlaskConical },
+            { path: '/analytics', label: 'Analytics Hub', icon: BarChart3 },
+            { path: '/journal', label: 'Trade Journal', icon: BookOpen },
+            { path: '/how-it-works', label: 'Quick Start', icon: HelpCircle },
+        ],
+    },
 ];
 
 export default function Sidebar() {
@@ -41,36 +51,43 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            <nav className="flex-1 px-3 py-6 flex flex-col gap-2 relative z-10">
-                {NAV_ITEMS.map((item) => {
-                    const Icon = item.icon;
-                    return (
-                        <NavLink
-                            key={item.path}
-                            to={item.path}
-                            className={({ isActive }) => `
-                                flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 group relative
-                                ${isActive ? 'text-[#00E5FF] bg-[#00E5FF]/10 shadow-[inset_0_0_12px_rgba(0,229,255,0.05)]' : 'text-gray-400 hover:text-white hover:bg-white/5'}
-                            `}
-                            end={item.path === '/'}
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    {isActive && (
-                                        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#00E5FF] rounded-r-md shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
+            <nav className="flex-1 px-3 py-6 flex flex-col gap-5 relative z-10">
+                {NAV_GROUPS.map((group) => (
+                    <div key={group.label} className="flex flex-col gap-2">
+                        <div className="px-3 text-[10px] uppercase tracking-[0.32em] text-gray-600 font-mono">
+                            {group.label}
+                        </div>
+                        {group.items.map((item) => {
+                            const Icon = item.icon;
+                            return (
+                                <NavLink
+                                    key={item.path}
+                                    to={item.path}
+                                    className={({ isActive }) => `
+                                        flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 group relative
+                                        ${isActive ? 'text-[#00E5FF] bg-[#00E5FF]/10 shadow-[inset_0_0_12px_rgba(0,229,255,0.05)]' : 'text-gray-400 hover:text-white hover:bg-white/5'}
+                                    `}
+                                    end={item.path === '/'}
+                                >
+                                    {({ isActive }) => (
+                                        <>
+                                            {isActive && (
+                                                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-[#00E5FF] rounded-r-md shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
+                                            )}
+                                            <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? 'transform scale-110' : 'group-hover:scale-110'}`} />
+                                            <span className="flex-1">{item.label}</span>
+                                            {item.path === '/' && signalCount > 0 && (
+                                                <span className="bg-[#10B981] text-black text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse min-w-[18px] text-center">
+                                                    {signalCount}
+                                                </span>
+                                            )}
+                                        </>
                                     )}
-                                    <Icon className={`w-5 h-5 transition-transform duration-300 ${isActive ? 'transform scale-110' : 'group-hover:scale-110'}`} />
-                                    <span className="flex-1">{item.label}</span>
-                                    {item.path === '/' && signalCount > 0 && (
-                                        <span className="bg-[#10B981] text-black text-[10px] font-black px-1.5 py-0.5 rounded-full animate-pulse min-w-[18px] text-center">
-                                            {signalCount}
-                                        </span>
-                                    )}
-                                </>
-                            )}
-                        </NavLink>
-                    );
-                })}
+                                </NavLink>
+                            );
+                        })}
+                    </div>
+                ))}
             </nav>
 
             <div className="p-5 border-t border-[#27272A] relative z-10 bg-[#0a0a0b]/50 backdrop-blur-md">

@@ -111,11 +111,36 @@ export default function HowItWorks() {
             <div className="pb-6 border-b border-white/5">
                 <h2 className="text-3xl font-black tracking-wider text-white flex items-center gap-3">
                     <BookOpen className="w-7 h-7 text-[#00E5FF]" />
-                    Jak działa <span className="text-[#00E5FF]">Sentinel</span>
+                    Quick Start <span className="text-[#00E5FF]">Sentinel</span>
                 </h2>
                 <p className="text-sm text-gray-400 mt-2 font-mono">
-                    Opis systemu, strategii i reguł risk management
+                    Krótki przewodnik operacyjny: co robić, gdzie patrzeć i które warstwy są dziś naprawdę ważne
                 </p>
+            </div>
+
+            <div className="glass-panel p-5">
+                <div className="flex items-start gap-3">
+                    <div className="p-2 rounded-lg bg-[#10B981]/10">
+                        <CheckCircle className="w-4 h-4 text-[#10B981]" />
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="text-lg font-bold text-white">Najprostszy workflow użytkownika</h3>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 text-[12px] font-mono">
+                            {[
+                                '1. Otwórz Command Center i sprawdź panel Next Action.',
+                                '2. Jeśli są sygnały, oceń je i dopiero potem wejdz do pozycji.',
+                                '3. Jeśli masz otwarte pozycje, priorytetem jest Monitor + Risk Controls.',
+                                '4. Exchange Ops służy do synchronizacji, kontroli zleceń i rezerwy spot.',
+                                '5. Backtest i Analytics traktuj jako warstwę research, nie jako ekran główny.',
+                                '6. AI Agents są dziś warstwą eksperymentalną, nie rdzeniem decyzji.',
+                            ].map((step) => (
+                                <div key={step} className="rounded-xl border border-white/5 bg-black/20 px-4 py-3 text-gray-300">
+                                    {step}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Pipeline overview */}
@@ -154,7 +179,7 @@ export default function HowItWorks() {
                     />
                     <StrategyCard
                         id="S2" name="Order Flow" desc="Quantitative CVD + OI"
-                        note="Wymaga danych WhaleCVD — aktywna po 4h od startu (aggTrade stream)"
+                        note="Warstwa research / eksperymentalna. Wymaga danych WhaleCVD i nie jest dziś głównym silnikiem systemu."
                         gates_a={['✅ A1 Killzone', '○ A2 (opcjonalne)', '○ A3 (opcjonalne)', '✅ A4 Funding Rate', '✅ A5 ADX > 20']}
                         gates_b={['○ dowolne 2/5 B gates', 'B1/B2 preferowane']}
                         gates_c={['○ dowolna 1/5 C gate']}
@@ -182,7 +207,10 @@ export default function HowItWorks() {
             </Section>
 
             {/* AI Agents */}
-            <Section title="4 Agenci AI — co oceniają" icon={Brain}>
+            <Section title="4 Agenci AI — warstwa eksperymentalna" icon={Brain}>
+                <div className="mb-4 rounded-xl border border-[#D4AF37]/15 bg-[#D4AF37]/5 px-4 py-3 text-[11px] text-[#D4AF37] font-mono">
+                    AI agents nie są dziś rdzeniem workflow użytkownika. Zostają w systemie jako pomocnicza warstwa insightów i eksperymentów.
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {[
                         { name: 'Context Trader', color: '#10B981', desc: 'SMC/ICT narrativa — sweep, FVG, ChoCH, premium/discount, HTF alignment. Nie generuje liczb — tylko ocenia jakość setupu.' },

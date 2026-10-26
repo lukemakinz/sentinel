@@ -3,8 +3,11 @@ from django.test import override_settings
 from django.test import TestCase
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
+from django.utils import timezone
 from ingester.models import WatchedPair
 from unittest.mock import patch
+from ingester.models import Candle
+from executor.models import Position, ExchangeOpenOrder, Trade, ExchangeFill, ExchangeClosedOrder
 
 
 class DashboardAuthTest(TestCase):
@@ -90,3 +93,98 @@ class DashboardAuthTest(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['error'], 'invalid_amount_usd')
+
+    def test_exchange_chart_snapshot_returns_candles_and_overlays(self):
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+        now = timezone.now()
+        Candle.objects.create(
+            symbol='BTCUSDT', interval='15m', timestamp=now,
+            open=100000, high=100500, low=99900, close=100200,
+            volume=12, quote_volume=1200000, taker_buy_volume=6,
+            taker_buy_quote_volume=600000, num_trades=100, is_closed=True,
+        )
+        Position.objects.create(
+            symbol='BTCUSDT', side='LONG', status='OPEN',
+            entry_price=100100, current_price=100200, quantity=0.01, position_size_usd=1001,
+            leverage=10, stop_loss=99500, liquidation_price=96000, margin_usd=100,
+            remaining_quantity=0.01, source='exchange'
+        )
+        ExchangeOpenOrder.objects.create(
+            order_id='k-1', symbol='BTCUSDT', side='SHORT', order_type='LIMIT',
+            price=100800, size=0.01, status='active', source='exchange'
+        )
+        Trade.objects.create(
+            symbol='BTCUSDT', strategy='S1C', side='LONG', entry_price=99950, exit_price=100400,
+            quantity=0.01, position_size_usd=999.5, pnl=4.5, pnl_percent=0.45,
+            risk_reward=1.5, entry_time=now, exit_time=now, close_reason='TP1'
+        )
+        ExchangeFill.objects.create(
+            trade_id='f-1', order_id='k-1', symbol='BTCUSDT', side='LONG',
+            price=100150, size=0.01, value=1001.5, fee=0.5, pnl=0.0,
+            liquidity='taker', filled_at=now
+        )
+        ExchangeClosedOrder.objects.create(
+            order_id='done-1', client_oid='client-9', symbol='BTCUSDT', side='SHORT',
+            order_type='LIMIT', price=100800, size=0.01, filled_size=0.0,
+            status='done', cancel_reason='IOC_CANCELLED', source='exchange', closed_at=now
+        )
+
+        response = self.client.get('/api/exchange/chart/?symbol=BTCUSDT&interval=15m&limit=100')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['symbol'], 'BTCUSDT')
+        self.assertEqual(len(response.data['candles']), 1)
+        self.assertEqual(len(response.data['positions']), 1)
+        self.assertEqual(len(response.data['open_orders']), 1)
+        self.assertEqual(len(response.data['trades']), 1)
+        self.assertEqual(response.data['trades'][0]['strategy'], 'S1C')
+        self.assertEqual(len(response.data['fills']), 1)
+        self.assertEqual(len(response.data['closed_orders']), 1)
+
+    def test_performance_returns_strategy_breakdown(self):
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+        now = timezone.now()
+        Trade.objects.create(
+            symbol='BTCUSDT', strategy='S1C', side='LONG', entry_price=100, exit_price=110,
+            quantity=1, position_size_usd=100, pnl=10, pnl_percent=10,
+            risk_reward=2.0, entry_time=now, exit_time=now, close_reason='TP1'
+        )
+        Trade.objects.create(
+            symbol='ETHUSDT', strategy='S5', side='LONG', entry_price=200, exit_price=190,
+            quantity=1, position_size_usd=200, pnl=-10, pnl_percent=-5,
+            risk_reward=-1.0, entry_time=now, exit_time=now, close_reason='STOP_LOSS'
+        )
+
+        response = self.client.get('/api/performance/')
+
+        self.assertEqual(response.status_code, 200)
+        strategies = {item['strategy']: item for item in response.data['strategy_breakdown']}
+        self.assertEqual(strategies['S1C']['total_pnl'], 10.0)
+        self.assertEqual(strategies['S1C']['win_rate'], 100.0)
+        self.assertEqual(strategies['S5']['total_pnl'], -10.0)
+        self.assertEqual(strategies['S5']['losing_trades'], 1)
+
+    def test_performance_can_filter_by_strategy(self):
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+        now = timezone.now()
+        Trade.objects.create(
+            symbol='BTCUSDT', strategy='S1C', side='LONG', entry_price=100, exit_price=110,
+            quantity=1, position_size_usd=100, pnl=10, pnl_percent=10,
+            risk_reward=2.0, entry_time=now, exit_time=now, close_reason='TP1'
+        )
+        Trade.objects.create(
+            symbol='ETHUSDT', strategy='S5', side='LONG', entry_price=200, exit_price=190,
+            quantity=1, position_size_usd=200, pnl=-10, pnl_percent=-5,
+            risk_reward=-1.0, entry_time=now, exit_time=now, close_reason='STOP_LOSS'
+        )
+
+        response = self.client.get('/api/performance/?strategy=S1C')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['total_trades'], 1)
+        self.assertEqual(response.data['winning_trades'], 1)
+        self.assertEqual(len(response.data['strategy_breakdown']), 1)
+        self.assertEqual(response.data['strategy_breakdown'][0]['strategy'], 'S1C')

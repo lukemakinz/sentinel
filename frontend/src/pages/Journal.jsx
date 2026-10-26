@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { usePolling } from '../hooks/usePolling';
 import { fetchTrades } from '../api';
 import TradeJournal from '../components/TradeJournal';
 import { BookOpen, Loader2 } from 'lucide-react';
 
+const STRATEGY_OPTIONS = ['ALL', 'S1', 'S1A', 'S1B', 'S1C', 'S3', 'S4', 'S5', 'S6'];
+
 export default function Journal() {
-    const { data: trades, loading } = usePolling(fetchTrades, 15000);
+    const [selectedStrategy, setSelectedStrategy] = useState('ALL');
+    const { data: trades, loading } = usePolling(() => fetchTrades(selectedStrategy), 15000, [selectedStrategy]);
     const tradeList = trades?.results || trades || [];
 
     return (
@@ -17,6 +20,22 @@ export default function Journal() {
                         <BookOpen className="w-4 h-4 text-[#D4AF37]" />
                         Comprehensive execution and analyst rationale logs
                     </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {STRATEGY_OPTIONS.map((strategy) => (
+                        <button
+                            key={strategy}
+                            type="button"
+                            onClick={() => setSelectedStrategy(strategy)}
+                            className={`rounded-xl border px-3 py-2 text-xs font-mono font-bold tracking-widest transition-all ${
+                                selectedStrategy === strategy
+                                    ? 'border-[#D4AF37]/40 bg-[#D4AF37]/10 text-[#D4AF37]'
+                                    : 'border-white/5 bg-black/20 text-gray-500 hover:border-white/10 hover:text-white'
+                            }`}
+                        >
+                            {strategy}
+                        </button>
+                    ))}
                 </div>
             </div>
 

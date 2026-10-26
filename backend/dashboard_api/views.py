@@ -1,4 +1,5 @@
 """Dashboard REST API views."""
+from collections import defaultdict
 from datetime import timedelta
 
 from django.conf import settings
@@ -10,7 +11,7 @@ from rest_framework.response import Response
 # analysts/ and consensus/ removed from INSTALLED_APPS — imports disabled
 # from analysts.models import AnalystSignalRecord
 # from consensus.models import ConsensusSignal
-from executor.models import Position, Trade, AccountState, ExchangeOpenOrder
+from executor.models import Position, Trade, AccountState, ExchangeOpenOrder, ExchangeFill, ExchangeClosedOrder
 from executor.tasks import sync_live_exchange_state, transfer_profit_reserve_to_spot
 from ingester.models import Candle
 from risk.models import RiskState, RiskEvent
@@ -103,6 +104,89 @@ def exchange_transfer_profit(request):
 
 
 @api_view(['GET'])
+def exchange_chart_snapshot(request):
+    """Candles plus trade/order overlays for exchange operations panels."""
+    symbol = str(request.query_params.get('symbol', 'BTCUSDT')).upper()
+    interval = str(request.query_params.get('interval', '15m')).lower()
+    try:
+        limit = min(max(int(request.query_params.get('limit', 200)), 50), 500)
+    except (TypeError, ValueError):
+        limit = 200
+
+    candles_qs = (
+        Candle.objects
+        .filter(symbol=symbol, interval=interval, is_closed=True)
+        .order_by('-timestamp')[:limit]
+    )
+    candles = [
+        {
+            'time': int(c.timestamp.timestamp()),
+            'timestamp': c.timestamp.isoformat(),
+            'open': float(c.open),
+            'high': float(c.high),
+            'low': float(c.low),
+            'close': float(c.close),
+            'volume': float(c.volume),
+        }
+        for c in reversed(list(candles_qs))
+    ]
+
+    positions = list(
+        Position.objects
+        .filter(symbol=symbol, source='exchange', status='OPEN')
+        .order_by('-opened_at')
+        .values(
+            'id', 'symbol', 'side', 'entry_price', 'stop_loss', 'liquidation_price',
+            'current_price', 'quantity', 'position_size_usd', 'opened_at'
+        )
+    )
+    orders = list(
+        ExchangeOpenOrder.objects
+        .filter(symbol=symbol, source='exchange')
+        .order_by('order_id')
+        .values('order_id', 'symbol', 'side', 'order_type', 'price', 'size', 'status', 'updated_at')
+    )
+    trades = list(
+        Trade.objects
+        .filter(symbol=symbol)
+        .order_by('-exit_time')[:20]
+        .values(
+            'id', 'symbol', 'strategy', 'side', 'entry_price', 'exit_price', 'pnl',
+            'entry_time', 'exit_time', 'close_reason'
+        )
+    )
+    fills = list(
+        ExchangeFill.objects
+        .filter(symbol=symbol, source='exchange')
+        .order_by('-filled_at')[:50]
+        .values(
+            'trade_id', 'order_id', 'symbol', 'side', 'price', 'size',
+            'value', 'fee', 'pnl', 'liquidity', 'filled_at'
+        )
+    )
+    closed_orders = list(
+        ExchangeClosedOrder.objects
+        .filter(symbol=symbol, source='exchange')
+        .order_by('-closed_at')[:50]
+        .values(
+            'order_id', 'client_oid', 'symbol', 'side', 'order_type', 'price',
+            'size', 'filled_size', 'status', 'cancel_reason', 'closed_at'
+        )
+    )
+
+    return Response({
+        'symbol': symbol,
+        'interval': interval,
+        'candles': candles,
+        'positions': positions,
+        'open_orders': orders,
+        'closed_orders': closed_orders,
+        'trades': trades,
+        'fills': fills,
+    })
+
+
+@api_view(['GET'])
 def conviction_scores(request):
     """Stub — analysts/consensus removed from pipeline. Returns empty."""
     # analysts/ and consensus/ disabled — dead code removed from active pipeline.
@@ -133,7 +217,16 @@ class PositionViewSet(viewsets.ReadOnlyModelViewSet):
 
 class TradeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TradeSerializer
-    queryset = Trade.objects.all()
+
+    def get_queryset(self):
+        qs = Trade.objects.all()
+        symbol_filter = self.request.query_params.get('symbol')
+        strategy_filter = self.request.query_params.get('strategy')
+        if symbol_filter:
+            qs = qs.filter(symbol=symbol_filter.upper())
+        if strategy_filter:
+            qs = qs.filter(strategy=strategy_filter.upper())
+        return qs
 
 
 class ExchangeOpenOrderViewSet(viewsets.ReadOnlyModelViewSet):
@@ -152,6 +245,9 @@ def performance(request):
     """Performance analytics — win rate, Sharpe, equity curve."""
     state = AccountState.objects.order_by('-updated_at').first()
     trades = Trade.objects.all()
+    strategy_filter = request.query_params.get('strategy')
+    if strategy_filter:
+        trades = trades.filter(strategy=strategy_filter.upper())
 
     total = trades.count()
     wins = trades.filter(pnl__gt=0).count()
@@ -166,6 +262,39 @@ def performance(request):
     # Equity curve from account states
     equity_curve = list(AccountState.objects.order_by('updated_at').values('updated_at', 'equity', 'balance'))
 
+    strategy_groups = defaultdict(list)
+    for trade in trades.order_by('exit_time'):
+        strategy_groups[(trade.strategy or 'S1').upper()].append(trade)
+
+    strategy_breakdown = []
+    for strategy, grouped_trades in strategy_groups.items():
+        strategy_total = len(grouped_trades)
+        strategy_wins = sum(1 for trade in grouped_trades if trade.pnl > 0)
+        strategy_losses = sum(1 for trade in grouped_trades if trade.pnl < 0)
+        winning_pnls = [trade.pnl for trade in grouped_trades if trade.pnl > 0]
+        losing_pnls = [trade.pnl for trade in grouped_trades if trade.pnl < 0]
+        rr_values = [trade.risk_reward for trade in grouped_trades if trade.risk_reward is not None]
+        total_pnl = sum(trade.pnl for trade in grouped_trades)
+        avg_win_usd = sum(winning_pnls) / len(winning_pnls) if winning_pnls else 0
+        avg_loss_usd = abs(sum(losing_pnls) / len(losing_pnls)) if losing_pnls else 0
+        profit_factor = sum(winning_pnls) / abs(sum(losing_pnls)) if losing_pnls else 0
+        avg_rr = sum(rr_values) / len(rr_values) if rr_values else 0
+
+        strategy_breakdown.append({
+            'strategy': strategy,
+            'total_trades': strategy_total,
+            'winning_trades': strategy_wins,
+            'losing_trades': strategy_losses,
+            'win_rate': round(strategy_wins / strategy_total * 100, 1) if strategy_total else 0,
+            'total_pnl': round(total_pnl, 2),
+            'avg_win_usd': round(avg_win_usd, 2),
+            'avg_loss_usd': round(avg_loss_usd, 2),
+            'profit_factor': round(profit_factor, 2) if avg_loss_usd > 0 else 0,
+            'avg_rr': round(avg_rr, 2),
+        })
+
+    strategy_breakdown.sort(key=lambda item: (item['total_pnl'], item['win_rate']), reverse=True)
+
     return Response({
         'account': AccountStateSerializer(state).data if state else None,
         'total_trades': total,
@@ -178,6 +307,7 @@ def performance(request):
         'avg_rr': round(sum(t.risk_reward for t in trades) / total, 2) if total > 0 else 0,
         'max_drawdown': state.max_drawdown if state else 0,
         'equity_curve': equity_curve[-100:],
+        'strategy_breakdown': strategy_breakdown,
     })
 
 

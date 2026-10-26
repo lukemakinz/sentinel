@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { ArrowRightLeft, CircleAlert, CircleCheckBig, Coins, LoaderCircle, RefreshCw, Shield, Wallet } from 'lucide-react';
 import { fetchExchangeIntegration, fetchExchangeState, transferExchangeProfit, triggerExchangeSync } from '../api';
 import { usePolling } from '../hooks/usePolling';
+import ExchangeChartPanel from './ExchangeChartPanel';
 
 function StatChip({ label, value, tone = 'text-white' }) {
     return (
@@ -23,6 +24,7 @@ export default function ExchangeControlPanel() {
     const account = exchangeState?.account;
     const positions = exchangeState?.positions || [];
     const openOrders = exchangeState?.open_orders || [];
+    const closedOrders = exchangeState?.closed_orders || [];
     const activeSymbols = integration?.active_symbols || [];
     const liveEnabled = Boolean(integration?.live_trading_enabled);
     const credentialsConfigured = Boolean(integration?.credentials_configured);
@@ -200,7 +202,7 @@ export default function ExchangeControlPanel() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
                 <div className="rounded-2xl border border-white/5 bg-black/20 p-4">
                     <div className="flex items-center justify-between gap-3 mb-3">
                         <p className="text-sm font-semibold text-white">Live Positions</p>
@@ -279,7 +281,56 @@ export default function ExchangeControlPanel() {
                         </div>
                     )}
                 </div>
+
+                <div className="rounded-2xl border border-white/5 bg-black/20 p-4">
+                    <div className="flex items-center justify-between gap-3 mb-3">
+                        <p className="text-sm font-semibold text-white">Closed Orders</p>
+                        <span className="text-[10px] uppercase tracking-[0.28em] text-gray-600 font-mono">{closedOrders.length} recent</span>
+                    </div>
+
+                    {closedOrders.length === 0 ? (
+                        <p className="text-sm text-gray-600 font-mono">No recent done or canceled exchange orders.</p>
+                    ) : (
+                        <div className="overflow-hidden rounded-xl border border-white/5">
+                            <div className="grid grid-cols-[1fr_0.65fr_0.7fr_0.75fr_0.9fr] gap-3 bg-white/[0.03] px-3 py-2 text-[10px] uppercase tracking-[0.25em] text-gray-600 font-mono">
+                                <span>Symbol</span>
+                                <span>Side</span>
+                                <span>Type</span>
+                                <span>Fill</span>
+                                <span>Status</span>
+                            </div>
+                            <div className="divide-y divide-white/5">
+                                {closedOrders.slice(0, 6).map((order) => (
+                                    <div key={order.order_id} className="grid grid-cols-[1fr_0.65fr_0.7fr_0.75fr_0.9fr] gap-3 px-3 py-3 text-sm">
+                                        <div>
+                                            <p className="font-semibold text-white">{order.symbol}</p>
+                                            <p className="text-[11px] font-mono text-gray-600">@ {Number(order.price || 0).toFixed(2)}</p>
+                                        </div>
+                                        <span className={order.side === 'LONG' ? 'text-[#10B981] font-mono' : 'text-[#EF4444] font-mono'}>
+                                            {order.side}
+                                        </span>
+                                        <span className="text-white font-mono">{order.order_type || '—'}</span>
+                                        <div>
+                                            <p className="text-white font-mono">{Number(order.filled_size || 0).toFixed(3)}</p>
+                                            <p className="text-[11px] font-mono text-gray-600">/{Number(order.size || 0).toFixed(3)}</p>
+                                        </div>
+                                        <div>
+                                            <p className={`${order.cancel_reason ? 'text-[#EF4444]' : 'text-[#D4AF37]'} font-mono`}>
+                                                {order.status}
+                                            </p>
+                                            {order.cancel_reason && (
+                                                <p className="text-[11px] font-mono text-gray-600">{order.cancel_reason}</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
+
+            <ExchangeChartPanel symbols={activeSymbols} />
         </div>
     );
 }

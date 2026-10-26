@@ -16,6 +16,7 @@ urlpatterns = [
     path('status/', views.system_status, name='system-status'),
     path('exchange/state/', views.exchange_live_state, name='exchange-live-state'),
     path('exchange/integration/', views.exchange_integration_status, name='exchange-integration-status'),
+    path('exchange/chart/', views.exchange_chart_snapshot, name='exchange-chart-snapshot'),
     path('exchange/sync/', views.exchange_sync_now, name='exchange-sync-now'),
     path('exchange/transfer-profit/', views.exchange_transfer_profit, name='exchange-transfer-profit'),
     path('conviction/', views.conviction_scores, name='conviction-scores'),

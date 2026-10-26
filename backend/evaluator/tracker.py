@@ -29,11 +29,12 @@ def create_signal(trade_context: dict, l2_decision: dict,
     tp1   = tps[0].get('level') if tps else None
     rr    = ((tp1 - entry) / (entry - sl)) if (tp1 and sl and entry and entry != sl) else None
 
+    expiry_hours = 8 if ctx.get('strategy') == 'S12AI' else 24
     sig = Signal.objects.create(
         symbol=ctx.get('symbol', ''),
         direction=ctx.get('direction', ''),
         strategy=ctx.get('strategy', 'S1'),
-        expires_at=datetime.now(timezone.utc) + timedelta(hours=24),
+        expires_at=datetime.now(timezone.utc) + timedelta(hours=expiry_hours),
         entry_price=entry,
         stop_loss=sl,
         take_profit_1=tp1,

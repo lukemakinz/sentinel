@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-export function usePolling(fetchFn, interval = 5000) {
+export function usePolling(fetchFn, interval = 5000, deps = []) {
     const [data, setData]       = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError]     = useState(null);
@@ -36,7 +36,7 @@ export function usePolling(fetchFn, interval = 5000) {
             mounted = false;
             clearInterval(intervalRef.current);
         };
-    }, [interval]); // interval is the only stable dependency
+    }, [interval, ...deps]);
 
     return { data, loading, error };
 }

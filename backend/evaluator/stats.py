@@ -71,7 +71,40 @@ def get_stats(filters: dict = None) -> dict:
         },
         'agent_calibration': agent_calibration,
         'agent_brier_scores': _brier_scores(qs),
+        'ai_selector': _ai_selector_stats(qs),
         'reentry_stats': _reentry_stats(),
+    }
+
+
+def _ai_selector_stats(qs) -> dict:
+    """Compare S12AI APPROVE with the identically-labeled REJECT cohort."""
+    ai = qs.filter(strategy='S12AI')
+
+    def cohort(rows):
+        pnls = [float(value) for value in rows.values_list('pnl_r', flat=True)
+                if value is not None]
+        gains = sum(value for value in pnls if value > 0)
+        losses = -sum(value for value in pnls if value < 0)
+        wins = sum(value > 0 for value in pnls)
+        return {
+            'resolved': len(pnls),
+            'win_rate_pct': round(100 * wins / len(pnls), 1) if pnls else 0.0,
+            'avg_pnl_r': round(sum(pnls) / len(pnls), 4) if pnls else 0.0,
+            'raw_profit_factor': round(gains / losses, 4) if losses else None,
+        }
+
+    approved = cohort(ai.filter(l2_action='APPROVE'))
+    rejected = cohort(ai.filter(l2_action='REJECT'))
+    total = approved['resolved'] + rejected['resolved']
+    return {
+        'label': 'standardized counterfactual +1R/-1R before trading costs',
+        'total_resolved': total,
+        'minimum_required': 100,
+        'sample_ready': total >= 100,
+        'approved': approved,
+        'rejected': rejected,
+        'selection_lift_avg_r': round(
+            approved['avg_pnl_r'] - rejected['avg_pnl_r'], 4),
     }
 
 
