@@ -27,6 +27,11 @@ class SupervisorVetoTest(TestCase):
         self.assertEqual(decision['size_multiplier'], 0.0)
         self.assertEqual(decision['veto_reason'], 'risk_manager')
 
+    def test_neutral_risk_manager_fails_closed(self):
+        decision = self._run(ct='APPROVE', ofq='APPROVE', rm='NEUTRAL', da='APPROVE')
+        self.assertEqual(decision['action'], 'REJECT')
+        self.assertEqual(decision['veto_reason'], 'risk_manager_unavailable')
+
     def test_three_approvals_give_full_size(self):
         decision = self._run(ct='APPROVE', ofq='APPROVE', rm='APPROVE', da='NEUTRAL')
         self.assertEqual(decision['action'], 'APPROVE')
@@ -65,3 +70,36 @@ class SupervisorVetoTest(TestCase):
         decision = self._run(ct='APPROVE', ofq='APPROVE', rm='APPROVE', da='APPROVE')
         self.assertEqual(decision['action'], 'APPROVE')
         self.assertEqual(decision['size_multiplier'], 1.0)
+
+    def test_conservative_ai_requires_all_core_agents(self):
+        responses = {
+            'context_trader': resp('APPROVE', 75),
+            'order_flow_quant': resp('NEUTRAL', 75),
+            'risk_manager': resp('APPROVE', 75),
+            'devils_advocate': resp('APPROVE', 75),
+        }
+        decision = self.sup.evaluate(responses, conservative=True)
+        self.assertEqual(decision['action'], 'REJECT')
+        self.assertEqual(decision['veto_reason'], 'conservative_ai_quorum')
+
+    def test_conservative_ai_approves_only_high_confidence_core_consensus(self):
+        responses = {
+            'context_trader': resp('APPROVE', 75),
+            'order_flow_quant': resp('APPROVE', 70),
+            'risk_manager': resp('APPROVE', 80),
+            'devils_advocate': resp('NEUTRAL', 50),
+        }
+        decision = self.sup.evaluate(responses, conservative=True)
+        self.assertEqual(decision['action'], 'APPROVE')
+        self.assertEqual(decision['size_multiplier'], 0.5)
+
+    def test_conservative_ai_strong_devils_advocate_is_full_veto(self):
+        responses = {
+            'context_trader': resp('APPROVE', 75),
+            'order_flow_quant': resp('APPROVE', 70),
+            'risk_manager': resp('APPROVE', 80),
+            'devils_advocate': resp('REJECT', 80),
+        }
+        decision = self.sup.evaluate(responses, conservative=True)
+        self.assertEqual(decision['action'], 'REJECT')
+        self.assertEqual(decision['veto_reason'], 'devils_advocate')

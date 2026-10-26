@@ -56,5 +56,6 @@ class OrderFlowQuantAgent(BaseAgent):
             f"Analyze this {direction} setup on {symbol}.\n\n"
             f"TradeContext:\n{self._format_context(ctx)}"
             f"{cvd_info}\n\n"
+            f"{self._adjudication_guidance(ctx)}"
             f"Return your verdict as structured JSON."
         )

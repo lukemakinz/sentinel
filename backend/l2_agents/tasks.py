@@ -1,8 +1,53 @@
 """Celery task: run L2 analysis when L1 passes."""
 import logging
 from celery import shared_task
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
+
+
+@shared_task(name='l2_agents.run_auction_shadow_cycle')
+def run_auction_shadow_cycle() -> dict:
+    """Run at most one immutable shadow adjudication per closed 15m bar."""
+    if not getattr(settings, 'AUCTION_SHADOW_ENABLED', True):
+        return {'disabled': True}
+
+    from ingester.models import WatchedPair
+    from .auction_adjudicator import summarize_analysis_costs
+    from .auction_service import analyze_symbol
+
+    use_ai = bool(getattr(settings, 'AUCTION_SHADOW_AI_ENABLED', False))
+    results = {'created': 0, 'deduplicated': 0, 'actions': {}, 'errors': {}}
+    costs = []
+    for symbol in WatchedPair.get_active_symbols():
+        try:
+            output = analyze_symbol(
+                symbol, use_ai=use_ai, persist=True, deduplicate_bar=True,
+                baseline=True,
+            )
+            bucket = 'created' if output['created'] else 'deduplicated'
+            results[bucket] += 1
+            action = output['decision']['action']
+            results['actions'][action] = results['actions'].get(action, 0) + 1
+            costs.append(output['analysis_cost'])
+        except Exception as exc:
+            logger.error('Auction shadow cycle failed for %s: %s', symbol, exc, exc_info=True)
+            results['errors'][symbol] = type(exc).__name__
+    # Deliberately last: every cycle reports what it spent.
+    results['analysis_cost'] = summarize_analysis_costs(costs)
+    logger.info(
+        'Auction shadow cycle: %s created, %s deduplicated, cost %s',
+        results['created'], results['deduplicated'],
+        results['analysis_cost']['display'],
+    )
+    return results
+
+
+@shared_task(name='l2_agents.resolve_auction_shadow_plans')
+def resolve_auction_shadow_plans() -> dict:
+    """Advance armed plans from closed candles; never submits an order."""
+    from .shadow_auction import resolve_open_plans
+    return resolve_open_plans()
 
 
 @shared_task(name='l2_agents.run_l2_analysis')
@@ -15,20 +60,26 @@ def run_l2_analysis(trade_context: dict) -> dict:
         decision = L2Orchestrator().run(trade_context)
         logger.info(f"L2 {symbol}: {decision['action']} ×{decision['size_multiplier']}")
 
-        # Create Signal record for EVERY L1 PASS (shadow=True if rejected)
+        params = None
+        # Compute counterfactual geometry even for rejected candidates.  This
+        # makes APPROVE vs REJECT measurable in shadow evaluation.  It does not
+        # place an order.
         try:
-            from evaluator.tracker import create_signal
-            create_signal(trade_context, decision, trade_params=None, executed=False)
-        except Exception as e:
-            logger.debug(f"Signal creation failed for {symbol}: {e}")
-
-        # If approved, compute L3 trade parameters and attach to the just-saved DB record
-        if decision['action'] == 'APPROVE':
-            try:
-                from executor.l3_calculator import L3Calculator
-                strategy = trade_context.get('strategy', 'S1')
-                params = L3Calculator().calculate(trade_context, decision, strategy=strategy)
-                if params:
+            from executor.l3_calculator import L3Calculator
+            strategy = trade_context.get('strategy', 'S1')
+            geometry_decision = decision if decision['action'] == 'APPROVE' else {
+                'action': 'APPROVE', 'size_multiplier': 1.0,
+            }
+            params = L3Calculator().calculate(
+                trade_context, geometry_decision, strategy=strategy)
+            if params and decision['action'] == 'APPROVE':
+                ai_execution_locked = (
+                    strategy == 'S12AI'
+                    and not getattr(settings, 'AI_ADJUDICATOR_EXECUTION_ENABLED', False)
+                )
+                if trade_context.get('shadow_only') or ai_execution_locked:
+                    logger.info(f"L3 shadow params calculated for {symbol}; execution locked")
+                else:
                     record = L2Decision.objects.filter(
                         symbol=symbol, action='APPROVE', trade_params__isnull=True
                     ).order_by('-timestamp').first()
@@ -36,8 +87,16 @@ def run_l2_analysis(trade_context: dict) -> dict:
                         record.trade_params = params
                         record.save(update_fields=['trade_params'])
                         logger.info(f"L3 params saved: {symbol} entry=${params['entry_price']:.0f} SL=${params['stop_loss']:.0f}")
-            except Exception as e:
-                logger.warning(f"L3 calc failed for {symbol}: {e}")
+        except Exception as e:
+            logger.warning(f"L3 calc failed for {symbol}: {e}")
+
+        # Create a shadow Signal for every decision, including rejections, with
+        # identical counterfactual geometry whenever it was calculable.
+        try:
+            from evaluator.tracker import create_signal
+            create_signal(trade_context, decision, trade_params=params, executed=False)
+        except Exception as e:
+            logger.debug(f"Signal creation failed for {symbol}: {e}")
 
         return decision
     except Exception as e:

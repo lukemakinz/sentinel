@@ -58,6 +58,8 @@ class OrchestratorRunTest(TestCase):
         self.assertEqual(L2Decision.objects.filter(symbol='BTCUSDT').count(), 1)
         db_record = L2Decision.objects.get(symbol='BTCUSDT')
         self.assertEqual(db_record.action, 'APPROVE')
+        self.assertIn('risk_snapshot', db_record.trade_context)
+        self.assertIn('ai_runtime', db_record.trade_context)
 
     def test_decision_saved_to_db_on_reject(self):
         self._run_with_patches(rm=REJECT)
@@ -77,10 +79,27 @@ class OrchestratorRunTest(TestCase):
             self.assertIn(agent, summary, f"Missing agent in summary: {agent}")
 
     def test_run_not_called_without_api_key(self):
-        with self.settings(ANTHROPIC_API_KEY=''):
+        with self.settings(ANTHROPIC_API_KEY='', OPENAI_API_KEY=''):
             decision = self.orch.run(TRADE_CONTEXT)
         self.assertEqual(decision['action'], 'REJECT')
         self.assertEqual(decision.get('veto_reason'), 'no_api_key')
+
+    def test_openai_only_configuration_is_supported(self):
+        with self.settings(ANTHROPIC_API_KEY='', OPENAI_API_KEY='test-key'):
+            decision = self._run_with_patches()
+        self.assertEqual(decision['action'], 'APPROVE')
+
+    def test_shadow_decision_is_saved_as_dismissed(self):
+        context = {**TRADE_CONTEXT, 'shadow_only': True}
+        patches = patch_all_agents()
+        for patcher in patches:
+            patcher.start()
+        try:
+            self.orch.run(context)
+        finally:
+            for patcher in patches:
+                patcher.stop()
+        self.assertTrue(L2Decision.objects.get(symbol='BTCUSDT').dismissed)
 
     def test_insufficient_approvals_returns_reject(self):
         decision = self._run_with_patches(ct=NEUTRAL, ofq=NEUTRAL, rm=APPROVE, da=NEUTRAL)

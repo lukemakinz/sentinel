@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 
 ANTHROPIC_MODEL = 'claude-haiku-4-5'
 OPENAI_MODEL    = 'gpt-4o-mini'
+AI_PROMPT_VERSION = 'l2-evidence-adjudicator-v2'
 
 
 class AgentResponse(BaseModel):
@@ -120,11 +121,28 @@ class BaseAgent:
     # ── Helpers ───────────────────────────────────────────────────────────────
 
     def _build_user_message(self, ctx: dict) -> str:
+        adjudication = self._adjudication_guidance(ctx)
         return (
             f"Analyze this {ctx.get('direction', 'UNKNOWN')} setup on {ctx.get('symbol', 'UNKNOWN')}.\n\n"
             f"TradeContext:\n{self._format_context(ctx)}\n\n"
+            f"{adjudication}"
             f"Return your verdict as structured JSON."
         )
+
+    @staticmethod
+    def _adjudication_guidance(ctx: dict) -> str:
+        candidate = ctx.get('ai_candidate') or {}
+        if candidate:
+            return (
+                f"\nAdmission policy: {candidate.get('passed_count')}/"
+                f"{candidate.get('total_count')} evidence families passed. "
+                f"Passed/failed map: {candidate.get('criteria')}. "
+                f"Hard vetoes: {candidate.get('hard_vetoes')}.\n"
+                "The quorum only grants review; it is NOT evidence that the trade has edge. "
+                "Use only facts present in the snapshot, treat missing data as unknown, and "
+                "reject rather than inventing confirmation.\n"
+            )
+        return ''
 
     @staticmethod
     def _format_context(ctx: dict) -> str:
