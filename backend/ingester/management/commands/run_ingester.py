@@ -20,12 +20,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('🏴‍☠️ SENTINEL Ingester starting...'))
 
-        # Backfill in background (don't block WebSocket start)
-        self.stdout.write('Scheduling historical candle backfill...')
-        try:
-            backfill_candles.delay()   # async via Celery
-        except Exception:
-            backfill_candles()         # fallback: sync if Celery not ready
+        # This is a dedicated long-running process.  A direct bootstrap avoids
+        # a 30-second broker timeout and works identically with or without a
+        # Celery worker.
+        self.stdout.write('Backfilling recent candles...')
+        backfill_candles()
 
         # Start WebSocket
         client = BinanceWebSocketClient()

@@ -3,6 +3,7 @@ from .models import (
     Candle, FundingRate, Liquidation, OpenInterest,
     LongShortRatio, TopTraderPosition, MarketTicker,
     AggTrade, WhaleThreshold, WhaleCVD, RetailCVD,
+    OrderBookSnapshot,
 )
 
 
@@ -79,5 +80,15 @@ class WhaleCVDAdmin(admin.ModelAdmin):
 @admin.register(RetailCVD)
 class RetailCVDAdmin(admin.ModelAdmin):
     list_display = ['symbol', 'timestamp', 'cumulative_delta']
+    list_filter = ['symbol']
+    ordering = ['-timestamp']
+
+
+@admin.register(OrderBookSnapshot)
+class OrderBookSnapshotAdmin(admin.ModelAdmin):
+    list_display = [
+        'symbol', 'timestamp', 'mid_price', 'spread_bps',
+        'imbalance_5', 'imbalance_20',
+    ]
     list_filter = ['symbol']
     ordering = ['-timestamp']

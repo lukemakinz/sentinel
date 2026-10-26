@@ -215,3 +215,31 @@ class RetailCVD(models.Model):
 
     def __str__(self):
         return f"{self.symbol} RetailCVD={self.cumulative_delta} @ {self.timestamp}"
+
+
+class OrderBookSnapshot(models.Model):
+    """Downsampled top-20 futures order-book snapshot with derived features."""
+    symbol = models.CharField(max_length=20, db_index=True)
+    timestamp = models.DateTimeField(db_index=True)
+    last_update_id = models.BigIntegerField(default=0)
+    bids = models.JSONField(default=list)
+    asks = models.JSONField(default=list)
+    best_bid = models.DecimalField(max_digits=20, decimal_places=8)
+    best_ask = models.DecimalField(max_digits=20, decimal_places=8)
+    mid_price = models.DecimalField(max_digits=20, decimal_places=8)
+    spread_bps = models.DecimalField(max_digits=12, decimal_places=4)
+    bid_depth_5_usd = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+    ask_depth_5_usd = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+    bid_depth_20_usd = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+    ask_depth_20_usd = models.DecimalField(max_digits=30, decimal_places=2, default=0)
+    imbalance_5 = models.DecimalField(max_digits=10, decimal_places=6, default=0)
+    imbalance_20 = models.DecimalField(max_digits=10, decimal_places=6, default=0)
+
+    class Meta:
+        ordering = ['-timestamp']
+        indexes = [
+            models.Index(fields=['symbol', '-timestamp']),
+        ]
+
+    def __str__(self):
+        return f"{self.symbol} L2 spread={self.spread_bps}bps imbalance={self.imbalance_20}"

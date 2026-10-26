@@ -17,12 +17,18 @@ def _active_symbols():
     return WatchedPair.get_active_symbols()
 
 
+def _market_data_symbols():
+    """Trade watchlist plus mandatory cross-market context instruments."""
+    context = getattr(settings, 'GLOBAL_CONTEXT_PAIRS', ['BTCUSDT', 'ETHUSDT'])
+    return list(dict.fromkeys([*context, *_active_symbols()]))
+
+
 @shared_task(name='ingester.fetch_open_interest')
 def fetch_open_interest():
     """Fetch open interest for all watched pairs — runs every 5 min."""
     from .binance_rest import BinanceRESTClient
     client = BinanceRESTClient()
-    for symbol in _active_symbols():
+    for symbol in _market_data_symbols():
         try:
             client.fetch_open_interest(symbol)
         except Exception as e:
@@ -114,13 +120,25 @@ def check_data_freshness():
     return {'stale': stale_symbols}
 
 
+@shared_task(name='ingester.prune_order_book_snapshots')
+def prune_order_book_snapshots():
+    """Keep the rolling L2 history bounded; long-term research uses exports."""
+    from .models import OrderBookSnapshot
+
+    retention_days = max(1, int(getattr(settings, 'ORDER_BOOK_RETENTION_DAYS', 14)))
+    cutoff = timezone.now() - timedelta(days=retention_days)
+    deleted, _ = OrderBookSnapshot.objects.filter(timestamp__lt=cutoff).delete()
+    logger.info(f"Pruned {deleted} order-book snapshots older than {retention_days} days")
+    return {'deleted': deleted, 'retention_days': retention_days}
+
+
 @shared_task(name='ingester.backfill_candles')
 def backfill_candles():
     """Backfill historical candles on startup — runs once."""
     from .binance_rest import BinanceRESTClient
     client = BinanceRESTClient()
     intervals = ['1m', '5m', '15m', '1h', '4h']
-    for symbol in _active_symbols():
+    for symbol in _market_data_symbols():
         for interval in intervals:
             try:
                 limit = 500 if interval in ['1m', '5m'] else 200

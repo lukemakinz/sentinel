@@ -100,6 +100,17 @@ class AggTradeHandlerTest(TestCase):
         self.assertEqual(WhaleCVD.objects.filter(symbol='ETHUSDT').count(), 1)
         self.assertEqual(RetailCVD.objects.filter(symbol='ETHUSDT').count(), 0)
 
+    def test_batch_aggregates_cvd_but_preserves_raw_trades(self):
+        buy = {**AGGTRADE_BUY, 'T': 1672531200000}
+        sell = {**AGGTRADE_SELL, 'T': 1672531201000, 'q': '0.50000000'}
+
+        self.client._process_aggtrade_batch([buy, sell])
+
+        self.assertEqual(AggTrade.objects.filter(symbol='BTCUSDT').count(), 2)
+        cvds = WhaleCVD.objects.filter(symbol='BTCUSDT')
+        self.assertEqual(cvds.count(), 1)
+        self.assertEqual(cvds.get().cumulative_delta, Decimal('15000.00'))
+
     def test_stream_url_includes_aggtrade_streams(self):
         client = BinanceWebSocketClient.__new__(BinanceWebSocketClient)
         client.pairs = ['btcusdt', 'ethusdt']
