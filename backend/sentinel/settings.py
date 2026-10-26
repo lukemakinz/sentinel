@@ -1,7 +1,24 @@
 import os
 from pathlib import Path
 
+from decouple import Config, RepositoryEnv
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def _secret_from_environment_or_project_env(name: str, default: str = '') -> str:
+    """Read secrets locally without importing Docker-oriented .env settings.
+
+    The repository .env contains values such as ``DB_PATH=/app/...`` which are
+    correct in Docker but invalid for a local management command.  Only callers
+    that explicitly opt in (API secrets below) use this fallback.
+    """
+    if name in os.environ:
+        return os.environ[name]
+    project_env_path = BASE_DIR.parent / '.env'
+    if project_env_path.exists():
+        return Config(RepositoryEnv(str(project_env_path)))(name, default=default)
+    return default
 
 # --- Core ---
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-dev-key')
@@ -34,6 +51,8 @@ INSTALLED_APPS = [
     'risk',
     'executor',
     'dashboard_api',
+    'carry_monitor',
+    'scalp_monitor',
 ]
 
 MIDDLEWARE = [
@@ -74,6 +93,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': _db_path,
+        'OPTIONS': {'timeout': 30},
     }
 }
 
@@ -140,27 +160,81 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # --- Sentinel Config ---
 TRADING_PAIRS = os.environ.get('TRADING_PAIRS', 'BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT').split(',')
+GLOBAL_CONTEXT_PAIRS = os.environ.get('GLOBAL_CONTEXT_PAIRS', 'BTCUSDT,ETHUSDT').split(',')
 TRADING_MODE = os.environ.get('TRADING_MODE', 'paper')  # paper, signal_only, semi_auto, full_auto
 BINANCE_TESTNET = os.environ.get('BINANCE_TESTNET', 'True').lower() in ('true', '1')
 BINANCE_API_KEY = os.environ.get('BINANCE_API_KEY', '')
 BINANCE_API_SECRET = os.environ.get('BINANCE_API_SECRET', '')
-ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
-OPENAI_API_KEY    = os.environ.get('OPENAI_API_KEY', '')
+ANTHROPIC_API_KEY = _secret_from_environment_or_project_env('ANTHROPIC_API_KEY')
+OPENAI_API_KEY = _secret_from_environment_or_project_env('OPENAI_API_KEY')
+AI_ADJUDICATOR_SHADOW_ENABLED = os.environ.get(
+    'AI_ADJUDICATOR_SHADOW_ENABLED', 'False').lower() in ('true', '1')
+AI_ADJUDICATOR_EXECUTION_ENABLED = False  # safety invariant; S12AI is research-only
+AI_CANDIDATE_MIN_CRITERIA = int(os.environ.get('AI_CANDIDATE_MIN_CRITERIA', '7'))
+AI_CANDIDATE_MIN_STRUCTURAL = int(os.environ.get('AI_CANDIDATE_MIN_STRUCTURAL', '2'))
 
-# Risk params
-MAX_RISK_PER_TRADE = float(os.environ.get('MAX_RISK_PER_TRADE', '0.005'))
-MAX_DAILY_DRAWDOWN = float(os.environ.get('MAX_DAILY_DRAWDOWN', '0.20'))
-MAX_DAILY_PORTFOLIO_DRAWDOWN = float(os.environ.get('MAX_DAILY_PORTFOLIO_DRAWDOWN', '0.20'))
-MAX_WEEKLY_DRAWDOWN = float(os.environ.get('MAX_WEEKLY_DRAWDOWN', '0.07'))
-MAX_OPEN_POSITIONS = int(os.environ.get('MAX_OPEN_POSITIONS', '3'))
+# Risk params.  Defaults match the conservative research protocol; operators
+# can still override them explicitly through the environment.
+MAX_RISK_PER_TRADE = float(os.environ.get('MAX_RISK_PER_TRADE', '0.002'))
+MAX_DAILY_DRAWDOWN = float(os.environ.get('MAX_DAILY_DRAWDOWN', '0.006'))
+MAX_DAILY_PORTFOLIO_DRAWDOWN = float(os.environ.get('MAX_DAILY_PORTFOLIO_DRAWDOWN', '0.006'))
+MAX_WEEKLY_DRAWDOWN = float(os.environ.get('MAX_WEEKLY_DRAWDOWN', '0.018'))
+MAX_OPEN_POSITIONS = int(os.environ.get('MAX_OPEN_POSITIONS', '2'))
 PROFIT_TO_SPOT_RATIO = float(os.environ.get('PROFIT_TO_SPOT_RATIO', '0.10'))
 DEFAULT_MARGIN_MODE = os.environ.get('DEFAULT_MARGIN_MODE', 'isolated')
-MAX_LEVERAGE = int(os.environ.get('MAX_LEVERAGE', '10'))
-MAX_HIGH_CONVICTION_LEVERAGE = int(os.environ.get('MAX_HIGH_CONVICTION_LEVERAGE', '20'))
+MAX_LEVERAGE = int(os.environ.get('MAX_LEVERAGE', '5'))
+MAX_HIGH_CONVICTION_LEVERAGE = int(os.environ.get('MAX_HIGH_CONVICTION_LEVERAGE', '5'))
 MAX_MARGIN_PER_TRADE_PCT = float(os.environ.get('MAX_MARGIN_PER_TRADE_PCT', '0.15'))
 MIN_LIQUIDATION_BUFFER_R = float(os.environ.get('MIN_LIQUIDATION_BUFFER_R', '3.0'))
 MAINTENANCE_MARGIN_RATE = float(os.environ.get('MAINTENANCE_MARGIN_RATE', '0.005'))
 INITIAL_BALANCE = float(os.environ.get('INITIAL_BALANCE', '10000'))
+
+# Paper execution assumptions (basis points).  Stop management is deliberately
+# frozen to the initial invalidation by default; alternatives must be promoted
+# by a named, replayed experiment rather than silently changing live behaviour.
+PAPER_MARKET_SLIPPAGE_BPS = float(os.environ.get('PAPER_MARKET_SLIPPAGE_BPS', '5'))
+PAPER_ALT_SLIPPAGE_BPS = float(os.environ.get('PAPER_ALT_SLIPPAGE_BPS', '15'))
+PAPER_TAKER_FEE_BPS = float(os.environ.get('PAPER_TAKER_FEE_BPS', '5'))
+PAPER_MAKER_FEE_BPS = float(os.environ.get('PAPER_MAKER_FEE_BPS', '2'))
+PAPER_STOP_MANAGEMENT_POLICY = os.environ.get(
+    'PAPER_STOP_MANAGEMENT_POLICY', 'INITIAL_STOP_ONLY').upper()
+ORDER_BOOK_STREAM_ENABLED = os.environ.get(
+    'ORDER_BOOK_STREAM_ENABLED', 'True').lower() in ('true', '1')
+ORDER_BOOK_SNAPSHOT_INTERVAL_SECONDS = float(os.environ.get(
+    'ORDER_BOOK_SNAPSHOT_INTERVAL_SECONDS', '5'))
+ORDER_BOOK_RETENTION_DAYS = int(os.environ.get('ORDER_BOOK_RETENTION_DAYS', '14'))
+OPEN_INTEREST_POLL_SECONDS = int(os.environ.get('OPEN_INTEREST_POLL_SECONDS', '300'))
+AGGTRADE_FLUSH_SECONDS = float(os.environ.get('AGGTRADE_FLUSH_SECONDS', '1'))
+AUCTION_SHADOW_ENABLED = os.environ.get(
+    'AUCTION_SHADOW_ENABLED', 'True').lower() in ('true', '1')
+AUCTION_AI_PROVIDER = os.environ.get('AUCTION_AI_PROVIDER', 'openai').strip().lower()
+AUCTION_OPENAI_MODEL = os.environ.get('AUCTION_OPENAI_MODEL', 'gpt-6.1-sol').strip()
+AUCTION_OPENAI_REASONING_EFFORT = os.environ.get(
+    'AUCTION_OPENAI_REASONING_EFFORT', 'high',
+).strip().lower()
+# Standard, short-context prices per 1M tokens as of 2026-10-26. Keep these
+# operator-configurable so a pricing change never requires a code release.
+AUCTION_OPENAI_INPUT_USD_PER_MILLION = float(os.environ.get(
+    'AUCTION_OPENAI_INPUT_USD_PER_MILLION', '2.0'))
+AUCTION_OPENAI_CACHED_INPUT_USD_PER_MILLION = float(os.environ.get(
+    'AUCTION_OPENAI_CACHED_INPUT_USD_PER_MILLION', '0.10'))
+AUCTION_OPENAI_OUTPUT_USD_PER_MILLION = float(os.environ.get(
+    'AUCTION_OPENAI_OUTPUT_USD_PER_MILLION', '10.0'))
+AUCTION_OPENAI_PRICING_AS_OF = os.environ.get(
+    'AUCTION_OPENAI_PRICING_AS_OF', '2026-10-26')
+# Hard cap on persisted AI spend per UTC day; once reached, analyses fail
+# closed to PASS without calling the provider. 0 blocks all AI calls.
+AUCTION_AI_DAILY_BUDGET_USD = float(os.environ.get('AUCTION_AI_DAILY_BUDGET_USD', '1.0'))
+_auction_ai_default = (
+    'True' if AUCTION_AI_PROVIDER == 'openai' and OPENAI_API_KEY else 'False'
+)
+AUCTION_SHADOW_AI_ENABLED = os.environ.get(
+    'AUCTION_SHADOW_AI_ENABLED',
+    os.environ.get('AI_ADJUDICATOR_SHADOW_ENABLED', _auction_ai_default),
+).lower() in ('true', '1')
+AUCTION_SHADOW_TARGET_R = float(os.environ.get('AUCTION_SHADOW_TARGET_R', '1.5'))
+AUCTION_SHADOW_CYCLE_SECONDS = int(os.environ.get('AUCTION_SHADOW_CYCLE_SECONDS', '300'))
+AUCTION_SHADOW_RESOLVE_SECONDS = int(os.environ.get('AUCTION_SHADOW_RESOLVE_SECONDS', '60'))
 EXCHANGE_NAME = os.environ.get('EXCHANGE_NAME', 'kucoin').lower()
 LIVE_TRADING_ENABLED = os.environ.get('LIVE_TRADING_ENABLED', 'False').lower() in ('true', '1')
 KUCOIN_API_KEY = os.environ.get('KUCOIN_API_KEY', '')
@@ -182,8 +256,8 @@ CONSENSUS_THRESHOLD = 65
 CONSENSUS_MIN_AGREEMENT = 4  # out of 6 analysts
 
 # Binance WebSocket
-BINANCE_WS_URL = 'wss://fstream.binance.com'
-BINANCE_REST_URL = 'https://fapi.binance.com'
+BINANCE_WS_URL = os.environ.get('BINANCE_WS_URL', 'wss://fstream.binance.com')
+BINANCE_REST_URL = os.environ.get('BINANCE_REST_URL', 'https://fapi.binance.com')
 
 # Celery Beat Schedule
 from celery.schedules import crontab
@@ -224,6 +298,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'ingester.check_data_freshness',
         'schedule': 120.0,   # every 2 minutes — catches stale data fast
     },
+    'prune-order-book-snapshots': {
+        'task': 'ingester.prune_order_book_snapshots',
+        'schedule': crontab(hour=2, minute=30),
+    },
     'update-news-calendar': {
         'task': 'risk.update_news_calendar',
         'schedule': 21600.0,  # every 6 hours
@@ -231,6 +309,18 @@ CELERY_BEAT_SCHEDULE = {
     'l1-scan-all-symbols': {
         'task': 'l1_filter.scan_all_symbols',
         'schedule': 60.0,   # every 1 min
+    },
+    'resolve-s12ai-shadow': {
+        'task': 'evaluator.resolve_s12ai_shadow',
+        'schedule': 3600.0,
+    },
+    'run-auction-shadow-cycle': {
+        'task': 'l2_agents.run_auction_shadow_cycle',
+        'schedule': 300.0,
+    },
+    'resolve-auction-shadow-plans': {
+        'task': 'l2_agents.resolve_auction_shadow_plans',
+        'schedule': 60.0,
     },
     # Risk resets
     'daily-risk-reset': {
@@ -249,5 +339,27 @@ CELERY_BEAT_SCHEDULE = {
     'eod-force-close': {
         'task': 'executor.force_close_all',
         'schedule': crontab(hour=22, minute=0),  # 22:00 UTC — close all positions
+    },
+    # FCM_SAFE25 paper-forward monitor — public data, zero order placement.
+    'carry-monitor-monthly-decision': {
+        'task': 'carry_monitor.evaluate_monthly_decision',
+        'schedule': crontab(hour=1, minute=0, day_of_month=1),
+    },
+    'carry-monitor-accrue-funding': {
+        'task': 'carry_monitor.accrue_funding',
+        'schedule': 3600.0,  # every hour — Binance settles every 8h
+    },
+    'carry-monitor-safety': {
+        'task': 'carry_monitor.monitor_safety',
+        'schedule': crontab(minute='*'),
+    },
+    # S20 paper scalp monitor — real prices, zero orders ever placed.
+    'scalp-monitor-evaluate-signal': {
+        'task': 'scalp_monitor.evaluate_signal',
+        'schedule': crontab(minute='1,16,31,46'),  # shortly after each 15m close
+    },
+    'scalp-monitor-manage-position': {
+        'task': 'scalp_monitor.manage_open_position',
+        'schedule': 120.0,  # every 2 minutes
     },
 }

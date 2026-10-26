@@ -18,7 +18,7 @@ aiohttp>=3.9,<4.0
 numpy>=1.26,<2.0
 pandas>=2.2,<3.0
 
-# LLM providers — system uses whichever key is set (Anthropic preferred)
+# LLM providers — Auction Intelligence defaults explicitly to OpenAI
 anthropic>=0.40,<1.0
 openai>=1.50,<2.0
 
