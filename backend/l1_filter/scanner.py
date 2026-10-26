@@ -3,10 +3,11 @@ from datetime import datetime, timezone
 from typing import Optional
 
 import numpy as np
+from django.conf import settings
 from analysts.base import Bias
 from analysts.momentum import compute_connors_rsi
 from .gates_a import check_killzone, check_htf_trend, check_btc_correlation, check_funding_rate, check_adx
-from .gates_b import check_liquidity_sweep, check_fvg_ob, check_premium_discount, check_atr_squeeze
+from .gates_b import check_liquidity_sweep, check_fvg_ob, check_fvg_ob_v2, check_premium_discount, check_atr_squeeze
 from .gates_c import (
     check_choch, check_momentum_divergence, check_ema_crossover,
     check_volume_spike, check_vwap, check_obv_confirmation, check_price_action_trigger,
@@ -14,6 +15,9 @@ from .gates_c import (
 from .utils import compute_atr, compute_ema
 from .mtf import build_top_down_context
 from .models import L1Result
+from .ai_adjudicator import (
+    AI_STRATEGY_ID, AICandidatePolicy, evaluate_ai_candidate, setup_fingerprint,
+)
 
 MIN_B_PASS = 2   # B1+B2 mandatory = core SMC setup (additional gates = optional confirmation)
 MIN_C_PASS = 1   # base threshold; S1 uses stricter trigger confirmation below
@@ -65,24 +69,34 @@ class L1Scanner:
         funding     = self._get_latest_funding_rate(symbol)
 
         a1_passed, a1_data = check_killzone(now)
+        london_fast_reclaim = strategy in {'S1CF', 'S1CF_OB'} and 7 <= now.hour < 10
         post_ny_continuation = 16 <= now.hour < 18
-        session_window = 'ny_continuation' if post_ny_continuation else a1_data.get('session')
+        if london_fast_reclaim:
+            session_window = 'london'
+        else:
+            session_window = 'ny_continuation' if post_ny_continuation else a1_data.get('session')
 
         a3_passed, a3_data = check_btc_correlation(btc_candles, direction, symbol, symbol_candles=candles_1h)
         a4_passed, a4_data = check_funding_rate(funding, direction)
         a5_passed, a5_data = check_adx(candles_1h)
 
-        gates_a = {'A1': a1_passed or post_ny_continuation, 'A2': True, 'A3': a3_passed, 'A4': a4_passed, 'A5': a5_passed}
+        gates_a = {'A1': a1_passed or post_ny_continuation or london_fast_reclaim,
+                   'A2': True, 'A3': a3_passed, 'A4': a4_passed, 'A5': a5_passed}
         strict_a_pass = all(gates_a.values())
         permissive_a_pass = self._passes_permissive_a(strategy, gates_a)
 
-        if not strict_a_pass and not permissive_a_pass:
+        ai_shadow_requested = strategy == AI_STRATEGY_ID
+        if not strict_a_pass and not permissive_a_pass and not ai_shadow_requested:
             self._save(symbol, direction, False, gates_a, {}, {})
             return None
 
         b1_passed, b1_data = check_liquidity_sweep(candles_1h, direction,
-                                                    symbol=symbol, htf_candles=candles_4h)
-        b2_passed, b2_data = check_fvg_ob(candles_15m, direction)
+                                                    symbol=symbol, htf_candles=candles_4h,
+                                                    now=now)
+        if strategy == 'S1CF_OB':
+            b2_passed, b2_data = check_fvg_ob_v2(candles_15m, direction)
+        else:
+            b2_passed, b2_data = check_fvg_ob(candles_15m, direction)
         b3_passed, b3_data = check_premium_discount(candles_1h, direction, htf_candles=candles_4h)
         # B4 (classical patterns) removed — redundant with B1+B2, adds noise
         b5_passed, b5_data = check_atr_squeeze(candles_1h)
@@ -93,12 +107,15 @@ class L1Scanner:
             b1_passed, b1_data, b2_passed, b3_passed, b5_passed,
             session_window=session_window, mtf_context=mtf_context
         )
+        if strategy in {'S1CF', 'S1CF_OB'} and session_window in {'london', 'ny', 'ny_continuation'} \
+                and b1_passed and b2_passed:
+            s1_candidates.append(strategy)
         # C1: CHoCH — HTF BOS is ideal confirmation but not hard requirement.
         # With limited backtest data, relax to accept standalone LTF CHoCH.
         htf_bos = _check_htf_bos(candles_4h, direction)
         c1_passed, c1_data = check_choch(candles_15m, direction,
                                           require_htf_bos=htf_bos)   # soft requirement
-        c2_passed, c2_data = check_momentum_divergence(candles_15m, direction, symbol=symbol)
+        c2_passed, c2_data = check_momentum_divergence(candles_15m, direction, symbol=symbol, now=now)
         c3_passed, c3_data = check_ema_crossover(candles_15m, direction)
         c4_passed, c4_data = check_volume_spike(candles_15m)
         c5_passed, c5_data = check_vwap(candles_1h, direction)
@@ -106,6 +123,24 @@ class L1Scanner:
         c7_passed, c7_data = check_price_action_trigger(candles_15m, direction)
 
         gates_c = {'C1': c1_passed, 'C2': c2_passed, 'C3': c3_passed, 'C4': c4_passed, 'C5': c5_passed, 'C6': c6_passed, 'C7': c7_passed}
+        ai_policy = AICandidatePolicy(
+            min_passed=int(getattr(settings, 'AI_CANDIDATE_MIN_CRITERIA', 7)),
+            min_structural=int(getattr(settings, 'AI_CANDIDATE_MIN_STRUCTURAL', 2)),
+        )
+        ai_candidate = (
+            evaluate_ai_candidate(gates_a, gates_b, gates_c, ai_policy)
+            if ai_shadow_requested else None
+        )
+        if ai_candidate:
+            ai_candidate['setup_fingerprint'] = setup_fingerprint(
+                symbol=symbol,
+                direction=direction,
+                observed_at=now,
+                session=session_window,
+                swept_level=b1_data.get('swept_level'),
+                fvg_zone=b2_data.get('fvg_zone'),
+                structure_type=c1_data.get('type'),
+            )
 
         flow_signal = self._get_volume_flow_signal(symbol, now=now)
         strategy_candidates = self._filter_s1_candidates_by_trigger(s1_candidates, c1_data, gates_c)
@@ -119,6 +154,8 @@ class L1Scanner:
         s5_data = self._get_s5_candidate(symbol, direction, gates_a, gates_c, mtf_context, candles_4h, candles_15m, now)
         if s5_data:
             strategy_candidates.append('S5')
+        if ai_candidate and ai_candidate['eligible']:
+            strategy_candidates.append(AI_STRATEGY_ID)
         if not strategy_candidates:
             self._save(symbol, direction, False, gates_a, gates_b, gates_c)
             return None
@@ -132,8 +169,13 @@ class L1Scanner:
         if selected_strategy == 'S5' and s5_data and s5_data.get('direction_override'):
             selected_direction = s5_data['direction_override']
 
-        setup_score = self._score_setup(
-            selected_strategy, gates_b, gates_c, mtf_context, b1_data, b2_data, c1_data, flow_signal
+        setup_score = (
+            ai_candidate['passed_count']
+            if selected_strategy == AI_STRATEGY_ID and ai_candidate
+            else self._score_setup(
+                selected_strategy, gates_b, gates_c, mtf_context,
+                b1_data, b2_data, c1_data, flow_signal
+            )
         )
         entry_mode = self._infer_entry_mode(selected_strategy, setup_score, mtf_context, c1_data, gates_c)
 
@@ -181,6 +223,10 @@ class L1Scanner:
             'adx_value':          adx_val,
             'regime':             'trending' if adx_val > 25 else 'weak_trending',
         }
+        if selected_strategy == AI_STRATEGY_ID:
+            ctx['ai_candidate'] = ai_candidate
+            ctx['shadow_only'] = True
+            ctx['max_leverage'] = 5
         self._save(symbol, selected_direction, True, gates_a, gates_b, gates_c, ctx)
         return ctx
 
@@ -231,6 +277,10 @@ class L1Scanner:
             if strategy_id == 'S1B' and c1_type in {'CHoCH', 'BOS', 'BOS_fallback'} and has_continuation_confirmation:
                 filtered.append(strategy_id)
             if strategy_id == 'S1C' and c1_type in {'CHoCH', 'BOS', 'BOS_fallback'} and any(
+                gates_c.get(gate, False) for gate in ('C3', 'C5', 'C6', 'C7')
+            ):
+                filtered.append(strategy_id)
+            if strategy_id in {'S1CF', 'S1CF_OB'} and c1_type in {'CHoCH', 'BOS', 'BOS_fallback'} and any(
                 gates_c.get(gate, False) for gate in ('C3', 'C5', 'C6', 'C7')
             ):
                 filtered.append(strategy_id)
@@ -601,9 +651,11 @@ class L1Scanner:
     @staticmethod
     def _infer_entry_mode(strategy_id: str, setup_score: int, mtf_context: dict,
                           c1_data: dict, gates_c: dict) -> str:
+        if strategy_id == AI_STRATEGY_ID:
+            return 'LIMIT'
         if strategy_id == 'S1A':
             return 'LIMIT'
-        if strategy_id == 'S1C':
+        if strategy_id in {'S1C', 'S1CF', 'S1CF_OB'}:
             return 'HYBRID' if setup_score >= 6 else 'LIMIT'
         if strategy_id == 'S2':
             if gates_c.get('C7') and (gates_c.get('C4') or gates_c.get('C6')):

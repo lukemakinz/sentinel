@@ -1,7 +1,7 @@
 """Gate B: Setup Structure — min 3 of 5 must pass."""
 import numpy as np
 
-from analysts.structure import detect_swing_points, detect_order_blocks, detect_fvg
+from analysts.structure import detect_swing_points, detect_order_blocks, detect_fvg, detect_order_blocks_v2
 from .utils import compute_atr
 
 
@@ -41,7 +41,8 @@ def _swept_level_has_htf_poi(swept_price: float, htf_candles: list,
 
 def check_liquidity_sweep(candles: list, direction: str,
                           symbol: str = None,
-                          htf_candles: list = None) -> tuple[bool, dict]:
+                          htf_candles: list = None,
+                          now=None) -> tuple[bool, dict]:
     """
     B1: Liquidity sweep against REAL structural levels (PDH/PDL/Asian Range/Equal levels).
     Expert improvement: requires HTF POI confluence (4H/1D OB or FVG at sweep level).
@@ -61,7 +62,7 @@ def check_liquidity_sweep(candles: list, direction: str,
             from datetime import datetime
             from l1_filter.liquidity import LiquiditySnapshot
 
-            snap    = LiquiditySnapshot.build(symbol)
+            snap    = LiquiditySnapshot.build(symbol, now=now)
             levels  = snap.all_levels()
 
             if levels:
@@ -184,6 +185,92 @@ def check_fvg_ob(candles: list, direction: str) -> tuple[bool, dict]:
             return True, {'fvg_zone': (ob['bottom'], ob['top']), 'fvg_type': 'order_block', 'fvg_status': 'fresh', 'fvg_fill_ratio': 0.0}
 
     return False, {}
+
+
+def check_fvg_ob_v2(candles: list, direction: str, ob_mode: str = None) -> tuple[bool, dict]:
+    """
+    B2 variant for S1CF_OB: same displacement-FVG detection as check_fvg_ob,
+    but paired with detect_order_blocks_v2 (ATR-normalized displacement,
+    structure-break requirement, volume filter, mitigation tracking) instead
+    of the naive fallback OB used by check_fvg_ob.
+
+    ob_mode:
+      'fallback' — OB only considered when no qualifying FVG exists (like
+                   check_fvg_ob, but with the improved OB detector).
+      'parallel' — OB and FVG compete as equal POIs; whichever is closer to
+                   price and freshest wins (default).
+    Reads S1CF_OB_MODE env var when ob_mode is not passed, for A/B testing
+    without threading extra config through the scanner call chain.
+    """
+    import os
+    if ob_mode is None:
+        # Chosen on April 2026 development data before evaluating May-August:
+        # fallback beat parallel (higher PnL and PF, similar trade count).
+        ob_mode = os.environ.get('S1CF_OB_MODE', 'fallback')
+
+    if len(candles) < 5:
+        return False, {}
+
+    current = candles[-1]['close']
+    atr = compute_atr(candles)[-1] if len(candles) >= 2 else 1.0
+    avg_vol = sum(c.get('volume', 0) for c in candles[-20:]) / min(20, len(candles))
+
+    from l1_filter.fvg import get_active_fvgs
+    fvg_dir = 'bullish' if direction == 'LONG' else 'bearish'
+    active_fvgs = get_active_fvgs(candles, atr, fvg_dir)
+
+    opens  = np.array([c['open']  for c in candles])
+    closes = np.array([c['close'] for c in candles])
+    highs  = np.array([c['high']  for c in candles])
+    lows   = np.array([c['low']   for c in candles])
+    vols   = np.array([c.get('volume', 0) for c in candles])
+    obs = detect_order_blocks_v2(opens, closes, highs, lows, vols, atr=atr,
+                                  vol_mult=1.2, displacement_atr_mult=1.5)
+    ob_type = 'bullish_ob' if direction == 'LONG' else 'bearish_ob'
+    qualifying_obs = [ob for ob in obs if ob['type'] == ob_type and ob['status'] != 'mitigated'
+                       and ((ob['bottom'] <= current) if direction == 'LONG' else (ob['top'] >= current))]
+
+    def fvg_candidate():
+        if direction == 'LONG':
+            nearby = [f for f in active_fvgs if f.bottom <= current]
+            key = lambda f: (0 if f.status == 'fresh' else 1, abs(current - f.top))
+        else:
+            nearby = [f for f in active_fvgs if f.top >= current]
+            key = lambda f: (0 if f.status == 'fresh' else 1, abs(current - f.bottom))
+        if not nearby:
+            return None
+        f = sorted(nearby, key=key)[0]
+        return {'fvg_zone': (f.bottom, f.top), 'entry_ote': f.ote_entry,
+                'fvg_type': 'displacement_fvg', 'fvg_status': f.status,
+                'fvg_fill_ratio': f.fill_ratio, '_freshness': 0 if f.status == 'fresh' else 1,
+                '_distance': abs(current - (f.top if direction == 'LONG' else f.bottom))}
+
+    def ob_candidate():
+        if not qualifying_obs:
+            return None
+        ob = sorted(qualifying_obs,
+                    key=lambda o: (0 if o['status'] == 'fresh' else 1,
+                                   abs(current - (o['top'] if direction == 'LONG' else o['bottom']))))[0]
+        mid = ob['bottom'] + 0.5 * (ob['top'] - ob['bottom'])
+        return {'fvg_zone': (ob['bottom'], ob['top']), 'entry_ote': mid,
+                'fvg_type': 'order_block_v2', 'fvg_status': ob['status'],
+                'fvg_fill_ratio': ob['fill_ratio'], '_freshness': 0 if ob['status'] == 'fresh' else 1,
+                '_distance': abs(current - (ob['top'] if direction == 'LONG' else ob['bottom']))}
+
+    fvg_cand = fvg_candidate()
+    ob_cand = ob_candidate()
+
+    if ob_mode == 'fallback':
+        chosen = fvg_cand or ob_cand
+    else:  # parallel
+        candidates = [c for c in (fvg_cand, ob_cand) if c]
+        chosen = sorted(candidates, key=lambda c: (c['_freshness'], c['_distance']))[0] if candidates else None
+
+    if not chosen:
+        return False, {}
+    chosen.pop('_freshness', None)
+    chosen.pop('_distance', None)
+    return True, chosen
 
 
 def check_premium_discount(candles: list, direction: str,

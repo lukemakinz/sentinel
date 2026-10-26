@@ -111,3 +111,16 @@ class LiquiditySnapshotTest(TestCase):
         self.assertIsInstance(snap.all_levels(), list)
         # Has at least PDH/PDL
         self.assertGreater(len(snap.all_levels()), 0)
+
+    def test_snapshot_equal_levels_exclude_future_candles(self):
+        now = datetime(2026, 1, 3, 10, 0, tzinfo=timezone.utc)
+        # Two conspicuous equal highs exist only after ``now`` and must not
+        # leak into a historical snapshot.
+        make_candle('BTCUSDT', '1h', 9999, 9900, 9950,
+                    datetime(2026, 1, 3, 11, 0, tzinfo=timezone.utc))
+        make_candle('BTCUSDT', '1h', 9999, 9900, 9950,
+                    datetime(2026, 1, 3, 12, 0, tzinfo=timezone.utc))
+
+        snapshot = LiquiditySnapshot.build('BTCUSDT', now)
+
+        self.assertNotIn(9999.0, snapshot.equal_highs)

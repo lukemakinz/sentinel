@@ -243,6 +243,29 @@ class L1ScannerTest(TestCase):
             self.assertIn(field, ctx, f"Missing field: {field}")
 
     @apply_patches
+    def test_s12ai_routes_six_of_nine_candidate_that_strict_l1_rejects(self, *mocks):
+        now = datetime(2026, 1, 1, 14, 0, tzinfo=timezone.utc)
+        with self.settings(AI_CANDIDATE_MIN_CRITERIA=6, AI_CANDIDATE_MIN_STRUCTURAL=2):
+            with patch('l1_filter.scanner.check_killzone', return_value=MOCK_FAIL), \
+                 patch('l1_filter.scanner.check_btc_correlation', return_value=MOCK_FAIL), \
+                 patch('l1_filter.scanner.check_adx', return_value=(False, {'adx_value': 12, 'atr': 50})):
+                self.assertIsNone(self.scanner.scan('BTCUSDT', now=now, strategy=None))
+                ctx = self.scanner.scan('BTCUSDT', now=now, strategy='S12AI')
+        self.assertIsNotNone(ctx)
+        self.assertEqual(ctx['strategy'], 'S12AI')
+        self.assertTrue(ctx['shadow_only'])
+        self.assertEqual(ctx['ai_candidate']['passed_count'], 6)
+        self.assertEqual(ctx['ai_candidate']['total_count'], 9)
+
+    @apply_patches
+    def test_s12ai_quorum_cannot_override_funding_hard_veto(self, *mocks):
+        with patch('l1_filter.scanner.check_funding_rate', return_value=MOCK_FAIL):
+            ctx = self.scanner.scan(
+                'BTCUSDT', now=datetime(2026, 1, 1, 14, 0, tzinfo=timezone.utc),
+                strategy='S12AI')
+        self.assertIsNone(ctx)
+
+    @apply_patches
     def test_requested_s1b_strategy_selects_continuation_profile(self, *mocks):
         with patch('l1_filter.scanner.check_liquidity_sweep', return_value=MOCK_FAIL), \
              patch('l1_filter.scanner.check_choch', return_value=(True, {'type': 'BOS'})):
@@ -263,6 +286,18 @@ class L1ScannerTest(TestCase):
         self.assertIsNotNone(ctx)
         self.assertEqual(ctx['strategy'], 'S1C')
         self.assertEqual(ctx['entry_mode'], 'HYBRID')
+
+    @apply_patches
+    def test_s1cf_clone_can_trade_london_without_changing_s1c(self, *mocks):
+        london = datetime(2026, 1, 1, 8, 0, tzinfo=timezone.utc)
+        with patch('l1_filter.scanner.check_killzone', return_value=MOCK_FAIL):
+            fast = self.scanner.scan('BTCUSDT', now=london, strategy='S1CF')
+            original = self.scanner.scan('BTCUSDT', now=london, strategy='S1C')
+
+        self.assertIsNotNone(fast)
+        self.assertEqual(fast['strategy'], 'S1CF')
+        self.assertEqual(fast['session_window'], 'london')
+        self.assertIsNone(original)
 
     @apply_patches
     def test_requested_s2_selects_flow_momentum_profile(self, *mocks):

@@ -62,7 +62,7 @@ def check_choch(candles: list, direction: str,
 
 
 def check_momentum_divergence(candles: list, direction: str,
-                               symbol: str = None) -> tuple[bool, dict]:
+                               symbol: str = None, now=None) -> tuple[bool, dict]:
     """
     C2: Momentum divergence — RSI or CVD divergence at sweep point.
     Expert improvement: CVD divergence (price lower low + CVD higher low) is
@@ -77,8 +77,10 @@ def check_momentum_divergence(candles: list, direction: str,
             from ingester.models import WhaleCVD
             from django.utils import timezone
             from datetime import timedelta
-            cutoff = timezone.now() - timedelta(hours=8)
-            cvd_values = list(WhaleCVD.objects.filter(symbol=symbol, timestamp__gte=cutoff)
+            as_of = now or timezone.now()
+            cutoff = as_of - timedelta(hours=8)
+            cvd_values = list(WhaleCVD.objects.filter(symbol=symbol, timestamp__gte=cutoff,
+                                                        timestamp__lte=as_of)
                               .order_by('timestamp').values_list('cumulative_delta', flat=True)[-20:])
             if len(cvd_values) >= 10:
                 import numpy as np

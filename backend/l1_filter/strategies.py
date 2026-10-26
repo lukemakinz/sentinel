@@ -33,6 +33,25 @@ STRATEGIES = {
         'gates_c_must':    ['C1'],
         'gates_c_min':     2,
     },
+    'S1CF': {
+        'name':            'SMC Reclaim Fast',
+        'description':     'S1C clone: 15m scans in London and NY, same structural setup',
+        'gates_a_all':     True,
+        'gates_b_must':    ['B1', 'B2'],
+        'gates_b_min':     2,
+        'gates_c_must':    ['C1'],
+        'gates_c_min':     2,
+    },
+    'S1CF_OB': {
+        'name':            'SMC Reclaim Fast + Order Block',
+        'description':     'S1CF clone: B2 uses ATR-normalized, structure-confirmed order blocks '
+                            'as an equal-priority POI alongside displacement FVG, not just a fallback',
+        'gates_a_all':     True,
+        'gates_b_must':    ['B1', 'B2'],
+        'gates_b_min':     2,
+        'gates_c_must':    ['C1'],
+        'gates_c_min':     2,
+    },
     'S2': {
         'name':            'Order Flow',
         'description':     'Whale CVD divergence + OI + funding',
@@ -74,6 +93,11 @@ STRATEGIES = {
         'gates_c_must':    ['C4', 'C7'],
         'gates_c_min':     2,
     },
+    'S12AI': {
+        'name':            'AI Quorum Shadow',
+        'description':     'Configurable evidence quorum routed to AI adjudication (shadow only)',
+        'shadow_only':     True,
+    },
 }
 
 
@@ -90,6 +114,8 @@ def evaluate_strategies(gates_a: dict, gates_b: dict, gates_c: dict,
     passing = []
 
     for strategy_id, cfg in STRATEGIES.items():
+        if cfg.get('shadow_only'):
+            continue
         if cfg.get('alias_for'):
             if cfg['alias_for'] in passing:
                 passing.append(strategy_id)

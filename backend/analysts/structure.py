@@ -71,6 +71,93 @@ def detect_order_blocks(opens, closes, highs, lows, volumes, lookback=30):
     return blocks[:5]  # Top 5 most recent
 
 
+def detect_order_blocks_v2(opens, closes, highs, lows, volumes, lookback=30,
+                            atr=None, displacement_atr_mult=1.5, vol_mult=1.2):
+    """
+    Order blocks, improved:
+    - Displacement normalized by ATR instead of a flat 0.5% threshold.
+    - Requires the displacement to break the prior swing high/low (real BOS),
+      not just move price.
+    - Requires displacement-candle volume >= vol_mult x average volume.
+    - Tracks mitigation since formation: fresh / partial / mitigated,
+      mirroring FVGZone.status in fvg.py (fill_ratio thresholds 0.25 / 0.5).
+
+    `atr` should be the caller's already-computed ATR (single float, e.g.
+    compute_atr(candles)[-1]); if omitted, falls back to mean true range
+    over the whole series (coarser, only for callers that don't have one).
+    """
+    n = len(opens)
+    if n < 5:
+        return []
+
+    if atr is None or atr <= 0:
+        trs = [highs[i] - lows[i] for i in range(n)]
+        atr = sum(trs) / len(trs) if trs else 0.0
+    if atr <= 0:
+        return []
+
+    avg_volume = sum(volumes[-20:]) / min(20, n) if n else 0.0
+    swings = detect_swing_points(list(highs), list(lows), lookback=min(5, n // 4) or 1)
+
+    blocks = []
+    for i in range(1, min(lookback, n - 1)):
+        idx = n - 1 - i
+        if idx + 3 >= n:
+            continue
+
+        disp_volume = max(volumes[idx + 1:idx + 4]) if idx + 4 <= n else volumes[idx + 1]
+        if avg_volume > 0 and disp_volume < vol_mult * avg_volume:
+            continue
+
+        if closes[idx] < opens[idx]:  # bearish candle -> bullish OB
+            move = closes[idx + 3] - closes[idx]
+            if move < displacement_atr_mult * atr:
+                continue
+            # A BOS may only use pivots confirmed before the candidate OB.
+            # Filtering by price (the previous implementation) could select a
+            # swing that occurred later in the series.
+            prior_highs = [p for swing_idx, p, t in swings
+                           if 'H' in t and swing_idx < idx]
+            broke_structure = bool(prior_highs) and closes[idx + 3] > max(prior_highs)
+            if not broke_structure:
+                continue
+            block = {
+                'type': 'bullish_ob', 'top': float(opens[idx]), 'bottom': float(closes[idx]),
+                'strength': float(move / atr),
+            }
+        elif closes[idx] > opens[idx]:  # bullish candle -> bearish OB
+            move = closes[idx] - closes[idx + 3]
+            if move < displacement_atr_mult * atr:
+                continue
+            prior_lows = [p for swing_idx, p, t in swings
+                          if 'L' in t and swing_idx < idx]
+            broke_structure = bool(prior_lows) and closes[idx + 3] < min(prior_lows)
+            if not broke_structure:
+                continue
+            block = {
+                'type': 'bearish_ob', 'top': float(closes[idx]), 'bottom': float(opens[idx]),
+                'strength': float(move / atr),
+            }
+        else:
+            continue
+
+        # Mitigation: how much of the block has price re-entered since formation.
+        depth = max(block['top'] - block['bottom'], 1e-9)
+        max_fill_ratio = 0.0
+        for j in range(idx + 4, n):
+            if block['type'] == 'bullish_ob':
+                intrusion = max(0.0, block['top'] - lows[j])
+            else:
+                intrusion = max(0.0, highs[j] - block['bottom'])
+            max_fill_ratio = max(max_fill_ratio, min(intrusion / depth, 1.0))
+        block['fill_ratio'] = round(max_fill_ratio, 4)
+        block['status'] = ('fresh' if max_fill_ratio < 0.25
+                            else 'partial' if max_fill_ratio < 0.5 else 'mitigated')
+        blocks.append(block)
+
+    return blocks[:5]
+
+
 def detect_fvg(highs, lows, closes, lookback=30):
     """
     Detect Fair Value Gaps (price imbalances).

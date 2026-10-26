@@ -205,6 +205,7 @@ class LiquiditySnapshot:
         recent = list(Candle.objects.filter(
             symbol=symbol, interval='1h', is_closed=True,
             timestamp__gte=now - timedelta(hours=24),
+            timestamp__lt=now,
         ).order_by('timestamp').values_list('high', 'low'))
 
         highs  = [float(h) for h, _ in recent]

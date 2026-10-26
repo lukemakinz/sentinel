@@ -1,3 +1,6 @@
+from datetime import datetime, timezone
+from unittest.mock import patch
+
 from django.test import TestCase
 
 from l1_filter.gates_b import (
@@ -69,6 +72,14 @@ class LiquiditySweepTest(TestCase):
     def test_insufficient_candles_fails(self):
         passed, _ = check_liquidity_sweep(uptrend(5), 'LONG')
         self.assertFalse(passed)
+
+    def test_real_liquidity_snapshot_is_built_at_scan_time(self):
+        as_of = datetime(2026, 1, 5, 14, tzinfo=timezone.utc)
+        with patch('l1_filter.liquidity.LiquiditySnapshot.build') as build:
+            build.return_value.all_levels.return_value = []
+            check_liquidity_sweep(sweep_candles_long(), 'LONG', symbol='BTCUSDT', now=as_of)
+
+        build.assert_called_once_with('BTCUSDT', now=as_of)
 
 
 class FVGOBTest(TestCase):
