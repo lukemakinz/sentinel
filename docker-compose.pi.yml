@@ -6,13 +6,19 @@ version: "3.9"
 
 x-backend-base: &backend-base
   build:
-    context: ./backend
-    dockerfile: Dockerfile.pi
+    # Repo root so the image can see requirements.pi.txt; .dockerignore whitelists.
+    context: .
+    dockerfile: backend/Dockerfile.pi
   volumes:
     - ./backend:/app
     - db_data:/app/db         # SQLite persisted here
   env_file:
     - .env
+  environment:
+    # Parquet archive lives on the persistent volume next to the database.
+    MARKET_ARCHIVE_DIR: /app/db/archive
+    PAPER_FORWARD_DIR: /app/db/paper_forward
+    PAPER_FORWARD_CACHE: /app/db/binance_cache
   depends_on:
     redis:
       condition: service_healthy
@@ -52,8 +58,12 @@ services:
       - db_data:/app/db
       - static_files:/app/staticfiles
 
+  # Opt-in only (--profile celery): Beat would also run the legacy L1->L2
+  # pipeline, whose agents call AI outside the daily budget. The ingester
+  # already runs OI polling, shadow, setup search and maintenance itself.
   celery_worker:
     <<: *backend-base
+    profiles: ["celery"]
     command: >
       celery -A sentinel worker
         --loglevel=info
@@ -67,6 +77,7 @@ services:
 
   celery_beat:
     <<: *backend-base
+    profiles: ["celery"]
     command: >
       celery -A sentinel beat
         --loglevel=info
@@ -85,6 +96,14 @@ services:
         condition: service_started
       redis:
         condition: service_healthy
+
+  # Separate process so feed-stale alerts still fire if the ingester dies.
+  telegram_bot:
+    <<: *backend-base
+    command: python manage.py run_telegram_bot
+    depends_on:
+      backend:
+        condition: service_started
 
   frontend:
     build:

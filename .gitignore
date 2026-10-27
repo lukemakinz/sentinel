@@ -83,3 +83,7 @@ coverage.xml
 
 # ── Dev scripts runtime ───────────────────────────────────────────────────────
 .sentinel-pids
+
+# Long-term market data archive (Parquet); back up separately
+data/archive/
+data/paper_forward/

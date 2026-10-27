@@ -24,15 +24,15 @@ docker compose version >/dev/null 2>&1 || DC="docker-compose"
 if [ ! -f .env ]; then
   warn ".env not found — creating from .env.example"
   cp .env.example .env
-  die "Fill in .env (ANTHROPIC_API_KEY, BINANCE_API_KEY) then re-run: ./deploy-pi.sh"
+  die "Fill in .env (DJANGO_SECRET_KEY, OPENAI_API_KEY, TELEGRAM_BOT_TOKEN) then re-run: ./deploy-pi.sh"
 fi
 
 if grep -q "zmien-na-losowy-klucz" .env; then
   die "DJANGO_SECRET_KEY not set in .env. Generate one: python3 -c \"import secrets; print(secrets.token_hex(32))\""
 fi
 
-if grep -q "sk-ant-\.\.\." .env; then
-  warn "ANTHROPIC_API_KEY looks like placeholder — AI agents won't work"
+if ! grep -qE "^OPENAI_API_KEY=sk-" .env; then
+  warn "OPENAI_API_KEY missing — AI adjudicator stays off (shadow baseline still runs)"
 fi
 
 # ── Get Pi IP ─────────────────────────────────────────────────────────────────

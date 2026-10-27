@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'dashboard_api',
     'carry_monitor',
     'scalp_monitor',
+    'telegram_bot',
 ]
 
 MIDDLEWARE = [
@@ -167,6 +168,14 @@ BINANCE_API_KEY = os.environ.get('BINANCE_API_KEY', '')
 BINANCE_API_SECRET = os.environ.get('BINANCE_API_SECRET', '')
 ANTHROPIC_API_KEY = _secret_from_environment_or_project_env('ANTHROPIC_API_KEY')
 OPENAI_API_KEY = _secret_from_environment_or_project_env('OPENAI_API_KEY')
+TELEGRAM_BOT_TOKEN = _secret_from_environment_or_project_env('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = _secret_from_environment_or_project_env('TELEGRAM_CHAT_ID')
+TELEGRAM_ALERT_STATUSES = set(filter(None, os.environ.get(
+    'TELEGRAM_ALERT_STATUSES', 'WAIT_RETEST,WAIT_MSS').split(',')))
+TELEGRAM_DAILY_SUMMARY_HOUR_UTC = int(os.environ.get('TELEGRAM_DAILY_SUMMARY_HOUR_UTC', '7'))
+FEED_STALE_SECONDS = int(os.environ.get('FEED_STALE_SECONDS', '300'))
+SETUP_SEARCH_ENABLED = os.environ.get('SETUP_SEARCH_ENABLED', 'True').lower() in ('true', '1')
+SETUP_SEARCH_MAX_SYMBOLS = int(os.environ.get('SETUP_SEARCH_MAX_SYMBOLS', '60'))
 AI_ADJUDICATOR_SHADOW_ENABLED = os.environ.get(
     'AI_ADJUDICATOR_SHADOW_ENABLED', 'False').lower() in ('true', '1')
 AI_ADJUDICATOR_EXECUTION_ENABLED = False  # safety invariant; S12AI is research-only
@@ -203,6 +212,12 @@ ORDER_BOOK_STREAM_ENABLED = os.environ.get(
 ORDER_BOOK_SNAPSHOT_INTERVAL_SECONDS = float(os.environ.get(
     'ORDER_BOOK_SNAPSHOT_INTERVAL_SECONDS', '5'))
 ORDER_BOOK_RETENTION_DAYS = int(os.environ.get('ORDER_BOOK_RETENTION_DAYS', '14'))
+AGGTRADE_RETENTION_DAYS = int(os.environ.get('AGGTRADE_RETENTION_DAYS', '14'))
+# Long-term Parquet copy of order book / aggTrades; pruning waits for it.
+PAPER_FORWARD_DIR = Path(os.environ.get('PAPER_FORWARD_DIR', str(BASE_DIR.parent / 'data' / 'paper_forward')))
+PAPER_FORWARD_CACHE = os.environ.get('PAPER_FORWARD_CACHE', '/tmp/sentinel-scalp-cache')
+PAPER_FORWARD_ENABLED = os.environ.get('PAPER_FORWARD_ENABLED', 'True').lower() in ('true', '1')
+MARKET_ARCHIVE_DIR = Path(os.environ.get('MARKET_ARCHIVE_DIR', str(BASE_DIR.parent / 'data' / 'archive')))
 OPEN_INTEREST_POLL_SECONDS = int(os.environ.get('OPEN_INTEREST_POLL_SECONDS', '300'))
 AGGTRADE_FLUSH_SECONDS = float(os.environ.get('AGGTRADE_FLUSH_SECONDS', '1'))
 AUCTION_SHADOW_ENABLED = os.environ.get(
@@ -302,6 +317,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'ingester.prune_order_book_snapshots',
         'schedule': crontab(hour=2, minute=30),
     },
+    'prune-agg-trades': {
+        'task': 'ingester.prune_agg_trades',
+        'schedule': crontab(hour=2, minute=40),
+    },
     'update-news-calendar': {
         'task': 'risk.update_news_calendar',
         'schedule': 21600.0,  # every 6 hours
@@ -321,6 +340,11 @@ CELERY_BEAT_SCHEDULE = {
     'resolve-auction-shadow-plans': {
         'task': 'l2_agents.resolve_auction_shadow_plans',
         'schedule': 60.0,
+    },
+    'setup-search-cycle': {
+        'task': 'l1_filter.run_setup_search_cycle',
+        # At each 15m close; journal keys make overlaps with the local loop harmless.
+        'schedule': crontab(minute='0,15,30,45'),
     },
     # Risk resets
     'daily-risk-reset': {

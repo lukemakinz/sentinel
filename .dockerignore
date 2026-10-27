@@ -1,0 +1,9 @@
+# Pi backend image: whitelist only what the build needs.
+*
+!requirements.pi.txt
+!backend
+backend/db.sqlite3*
+backend/db
+backend/staticfiles
+**/__pycache__
+**/*.pyc

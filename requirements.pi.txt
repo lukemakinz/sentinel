@@ -17,6 +17,9 @@ aiohttp>=3.9,<4.0
 # Data analysis (no TA-Lib — not used in codebase)
 numpy>=1.26,<2.0
 pandas>=2.2,<3.0
+# Same version as development so indicator values match the backtests exactly.
+TA-Lib==0.6.8
+pyarrow==21.0.0
 
 # LLM providers — Auction Intelligence defaults explicitly to OpenAI
 anthropic>=0.40,<1.0
