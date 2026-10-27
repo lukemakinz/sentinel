@@ -74,3 +74,39 @@ def test_weekly_holdings_drift_and_rebalance_turnover_uses_actual_notional():
     assert result.summary['rebalances'] == 2
     assert abs(result.summary['fees_paid'] - 1.2) < 1e-9
     assert abs(result.summary['final_equity'] - 138.8) < 1e-9
+
+
+def _flat_run(eth=(100.0, 100.0, 100.0), **kwargs):
+    index = pd.date_range('2026-01-05', periods=3, freq='1D', tz='UTC')
+    panel = pd.DataFrame({'BTCUSDT': [100.0] * 3, 'ETHUSDT': list(eth),
+                          'SOLUSDT': [100.0] * 3}, index=index)
+    config = BookASmallTsmomConfig(min_position_usd=0.01, taker_fee_bps=0.0,
+                                   include_btc_in_universe=False)
+    with patch('backtest.book_a_portfolio_sim.build_daily_panel', return_value=panel), \
+            patch('backtest.book_a_portfolio_sim.target_weights_for_day',
+                  return_value={'ETHUSDT': 0.5}):
+        return index, simulate_book_a({}, config, index[0], index[-1] + pd.Timedelta(days=1),
+                                      initial_capital=100.0, **kwargs)
+
+
+def test_long_holdings_pay_funding_settled_inside_each_day():
+    index, _ = _flat_run()
+    rates = pd.Series([0.001, 0.001, 0.001],
+                      index=[index[1] - pd.Timedelta(hours=8), index[1], index[2]])
+    _, result = _flat_run(funding={'ETHUSDT': rates}, funding_multiplier=2.0)
+
+    # $50 of ETH held after the first rebalance; three settlements at 0.1% x2.
+    assert abs(result.summary['funding_paid'] - 0.30) < 1e-9
+    assert abs(result.summary['final_equity'] - 99.70) < 1e-9
+
+
+def test_quantities_round_to_contract_steps_and_tiny_targets_vanish():
+    rising = (100.0, 110.0, 110.0)
+    _, exact = _flat_run(eth=rising)
+    _, rounded = _flat_run(eth=rising, quantity_steps={'ETHUSDT': 0.3})
+    _, vanished = _flat_run(eth=rising, quantity_steps={'ETHUSDT': 2.0})
+
+    # Target 0.5 ETH: exact earns $5, 0.6 ETH (2 x 0.3) earns $6, step 2.0 -> 0 ETH.
+    assert abs(exact.summary['net_pnl'] - 5.0) < 1e-9
+    assert abs(rounded.summary['net_pnl'] - 6.0) < 1e-9
+    assert abs(vanished.summary['net_pnl']) < 1e-9

@@ -45,7 +45,16 @@ def simulate_book_a(
     end: pd.Timestamp,
     initial_capital: float = 250.0,
     risk: BookARiskOverlayConfig | None = None,
+    funding: dict[str, pd.Series] | None = None,
+    funding_multiplier: float = 1.0,
+    quantity_steps: dict[str, float] | None = None,
 ) -> BookASimResult:
+    """``funding``/``quantity_steps`` default off so frozen results are unchanged.
+
+    ``funding`` maps symbol to settled perpetual funding rates; longs pay
+    positive rates on their notional at each settlement inside the day.
+    ``quantity_steps`` rounds rebalance quantities to exchange contract sizes.
+    """
     full_panel = build_daily_panel(minutes_by_symbol, config)
     panel = full_panel.loc[(full_panel.index >= start) & (full_panel.index < end)]
     if panel.empty:
@@ -60,6 +69,7 @@ def simulate_book_a(
     equity = float(initial_capital)
     peak_equity = initial_capital
     fees_paid = 0.0
+    funding_paid = 0.0
     rebalance_count = 0
     equity_points = {}
     daily_pnl = {}
@@ -75,8 +85,21 @@ def simulate_book_a(
         rebalance_set = set(rebalance_candidates)
     prev_equity = equity
 
+    previous_day = None
     for i, day in enumerate(panel.index):
         closes = panel.loc[day]
+        if funding and quantities:
+            window_start = previous_day if previous_day is not None else day - pd.Timedelta(days=1)
+            for symbol, quantity in sorted(quantities.items()):
+                rates = funding.get(symbol)
+                if rates is None or rates.empty:
+                    continue
+                settled = rates.loc[(rates.index > window_start) & (rates.index <= day)]
+                if len(settled):
+                    payment = quantity * float(closes[symbol]) * float(settled.sum()) * funding_multiplier
+                    cash -= payment
+                    funding_paid += payment
+        previous_day = day
         equity = cash
         for symbol, quantity in quantities.items():
             price = float(closes[symbol])
@@ -119,8 +142,15 @@ def simulate_book_a(
                 current_notional = quantities.get(symbol, 0.0) * price
                 target_notional = target.get(symbol, 0.0) * equity
                 turnover_usd += abs(target_notional - current_notional)
-                if target_notional > 0:
-                    target_quantities[symbol] = target_notional / price
+                quantity = target_notional / price if target_notional > 0 else 0.0
+                step = (quantity_steps or {}).get(symbol)
+                if step:
+                    quantity = round(quantity / step) * step
+                    target_notional = quantity * price
+                    turnover_usd += abs(target_notional - current_notional) - abs(
+                        target.get(symbol, 0.0) * equity - current_notional)
+                if quantity > 0:
+                    target_quantities[symbol] = quantity
                 cash += current_notional - target_notional
             fee = turnover_usd * (config.taker_fee_bps / 10000.0)
             fees_paid += fee
@@ -149,6 +179,7 @@ def simulate_book_a(
         'final_equity': float(equity),
         'net_pnl': net,
         'fees_paid': float(fees_paid),
+        'funding_paid': float(funding_paid),
         'rebalances': rebalance_count,
         'calendar_days': days,
         'mean_calendar_day_pnl': net / days,
