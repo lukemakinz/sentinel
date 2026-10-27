@@ -122,13 +122,31 @@ def check_data_freshness():
 
 @shared_task(name='ingester.prune_order_book_snapshots')
 def prune_order_book_snapshots():
-    """Keep the rolling L2 history bounded; long-term research uses exports."""
+    """Archive complete days to Parquet, then keep the live L2 window bounded."""
     from .models import OrderBookSnapshot
 
+    from .archive import archive_pending, safe_prune_cutoff
+
     retention_days = max(1, int(getattr(settings, 'ORDER_BOOK_RETENTION_DAYS', 14)))
-    cutoff = timezone.now() - timedelta(days=retention_days)
+    archive_pending('order_book')
+    cutoff = safe_prune_cutoff('order_book', timezone.now() - timedelta(days=retention_days))
     deleted, _ = OrderBookSnapshot.objects.filter(timestamp__lt=cutoff).delete()
     logger.info(f"Pruned {deleted} order-book snapshots older than {retention_days} days")
+    return {'deleted': deleted, 'retention_days': retention_days}
+
+
+@shared_task(name='ingester.prune_agg_trades')
+def prune_agg_trades():
+    """Live aggTrades only feed 24h whale thresholds; archives hold history."""
+    from .models import AggTrade
+
+    from .archive import archive_pending, safe_prune_cutoff
+
+    retention_days = max(2, int(getattr(settings, 'AGGTRADE_RETENTION_DAYS', 14)))
+    archive_pending('agg_trades')
+    cutoff = safe_prune_cutoff('agg_trades', timezone.now() - timedelta(days=retention_days))
+    deleted, _ = AggTrade.objects.filter(timestamp__lt=cutoff).delete()
+    logger.info(f"Pruned {deleted} aggTrades older than {retention_days} days")
     return {'deleted': deleted, 'retention_days': retention_days}
 
 

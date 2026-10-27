@@ -5,6 +5,7 @@ Connects to wss://fstream.binance.com for klines, funding rate, and liquidation 
 import asyncio
 import json
 import logging
+import time
 from datetime import datetime, timezone
 from decimal import Decimal
 
@@ -430,6 +431,61 @@ class BinanceWebSocketClient:
             except asyncio.TimeoutError:
                 continue
 
+    async def _run_setup_search_loop(self):
+        """Local setup-search journal: 30 s after every closed 15m bar."""
+        if not getattr(settings, 'SETUP_SEARCH_ENABLED', True):
+            return
+        from l1_filter.tasks import run_setup_search_cycle
+
+        while self.running:
+            now = time.time()
+            wait = 900 - (now % 900) + 30
+            try:
+                await asyncio.wait_for(self._stop_event.wait(), timeout=wait)
+                return
+            except asyncio.TimeoutError:
+                pass
+            try:
+                result = await asyncio.to_thread(run_setup_search_cycle.run)
+                logger.info('Setup search cycle: %s', result)
+            except Exception as exc:
+                logger.error('Setup search loop error: %s', exc, exc_info=True)
+
+    async def _run_maintenance_loop(self):
+        """Hourly whale threshold; daily pruning (02:30 UTC). Celery-free."""
+        from .tasks import (
+            prune_agg_trades,
+            prune_order_book_snapshots,
+            recalculate_whale_threshold,
+        )
+
+        last_prune_day = last_paper_day = None
+        while self.running:
+            try:
+                await asyncio.to_thread(recalculate_whale_threshold.run)
+                now = datetime.now(timezone.utc)
+                # Only inside 02:00-03:00 UTC, never as a side effect of a restart.
+                if now.hour == 2 and last_prune_day != now.date():
+                    await asyncio.to_thread(prune_order_book_snapshots.run)
+                    await asyncio.to_thread(prune_agg_trades.run)
+                    last_prune_day = now.date()
+                # Daily archives for yesterday are usually published by 03:00 UTC.
+                if (now.hour >= 3 and last_paper_day != now.date()
+                        and getattr(settings, 'PAPER_FORWARD_ENABLED', True)):
+                    from backtest.paper_forward_ab import run_paper_forward
+                    report = await asyncio.to_thread(
+                        run_paper_forward, settings.PAPER_FORWARD_CACHE)
+                    logger.info('Paper-forward: %s %s days', report['status'],
+                                report.get('forward_days'))
+                    last_paper_day = now.date()
+            except Exception as exc:
+                logger.error('Maintenance loop error: %s', exc, exc_info=True)
+            try:
+                await asyncio.wait_for(self._stop_event.wait(), timeout=3600)
+                return
+            except asyncio.TimeoutError:
+                continue
+
     async def connect(self):
         """Connect routed market/public streams and process them concurrently."""
         self.running = True
@@ -440,6 +496,8 @@ class BinanceWebSocketClient:
         ]
         consumers.append(self._poll_open_interest())
         consumers.append(self._run_shadow_pipeline())
+        consumers.append(self._run_setup_search_loop())
+        consumers.append(self._run_maintenance_loop())
         consumers.append(self._flush_aggtrade_loop())
         await asyncio.gather(*consumers)
 
