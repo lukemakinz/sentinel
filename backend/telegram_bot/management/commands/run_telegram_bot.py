@@ -60,6 +60,9 @@ class Command(BaseCommand):
                     process_update(update, allowed, lambda text, chat: send_message(text, chat))
                 if allowed and time.monotonic() >= next_watchdog:
                     watchdog.check()
+                    # Independent of the ingester: stale data -> CLOSE_ONLY, DD -> HALT.
+                    from risk.trading_state import evaluate_guards
+                    evaluate_guards()
                     next_watchdog = time.monotonic() + 60
                 now = timezone.now()
                 if allowed and now.hour == summary_hour and last_summary_day != now.date():

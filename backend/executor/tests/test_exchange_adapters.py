@@ -129,3 +129,18 @@ class ExchangeAdapterTest(TestCase):
         })
         self.assertFalse(result.ok)
         self.assertNotIn('Unsupported KuCoin futures symbol', result.payload.get('error', ''))
+
+
+class ClientOrderIdTest(TestCase):
+    def test_supplied_client_oid_is_sent_so_retries_are_idempotent(self):
+        from unittest.mock import patch
+
+        WatchedPair.objects.create(symbol='BTCUSDT', active=True)
+        adapter = KuCoinFuturesAdapter()
+        params = {'symbol': 'BTCUSDT', 'side': 'LONG', 'entry_price': 100000, 'quantity': 0.01,
+                  'leverage': 3, 'order_type': 'MARKET', 'client_oid': 'sentinel-42'}
+        with patch.object(adapter, '_request') as request:
+            adapter.place_order(params)
+            adapter.place_order(params)
+        sent = [call.args[2]['clientOid'] for call in request.call_args_list]
+        self.assertEqual(sent, ['sentinel-42', 'sentinel-42'])

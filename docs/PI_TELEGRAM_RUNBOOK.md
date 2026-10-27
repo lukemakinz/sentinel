@@ -52,6 +52,19 @@ CVD i OI potrzebują kilku minut, zanim jakość danych pozwoli na analizy.
 | `/raport` | dziennik setupów (ścisłe RR≥1:3 i wszystkie) + shadow AI vs baseline |
 | `/koszt` | AI dziś i w 7 dni |
 | `/pauza`, `/wznow` | wstrzymuje / wznawia shadow, AI i dziennik (feed zbiera dalej) |
+| `/paper` | paper-forward Book A+B od 2026-10-27 |
+| `/stop` | awaryjny HALT handlu; odblokowanie wyłącznie z CLI |
+
+### Stany handlu
+
+`NORMAL` → `CAUTION` (ryzyko ×0,5) → `DEFENSIVE` (×0,25) → `CLOSE_ONLY` → `HALT`.
+System sam tylko podnosi stan: nieaktualny feed → `CLOSE_ONLY` (wraca sam, gdy
+dane płyną), DD ≥ 10% lub rozbieżność z giełdą → `HALT` z ręcznym odblokowaniem:
+
+```bash
+python manage.py trading_state                       # podgląd
+python manage.py trading_state --release NORMAL --reason "sprawdzone: ..."
+```
 
 Alerty automatyczne: nowy `WAIT_RETEST` i `WAIT_MSS` (zmienna
 `TELEGRAM_ALERT_STATUSES`), wynik zaalertowanego setupu, feed nieaktualny > 5 min

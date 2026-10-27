@@ -100,3 +100,42 @@ class ExecutorTaskTest(TestCase):
         closed_order = ExchangeClosedOrder.objects.get(order_id='done-1')
         self.assertEqual(closed_order.symbol, 'BTCUSDT')
         self.assertEqual(closed_order.status, 'done')
+
+
+class LiveReconciliationTests(TestCase):
+    def _adapter(self, mock_get_adapter, exchange_positions):
+        adapter = mock_get_adapter.return_value
+        ok = ExchangeOrderResult(True, {'code': '200000', 'data': {}})
+        for method in ('get_account_overview', 'get_positions', 'get_open_orders',
+                       'get_recent_fills', 'get_recent_closed_orders'):
+            getattr(adapter, method).return_value = ok
+        adapter.normalize_positions.return_value = exchange_positions
+        adapter.normalize_open_orders.return_value = []
+        adapter.normalize_recent_fills.return_value = []
+        adapter.normalize_recent_closed_orders.return_value = []
+
+    @override_settings(LIVE_TRADING_ENABLED=True)
+    @patch('executor.exchange_adapters.get_exchange_adapter')
+    def test_unknown_exchange_position_halts_instead_of_being_adopted(self, mock_get_adapter):
+        from risk.trading_state import current
+        self._adapter(mock_get_adapter, [{
+            'symbol': 'BTCUSDT', 'side': 'LONG', 'quantity_base': 0.012, 'entry_price': 68000.0,
+            'mark_price': 68500.0, 'position_size_usd': 816.0, 'unrealized_pnl': 0.0, 'leverage': 5}])
+        result = sync_live_exchange_state()
+
+        self.assertTrue(result['payload']['reconciliation']['halted'])
+        self.assertEqual(current().state, 'HALT')
+
+    @override_settings(LIVE_TRADING_ENABLED=True)
+    @patch('executor.exchange_adapters.get_exchange_adapter')
+    def test_matching_books_do_not_halt(self, mock_get_adapter):
+        from risk.trading_state import current
+        Position.objects.create(symbol='BTCUSDT', side='LONG', entry_price=68000, quantity=0.012,
+                                remaining_quantity=0.012, position_size_usd=816, stop_loss=67000)
+        self._adapter(mock_get_adapter, [{
+            'symbol': 'BTCUSDT', 'side': 'LONG', 'quantity_base': 0.012, 'entry_price': 68000.0,
+            'mark_price': 68500.0, 'position_size_usd': 816.0, 'unrealized_pnl': 0.0, 'leverage': 5}])
+        result = sync_live_exchange_state()
+
+        self.assertEqual(result['payload']['reconciliation']['mismatches'], [])
+        self.assertEqual(current().state, 'NORMAL')

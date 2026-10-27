@@ -252,6 +252,13 @@ AUCTION_SHADOW_CYCLE_SECONDS = int(os.environ.get('AUCTION_SHADOW_CYCLE_SECONDS'
 AUCTION_SHADOW_RESOLVE_SECONDS = int(os.environ.get('AUCTION_SHADOW_RESOLVE_SECONDS', '60'))
 EXCHANGE_NAME = os.environ.get('EXCHANGE_NAME', 'kucoin').lower()
 LIVE_TRADING_ENABLED = os.environ.get('LIVE_TRADING_ENABLED', 'False').lower() in ('true', '1')
+# Not an operator switch: becomes True in code only once the adapter places a
+# resting stop on the exchange for every entry. Live submits are refused until then.
+EXCHANGE_SIDE_STOPS_IMPLEMENTED = False
+PORTFOLIO_MAX_OPEN_RISK_PCT = float(os.environ.get('PORTFOLIO_MAX_OPEN_RISK_PCT', '0.5'))
+PORTFOLIO_MAX_NET_BETA_X = float(os.environ.get('PORTFOLIO_MAX_NET_BETA_X', '1.5'))
+PORTFOLIO_MAX_GROSS_X = float(os.environ.get('PORTFOLIO_MAX_GROSS_X', '3.0'))
+TRADING_STATE_HALT_DRAWDOWN_PCT = float(os.environ.get('TRADING_STATE_HALT_DRAWDOWN_PCT', '10'))
 KUCOIN_API_KEY = os.environ.get('KUCOIN_API_KEY', '')
 KUCOIN_API_SECRET = os.environ.get('KUCOIN_API_SECRET', '')
 KUCOIN_API_PASSPHRASE = os.environ.get('KUCOIN_API_PASSPHRASE', '')

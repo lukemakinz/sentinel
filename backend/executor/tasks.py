@@ -63,10 +63,15 @@ def process_signal(consensus_signal_id):
     elif mode in {'semi_auto', 'full_auto'}:
         if not settings.LIVE_TRADING_ENABLED:
             logger.warning("Live trading mode requested but LIVE_TRADING_ENABLED is false")
+        elif not getattr(settings, 'EXCHANGE_SIDE_STOPS_IMPLEMENTED', False):
+            # Fail closed: the adapter submits only the entry. Without a resting
+            # stop on the exchange a crash would leave the position unprotected.
+            logger.error("Live order refused: exchange-side stop orders are not implemented")
         else:
             from .exchange_adapters import get_exchange_adapter
             adapter = get_exchange_adapter()
-            exchange_result = adapter.place_order(result)
+            # Deterministic id: a retried submit cannot open the position twice.
+            exchange_result = adapter.place_order({**result, 'client_oid': f'sentinel-{signal.id}'})
             logger.info(f"Live order submit {signal.symbol}: ok={exchange_result.ok} payload={exchange_result.payload}")
     else:
         logger.info(f"Mode '{mode}' — no auto execution")
@@ -191,6 +196,12 @@ def sync_live_exchange_state():
         'normalized_closed_orders': adapter.normalize_recent_closed_orders(closed_orders.payload) if closed_orders.ok else [],
     }
     normalized_positions = payload['normalized_positions']
+    if positions.ok:
+        # Compare before mirroring: an unexplained difference halts trading.
+        from .reconcile import halt_on_mismatch, local_intended_positions, reconcile
+        mismatches = reconcile(local_intended_positions(), normalized_positions)
+        payload['reconciliation'] = {'mismatches': mismatches,
+                                     'halted': halt_on_mismatch(mismatches)}
     normalized_open_orders = payload['normalized_open_orders']
     normalized_fills = payload['normalized_fills']
     normalized_closed_orders = payload['normalized_closed_orders']

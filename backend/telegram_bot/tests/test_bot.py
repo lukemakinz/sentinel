@@ -84,3 +84,14 @@ class FeedWatchdogTests(TestCase):
         self.assertEqual(len(sent), 2)
         self.assertIn('order_book', sent[0])
         self.assertIn('znowu', sent[1])
+
+
+class TelegramTradingStateTests(TestCase):
+    def test_stop_halts_and_status_shows_state(self):
+        from risk.trading_state import current, release
+
+        self.assertIn('HALT', handle('/stop'))
+        self.assertEqual(current().state, 'HALT')
+        self.assertIn('stan handlu: HALT', handle('/status'))
+        # Telegram cannot lift it; only the operator CLI path can.
+        self.assertFalse(release('NORMAL', 'x', by='system'))

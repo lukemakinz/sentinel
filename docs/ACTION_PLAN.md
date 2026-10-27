@@ -7,17 +7,17 @@ Raportujemy $/dzień (i dystans do $5/dzień) **oraz** zwrot/DD; skalowanie wg z
 
 | # | Krok | Kryterium „gotowe” |
 |---|---|---|
-| 1 | Archiwum order booka i aggTrade przed pruningiem (Parquet, manifest, sha256, raport luk) | prune usuwa tylko dni z poprawnym archiwum |
-| 2 | Test OOS 2026-09-01 → ostatnia pełna doba: zamrożone Book A, FCM_SAFE25, BENCH_AB_R2 + Deflated Sharpe (liczba prób = liczba badań) | raport w `docs/research/oos_2026_09_10/` |
-| 3 | Deterministyczna bramka kandydatów przed OpenAI | AI wołane tylko dla kandydata; testy; koszt/dzień w raporcie |
+| ✅ 1 | Archiwum order booka i aggTrade przed pruningiem (Parquet, manifest, sha256, raport luk) | prune usuwa tylko dni z poprawnym archiwum |
+| ✅ 2 | Test OOS 2026-09-01 → ostatnia pełna doba: zamrożone Book A, FCM_SAFE25, BENCH_AB_R2 + Deflated Sharpe (liczba prób = liczba badań) | raport w `docs/research/oos_2026_09_10/` |
+| ✅ 3 | Deterministyczna bramka kandydatów przed OpenAI | AI wołane tylko dla kandydata; testy; koszt/dzień w raporcie |
 
 ## Następnie
 
-4. Silnik ekspozycji portfela (alty = zakład na BTC) + stany NORMAL/CAUTION/CLOSE_ONLY/HALT, idempotentne zlecenia, rekoncyliacja.
+4. ✅ Silnik ekspozycji portfela (bety z danych, netto ze znakiem, ryzyko do stopów) + stany NORMAL…HALT, idempotentne `clientOid`, rekoncyliacja → HALT. Live odmawia zleceń, dopóki adapter nie stawia stopów po stronie giełdy (`EXCHANGE_SIDE_STOPS_IMPLEMENTED`).
 5. Kontrfaktyczne bliźniaki w shadow (market vs limit; P1/P2 po implementacji w resolverze).
 6. `ALT_BREADTH_BINANCE` z historycznym składem koszyka; test, czy poprawia Book A.
 7. Rejestr hipotez z budżetem (1–2/mies.) i Deflated Sharpe w każdym raporcie.
-8. Codzienny paper-forward z CLI (Book A, FCM).
+8. ✅ Codzienny paper-forward z CLI (BENCH_AB_R2; FCM pominięty — epizody miesięczne).
 
 ## Później (gdy będą setki oznaczonych przypadków)
 

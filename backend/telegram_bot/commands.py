@@ -13,6 +13,7 @@ HELP = (
     '/koszt — wydatki AI dziś i w 7 dni\n'
     '/paper — paper-forward Book A+B od 2026-10-27\n'
     '/pauza — wstrzymaj analizy, AI i dziennik\n'
+    '/stop — awaryjny HALT handlu (odblokowanie tylko z CLI)\n'
     '/wznow — wznów\n'
     'Handel na żywo nie da się włączyć z telefonu.'
 )
@@ -37,7 +38,10 @@ def cmd_status(_args) -> str:
     open_setups = SetupObservation.objects.filter(
         kind='SETUP', outcome__in=['OPEN', 'FILLED']).count()
     feed = ', '.join(f'{k} {_age(v)}' for k, v in ages.items())
+    from risk.trading_state import current as trading_state
+    state = trading_state()
     return '\n'.join([
+        f"stan handlu: {state.state}{' 🔒' if state.manual_unlock else ''} — {state.reason or 'OK'}",
         f"{'⏸ PAUZA' if system_paused() else '▶️ działa'} | feed {'🚨 ' + ','.join(stale) if stale else 'OK'}",
         f'wiek danych: {feed}',
         f"AI dziś: ${budget['spent_today_usd']:.4f} / ${budget['daily_budget_usd']:.2f}",
@@ -112,6 +116,14 @@ def cmd_pause(_args, by='telegram') -> str:
     return '⏸ Wstrzymano: shadow, AI i dziennik. Feed dalej zbiera dane. /wznow aby wznowić.'
 
 
+def cmd_stop(_args, by='telegram') -> str:
+    from risk.trading_state import escalate
+
+    escalate('HALT', 'Operator /stop from Telegram', by=by, manual_unlock=True)
+    return ('🛑 HALT. Nowe wejścia zablokowane. Odblokowanie: '
+            'manage.py trading_state --release NORMAL --reason "..."')
+
+
 def cmd_resume(_args, by='telegram') -> str:
     from risk.models import ControlFlag
 
@@ -122,7 +134,7 @@ def cmd_resume(_args, by='telegram') -> str:
 COMMANDS = {
     '/start': lambda _a: HELP, '/help': lambda _a: HELP,
     '/status': cmd_status, '/scan': cmd_scan, '/raport': cmd_report,
-    '/koszt': cmd_cost, '/paper': cmd_paper, '/pauza': cmd_pause, '/wznow': cmd_resume,
+    '/koszt': cmd_cost, '/paper': cmd_paper, '/pauza': cmd_pause, '/stop': cmd_stop, '/wznow': cmd_resume,
 }
 
 

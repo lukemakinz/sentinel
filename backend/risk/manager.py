@@ -22,6 +22,13 @@ class RiskManager:
         Evaluate whether a trade should be taken.
         Returns (approved, trade_params) or (False, reason).
         """
+        # Operating state first: CLOSE_ONLY/HALT admit no new risk at all.
+        from .trading_state import current as trading_state, risk_multiplier
+        state = trading_state()
+        state_multiplier = risk_multiplier(state)
+        if state_multiplier <= 0:
+            return False, {'reason': f'Trading state {state.state}: {state.reason}'}
+
         # Kill switch check
         allowed, reason = check_kill_switches(symbol, side)
         if not allowed:
@@ -40,7 +47,7 @@ class RiskManager:
         balance = self._get_balance()
         risk_pct = settings.MAX_RISK_PER_TRADE
         multiplier = get_position_size_multiplier()
-        effective_risk = risk_pct * multiplier
+        effective_risk = risk_pct * multiplier * state_multiplier
 
         # Tier-based sizing
         if tier == 'HIGH_CONVICTION':
@@ -86,8 +93,26 @@ class RiskManager:
             'tier': tier,
         }
 
+        # Portfolio view: alts move together, so check the whole book, not the trade.
+        from .exposure import (
+            check_new_trade, estimate_betas, legs_from_open_positions, proposed_leg,
+        )
+        betas = estimate_betas([symbol])
+        ok, exposure_reason, after = check_new_trade(
+            legs_from_open_positions(), proposed_leg(trade_params, betas[symbol]['beta']),
+            self._get_equity())
+        if not ok:
+            return False, {'reason': f'Portfolio exposure: {exposure_reason}', 'exposure': after}
+        trade_params['exposure_after'] = after
+        trade_params['trading_state'] = state.state
+
         logger.info(f"✅ Trade approved: {symbol} {side} size=${size:.2f} SL={sl:.2f}")
         return True, trade_params
+
+    def _get_equity(self):
+        from executor.models import AccountState
+        state = AccountState.objects.order_by('-updated_at').first()
+        return float(state.equity) if state else float(settings.INITIAL_BALANCE)
 
     def _get_balance(self):
         """Get current account balance."""

@@ -125,7 +125,7 @@ class KuCoinFuturesAdapter(BaseExchangeAdapter):
             return ExchangeOrderResult(False, {'error': f"Unsupported KuCoin futures symbol: {trade_params['symbol']}"})
         contracts = self._contracts_from_quantity(float(trade_params.get('quantity', 0.0)), contract['contract_size'])
         payload = {
-            'clientOid': str(uuid.uuid4()),
+            'clientOid': str(trade_params.get('client_oid') or uuid.uuid4()),
             'symbol': contract['symbol'],
             'marginMode': str(trade_params.get('margin_mode', 'isolated')).upper(),
             'leverage': int(trade_params.get('leverage', settings.MAX_LEVERAGE)),

@@ -35,6 +35,8 @@ class RiskEvent(models.Model):
         ('POSITION_OPENED', 'Position Opened'),
         ('POSITION_CLOSED', 'Position Closed'),
         ('DAILY_PORTFOLIO_STOP', 'Daily Portfolio Stop'),
+        ('STATE_CHANGE', 'Trading State Change'),
+        ('RECONCILIATION', 'Exchange Reconciliation Mismatch'),
     ]
 
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -75,3 +77,21 @@ class ControlFlag(models.Model):
 
 def system_paused() -> bool:
     return ControlFlag.is_enabled('paused')
+
+
+class TradingState(models.Model):
+    """Single-row operating state that gates new entries and sizes risk.
+
+    Severity only rises automatically. A state set with ``manual_unlock`` can
+    only be lowered by an operator from the CLI, never by the system.
+    """
+    STATES = ['NORMAL', 'CAUTION', 'DEFENSIVE', 'CLOSE_ONLY', 'HALT']
+
+    state = models.CharField(max_length=12, default='NORMAL')
+    reason = models.CharField(max_length=300, blank=True, default='')
+    manual_unlock = models.BooleanField(default=False)
+    set_by = models.CharField(max_length=60, blank=True, default='')
+    since = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return f"{self.state} ({self.reason})"
