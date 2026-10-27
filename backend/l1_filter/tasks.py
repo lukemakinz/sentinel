@@ -7,6 +7,39 @@ from django.conf import settings
 logger = logging.getLogger(__name__)
 
 
+@shared_task(name='l1_filter.run_setup_search_cycle')
+def run_setup_search_cycle() -> dict:
+    """Scan, journal, resolve and alert; observation only, never orders."""
+    from dataclasses import replace
+
+    from django.conf import settings
+
+    from risk.models import system_paused
+    from telegram_bot.alerts import alert_new, alert_outcomes
+
+    from .setup_journal import record_scan, resolve_open
+    from .setup_search import SetupSearchConfig, run_setup_search
+
+    if not getattr(settings, 'SETUP_SEARCH_ENABLED', True):
+        return {'disabled': True}
+    if system_paused():
+        return {'paused': True}
+    config = replace(SetupSearchConfig(),
+                     max_symbols=getattr(settings, 'SETUP_SEARCH_MAX_SYMBOLS', 60))
+    report = run_setup_search(config)
+    created = record_scan(report)
+    finished = resolve_open()
+    statuses = getattr(settings, 'TELEGRAM_ALERT_STATUSES', {'WAIT_RETEST', 'WAIT_MSS'})
+    return {
+        'universe': report['universe'],
+        'rows': len(report['rows']),
+        'new_observations': len(created),
+        'resolved': len(finished),
+        'alerts': alert_new(created, statuses) + alert_outcomes(finished),
+        'errors': len(report['errors']),
+    }
+
+
 @shared_task(name='l1_filter.scan_all_symbols')
 def scan_all_symbols():
     """

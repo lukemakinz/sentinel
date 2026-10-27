@@ -48,3 +48,30 @@ class RiskEvent(models.Model):
 
     def __str__(self):
         return f"{self.event_type} | {self.symbol} | {self.timestamp}"
+
+
+class ControlFlag(models.Model):
+    """Operator switches set from the phone (Telegram) or admin.
+
+    ``paused`` stops shadow analysis, AI calls and the setup-search journal.
+    There is deliberately no flag that enables live trading.
+    """
+    key = models.CharField(max_length=40, unique=True)
+    enabled = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
+    updated_by = models.CharField(max_length=60, blank=True, default='')
+
+    def __str__(self):
+        return f"{self.key}={self.enabled}"
+
+    @classmethod
+    def is_enabled(cls, key: str) -> bool:
+        return cls.objects.filter(key=key, enabled=True).exists()
+
+    @classmethod
+    def set(cls, key: str, enabled: bool, by: str = '') -> None:
+        cls.objects.update_or_create(key=key, defaults={'enabled': enabled, 'updated_by': by})
+
+
+def system_paused() -> bool:
+    return ControlFlag.is_enabled('paused')

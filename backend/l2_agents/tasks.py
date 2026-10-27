@@ -11,6 +11,9 @@ def run_auction_shadow_cycle() -> dict:
     """Run at most one immutable shadow adjudication per closed 15m bar."""
     if not getattr(settings, 'AUCTION_SHADOW_ENABLED', True):
         return {'disabled': True}
+    from risk.models import system_paused
+    if system_paused():
+        return {'paused': True}
 
     from ingester.models import WatchedPair
     from .auction_adjudicator import summarize_analysis_costs
