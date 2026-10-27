@@ -81,9 +81,74 @@ def _fail_closed(snapshot: dict, reason: str, runtime: dict) -> tuple[AuctionDec
     }
 
 
+CANDIDATE_REUSE = timedelta(hours=4)
+
+
+def mechanical_candidate(snapshot: dict) -> dict | None:
+    """The deterministic gate: only what the frozen baseline would ARM."""
+    from .mechanical_baseline import mechanical_decision
+
+    try:
+        decision = mechanical_decision(snapshot)
+    except ValueError:
+        return None
+    if decision.action != 'ARM':
+        return None
+    low, high = sorted(float(v) for v in decision.entry_zone)
+    return {
+        'strategy_id': decision.strategy_id,
+        'direction': decision.direction,
+        'entry_zone': [low, high],
+        'management_policy': decision.management_policy,
+        'thesis': decision.thesis,
+        'key': f"{snapshot.get('symbol')}:{decision.direction}:{decision.strategy_id}:{low:.10g}:{high:.10g}",
+    }
+
+
+def _recent_adjudication(candidate_key: str):
+    """Latest real (billed or valid) AI verdict on this candidate within 4h.
+
+    Reuse rows never extend the window, and an API error without usage may be
+    retried, so the same candidate is paid for at most once per window.
+    """
+    rows = (AuctionAnalysis.objects
+            .filter(runtime__candidate_key=candidate_key,
+                    timestamp__gte=timezone.now() - CANDIDATE_REUSE)
+            .order_by('-timestamp'))
+    for row in rows:
+        runtime = row.runtime or {}
+        if runtime.get('reason') == 'candidate_already_adjudicated':
+            continue
+        if (runtime.get('analysis_cost') or {}).get('estimated_usd') is None \
+                and runtime.get('error_type'):
+            continue
+        return row
+    return None
+
+
 def decide_snapshot(snapshot: dict, use_ai: bool) -> tuple[AuctionDecision, dict]:
     """Adjudicate one already-built immutable snapshot and always fail closed."""
     if use_ai:
+        preflight = deterministic_preflight(snapshot)
+        candidate = mechanical_candidate(snapshot) if preflight['action'] != 'PASS' else None
+        if candidate is None:
+            # No deterministic candidate: nothing for the model to judge.
+            return AuctionDecision(**preflight), {
+                'provider': None, 'model': None,
+                'prompt_version': AUCTION_PROMPT_VERSION,
+                'reason': 'no_mechanical_candidate',
+                'analysis_cost': zero_analysis_cost('no_mechanical_candidate'),
+            }
+        previous = _recent_adjudication(candidate['key'])
+        if previous is not None:
+            return AuctionDecision(**previous.decision), {
+                'provider': None, 'model': None,
+                'prompt_version': AUCTION_PROMPT_VERSION,
+                'reason': 'candidate_already_adjudicated',
+                'reused_analysis_id': previous.pk,
+                'candidate_key': candidate['key'],
+                'analysis_cost': zero_analysis_cost('candidate_already_adjudicated'),
+            }
         budget = ai_budget_status()
         if budget['exhausted']:
             return _fail_closed(snapshot, 'AI daily budget exhausted; fail closed.', {
@@ -92,7 +157,8 @@ def decide_snapshot(snapshot: dict, use_ai: bool) -> tuple[AuctionDecision, dict
                 'analysis_cost': zero_analysis_cost('ai_daily_budget_exhausted'),
             })
         try:
-            return AuctionAdjudicator().analyze(snapshot)
+            decision, runtime = AuctionAdjudicator().analyze(snapshot, candidate)
+            return decision, {**runtime, 'candidate_key': candidate['key']}
         except AdjudicationError as exc:
             # The provider billed this response even though it was rejected.
             usage = dict(exc.usage)
@@ -101,12 +167,14 @@ def decide_snapshot(snapshot: dict, use_ai: bool) -> tuple[AuctionDecision, dict
             )
             return _fail_closed(snapshot, 'AI response rejected by validation; fail closed.', {
                 **usage,
+                'candidate_key': candidate['key'],
                 'error_type': type(exc.__cause__ or exc).__name__,
                 'error_message': str(exc)[:500],
                 'analysis_cost': {**cost, 'reason': 'billed_response_rejected'},
             })
         except Exception as exc:
             return _fail_closed(snapshot, 'AI adjudication failed; fail closed.', {
+                'candidate_key': candidate['key'],
                 'error_type': type(exc).__name__,
                 'analysis_cost': unavailable_analysis_cost('api_error_without_usage'),
             })

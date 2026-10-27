@@ -236,11 +236,17 @@ class AuctionAnalysisCostAccountingTest(TestCase):
         'recheck_condition': 'r', 'risk_notes': ['s'],
     }
 
+    candidate = {'strategy_id': 'SAI1_FAILED_AUCTION', 'direction': 'SHORT',
+                 'entry_zone': [100.0, 101.0], 'management_policy': 'P0_INITIAL_STOP',
+                 'thesis': ['t'], 'key': 'XUSDT:SHORT:SAI1_FAILED_AUCTION:100:101'}
+
     def _analyze(self, response):
         from l2_agents.auction_service import decide_snapshot
-        with patch('l2_agents.auction_adjudicator.deterministic_preflight') as preflight, \
+        wait = {**self.unlisted_arm, 'action': 'WAIT'}
+        with patch('l2_agents.auction_adjudicator.deterministic_preflight', return_value=wait), \
+                patch('l2_agents.auction_service.deterministic_preflight', return_value=wait), \
+                patch('l2_agents.auction_service.mechanical_candidate', return_value=self.candidate), \
                 patch('openai.OpenAI') as openai_cls:
-            preflight.return_value = {**self.unlisted_arm, 'action': 'WAIT'}
             openai_cls.return_value.responses.create.return_value = response
             result = decide_snapshot(complete_snapshot(), use_ai=True)
         return result, openai_cls
@@ -380,3 +386,60 @@ class MechanicalBaselineTest(TestCase):
         report = build_report()
         self.assertEqual(report['paired_comparison']['mechanical_baseline']['plans'], 1)
         self.assertEqual(report['paired_comparison']['ai']['plans'], 0)
+
+
+
+class CandidateGateTest(TestCase):
+    candidate = AuctionAnalysisCostAccountingTest.candidate
+
+    @override_settings(AUCTION_AI_PROVIDER='openai', OPENAI_API_KEY='sk-test')
+    def test_no_candidate_means_no_api_call(self):
+        from l2_agents.auction_service import decide_snapshot
+        wait = {**AuctionAnalysisCostAccountingTest.unlisted_arm, 'action': 'WAIT'}
+        with patch('l2_agents.auction_service.deterministic_preflight', return_value=wait), \
+                patch('l2_agents.auction_service.mechanical_candidate', return_value=None), \
+                patch('openai.OpenAI') as openai_cls:
+            decision, runtime = decide_snapshot(complete_snapshot(), use_ai=True)
+
+        openai_cls.assert_not_called()
+        self.assertEqual(runtime['reason'], 'no_mechanical_candidate')
+        self.assertEqual(runtime['analysis_cost']['estimated_usd'], 0.0)
+
+    @override_settings(AUCTION_AI_PROVIDER='openai', OPENAI_API_KEY='sk-test')
+    def test_same_candidate_is_paid_for_once_per_window(self):
+        from l2_agents.auction_service import decide_snapshot
+        AuctionAnalysis.objects.create(
+            symbol='XUSDT', snapshot_hash='h', snapshot_version='v', provider='openai',
+            action='PASS', direction='NONE', strategy_id='NONE', snapshot={}, shadow_only=True,
+            decision={**AuctionAnalysisCostAccountingTest.unlisted_arm, 'action': 'PASS',
+                      'direction': 'NONE', 'strategy_id': 'NONE', 'entry_zone': None,
+                      'management_policy': 'NONE'},
+            runtime={'candidate_key': self.candidate['key'],
+                     'analysis_cost': {'estimated_usd': 0.02}})
+        wait = {**AuctionAnalysisCostAccountingTest.unlisted_arm, 'action': 'WAIT'}
+        with patch('l2_agents.auction_service.deterministic_preflight', return_value=wait), \
+                patch('l2_agents.auction_service.mechanical_candidate', return_value=self.candidate), \
+                patch('openai.OpenAI') as openai_cls:
+            decision, runtime = decide_snapshot(complete_snapshot(), use_ai=True)
+
+        openai_cls.assert_not_called()
+        self.assertEqual(decision.action, 'PASS')
+        self.assertEqual(runtime['reason'], 'candidate_already_adjudicated')
+
+    def test_arm_must_confirm_the_candidate_unchanged(self):
+        changed = AuctionDecision(**{**AuctionAnalysisCostAccountingTest.unlisted_arm,
+                                     'entry_zone': [100.0, 101.0], 'direction': 'LONG'})
+        with self.assertRaisesRegex(ValueError, 'unchanged'):
+            AuctionAdjudicator._validate_against_candidate(changed, self.candidate)
+        same = AuctionDecision(**{**AuctionAnalysisCostAccountingTest.unlisted_arm,
+                                  'entry_zone': [100.0, 101.0]})
+        AuctionAdjudicator._validate_against_candidate(same, self.candidate)
+
+    def test_candidate_is_the_baseline_arm(self):
+        from l2_agents.auction_service import mechanical_candidate
+        snapshot = {**baseline_snapshot('TREND_UP', 100.5), 'symbol': 'XUSDT'}
+        candidate = mechanical_candidate(snapshot)
+
+        self.assertEqual(candidate['direction'], 'LONG')
+        self.assertEqual(candidate['entry_zone'], [99.0, 99.0])
+        self.assertIsNone(mechanical_candidate({**baseline_snapshot('TRANSITION', 100.0), 'symbol': 'X'}))

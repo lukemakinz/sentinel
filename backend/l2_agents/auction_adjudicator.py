@@ -14,7 +14,7 @@ from .market_intelligence import deterministic_preflight
 
 logger = logging.getLogger(__name__)
 
-AUCTION_PROMPT_VERSION = 'sentinel-auction-adjudicator-v1'
+AUCTION_PROMPT_VERSION = 'sentinel-auction-adjudicator-v2-candidate'
 OPENAI_PRICING_REFERENCE = 'https://developers.openai.com/api/docs/pricing'
 
 
@@ -155,6 +155,8 @@ Hard rules:
 12. Stop management must be one of the supplied policy IDs. P0 is the default. Do not select breakeven merely because price moved in favor; it requires a separately validated policy.
 13. For ARM, entry_zone must exactly copy the low/high of one supplied snapshot zone. Do not round or create a nearby zone. IFVG_FLIP must select an FVG zone. A long failed-auction or trend-retest setup must use support/FVG; a short setup must use resistance/FVG.
 
+14. When a mechanical candidate is supplied, judge only that candidate: either ARM it unchanged (same strategy_id, direction and entry_zone) or return WAIT/PASS. Never propose a different setup. PASS is the right answer when the evidence is mixed.
+
 Return a single structured decision through the required tool. Keep evidence concise and tied to named snapshot fields."""
 
 
@@ -192,7 +194,8 @@ class AuctionAdjudicator:
             return 'anthropic'
         return None
 
-    def analyze(self, snapshot: dict) -> tuple[AuctionDecision, dict]:
+    def analyze(self, snapshot: dict, candidate: dict | None = None) -> tuple[AuctionDecision, dict]:
+        self._candidate = candidate
         preflight = deterministic_preflight(snapshot)
         if preflight['action'] == 'PASS':
             return AuctionDecision(**preflight), {
@@ -230,6 +233,7 @@ class AuctionAdjudicator:
 
         try:
             self._validate_against_snapshot(decision, snapshot)
+            self._validate_against_candidate(decision, candidate)
         except ValueError as exc:
             raise AdjudicationError(str(exc), {
                 'provider': provider, 'model': model, **usage,
@@ -242,12 +246,27 @@ class AuctionAdjudicator:
         }
         return decision, runtime
 
+    def _message(self, snapshot: dict) -> str:
+        candidate = getattr(self, '_candidate', None)
+        head = "Adjudicate this immutable market snapshot. Execution is locked.\n\n"
+        if candidate:
+            head += ("Mechanical candidate to judge (ARM unchanged, WAIT or PASS):\n"
+                     f"{json.dumps(candidate, sort_keys=True)}\n\n")
+        return head + json.dumps(snapshot, sort_keys=True, indent=2, default=str)
+
     @staticmethod
-    def _message(snapshot: dict) -> str:
-        return (
-            "Adjudicate this immutable market snapshot. Execution is locked.\n\n"
-            f"{json.dumps(snapshot, sort_keys=True, indent=2, default=str)}"
+    def _validate_against_candidate(decision: AuctionDecision, candidate: dict | None) -> None:
+        """An ARM may only confirm the supplied candidate, never replace it."""
+        if not candidate or decision.action != 'ARM':
+            return
+        same = (
+            decision.strategy_id == candidate['strategy_id']
+            and decision.direction == candidate['direction']
+            and sorted(float(v) for v in decision.entry_zone or [])
+            == sorted(float(v) for v in candidate['entry_zone'])
         )
+        if not same:
+            raise ValueError('ARM must confirm the supplied mechanical candidate unchanged')
 
     def _call_anthropic(self, snapshot: dict) -> tuple[AuctionDecision, dict]:
         import anthropic
