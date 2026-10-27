@@ -328,3 +328,26 @@ class ClusterScalpSimulatorTests(unittest.TestCase):
         symbols = {trade['symbol'] for trade in result['trades']}
         self.assertEqual(symbols, {'ETHUSDT', 'SOLUSDT'})
 
+
+
+def test_signal_partial_scales_out_and_keeps_initial_stop():
+    market = _market(periods=6)
+    # Entry at 100 open, stop 99 (1R = 1). Bar 1 reaches 102 (2R partial),
+    # bar 2 falls back to the untouched initial stop.
+    market.iloc[1, market.columns.get_loc('high')] = 102.0
+    market.iloc[2, market.columns.get_loc('low')] = 98.5
+    ts = market.index[0]
+    config = replace(_config(), max_hold_minutes=60)
+    signal = dict(_signal(ts, 'partial'), target_price=104.0,
+                  partial_price=102.0, partial_fraction=0.5)
+    result = execute_cluster(
+        {'ETHUSDT': (market, pd.Series(dtype=float))},
+        {'ETHUSDT': [signal]},
+        config, ts, market.index[-1] + pd.Timedelta(minutes=1), 250.0,
+    )
+    trade = result['trades'][0]
+
+    assert [e['reason'] for e in trade['exits']] == ['PARTIAL', 'STOP']
+    assert trade['exits'][0]['quantity'] == trade['exits'][1]['quantity']
+    # Half at +2R, half at -1R, zero costs: +0.5R overall.
+    assert abs(trade['r_multiple'] - 0.5) < 1e-9

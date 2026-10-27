@@ -97,7 +97,7 @@ def execute_cluster(
             'side': 'LONG' if pos['side'] == 1 else 'SHORT',
             'entry': pos['entry'],
             'initial_stop': pos['initial_stop'],
-            'quantity': pos['qty'],
+            'quantity': pos.get('initial_qty', pos['qty']),
             'pnl': pnl,
             'leverage': config.leverage,
             'initial_margin': pos['initial_margin'],
@@ -111,7 +111,7 @@ def execute_cluster(
             'evidence': pos.get('evidence'),
             'score': pos['score'],
             'reason': reason,
-            'exits': [{
+            'exits': pos.get('exits', []) + [{
                 'timestamp': str(timestamp), 'price': fill,
                 'quantity': pos['qty'], 'reason': reason,
             }],
@@ -166,6 +166,8 @@ def execute_cluster(
                 > 1 / config.leverage - config.margin_safety_reserve):
             diagnostics['blocked_margin_stop_buffer'] += 1
             return False
+        if signal.get('partial_price') is not None and config.trailing:
+            raise ValueError('Per-signal partial exits require trailing=False')
         stop_fill = signal['stop'] * (1 - side * slip)
         unit_loss = side * (entry - stop_fill) + entry_fee * entry + fee * stop_fill
         signal_scale = float(signal.get('risk_scale', 1.0))
@@ -196,12 +198,34 @@ def execute_cluster(
             'setup': signal['setup'], 'setup_id': signal.get('setup_id'),
             'evidence': signal.get('evidence'), 'score': signal['score'],
             'best': entry, 'partial_hit': False,
+            'initial_qty': qty, 'exits': [],
+            'partial_price': signal.get('partial_price'),
+            'partial_fraction': float(signal.get('partial_fraction', 0.0)),
+            'partial_taken': False,
         }
         cash -= pos['fees']
         positions[symbol] = pos
         diagnostics['entries'] += 1
         diagnostics[f'entries_{symbol}'] += 1
         return True
+
+    def take_partial(pos, price, timestamp):
+        """Scale out at a fixed level; the stop is left untouched."""
+        nonlocal cash
+        quantity = pos['qty'] * pos['partial_fraction']
+        fill = price * (1 - pos['side'] * slip)
+        gross = pos['side'] * (fill - pos['entry']) * quantity
+        exit_fee = fill * quantity * fee
+        cash += gross - exit_fee
+        pos['qty'] -= quantity
+        pos['gross_pnl'] += gross
+        pos['fees'] += exit_fee
+        pos['partial_taken'] = True
+        pos['exits'].append({
+            'timestamp': str(timestamp), 'price': fill,
+            'quantity': quantity, 'reason': 'PARTIAL',
+        })
+        diagnostics['partial_exits'] += 1
 
     def manage_position(symbol, row, timestamp, close_time):
         pos = positions[symbol]
@@ -214,6 +238,10 @@ def execute_cluster(
         target = pos['target_price']
         extreme = row.high if side == 1 else row.low
         can_take_profit = pos.get('limit_fill_bar') != timestamp
+        partial = pos.get('partial_price')
+        if (partial is not None and not pos['partial_taken'] and can_take_profit
+                and side * (extreme - partial) >= 0):
+            take_partial(pos, partial, close_time)
         if can_take_profit and side * (extreme - target) >= 0:
             close_position(symbol, target, close_time, 'TARGET')
         elif (close_time - pos['opened_at']).total_seconds() / 60 >= config.max_hold_minutes:
