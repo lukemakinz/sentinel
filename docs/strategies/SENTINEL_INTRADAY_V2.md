@@ -140,6 +140,20 @@ Each H×P combination is reported on a common cohort and must pass all gates:
 AI can explain a candidate and later diagnose errors. It cannot loosen the
 economics gate, change a stop, invent a target or promote a policy.
 
+## Research status — 2026-11-01
+
+- H1 trend pullback v1 failed the development stress gate: 3 fills, PF 0.566.
+- The final H1 confirmation-entry v2 also failed: 5 fills, PF 0.742. H1 is
+  closed on the shared historical sample; there will be no v3 threshold tune.
+- A separate user-proposed double-top/bottom experiment required a controlled
+  second sweep, regular RSI divergence, a low-ADX range, neckline break and
+  retest. It produced 5 development candidates across eight symbols, one
+  base-cost fill that reached target (+1.186 net R), and zero stress-cost fills.
+  It is rejected for insufficient frequency/economics and does not count as
+  the contracted H3 because it did not use executed-flow absorption.
+- H2 session expansion is next. The contracted H3 range failed auction remains
+  a separate future test and must include flow/absorption as specified above.
+
 ## Wymienny silnik strategii
 
 Każde H1/H2/H3 jest osobnym, wersjonowanym pluginem, a nie kolejną gałęzią

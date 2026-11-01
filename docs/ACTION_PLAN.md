@@ -26,9 +26,19 @@ Aktualny opis strategii i architektury do przekazania dalej:
    replay `auction-replay-v1.2` na SOL 2024–09.2026 odrzucił oba dla M0
    (P1 −0,928R/trade, P2 −0,952R). Nie stroić dalej na M0; używać niezmienionych
    polityk dopiero z nowymi wejściami Intraday v2.
-9. Zaimplementować trzy prerejestrowane pluginy `SENTINEL_INTRADAY_V2`
+9. 🟡 Zaimplementować trzy prerejestrowane pluginy `SENTINEL_INTRADAY_V2`
    (trend pullback, session expansion, range failed auction) z naturalnym stopem
    0,40–1,25%, kosztem stress ≤0,25R, hold ≤4h i bez overnight.
+   - H1 trend pullback v1: odrzucony na development stress (3 fille, PF 0,566).
+   - H1 confirm v2: odrzucony na development stress (5 filli, PF 0,742); rodzina
+     H1 zamknięta na wspólnej próbce, bez V3.
+   - Poboczna hipoteza użytkownika `H3_DOUBLE_SWEEP_DIVERGENCE_V1` (double
+     top/bottom + regular divergence + neckline retest): odrzucona z powodu
+     zbyt małej częstości. 5 kandydatów/6 mies./8 symboli, 1 fill base zakończony
+     targetem (+1,186R netto), 0 filli stress. Nie zastępuje właściwego H3, bo
+     nie zawiera archiwalnego executed-flow/absorption.
+   - Następny niezależny eksperyment: H2 session expansion. Potem właściwy H3
+     range failed auction z flow; nie stroić H1 ani double-sweep na tej historii.
 10. `ALT_BREADTH_BINANCE` z historycznym składem koszyka; test, czy poprawia Book A.
 11. Rejestr hipotez z budżetem (1–2/mies.) i Deflated Sharpe w każdym raporcie.
 12. ✅ Codzienny paper-forward z CLI i pętli ingestera; pierwszy ledger: 2026-10-27, 1 dzień, `INSUFFICIENT`, $0,00. Composite Book A+B nie może być promowany, dopóki Book B łamie limit 0,5% ryzyka.

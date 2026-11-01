@@ -46,6 +46,7 @@ BREADTH_MIN_LISTING_DAYS = 730
 STALE_BREADTH_AFTER = timedelta(hours=2)
 INTERVAL_MINUTES = {'1m': 1, '5m': 5, '15m': 15, '1h': 60, '4h': 240}
 LIMITS = {'15m': 100, '1h': 220, '4h': 220, '5m': 240}  # = live _timeframe_summary limits
+RECENT_BARS = 300  # raw closed bars exposed to structure-detecting plugins
 REPLAY_ASSUMPTIONS = {
     'data_quality': 'candles_only (no historical order book / OI / CVD)',
     'arm_latency_minutes': ARM_LATENCY.total_seconds() / 60,
@@ -261,7 +262,8 @@ class Replay:
             summaries[item] = frames
         return summaries
 
-    def snapshot(self, target: str, t: datetime, *, full: bool) -> dict:
+    def snapshot(self, target: str, t: datetime, *, full: bool,
+                 include_bars: bool = False) -> dict:
         """Cheap M0-input snapshot, or the full production composition."""
         from l2_agents.market_intelligence import (
             _data_quality, _global_regime, _summarize_rows, _zones, compose_snapshot,
@@ -301,11 +303,19 @@ class Replay:
             ):
                 frame = {'available': False, 'interval': '1h', 'reason': 'stale_or_delisted'}
             context[alt] = {'1h': frame}
-        return compose_snapshot(
+        snapshot = compose_snapshot(
             symbol=target, now=t, summaries=summaries, context_summaries=context,
             breadth_universe={'version': f'pit-breadth-{quarter}', 'symbols': breadth},
             depth={}, flow={}, structural={}, candles_only_quality=True,
         )
+        if include_bars:
+            # Closed 1h/4h bars for plugins that detect their own structure.
+            snapshot['recent_bars'] = {}
+            for interval in ('1h', '4h'):
+                bars = self.bars(target, interval)
+                snapshot['recent_bars'][interval] = (
+                    bars.rows(bars.closed_count(t_ms), RECENT_BARS) if bars is not None else [])
+        return snapshot
 
     def run_symbol(self, target: str, progress=None) -> list[dict]:
         from l2_agents.mechanical_baseline import (
@@ -401,6 +411,87 @@ class Replay:
                 'closed_at': plan.closed_at.isoformat() if plan.closed_at else None,
             })
         return records
+
+
+def run_plugin(replay: 'Replay', target: str, strategy_id: str, progress=None) -> list[dict]:
+    """Generic replay of any registered strategy plugin plus M1/M3 overlays.
+
+    Scans on the plugin's ``scan_interval`` (default 15m), holds at most one
+    position per symbol, uses plugin-owned stop/target/hold when provided and
+    the production plan geometry and resolver.
+    """
+    from l2_agents.auction_adjudicator import AuctionDecision
+    from l2_agents.mechanical_baseline import (
+        global_context_filtered_decision, trend_filtered_decision,
+    )
+    from l2_agents.shadow_auction import plan_geometry, resolve_plan
+    from l2_agents.strategies import strategy_registry
+
+    plugin = strategy_registry.get(strategy_id)
+    interval = getattr(plugin, 'scan_interval', '15m')
+    scan_bars = replay.bars(target, interval)
+    minutes = replay.bars(target, '1m')
+    if scan_bars is None or minutes is None:
+        return []
+    data_end = datetime.fromtimestamp((minutes.open_ms[-1] + 60_000) / 1000, tz=timezone.utc)
+    start_ms, end_ms = int(replay.start.value // 10**6), int(replay.end.value // 10**6)
+    closes = scan_bars.open_ms + scan_bars.step_ms
+    busy_until: datetime | None = None
+    records = []
+
+    def loader(start, end):
+        return minutes.window(int(start.timestamp() * 1000), int(end.timestamp() * 1000))
+
+    for index in range(len(closes)):
+        close_ms = int(closes[index])
+        if close_ms < start_ms or close_ms > end_ms:
+            continue
+        t = datetime.fromtimestamp(close_ms / 1000, tz=timezone.utc)
+        if progress and index % 5000 == 0:
+            progress(target, t, len(records))
+        if busy_until is not None and t < busy_until:
+            continue
+        snapshot = replay.snapshot(target, t, full=True, include_bars=True)
+        scan = plugin.scan(snapshot)
+        if not scan.candidates:
+            continue
+        cand = scan.candidates[0]
+        low, high = cand.entry_zone
+        m0 = AuctionDecision(
+            action='ARM', direction=cand.direction, strategy_id=cand.strategy_id,
+            confidence=0.5, data_quality=float((snapshot.get('data_quality') or {}).get('score') or 0.0),
+            thesis=list(cand.thesis), counter_thesis=[], entry_zone=[low, high],
+            trigger_conditions=list(cand.trigger_conditions),
+            invalidation_conditions=list(cand.invalidation_conditions),
+            management_policy='P0_INITIAL_STOP', ttl_minutes=cand.ttl_minutes,
+            recheck_condition='Next scan bar.', risk_notes=['Research plugin replay.'],
+        )
+        m1 = trend_filtered_decision(snapshot, m0)
+        m3 = global_context_filtered_decision(snapshot, m0)
+        armed_at = t + ARM_LATENCY
+        overrides = {'structural_stop': cand.stop_price, 'target_r': cand.target_r,
+                     'max_hold_minutes': cand.max_hold_minutes,
+                     'zone_kind': (cand.metadata or {}).get('zone_kind')}
+        plan = ReplayPlan(symbol=target, strategy_id=strategy_id,
+                          **plan_geometry(m0.model_dump(), snapshot, armed_at, overrides=overrides))
+        outcome = resolve_plan(plan, now=data_end, rows_loader=loader)
+        busy_until = plan.closed_at or plan.expires_at
+        gc = snapshot.get('global_context') or {}
+        records.append({
+            'symbol': target, 'strategy_id': strategy_id, 'bar_close': t.isoformat(),
+            'armed_at': armed_at.isoformat(), 'direction': m0.direction,
+            'regime': snapshot['global_regime']['state'],
+            'm1': m1.action, 'm3': m3.action, 'global_state': gc.get('state'),
+            'global_bias': gc.get('target_bias_score_minus100_100'),
+            'trend_regime': (snapshot.get('trend_state') or {}).get('regime'),
+            'outcome': outcome, 'state': plan.state, 'exit_reason': plan.exit_reason,
+            'net_r': plan.net_r, 'gross_r': plan.gross_r, 'mfe_r': plan.mfe_r, 'mae_r': plan.mae_r,
+            'target_r': plan.target_r,
+            'risk_pct': (abs(plan.entry_price - plan.structural_stop) / plan.entry_price * 100
+                         if plan.entry_price else None),
+            'closed_at': plan.closed_at.isoformat() if plan.closed_at else None,
+        })
+    return records
 
 
 def quarters(start: pd.Timestamp, end: pd.Timestamp) -> list[pd.Period]:

@@ -1,0 +1,123 @@
+{
+  "protocol": "S117_EXIT_GEOMETRY v1.0.0",
+  "trades": 725,
+  "part1_information": {
+    "60": {
+      "n": 725,
+      "h3b_mean_r": -0.0076,
+      "random_mean_r": -0.0016,
+      "diff_mean_r": -0.006,
+      "diff_ci95": [
+        -0.0425,
+        0.0239
+      ]
+    },
+    "240": {
+      "n": 725,
+      "h3b_mean_r": -0.0197,
+      "random_mean_r": -0.0037,
+      "diff_mean_r": -0.016,
+      "diff_ci95": [
+        -0.087,
+        0.0429
+      ]
+    },
+    "1440": {
+      "n": 724,
+      "h3b_mean_r": -0.0163,
+      "random_mean_r": 0.0141,
+      "diff_mean_r": -0.0303,
+      "diff_ci95": [
+        -0.1638,
+        0.1
+      ]
+    },
+    "4320": {
+      "n": 720,
+      "h3b_mean_r": 0.0418,
+      "random_mean_r": 0.0303,
+      "diff_mean_r": 0.0116,
+      "diff_ci95": [
+        -0.2441,
+        0.2634
+      ]
+    }
+  },
+  "entries_informative": false,
+  "walk_forward": [
+    {
+      "train": [
+        2024
+      ],
+      "test": 2025,
+      "chosen": {
+        "stop_k": 1.0,
+        "target_r": 0.0,
+        "hold_h": 168.0
+      },
+      "train_mean_r": 0.0337,
+      "test_mean_r": 0.0735,
+      "test_trades": 260
+    },
+    {
+      "train": [
+        2024,
+        2025
+      ],
+      "test": 2026,
+      "chosen": {
+        "stop_k": 1.0,
+        "target_r": 0.0,
+        "hold_h": 168.0
+      },
+      "train_mean_r": 0.0529,
+      "test_mean_r": 0.4015,
+      "test_trades": 187
+    }
+  ],
+  "oos_stress": {
+    "trades": 447,
+    "mean_net_r": 0.2107,
+    "ci95": [
+      -0.1174,
+      0.584
+    ],
+    "total_r": 94.2
+  },
+  "oos_original_geometry_mean_r": -0.0454,
+  "oos_median_config_mean_r": -0.046,
+  "upper_bound_in_sample_top5": [
+    {
+      "stop_k": 1.0,
+      "target_r": 0.0,
+      "hold_h": 168.0,
+      "mean_net_r": 0.1428
+    },
+    {
+      "stop_k": 1.5,
+      "target_r": 0.0,
+      "hold_h": 168.0,
+      "mean_net_r": 0.0457
+    },
+    {
+      "stop_k": 1.5,
+      "target_r": 5.0,
+      "hold_h": 72.0,
+      "mean_net_r": 0.0398
+    },
+    {
+      "stop_k": 1.5,
+      "target_r": 5.0,
+      "hold_h": 168.0,
+      "mean_net_r": 0.037
+    },
+    {
+      "stop_k": 1.0,
+      "target_r": 5.0,
+      "hold_h": 168.0,
+      "mean_net_r": 0.0319
+    }
+  ],
+  "share_of_configs_positive_in_sample": 0.181,
+  "decision": "REJECTED"
+}

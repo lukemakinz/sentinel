@@ -1,0 +1,46 @@
+{
+  "id": "H1_TREND_PULLBACK_CONFIRM_V2",
+  "version": "2.0.0",
+  "frozen_at": "2026-11-01",
+  "status": "RETROSPECTIVE_DIAGNOSTIC_ONLY",
+  "parent": "H1_TREND_PULLBACK_V1 — rejected at development stress gate",
+  "single_change": "After the same confirmed breakout pullback, place the 30-minute post-only limit at the midpoint of the 15m confirmation candle body instead of the breakout-zone edge.",
+  "rationale_before_results": "V1 produced only 3 stress fills from 16 development candidates: seven limits expired and six candidates failed the cost/reward gate. A body-midpoint limit tests a normal shallow micro-retest while still refusing a market chase. Trend, displacement, confirmation, stop, target, session, risk and gates are unchanged.",
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+  "windows": {
+    "warmup_start": "2025-04-01",
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_diagnostic": ["2026-04-01", "2026-09-01"]
+  },
+  "unchanged_setup": {
+    "trend": "4h and 1h aligned EMA20/EMA50/slope; ADX >= 18/20",
+    "displacement": "15m break of prior 20-bar extreme by 0.05 ATR, body >=0.80 ATR, volume >=1.20x median, outer-quartile close",
+    "pullback": "first touch within eight 15m bars",
+    "confirmation": "15m rejection body >=0.25 ATR plus closed 5m break of prior two bars",
+    "stop": "displacement origin plus 0.15 ATR; 0.60%-1.25%",
+    "target": "static P0 1.50R",
+    "session": "06:00-18:00 UTC",
+    "maximum_hold": "240 minutes; no overnight",
+    "economics": "estimated stress round-trip costs <=0.25R"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "risk_per_trade_usd": 0.50,
+    "max_notional_usd": 125,
+    "max_margin_usd": 25,
+    "max_leverage": 3,
+    "one_position_cluster_wide": true
+  },
+  "cost_scenarios_bps": {
+    "base": {"maker_entry": 2, "taker_exit": 5, "slippage": 2},
+    "stress": {"maker_entry": 5, "taker_exit": 8, "slippage": 5},
+    "severe": {"maker_entry": 10, "taker_exit": 10, "slippage": 10}
+  },
+  "gates": {
+    "development_stress": "at least 40 fills, net PnL > 0, PF > 1.10 and mean net R > 0",
+    "validation_stress": "at least 20 fills, net PnL >= 0, PF >= 1.00, at least two positive symbols, largest symbol <=60% of gross profit"
+  },
+  "research_budget": "This is the final H1 variant on the shared historical sample. Failure closes H1; no V3 parameter adjustment is allowed.",
+  "promotion": "A historical pass authorizes only a newly frozen paper-forward plugin. Live remains disabled."
+}

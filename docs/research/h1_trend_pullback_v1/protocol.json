@@ -1,0 +1,52 @@
+{
+  "id": "H1_TREND_PULLBACK_V1",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-01",
+  "status": "RETROSPECTIVE_DIAGNOSTIC_ONLY",
+  "question": "Does a first retest after a volume-backed 15m displacement in a fully aligned 4h/1h trend have positive expectancy after stress costs?",
+  "prior_failed_families": {
+    "S16": "RSI/Connors-RSI pullback failed; H1 does not use oscillator oversold/overbought entries.",
+    "S17": "generic order-block retest with a 5R/trailing exit failed; H1 requires a break of an objective 20-bar extreme, first retest, 5m confirmation and a fixed 1.5R P0 target.",
+    "S53": "market entry on displacement failed; H1 never chases the impulse and uses a post-confirmation limit retest."
+  },
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+  "windows": {
+    "warmup_start": "2025-04-01",
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_diagnostic": ["2026-04-01", "2026-09-01"]
+  },
+  "setup": {
+    "trend": "4h and 1h close/EMA20/EMA50/slope aligned; ADX >= 18/20",
+    "displacement": "15m close through the prior 20-bar extreme by 0.05 ATR, body >= 0.80 ATR, volume >= 1.20x prior-20 median, close in outer candle quartile",
+    "pullback": "first touch within eight 15m bars of a +/-0.10 ATR breakout-level zone without closing beyond the displacement-origin stop",
+    "confirmation": "directional 15m rejection body >=0.25 ATR plus closed 5m break of the prior two 5m bars",
+    "entry": "limit at the breakout-zone edge for 30 minutes; never chase at market",
+    "session": "confirmation from 06:00 inclusive to 18:00 exclusive UTC so a four-hour hold ends before 22:00 UTC",
+    "stop": "beyond the displacement candle origin plus 0.15 ATR; natural distance 0.60%-1.25%",
+    "target": "fixed P0 at 1.50R",
+    "economics": "estimated stress round-trip cost <=0.25R"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "risk_per_trade_usd": 0.50,
+    "max_notional_usd": 125,
+    "max_margin_usd": 25,
+    "max_leverage": 3,
+    "one_position_cluster_wide": true,
+    "max_hold_minutes": 240,
+    "no_overnight": true,
+    "same_bar_policy": "STOP_FIRST"
+  },
+  "cost_scenarios_bps": {
+    "base": {"maker_entry": 2, "taker_exit": 5, "slippage": 2},
+    "stress": {"maker_entry": 5, "taker_exit": 8, "slippage": 5},
+    "severe": {"maker_entry": 10, "taker_exit": 10, "slippage": 10}
+  },
+  "gates": {
+    "development_stress": "at least 40 fills, net PnL > 0, PF > 1.10 and mean net R > 0",
+    "validation_stress": "at least 20 fills, net PnL >= 0, PF >= 1.00, at least two positive symbols, largest symbol <=60% of gross profit",
+    "promotion": "a historical pass authorizes only a new frozen paper-forward plugin; live remains disabled"
+  },
+  "no_parameter_search": "Exactly one configuration. Any parameter change creates a new strategy ID and protocol."
+}

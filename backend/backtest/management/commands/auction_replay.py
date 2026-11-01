@@ -17,7 +17,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from backtest.auction_replay import (
-    REPLAY_ASSUMPTIONS, REPLAY_VERSION, Replay, build_breadth_by_quarter,
+    REPLAY_ASSUMPTIONS, REPLAY_VERSION, Replay, build_breadth_by_quarter, run_plugin,
 )
 from backtest.auction_replay_stats import summarize, verdict
 
@@ -38,13 +38,23 @@ class Command(BaseCommand):
         parser.add_argument('--out', default=str(DEFAULT_OUT))
         parser.add_argument('--usd-per-r', type=float, default=1.25,
                             help='$ per 1R: 0.5%% risk on $250 = $1.25.')
+        parser.add_argument('--strategy', default='',
+                            help='Replay this registered plugin (generic path) instead of frozen M0.')
+        parser.add_argument('--slippage-bps', type=float, default=None,
+                            help='Override PAPER_MARKET_SLIPPAGE_BPS for this run (stress scenario).')
+        parser.add_argument('--breadth-file', default='',
+                            help='Reuse an existing point-in-time breadth_by_quarter.json.')
 
     def handle(self, *args, **opt):
         start, end = pd.Timestamp(opt['start'], tz='UTC'), pd.Timestamp(opt['end'], tz='UTC')
         out = Path(opt['out'])
         out.mkdir(parents=True, exist_ok=True)
 
+        if opt['slippage_bps'] is not None:
+            settings.PAPER_MARKET_SLIPPAGE_BPS = opt['slippage_bps']
         breadth_path = out / 'breadth_by_quarter.json'
+        if not breadth_path.exists() and opt['breadth_file']:
+            breadth_path.write_text(Path(opt['breadth_file']).read_text())
         if breadth_path.exists():
             breadth = json.loads(breadth_path.read_text())
         else:
@@ -69,8 +79,9 @@ class Command(BaseCommand):
                 self.stdout.write(f'{target}: reused {path.name}')
                 continue
             started = time.monotonic()
-            rows = replay.run_symbol(
-                target, progress=lambda s, t, n: self.stdout.write(f'  {s} {t:%Y-%m-%d} candidates={n}'))
+            progress = lambda s, t, n: self.stdout.write(f'  {s} {t:%Y-%m-%d} candidates={n}')  # noqa: E731
+            rows = (run_plugin(replay, target, opt['strategy'], progress=progress) if opt['strategy']
+                    else replay.run_symbol(target, progress=progress))
             path.write_text(json.dumps(rows, default=str))
             records += rows
             replay.drop(target)
@@ -80,6 +91,8 @@ class Command(BaseCommand):
         summary.update({
             'version': REPLAY_VERSION, 'start': str(start.date()), 'end': str(end.date()),
             'targets': targets, 'assumptions': REPLAY_ASSUMPTIONS,
+            'strategy': opt['strategy'] or 'M0_FROZEN',
+            'slippage_bps': float(getattr(settings, 'PAPER_MARKET_SLIPPAGE_BPS', 5)),
             'verdict': verdict(summary) if summary.get('candidates') else [],
         })
         (out / 'summary.json').write_text(json.dumps(summary, indent=2, default=str))

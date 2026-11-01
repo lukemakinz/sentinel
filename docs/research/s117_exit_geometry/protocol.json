@@ -1,0 +1,32 @@
+{
+  "id": "S117_EXIT_GEOMETRY",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-01",
+  "frozen_before_results": true,
+  "contamination_note": "Interim H3B base results for BTCUSDT and ETHUSDT (net R by year and exit-reason counts) were seen before this protocol was written; no other H3B outcome was seen.",
+  "question": "Are H3B entries informative, and if so, does a different stop/target/hold geometry chosen walk-forward produce positive out-of-sample expectancy?",
+  "entries": "exactly the H3B_TREND_DOUBLE_BOTTOM_V1 replay entries (base run records): entry at the first 1m close at/after armed_at with adverse market slippage; original structural risk = risk_pct x entry",
+  "part_1_information_test": {
+    "measure": "signed forward return in units of original risk at 1h, 4h, 24h and 72h after entry (no stop/target)",
+    "baseline": "20 random entries per H3B trade: same symbol, same calendar year, same direction, same risk_pct, random 1m timestamps",
+    "statistic": "mean difference H3B - random per horizon with day-block bootstrap 95% CI",
+    "reading": "if no horizon's CI excludes 0 in H3B's favour, the entry carries no detectable information and exit tuning cannot create edge"
+  },
+  "part_2_exit_grid": {
+    "stop_multiple_of_original_risk": [0.5, 1.0, 1.5, 2.0],
+    "target_r_in_new_risk": [1.0, 1.5, 2.0, 3.0, 5.0, "none"],
+    "max_hold_hours": [24, 72, 168],
+    "configs": 72,
+    "fills": "same-bar stop first; target exits maker without slippage; stop and time exits taker with slippage",
+    "costs": "taker 5 bps, maker 2 bps; slippage 5 bps base, 10 bps stress"
+  },
+  "selection_walk_forward": {
+    "fold_1": "choose config with best mean net R (stress) on 2024 entries, evaluate on 2025 entries",
+    "fold_2": "choose on 2024-2025 entries, evaluate on 2026 entries",
+    "oos_metric": "concatenated 2025+2026 OOS mean net R per trade with day-block bootstrap 95% CI",
+    "comparators": ["original H3B geometry (1.0x stop, 2R, 72h) on the same OOS trades", "median config OOS"],
+    "upper_bound_only": "best config chosen on the full period (in-sample, biased upward); reported, never used as evidence"
+  },
+  "pass_condition": "walk-forward OOS stress mean net R > 0 with 95% CI lower bound > 0 AND part 1 shows information; PASS authorizes a new frozen protocol (new id) with that geometry, evaluated forward only",
+  "scope_note": "M0 failed-auction entries are excluded: their fill time is a trigger event not stored in replay records, and M0 is already negative before costs."
+}

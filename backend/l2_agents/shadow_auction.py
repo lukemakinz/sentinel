@@ -39,28 +39,37 @@ def create_shadow_plan(analysis):
     )
 
 
-def plan_geometry(decision: dict, snapshot: dict, armed_at) -> dict:
+def plan_geometry(decision: dict, snapshot: dict, armed_at, *,
+                  overrides: dict | None = None) -> dict:
     """Deterministic plan geometry and cost assumptions for one ARM decision.
 
     Shared by the live shadow plan and the historical replay, so both price
-    entries, stops, targets and costs identically.
+    entries, stops, targets and costs identically.  ``overrides`` carries
+    plugin-owned geometry (``structural_stop``, ``target_r``,
+    ``max_hold_minutes``, ``zone_kind``); without it the legacy zone/ATR
+    geometry applies unchanged.
     """
-    zone = _match_zone(decision.get('entry_zone'), snapshot)
-    if zone is None:
-        raise ValueError('ARM entry zone must match a supplied snapshot zone')
-
-    zone_low = float(zone['low'])
-    zone_high = float(zone['high'])
-    reference = (zone_low + zone_high) / 2.0
-    atr = float(snapshot.get('instrument', {}).get('15m', {}).get('atr14') or 0.0)
-    if atr <= 0:
-        raise ValueError('ARM requires a positive 15m ATR')
-    buffer_price = max(atr * 0.15, reference * 0.0005)
     direction = decision['direction']
-    structural_stop = (
-        zone_low - buffer_price if direction == 'LONG'
-        else zone_high + buffer_price
-    )
+    overrides = overrides or {}
+    if overrides.get('structural_stop') is not None:
+        zone_low, zone_high = sorted(float(v) for v in decision['entry_zone'])
+        zone = {'kind': overrides.get('zone_kind') or 'PLUGIN', 'low': zone_low, 'high': zone_high}
+        structural_stop = float(overrides['structural_stop'])
+    else:
+        zone = _match_zone(decision.get('entry_zone'), snapshot)
+        if zone is None:
+            raise ValueError('ARM entry zone must match a supplied snapshot zone')
+        zone_low = float(zone['low'])
+        zone_high = float(zone['high'])
+        reference = (zone_low + zone_high) / 2.0
+        atr = float(snapshot.get('instrument', {}).get('15m', {}).get('atr14') or 0.0)
+        if atr <= 0:
+            raise ValueError('ARM requires a positive 15m ATR')
+        buffer_price = max(atr * 0.15, reference * 0.0005)
+        structural_stop = (
+            zone_low - buffer_price if direction == 'LONG'
+            else zone_high + buffer_price
+        )
     ttl_minutes = int(decision.get('ttl_minutes') or 0)
     if ttl_minutes <= 0:
         raise ValueError('ARM requires a positive TTL')
@@ -72,7 +81,7 @@ def plan_geometry(decision: dict, snapshot: dict, armed_at) -> dict:
         'market_slippage_bps': float(getattr(settings, 'PAPER_MARKET_SLIPPAGE_BPS', 5)),
         'same_bar_policy': 'STOP_FIRST',
         'trigger_timeframe': '1m_closed',
-        'max_hold_minutes': int(getattr(
+        'max_hold_minutes': int(overrides.get('max_hold_minutes') or getattr(
             settings, 'AUCTION_SHADOW_MAX_HOLD_MINUTES', 240,
         )),
     }
@@ -82,7 +91,8 @@ def plan_geometry(decision: dict, snapshot: dict, armed_at) -> dict:
         'zone_low': zone_low,
         'zone_high': zone_high,
         'structural_stop': structural_stop,
-        'target_r': float(getattr(settings, 'AUCTION_SHADOW_TARGET_R', 1.5)),
+        'target_r': float(overrides.get('target_r') or getattr(
+            settings, 'AUCTION_SHADOW_TARGET_R', 1.5)),
         'management_policy': decision['management_policy'],
         'armed_at': armed_at,
         'expires_at': armed_at + timedelta(minutes=ttl_minutes),

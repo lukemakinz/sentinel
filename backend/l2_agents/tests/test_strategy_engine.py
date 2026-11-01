@@ -48,10 +48,13 @@ class ExampleStrategy(StrategyPlugin):
 class StrategyRegistryTest(SimpleTestCase):
     def test_builtin_plugins_are_discovered_with_versioned_contracts(self):
         self.assertEqual(strategy_registry.ids(), (
+            'H3B_TREND_DOUBLE_BOTTOM_V1',
             'SAI1_FAILED_AUCTION',
             'SAI1_IFVG_FLIP',
             'SAI1_TREND_RETEST',
         ))
+        # Registered research plugins are not enabled for new live plans.
+        self.assertNotIn('H3B_TREND_DOUBLE_BOTTOM_V1', strategy_registry.enabled_ids())
         catalog = strategy_registry.catalog(enabled_only=False)
         self.assertEqual(
             catalog['SAI1_FAILED_AUCTION']['detector_mode'],

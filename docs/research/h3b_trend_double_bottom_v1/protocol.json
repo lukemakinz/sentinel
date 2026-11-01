@@ -1,0 +1,43 @@
+{
+  "id": "H3B_TREND_DOUBLE_BOTTOM_V1",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-01",
+  "frozen_before_results": true,
+  "motivation": "H3 v1 (15m, range, 9 stacked conditions, limit retest) produced 5 candidates in 6 months. H3B keeps the mechanism (two comparable extremes + RSI divergence + neckline break) but aligns it with the 4h trend (the only context the project has shown to add value: M1/M3 replay, S107 long-in-up-regime), moves it to 1h, enters at market on the confirmed break and uses structural stops wide enough for costs to stay ~0.1-0.2R.",
+  "relation_to_h3_v1": "New id. Not a threshold search on v1: different timeframe, context (with-trend instead of range), entry and exits. Data overlap with v1 (8 of the 10 symbols, 2025-08..2026-09) is acknowledged; v1 produced 5 candidates, so information leakage is negligible.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "AVAXUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "MATICUSDT", "LINKUSDT", "BNBUSDT"],
+  "period": ["2024-01-01", "2026-10-01"],
+  "scan": "every closed 1h bar, closed bars only",
+  "setup_long": {
+    "trend_4h": "last closed 4h close > EMA50(4h) and EMA20(4h) > EMA50(4h)",
+    "pivots": "1h pivot lows of width 3 (confirmed 3 bars later)",
+    "pair": "latest confirmed pivot low p2 and an earlier pivot low p1 with 5 <= p2-p1 <= 60 bars",
+    "equal_lows": "|low(p2) - low(p1)| <= 0.5 x ATR14(1h) at p2",
+    "divergence": "RSI14(1h) at p2 >= RSI14 at p1 + 2",
+    "neckline": "highest high strictly between p1 and p2; neckline - max(low p1, low p2) >= 1.0 x ATR14",
+    "trigger": "the current closed 1h bar is the first close above the neckline after p2, within 24 bars of p2",
+    "short": "mirror image: pivot highs, 4h downtrend, bearish divergence, close below neckline"
+  },
+  "execution": {
+    "entry": "market at the first 1m close after the 1h bar closes (+3 min arm latency, live shadow convention)",
+    "stop": "min(low p1, low p2) - 0.25 x ATR14(1h) (mirror for shorts)",
+    "risk_filter": "stop distance 1.0%-6.0% of entry reference, else no trade",
+    "target": "2.0R fixed",
+    "max_hold_hours": 72,
+    "one_position_per_symbol": true,
+    "costs": "live shadow model: taker 5 bps, target maker 2 bps, market slippage 5 bps (base) and 10 bps (stress)"
+  },
+  "policies": {
+    "M0": "H3B raw",
+    "M1": "H3B + frozen trend filter (trend_filtered_decision)",
+    "M3": "H3B + frozen global-context filter (global_context_filtered_decision)"
+  },
+  "gates_stress_all_required_for_a_policy": [
+    ">= 100 filled trades in 2024-01..2026-10",
+    "mean net R per filled trade > 0 with day-block bootstrap one-sided 98.3% lower bound > 0 (Bonferroni for 3 policies)",
+    "total R > 0 in each of 2024, 2025 and 2026",
+    "no single symbol contributes > 40% of gross profit"
+  ],
+  "decision_meaning": "PASS authorizes shadow + paper-forward only; live stays disabled",
+  "no_parameter_search": "exactly one configuration; any change requires a new id"
+}

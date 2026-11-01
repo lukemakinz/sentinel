@@ -1,0 +1,241 @@
+{
+  "protocol_sha256": "3edffd6752985f69ad8c1d9c602ddbb4bda91090183a961927fa1c8a04f9c9e6",
+  "config": {
+    "name": "H3_DOUBLE_SWEEP_DIVERGENCE_V1",
+    "swing_width": 2,
+    "minimum_separation_bars": 6,
+    "maximum_separation_bars": 32,
+    "minimum_sweep_atr": 0.03,
+    "maximum_sweep_atr": 0.35,
+    "minimum_rsi_divergence": 3.0,
+    "bullish_first_rsi_maximum": 35.0,
+    "bearish_first_rsi_minimum": 65.0,
+    "mss_window_bars": 4,
+    "mss_break_atr": 0.03,
+    "h1_adx_maximum": 25.0,
+    "h4_adx_maximum": 30.0,
+    "stop_buffer_atr": 0.15,
+    "minimum_stop_pct": 0.6,
+    "maximum_stop_pct": 1.25,
+    "first_entry_hour_utc": 6,
+    "last_entry_hour_utc": 18,
+    "limit_ttl_minutes": 30,
+    "target_r": 1.5
+  },
+  "raw_candidates_by_symbol": {
+    "BTCUSDT": 0,
+    "ETHUSDT": 2,
+    "SOLUSDT": 2,
+    "BNBUSDT": 0,
+    "XRPUSDT": 0,
+    "ADAUSDT": 2,
+    "DOGEUSDT": 1,
+    "AVAXUSDT": 3
+  },
+  "raw_candidates_by_window": {
+    "development": 5,
+    "validation": 1,
+    "retrospective_diagnostic": 3
+  },
+  "windows": {
+    "development": {
+      "base": {
+        "trades": 1,
+        "wins": 1,
+        "win_rate_pct": 100.0,
+        "profit_factor": "Infinity",
+        "net_pnl": 0.5930211586793064,
+        "return_pct": 0.23720846347172753,
+        "max_drawdown_pct": 0.11074210609277602,
+        "mean_net_r": 1.186042317358586,
+        "fees": 0.04895044078795411,
+        "funding_pnl": -0.0006883526792423356,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 1,
+            "net_pnl": 0.593021158679293,
+            "gross_profit": 0.593021158679293
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "BNBUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "XRPUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ADAUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "DOGEUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "AVAXUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-11": {
+            "trades": 1,
+            "pnl": 0.593021158679293
+          }
+        },
+        "diagnostics": {
+          "signals": 5,
+          "blocked_reward_cost_or_target": 2,
+          "expired_or_cancelled_limit": 2,
+          "entries": 1,
+          "entries_ETHUSDT": 1
+        },
+        "drawdown_halted": false
+      },
+      "stress": {
+        "trades": 0,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": null,
+        "net_pnl": 0.0,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0.0,
+        "mean_net_r": 0.0,
+        "fees": 0.0,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "BNBUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "XRPUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ADAUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "DOGEUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "AVAXUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": null,
+        "per_month": {},
+        "diagnostics": {
+          "signals": 5,
+          "blocked_reward_cost_or_target": 3,
+          "expired_or_cancelled_limit": 2
+        },
+        "drawdown_halted": false
+      },
+      "severe": {
+        "trades": 0,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": null,
+        "net_pnl": 0.0,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0.0,
+        "mean_net_r": 0.0,
+        "fees": 0.0,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "BNBUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "XRPUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ADAUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "DOGEUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "AVAXUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": null,
+        "per_month": {},
+        "diagnostics": {
+          "signals": 5,
+          "blocked_reward_cost_or_target": 3,
+          "expired_or_cancelled_limit": 2
+        },
+        "drawdown_halted": false
+      }
+    }
+  },
+  "decision": "REJECTED_AT_DEVELOPMENT_STRESS_GATE"
+}

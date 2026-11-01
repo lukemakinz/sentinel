@@ -1,0 +1,47 @@
+{
+  "id": "H3_DOUBLE_SWEEP_DIVERGENCE_V1",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-01",
+  "status": "RETROSPECTIVE_DIAGNOSTIC_ONLY",
+  "question": "Does a narrow second sweep of an equal 15m swing with regular RSI divergence, followed by a range-regime neckline break and retest, have positive expectancy after stress costs?",
+  "mechanism": "The second top/bottom takes resting liquidity but fails to gain momentum. A confirmed return inside the level plus RSI non-confirmation identifies the trap; the neckline break confirms a structure change and its retest supplies the entry.",
+  "difference_from_rejected_S112_S114": "No order block, FVG or counter-trend 1h context. H3 requires two comparable confirmed extremes, a controlled 0.03-0.35 ATR sweep, regular RSI divergence, low-ADX 1h/4h range context and a neckline retest. Target is 1.5R intraday rather than 3R over 72h.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "windows": {
+    "warmup_start": "2025-04-01",
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_diagnostic": ["2026-04-01", "2026-09-01"]
+  },
+  "setup": {
+    "pivots": "confirmed 15m width-2 swings separated by 6-32 bars",
+    "sweep": "second extreme exceeds the first by 0.03-0.35 ATR and its candle closes back inside",
+    "divergence": "regular RSI divergence >=3 points; first bottom RSI <=35 or first top RSI >=65",
+    "regime": "at MSS, 1h ADX <=25 and 4h ADX <=30",
+    "mss": "within four 15m bars after the second pivot is known, directional close breaks the intervening neckline by 0.03 ATR",
+    "entry": "30-minute post-only limit retest at the neckline",
+    "stop": "beyond the second sweep extreme plus 0.15 ATR; distance 0.60%-1.25%",
+    "target": "static P0 1.50R",
+    "session": "MSS from 06:00 inclusive to 18:00 exclusive UTC",
+    "maximum_hold": "240 minutes; no overnight",
+    "economics": "estimated stress round-trip costs <=0.25R"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "risk_per_trade_usd": 0.50,
+    "max_notional_usd": 125,
+    "max_margin_usd": 25,
+    "max_leverage": 3,
+    "one_position_cluster_wide": true
+  },
+  "cost_scenarios_bps": {
+    "base": {"maker_entry": 2, "taker_exit": 5, "slippage": 2},
+    "stress": {"maker_entry": 5, "taker_exit": 8, "slippage": 5},
+    "severe": {"maker_entry": 10, "taker_exit": 10, "slippage": 10}
+  },
+  "gates": {
+    "development_stress": "at least 40 fills, net PnL > 0, PF >1.10 and mean net R >0",
+    "validation_stress": "at least 20 fills, net PnL >=0, PF >=1.00, at least three positive symbols, largest symbol <=50% of gross profit"
+  },
+  "no_parameter_search": "Exactly one configuration; failure closes this H3 version."
+}

@@ -91,6 +91,12 @@ class StrategyCandidate:
     metadata: Mapping[str, Any] = field(
         default_factory=lambda: MappingProxyType({}),
     )
+    # Optional plugin-owned exit geometry.  When ``stop_price`` is None the
+    # engine keeps its legacy zone/ATR stop, 1.5R target and 4h hold, so
+    # existing strategies are unchanged.
+    stop_price: float | None = None
+    target_r: float | None = None
+    max_hold_minutes: int | None = None
 
     def __post_init__(self) -> None:
         if self.direction not in {'LONG', 'SHORT'}:
@@ -106,6 +112,16 @@ class StrategyCandidate:
             raise StrategyConfigurationError('Candidate requires trigger and invalidation rules.')
         if self.ttl_minutes <= 0:
             raise StrategyConfigurationError('Candidate TTL must be positive.')
+        if self.stop_price is not None:
+            stop = float(self.stop_price)
+            if (self.direction == 'LONG' and not 0 < stop < low) or (
+                    self.direction == 'SHORT' and not stop > high):
+                raise StrategyConfigurationError(
+                    'Candidate stop must lie beyond the entry zone on the risk side.')
+        if self.target_r is not None and not 0 < float(self.target_r) <= 10:
+            raise StrategyConfigurationError('Candidate target_r must be in (0, 10].')
+        if self.max_hold_minutes is not None and not 0 < int(self.max_hold_minutes) <= 7 * 24 * 60:
+            raise StrategyConfigurationError('Candidate max hold must be in (0, 7 days].')
 
 
 @dataclass(frozen=True)
