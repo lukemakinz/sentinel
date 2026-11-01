@@ -1,0 +1,25 @@
+{
+  "strategy_id": "S67_DUAL_DAYTRADE",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "ny_orb_htc",
+    "hourly_donchian_adx"
+  ],
+  "fixed_risk_usd": 15.0,
+  "max_positions": 2,
+  "daily_goal_usd": 5.0,
+  "disclosure": "cached-window historical characterization; not live approval"
+}

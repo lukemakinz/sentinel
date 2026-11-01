@@ -29,6 +29,7 @@ urlpatterns = [
     path('positions/<int:position_id>/evaluate/', executor_views.position_evaluate, name='position-evaluate'),
     path('system/stats/', views.system_stats, name='system-stats'),
     path('mtf/<str:symbol>/', views.mtf_analysis, name='mtf-analysis'),
+    path('auction/research/', views.auction_research, name='auction-research'),
     path('scan/<str:symbol>/', views.latest_scan, name='latest-scan'),
     path('analysis/<str:symbol>/', views.latest_analysis, name='latest-analysis'),
     path('pairs/', views.watched_pairs, name='watched-pairs'),

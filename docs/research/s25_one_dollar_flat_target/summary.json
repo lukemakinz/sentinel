@@ -1,0 +1,486 @@
+{
+  "protocol_sha256": "cf4b8b6e0ed965b20db7595851cf553eb471f3350e128406a8a300cedf5ba898",
+  "disclosure": "retrospective diagnostic; not a live paper-forward result",
+  "results": {
+    "S25_flat_1r_standard_hold": {
+      "config": {
+        "name": "S25_flat_1r_standard_hold",
+        "route": "oi",
+        "ema_period": 200,
+        "ema_slope_lookback": 8,
+        "adx_threshold": 20.0,
+        "displacement_atr_mult": 1.5,
+        "volume_mult": 1.2,
+        "volume_avg_lookback": 20,
+        "zone_ttl_bars": 32,
+        "stop_buffer_atr_mult": 0.15,
+        "obv_ema_period": 9,
+        "target_r": 1.0,
+        "oi_lookback_bars": 8,
+        "toptrader_zscore_window": 672,
+        "toptrader_extreme_z": 1.5,
+        "partial_r": 0.5,
+        "trail_atr": 1.5,
+        "fixed_risk_usd": 1.0,
+        "fixed_margin_usd": 50.0,
+        "max_notional_equity": 0.5,
+        "max_margin_fraction": 0.2,
+        "leverage": 5.0,
+        "risk_fraction": 0.01,
+        "trailing": false,
+        "max_hold_minutes": 240
+      },
+      "raw_candidates_by_window": {
+        "development": 196,
+        "validation": 62,
+        "retrospective_evaluation": 158
+      },
+      "windows": {
+        "development": {
+          "base": {
+            "trades": 119,
+            "wins": 62,
+            "win_rate_pct": 52.10084033613446,
+            "profit_factor": 0.7927339359517348,
+            "net_pnl": -9.102522322120649,
+            "return_pct": -3.641008928848255,
+            "max_drawdown_pct": 5.389975020573223,
+            "mean_net_r": -0.0928824634609393,
+            "fees": 10.592258238938731,
+            "funding_pnl": 0.0015368656822573397,
+            "per_symbol": {
+              "ETHUSDT": {
+                "trades": 45,
+                "net_pnl": -5.374660454591691,
+                "gross_profit": 12.15892708545789
+              },
+              "SOLUSDT": {
+                "trades": 45,
+                "net_pnl": 0.6709124034753415,
+                "gross_profit": 16.118227190474784
+              },
+              "BNBUSDT": {
+                "trades": 29,
+                "net_pnl": -4.398774271004299,
+                "gross_profit": 6.537413080462414
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 46.29736462174942,
+            "per_month": {
+              "2025-08": {
+                "trades": 20,
+                "pnl": -0.35534635128760783
+              },
+              "2025-09": {
+                "trades": 24,
+                "pnl": 1.4546274292538897
+              },
+              "2025-10": {
+                "trades": 21,
+                "pnl": -3.3055043331135607
+              },
+              "2025-11": {
+                "trades": 17,
+                "pnl": -2.531475032891194
+              },
+              "2025-12": {
+                "trades": 23,
+                "pnl": -4.830407892287013
+              },
+              "2026-01": {
+                "trades": 14,
+                "pnl": 0.4655838582048375
+              }
+            },
+            "diagnostics": {
+              "signals": 196,
+              "entries": 119,
+              "entries_BNBUSDT": 29,
+              "blocked_stop_width_or_gap": 26,
+              "blocked_reward_cost_or_target": 27,
+              "entries_SOLUSDT": 45,
+              "blocked_open_position": 8,
+              "entries_ETHUSDT": 45,
+              "blocked_risk_halt_or_capital": 1
+            },
+            "drawdown_halted": false
+          },
+          "stress": {
+            "trades": 69,
+            "wins": 35,
+            "win_rate_pct": 50.72463768115942,
+            "profit_factor": 0.6927200233025838,
+            "net_pnl": -8.445797820103564,
+            "return_pct": -3.3783191280414293,
+            "max_drawdown_pct": 4.536302056249508,
+            "mean_net_r": -0.11112332253387039,
+            "fees": 7.766930913906407,
+            "funding_pnl": 0.001351281754556456,
+            "per_symbol": {
+              "ETHUSDT": {
+                "trades": 26,
+                "net_pnl": -3.4658465130390823,
+                "gross_profit": 6.787250099399188
+              },
+              "SOLUSDT": {
+                "trades": 32,
+                "net_pnl": -3.6291477106572643,
+                "gross_profit": 9.242749193111308
+              },
+              "BNBUSDT": {
+                "trades": 11,
+                "net_pnl": -1.3508035964072178,
+                "gross_profit": 3.009878689881475
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 48.544161898826125,
+            "per_month": {
+              "2025-08": {
+                "trades": 9,
+                "pnl": -0.07269363377844229
+              },
+              "2025-09": {
+                "trades": 14,
+                "pnl": 0.5406508324666675
+              },
+              "2025-10": {
+                "trades": 14,
+                "pnl": -4.276082471828403
+              },
+              "2025-11": {
+                "trades": 14,
+                "pnl": -1.1636948584394418
+              },
+              "2025-12": {
+                "trades": 11,
+                "pnl": -3.5265406329229165
+              },
+              "2026-01": {
+                "trades": 7,
+                "pnl": 0.05256294439897147
+              }
+            },
+            "diagnostics": {
+              "signals": 196,
+              "entries": 69,
+              "entries_BNBUSDT": 11,
+              "blocked_stop_width_or_gap": 22,
+              "blocked_reward_cost_or_target": 87,
+              "entries_SOLUSDT": 32,
+              "blocked_open_position": 7,
+              "entries_ETHUSDT": 26,
+              "blocked_risk_halt_or_capital": 2
+            },
+            "drawdown_halted": false
+          },
+          "severe": {
+            "trades": 31,
+            "wins": 15,
+            "win_rate_pct": 48.38709677419355,
+            "profit_factor": 0.6554448453713849,
+            "net_pnl": -4.782536990142631,
+            "return_pct": -1.9130147960570554,
+            "max_drawdown_pct": 3.214072254100686,
+            "mean_net_r": -0.15427538677879457,
+            "fees": 3.2709860813311837,
+            "funding_pnl": 0.0017004621568988583,
+            "per_symbol": {
+              "ETHUSDT": {
+                "trades": 9,
+                "net_pnl": -3.5076922733677804,
+                "gross_profit": 2.1199008688261642
+              },
+              "SOLUSDT": {
+                "trades": 17,
+                "net_pnl": -1.4844244356178535,
+                "gross_profit": 5.362538521593336
+              },
+              "BNBUSDT": {
+                "trades": 5,
+                "net_pnl": 0.20957971884300264,
+                "gross_profit": 1.61534706227701
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 58.94333252902329,
+            "per_month": {
+              "2025-08": {
+                "trades": 6,
+                "pnl": 1.0452400656931786
+              },
+              "2025-09": {
+                "trades": 6,
+                "pnl": -0.1720856380384248
+              },
+              "2025-10": {
+                "trades": 8,
+                "pnl": -2.4096315515450044
+              },
+              "2025-11": {
+                "trades": 7,
+                "pnl": -2.537781692598429
+              },
+              "2025-12": {
+                "trades": 4,
+                "pnl": -0.7082781736539516
+              }
+            },
+            "diagnostics": {
+              "signals": 196,
+              "blocked_reward_cost_or_target": 135,
+              "entries": 31,
+              "entries_SOLUSDT": 17,
+              "blocked_open_position": 3,
+              "blocked_stop_width_or_gap": 19,
+              "entries_ETHUSDT": 9,
+              "entries_BNBUSDT": 5,
+              "blocked_risk_halt_or_capital": 1
+            },
+            "drawdown_halted": false
+          }
+        }
+      },
+      "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+    },
+    "S25_flat_1r_fast_hold": {
+      "config": {
+        "name": "S25_flat_1r_fast_hold",
+        "route": "oi",
+        "ema_period": 200,
+        "ema_slope_lookback": 8,
+        "adx_threshold": 20.0,
+        "displacement_atr_mult": 1.5,
+        "volume_mult": 1.2,
+        "volume_avg_lookback": 20,
+        "zone_ttl_bars": 32,
+        "stop_buffer_atr_mult": 0.15,
+        "obv_ema_period": 9,
+        "target_r": 1.0,
+        "oi_lookback_bars": 8,
+        "toptrader_zscore_window": 672,
+        "toptrader_extreme_z": 1.5,
+        "partial_r": 0.5,
+        "trail_atr": 1.5,
+        "fixed_risk_usd": 1.0,
+        "fixed_margin_usd": 50.0,
+        "max_notional_equity": 0.5,
+        "max_margin_fraction": 0.2,
+        "leverage": 5.0,
+        "risk_fraction": 0.01,
+        "trailing": false,
+        "max_hold_minutes": 90
+      },
+      "raw_candidates_by_window": {
+        "development": 196,
+        "validation": 62,
+        "retrospective_evaluation": 158
+      },
+      "windows": {
+        "development": {
+          "base": {
+            "trades": 106,
+            "wins": 44,
+            "win_rate_pct": 41.509433962264154,
+            "profit_factor": 0.6238964187099898,
+            "net_pnl": -12.475193624193338,
+            "return_pct": -4.990077449677333,
+            "max_drawdown_pct": 6.0132784883283,
+            "mean_net_r": -0.15391701656946002,
+            "fees": 9.271101455606411,
+            "funding_pnl": 0.00578101701837721,
+            "per_symbol": {
+              "ETHUSDT": {
+                "trades": 37,
+                "net_pnl": -4.371920200430139,
+                "gross_profit": 7.388710200484127
+              },
+              "SOLUSDT": {
+                "trades": 40,
+                "net_pnl": -2.8351531468888993,
+                "gross_profit": 8.893467401360766
+              },
+              "BNBUSDT": {
+                "trades": 29,
+                "net_pnl": -5.268120276874299,
+                "gross_profit": 4.412197597008486
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 42.97528828922329,
+            "per_month": {
+              "2025-08": {
+                "trades": 20,
+                "pnl": 1.0222899275280497
+              },
+              "2025-09": {
+                "trades": 24,
+                "pnl": -1.7848228079358819
+              },
+              "2025-10": {
+                "trades": 22,
+                "pnl": -5.871478815890384
+              },
+              "2025-11": {
+                "trades": 17,
+                "pnl": -2.564814730643292
+              },
+              "2025-12": {
+                "trades": 23,
+                "pnl": -3.2763671972518296
+              }
+            },
+            "diagnostics": {
+              "signals": 196,
+              "entries": 106,
+              "entries_BNBUSDT": 29,
+              "blocked_stop_width_or_gap": 21,
+              "blocked_reward_cost_or_target": 19,
+              "entries_SOLUSDT": 40,
+              "blocked_open_position": 6,
+              "entries_ETHUSDT": 37,
+              "blocked_risk_halt_or_capital": 30
+            },
+            "drawdown_halted": true
+          },
+          "stress": {
+            "trades": 69,
+            "wins": 26,
+            "win_rate_pct": 37.68115942028986,
+            "profit_factor": 0.6024620064239706,
+            "net_pnl": -8.867343574597527,
+            "return_pct": -3.5469374298390144,
+            "max_drawdown_pct": 4.326555975300761,
+            "mean_net_r": -0.12052416853057317,
+            "fees": 7.914409627207739,
+            "funding_pnl": 0.0035256852215912677,
+            "per_symbol": {
+              "ETHUSDT": {
+                "trades": 26,
+                "net_pnl": -4.478444732750262,
+                "gross_profit": 5.254984719745551
+              },
+              "SOLUSDT": {
+                "trades": 32,
+                "net_pnl": -2.416853412856881,
+                "gross_profit": 7.118707269086201
+              },
+              "BNBUSDT": {
+                "trades": 11,
+                "net_pnl": -1.9720454289903842,
+                "gross_profit": 1.0646150105746415
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 52.973244839551995,
+            "per_month": {
+              "2025-08": {
+                "trades": 9,
+                "pnl": -0.19434568460417267
+              },
+              "2025-09": {
+                "trades": 14,
+                "pnl": -1.1257229951000056
+              },
+              "2025-10": {
+                "trades": 14,
+                "pnl": -5.1917714509093855
+              },
+              "2025-11": {
+                "trades": 14,
+                "pnl": -1.4892171910636591
+              },
+              "2025-12": {
+                "trades": 11,
+                "pnl": -1.011212378620911
+              },
+              "2026-01": {
+                "trades": 7,
+                "pnl": 0.14492612570060714
+              }
+            },
+            "diagnostics": {
+              "signals": 196,
+              "entries": 69,
+              "entries_BNBUSDT": 11,
+              "blocked_stop_width_or_gap": 22,
+              "blocked_reward_cost_or_target": 88,
+              "entries_SOLUSDT": 32,
+              "blocked_open_position": 7,
+              "entries_ETHUSDT": 26,
+              "blocked_risk_halt_or_capital": 1
+            },
+            "drawdown_halted": false
+          },
+          "severe": {
+            "trades": 31,
+            "wins": 12,
+            "win_rate_pct": 38.70967741935484,
+            "profit_factor": 0.6664986142165394,
+            "net_pnl": -3.5753425950744315,
+            "return_pct": -1.4301370380297773,
+            "max_drawdown_pct": 2.5706901361804757,
+            "mean_net_r": -0.11533363209917522,
+            "fees": 3.2675192259230297,
+            "funding_pnl": 0.00948143621524271,
+            "per_symbol": {
+              "ETHUSDT": {
+                "trades": 9,
+                "net_pnl": -1.7866031807881768,
+                "gross_profit": 1.6331132013989986
+              },
+              "SOLUSDT": {
+                "trades": 17,
+                "net_pnl": -0.6225524329293819,
+                "gross_profit": 4.805873696435015
+              },
+              "BNBUSDT": {
+                "trades": 5,
+                "net_pnl": -1.1661869813568728,
+                "gross_profit": 0.7062934114769348
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 67.2594144441405,
+            "per_month": {
+              "2025-08": {
+                "trades": 6,
+                "pnl": 1.0980801253890604
+              },
+              "2025-09": {
+                "trades": 6,
+                "pnl": -0.0068704026624004655
+              },
+              "2025-10": {
+                "trades": 8,
+                "pnl": -2.7480745253060093
+              },
+              "2025-11": {
+                "trades": 7,
+                "pnl": -1.36646459531309
+              },
+              "2025-12": {
+                "trades": 4,
+                "pnl": -0.5520131971819922
+              }
+            },
+            "diagnostics": {
+              "signals": 196,
+              "blocked_reward_cost_or_target": 136,
+              "entries": 31,
+              "entries_SOLUSDT": 17,
+              "blocked_open_position": 2,
+              "blocked_stop_width_or_gap": 19,
+              "entries_ETHUSDT": 9,
+              "entries_BNBUSDT": 5,
+              "blocked_risk_halt_or_capital": 1
+            },
+            "drawdown_halted": false
+          }
+        }
+      },
+      "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+    }
+  }
+}

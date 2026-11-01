@@ -1,0 +1,145 @@
+{
+  "protocol_version": "S36-FUNDING-REGIME-SWITCH-v1.0-frozen-2026-09-14",
+  "status": "retrospective_research_only_frozen_before_pnl_replay",
+  "supersedes": "S35 post-funding exhaustion; this is a new dual-regime hypothesis, not a parameter rescue",
+  "objective": "After an unusually crowded funding event, let three completed bars classify a causal FADE, CONTINUATION or NO_TRADE state; enter only after a later confirmed retest.",
+  "market": "Binance USD-M perpetual",
+  "symbols": ["SUIUSDT", "DOGEUSDT", "XRPUSDT", "SOLUSDT", "ETHUSDT"],
+  "data": {
+    "sources": [
+      "5m perpetual OHLCV, quote volume, trade count and taker-buy quote volume",
+      "5m mark-price OHLC",
+      "5m index-price OHLC",
+      "realized funding history"
+    ],
+    "access": "anonymous checksum-verified Binance public archives only; no account, API key, private file or application",
+    "missing_policy": "no interpolation, resampling or forward-fill; a gap invalidates only the affected feature, setup or open position",
+    "funding_timestamp": "ceil raw calc_time to the first 5m boundary at or after it; never floor",
+    "history": "all ranks and percentiles use exactly the previous 180 realized funding events of the same symbol and exclude the classified event",
+    "order_flow_proxy": "bar delta = (2 * taker_buy_quote_volume - quote_volume) / quote_volume; this is a public trade-flow proxy, not order-book CVD"
+  },
+  "event_definition": {
+    "time": "T is the causal funding timestamp; B0 is the bar ending at T; all event features stop at B0",
+    "mandatory_funding": "abs(funding[T]) >= max(0.0001, trailing Q75 of abs funding over the previous 180 events)",
+    "quorum": "at least 3 of 5 distinct criteria; criteria do not substitute for later regime confirmation",
+    "criteria": [
+      "premium: mark/index - 1 at B0 has the funding sign and abs premium >= max(0.0002, trailing Q75 abs pre-event premium)",
+      "60m extension: completed 60m return through B0 has the funding sign and abs return >= trailing Q65",
+      "4h extension: completed 4h return through B0 has the funding sign and abs return >= trailing Q60",
+      "Bollinger extension: funding_sign * (B0 close - SMA20) / population_STD20 >= 1.50, using only completed 5m closes",
+      "volume expansion: mean quote volume of the final 12 completed 5m bars >= 1.50 * median quote volume of the previous 2016 completed 5m bars"
+    ],
+    "deduplication": "one immutable setup id per symbol and funding timestamp"
+  },
+  "observation": {
+    "bars": "B1, B2 and B3 open at T, T+5m and T+10m; classification occurs only at T+15m after B3 closes",
+    "atr": "Wilder ATR(14) fixed from B0 and used for every classification and retest threshold",
+    "pre_ranges": "FADE structure uses the final 4 completed pre-T bars; CONTINUATION breakout uses the final 6",
+    "delta": "aggregate B1-B3 delta is sum(2*taker_buy_quote_volume - quote_volume) / sum(quote_volume)",
+    "ambiguity": "if data allow both states or neither state, classify NO_TRADE"
+  },
+  "fade_state": {
+    "side": "opposite the funding sign",
+    "mandatory": [
+      "at least one B1-B3 close breaks the opposite edge of the pre-4-bar range by at least 0.05 ATR",
+      "B3 close remains at least 0.05 ATR beyond that broken level",
+      "abs signed B3 premium <= 0.50 * abs B0 premium",
+      "abs B3 premium <= abs B2 premium"
+    ],
+    "soft_quorum": "at least 2 of 3",
+    "soft_criteria": [
+      "one opposite-sign B1-B3 displacement body >= 0.50 ATR and closes in the final 25% of its range",
+      "funding_sign * aggregate_delta <= -0.10 and at least two B1-B3 bar deltas have the opposite sign",
+      "funding_sign * (B3 close / B0 close - 1) is negative with absolute price change >= 0.50 ATR"
+    ]
+  },
+  "continuation_state": {
+    "side": "same as the funding sign",
+    "mandatory": [
+      "the mandatory FADE structure conditions are not all satisfied",
+      "at least one B1-B3 close breaks the funding-side edge of the pre-6-bar range by at least 0.05 ATR",
+      "B3 close remains at least 0.05 ATR beyond that breakout level",
+      "funding_sign * B3 premium >= 0.75 * abs B0 premium",
+      "at least two B1-B3 signed premiums retain >= 0.50 * abs B0 premium"
+    ],
+    "soft_quorum": "at least 2 of 3",
+    "soft_criteria": [
+      "funding_sign * (B3 close / B0 close - 1) is positive with absolute price change >= 0.50 ATR",
+      "funding_sign * aggregate_delta >= 0.10 and at least two B1-B3 bar deltas have the funding sign",
+      "completed 4h return retains the funding sign and funding_sign * Bollinger z-score at B3 >= 1.00"
+    ]
+  },
+  "retest_and_entry": {
+    "window": "inspect at most the next 3 fully completed 5m bars after classification",
+    "touch": "the bar range intersects breakout level +/- 0.10 ATR",
+    "acceptance": "bar closes at least 0.05 ATR on the trade side of the level and its body has the trade direction",
+    "premium": "FADE requires abs premium <= 0.75 * abs B0 premium; CONTINUATION requires funding_sign * premium >= 0.50 * abs B0 premium",
+    "entry": "market at the next 5m open after the first qualifying completed retest bar",
+    "expiry": [
+      "no qualifying retest in 3 bars",
+      "a retest bar closes 0.15 ATR beyond the level on the invalid side",
+      "before a retest, price closes more than 1.50 ATR away from the level"
+    ],
+    "collision": "one global position; sort by classification soft-count, event quorum count, funding/threshold ratio, then SUI, DOGE, XRP, SOL, ETH"
+  },
+  "initial_stop_and_sizing": {
+    "structural_stop": "LONG below the lowest low from B1 through the retest, SHORT above the highest high, plus an adverse buffer max(0.15 ATR, 2 ticks)",
+    "minimum_distance": "max(0.60 ATR, 0.0060 * entry price, 3 ticks); widen only to this predefined minimum",
+    "maximum_distance": "min(2.50 ATR, 0.0300 * entry price); veto if structural distance exceeds it or maximum < minimum",
+    "risk": "min(0.50 USD, 0.20% of min(current equity, 250 USD)), inclusive of stress stop friction",
+    "maximum_notional": "50% of current equity",
+    "maximum_isolated_leverage": 2,
+    "liquidity": "notional <= 0.10% of the minimum quote volume of the 12 completed bars before entry",
+    "quantization": "quantity rounds down to frozen MARKET_LOT_SIZE; prices round adversely to tick; minimum historical notional is conservatively 20 USD; never increase risk to meet it"
+  },
+  "position_management": {
+    "profit_unit": "R is the initial stress-inclusive dollar risk and price barrier distance recorded at entry",
+    "partial_if_executable": "at +1R close 50% rounded down to quantity step only if both child orders are at least 20 USD notional; otherwise do not split",
+    "breakeven": "after a completed bar first reaches +1R, activate from the next bar a stop on all remaining quantity intended to leave +2 bps net after stress round-trip costs",
+    "trailing": "after a completed bar first reaches +1.5R, activate next bar; LONG uses the tighter valid improvement of cost-BE, highest completed close minus 1.50 ATR, and the lowest low of the last 3 completed bars minus 0.15 ATR; SHORT is symmetric",
+    "hard_target": "+4R on remaining quantity",
+    "stagnation_exit": "after 60 minutes, exit next open only if MFE <0.50R and marked net PnL is non-positive",
+    "time_exit": "120 minutes if +1R was never reached; otherwise 180 minutes",
+    "stop_rule": "stop never loosens; gaps fill at worse of bar open or stop plus slippage; if stop and target are both possible in one bar, stop occurs first",
+    "funding": "exclude the pre-entry settlement; book every later realized funding while the position is open with the correct side"
+  },
+  "portfolio_risk": {
+    "maximum_positions": 1,
+    "daily_realized_loss_stop": "0.60% of start-of-day equity",
+    "weekly_realized_loss_stop": "1.50% of start-of-week equity",
+    "drawdown_kill": "4.00% mark-to-market from high-water mark, permanent RISK_FAIL for the replay window",
+    "prohibitions": ["no averaging", "no martingale", "no stop widening", "no leverage or risk increase after results"]
+  },
+  "costs": {
+    "base": {"taker_fee_bps_per_side": 5, "slippage_bps_per_side": 1, "round_trip_bps": 12},
+    "stress": {"taker_fee_bps_per_side": 5, "slippage_bps_per_side": 10, "round_trip_bps": 30}
+  },
+  "windows": {
+    "warmup": ["2021-07-01", "2022-01-01"],
+    "development": ["2022-01-01", "2023-07-01"],
+    "validation": ["2023-07-01", "2024-07-01"],
+    "retrospective_evaluation": ["2024-07-01", "2026-09-01"],
+    "genuine_oos": "first complete UTC day after protocol and implementation hashes are frozen"
+  },
+  "edge_gate": [
+    "development stress: >=60 trades, PF >=1.15, net >0",
+    "validation stress: >=40 trades, PF >=1.10, net >0",
+    "retrospective evaluation stress: >=60 trades, PF >=1.10, net >0",
+    "validation plus evaluation: net expectancy >=0.05R and lower 95% UTC-week block-bootstrap mean trade PnL >0",
+    "stress maximum drawdown <=4% with no risk violation",
+    "FADE and CONTINUATION each have >=25 total trades, PF >=1.00 and positive net",
+    "at least 3 symbols each have >=10 validation-plus-evaluation trades and positive stress net",
+    "no symbol supplies >50% of validation-plus-evaluation trades or positive gross PnL",
+    "LONG and SHORT each supply >=20% of all trades"
+  ],
+  "income_target_gate": {
+    "target": "25 USD average net per calendar day from 250 USD initial capital",
+    "calculation": "stress net divided by every calendar day including zero-trade days",
+    "required": "validation and retrospective evaluation each have mean >=25 USD/day and lower 95% UTC-week block-bootstrap mean daily PnL >=25 USD/day",
+    "report": ["mean", "median", "share of days >=25 USD", "every month", "worst day", "diagnostic capital required at observed return"],
+    "independence": "EDGE_PASS/FAIL and INCOME_TARGET_PASS/FAIL are separate; never resize after seeing results"
+  },
+  "ai": "shadow-only APPROVE/VETO label after deterministic qualification; no execution effect until >=100 prospective fixed-model and fixed-prompt decisions prove positive incremental stress expectancy versus the identical baseline",
+  "promotion": "historical pass permits paper-forward only; live remains disabled until >=40 prospective trades over >=6 months pass the same stress and drawdown gates",
+  "reality_boundary": "25 USD from 250 USD is 10% per day and 50R per day at the frozen 0.50 USD risk. No result is a guarantee and leverage may not be used to manufacture the income gate."
+}

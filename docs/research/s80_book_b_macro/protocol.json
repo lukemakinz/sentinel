@@ -1,0 +1,24 @@
+{
+  "strategy_id": "S80_book_b_macro_burst",
+  "traded": [
+    "BTCUSDT",
+    "ETHUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "events": [
+    "FOMC",
+    "CPI",
+    "NFP"
+  ],
+  "capital_usd": 250,
+  "fixed_risk_usd": 10.0
+}

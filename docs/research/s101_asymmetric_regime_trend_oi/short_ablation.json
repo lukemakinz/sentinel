@@ -1,0 +1,597 @@
+{
+  "disclosure": "Post-hoc ablation; explanatory only, never a promotion gate.",
+  "variants": {
+    "none": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 29,
+        "long_decisions": 29,
+        "short_decisions": 0,
+        "cash_decisions": 80,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 596.2117935642492,
+        "net_pnl": 96.2117935642492,
+        "return_pct": 19.24235871284985,
+        "max_drawdown_pct": 9.23885994707675,
+        "annualized_sharpe": 1.01056383932286,
+        "rebalances": 109,
+        "turnover_usd": 4233.822848037983,
+        "fees": 3.387058278430386,
+        "slippage": 2.116911424018992,
+        "funding_pnl": -5.63451407164087
+      },
+      "direction_pnl": {
+        "long_up_regime": 97.0769812392981,
+        "short_down_regime": -0.29272848639891436,
+        "sideways_or_unclassified": -0.5724591886499866
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 60.188102587183835,
+          "short_down_regime": -0.16552170838133407,
+          "sideways_or_unclassified": -0.11687042561015915
+        },
+        "validation": {
+          "long_up_regime": 37.90221860106374,
+          "short_down_regime": -0.1272067780175803,
+          "sideways_or_unclassified": -0.4555887630398274
+        },
+        "retrospective": {
+          "long_up_regime": -1.013339948949465,
+          "short_down_regime": 0.0,
+          "sideways_or_unclassified": 0.0
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 59.90571045319234,
+          "return_on_start_nav_pct": 11.981142090638468,
+          "usd_per_calendar_day": 0.21943483682488038,
+          "max_continuous_drawdown_pct": 7.225632921479807,
+          "annualized_sharpe": 1.5081799485890353,
+          "positive_month_share": 0.3333333333333333
+        },
+        "validation": {
+          "start_nav": 559.9057104531923,
+          "net_pnl": 37.31942306000633,
+          "return_on_start_nav_pct": 6.665304954614533,
+          "usd_per_calendar_day": 0.15232417575512788,
+          "max_continuous_drawdown_pct": 9.23885994707675,
+          "annualized_sharpe": 0.9533657860190279,
+          "positive_month_share": 0.5
+        },
+        "retrospective": {
+          "start_nav": 597.2251335131987,
+          "net_pnl": -1.013339948949465,
+          "return_on_start_nav_pct": -0.16967469921911285,
+          "usd_per_calendar_day": -0.004170123246705617,
+          "max_continuous_drawdown_pct": 2.7687891151564115,
+          "annualized_sharpe": -0.14986559853123518,
+          "positive_month_share": 0.0
+        }
+      }
+    },
+    "btc": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 42,
+        "long_decisions": 29,
+        "short_decisions": 13,
+        "cash_decisions": 67,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 570.7694393161788,
+        "net_pnl": 70.76943931617882,
+        "return_pct": 14.15388786323577,
+        "max_drawdown_pct": 10.725841393638424,
+        "annualized_sharpe": 0.7278468869130946,
+        "rebalances": 109,
+        "turnover_usd": 6151.871137713931,
+        "fees": 4.921496910171143,
+        "slippage": 3.0759355688569645,
+        "funding_pnl": -4.622656476324474
+      },
+      "direction_pnl": {
+        "long_up_regime": 96.12988303074798,
+        "short_down_regime": -23.91950659971309,
+        "sideways_or_unclassified": -1.4409371148560695
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 59.96001282354547,
+          "short_down_regime": -10.936742192514942,
+          "sideways_or_unclassified": -0.37781707283318156
+        },
+        "validation": {
+          "long_up_regime": 37.139967546339335,
+          "short_down_regime": 8.680727189902996,
+          "sideways_or_unclassified": -0.4464264229984565
+        },
+        "retrospective": {
+          "long_up_regime": -0.9700973391368279,
+          "short_down_regime": -21.663491597101142,
+          "sideways_or_unclassified": -0.6166936190244314
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 48.645453558197346,
+          "return_on_start_nav_pct": 9.72909071163947,
+          "usd_per_calendar_day": 0.17818847457215145,
+          "max_continuous_drawdown_pct": 9.23987922838374,
+          "annualized_sharpe": 1.1801864699511955,
+          "positive_month_share": 0.4444444444444444
+        },
+        "validation": {
+          "start_nav": 548.6454535581973,
+          "net_pnl": 45.374268313243874,
+          "return_on_start_nav_pct": 8.27023499766062,
+          "usd_per_calendar_day": 0.18520109515609745,
+          "max_continuous_drawdown_pct": 10.725841393638424,
+          "annualized_sharpe": 1.132680029597736,
+          "positive_month_share": 0.625
+        },
+        "retrospective": {
+          "start_nav": 594.0197218714412,
+          "net_pnl": -23.2502825552624,
+          "return_on_start_nav_pct": -3.9140590285475856,
+          "usd_per_calendar_day": -0.09568017512453664,
+          "max_continuous_drawdown_pct": 5.798663954682315,
+          "annualized_sharpe": -1.606562929593111,
+          "positive_month_share": 0.125
+        }
+      }
+    },
+    "eth": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 48,
+        "long_decisions": 29,
+        "short_decisions": 19,
+        "cash_decisions": 61,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 599.9879020431625,
+        "net_pnl": 99.98790204316253,
+        "return_pct": 19.99758040863251,
+        "max_drawdown_pct": 8.339538859774443,
+        "annualized_sharpe": 0.9824481932100982,
+        "rebalances": 109,
+        "turnover_usd": 5400.204416523198,
+        "fees": 4.320163533218557,
+        "slippage": 2.7001022082615984,
+        "funding_pnl": -4.99154547687887
+      },
+      "direction_pnl": {
+        "long_up_regime": 97.2759979570099,
+        "short_down_regime": 3.8540240815572133,
+        "sideways_or_unclassified": -1.1421199954045846
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 60.08411199196149,
+          "short_down_regime": 4.695201705447516,
+          "sideways_or_unclassified": -0.3026572496109452
+        },
+        "validation": {
+          "long_up_regime": 38.21164390440754,
+          "short_down_regime": -1.3225491435779304,
+          "sideways_or_unclassified": -0.5519499009802757
+        },
+        "retrospective": {
+          "long_up_regime": -1.019757939359124,
+          "short_down_regime": 0.48137151968762737,
+          "sideways_or_unclassified": -0.2875128448133637
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 64.47665644779806,
+          "return_on_start_nav_pct": 12.895331289559614,
+          "usd_per_calendar_day": 0.23617822874651306,
+          "max_continuous_drawdown_pct": 8.040213241352422,
+          "annualized_sharpe": 1.5292528338392588,
+          "positive_month_share": 0.4444444444444444
+        },
+        "validation": {
+          "start_nav": 564.4766564477981,
+          "net_pnl": 36.33714485984933,
+          "return_on_start_nav_pct": 6.437315776442517,
+          "usd_per_calendar_day": 0.14831487697897686,
+          "max_continuous_drawdown_pct": 8.339538859774443,
+          "annualized_sharpe": 0.9002699053148515,
+          "positive_month_share": 0.625
+        },
+        "retrospective": {
+          "start_nav": 600.8138013076474,
+          "net_pnl": -0.8258992644848604,
+          "return_on_start_nav_pct": -0.13746343088113544,
+          "usd_per_calendar_day": -0.0033987624052874916,
+          "max_continuous_drawdown_pct": 3.730858145277405,
+          "annualized_sharpe": -0.03195811598516041,
+          "positive_month_share": 0.25
+        }
+      }
+    },
+    "sol": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 41,
+        "long_decisions": 29,
+        "short_decisions": 12,
+        "cash_decisions": 68,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 580.0402705377913,
+        "net_pnl": 80.04027053779134,
+        "return_pct": 16.00805410755828,
+        "max_drawdown_pct": 10.901243793940907,
+        "annualized_sharpe": 0.8099997050635699,
+        "rebalances": 109,
+        "turnover_usd": 5248.516148102122,
+        "fees": 4.198812918481696,
+        "slippage": 2.624258074051061,
+        "funding_pnl": -5.788358163409966
+      },
+      "direction_pnl": {
+        "long_up_regime": 96.26064172355188,
+        "short_down_regime": -15.285903443726113,
+        "sideways_or_unclassified": -0.9344677420344283
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 60.095649636624444,
+          "short_down_regime": -11.017412612088094,
+          "sideways_or_unclassified": -0.2720767358918579
+        },
+        "validation": {
+          "long_up_regime": 37.150846416680565,
+          "short_down_regime": -2.3546562834776523,
+          "sideways_or_unclassified": -0.4465571881953565
+        },
+        "retrospective": {
+          "long_up_regime": -0.9858543297531241,
+          "short_down_regime": -1.9138345481603665,
+          "sideways_or_unclassified": -0.2158338179472139
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 48.80616028864449,
+          "return_on_start_nav_pct": 9.761232057728899,
+          "usd_per_calendar_day": 0.17877714391444868,
+          "max_continuous_drawdown_pct": 9.608971905257057,
+          "annualized_sharpe": 1.1722256394168766,
+          "positive_month_share": 0.3333333333333333
+        },
+        "validation": {
+          "start_nav": 548.8061602886445,
+          "net_pnl": 34.349632945007556,
+          "return_on_start_nav_pct": 6.258973646895905,
+          "usd_per_calendar_day": 0.14020258344901043,
+          "max_continuous_drawdown_pct": 10.901243793940907,
+          "annualized_sharpe": 0.8977431836014673,
+          "positive_month_share": 0.5
+        },
+        "retrospective": {
+          "start_nav": 583.155793233652,
+          "net_pnl": -3.1155226958607045,
+          "return_on_start_nav_pct": -0.5342522070448528,
+          "usd_per_calendar_day": -0.01282108105292471,
+          "max_continuous_drawdown_pct": 4.576851490822809,
+          "annualized_sharpe": -0.17133747618458536,
+          "positive_month_share": 0.25
+        }
+      }
+    },
+    "btc_eth": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 52,
+        "long_decisions": 29,
+        "short_decisions": 23,
+        "cash_decisions": 57,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 577.8673406678452,
+        "net_pnl": 77.86734066784516,
+        "return_pct": 15.573468133569035,
+        "max_drawdown_pct": 9.338531148466057,
+        "annualized_sharpe": 0.7770386274495537,
+        "rebalances": 109,
+        "turnover_usd": 6463.919539219232,
+        "fees": 5.171135631375387,
+        "slippage": 3.2319597696096176,
+        "funding_pnl": -4.5898353000455865
+      },
+      "direction_pnl": {
+        "long_up_regime": 97.13706305527074,
+        "short_down_regime": -17.665772133243138,
+        "sideways_or_unclassified": -1.6039502541824504
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 60.23139569651511,
+          "short_down_regime": -0.12487331358892106,
+          "sideways_or_unclassified": -0.4133877238182322
+        },
+        "validation": {
+          "long_up_regime": 37.88782850989787,
+          "short_down_regime": 0.8066848281140437,
+          "sideways_or_unclassified": -0.5475990705253935
+        },
+        "retrospective": {
+          "long_up_regime": -0.9821611511422361,
+          "short_down_regime": -18.34758364776826,
+          "sideways_or_unclassified": -0.6429634598388247
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 59.693134659107955,
+          "return_on_start_nav_pct": 11.938626931821592,
+          "usd_per_calendar_day": 0.21865617091248335,
+          "max_continuous_drawdown_pct": 8.64452800458021,
+          "annualized_sharpe": 1.4032978031594383,
+          "positive_month_share": 0.5555555555555556
+        },
+        "validation": {
+          "start_nav": 559.693134659108,
+          "net_pnl": 38.14691426748652,
+          "return_on_start_nav_pct": 6.815683792641239,
+          "usd_per_calendar_day": 0.15570169088770008,
+          "max_continuous_drawdown_pct": 9.338531148466057,
+          "annualized_sharpe": 0.9455336742688148,
+          "positive_month_share": 0.625
+        },
+        "retrospective": {
+          "start_nav": 597.8400489265945,
+          "net_pnl": -19.97270825874932,
+          "return_on_start_nav_pct": -3.3408113582570746,
+          "usd_per_calendar_day": -0.08219221505658157,
+          "max_continuous_drawdown_pct": 5.978661306290379,
+          "annualized_sharpe": -1.112224436186839,
+          "positive_month_share": 0.25
+        }
+      }
+    },
+    "btc_sol": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 48,
+        "long_decisions": 29,
+        "short_decisions": 19,
+        "cash_decisions": 61,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 573.5661494425738,
+        "net_pnl": 73.56614944257376,
+        "return_pct": 14.713229888514757,
+        "max_drawdown_pct": 11.121395818781588,
+        "annualized_sharpe": 0.7326686839397629,
+        "rebalances": 109,
+        "turnover_usd": 6645.0210301876805,
+        "fees": 5.316016824150144,
+        "slippage": 3.3225105150938408,
+        "funding_pnl": -5.068057006220351
+      },
+      "direction_pnl": {
+        "long_up_regime": 96.423494868712,
+        "short_down_regime": -21.381406567589522,
+        "sideways_or_unclassified": -1.4759388585487159
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 60.246357583840506,
+          "short_down_regime": -11.033778199656865,
+          "sideways_or_unclassified": -0.38955521903164936
+        },
+        "validation": {
+          "long_up_regime": 37.15198799877692,
+          "short_down_regime": 6.398211545183585,
+          "sideways_or_unclassified": -0.446570910135506
+        },
+        "retrospective": {
+          "long_up_regime": -0.9748507139054254,
+          "short_down_regime": -16.745839913116242,
+          "sideways_or_unclassified": -0.6398127293815605
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 48.82302416515199,
+          "return_on_start_nav_pct": 9.764604833030397,
+          "usd_per_calendar_day": 0.1788389163558681,
+          "max_continuous_drawdown_pct": 9.66514456598031,
+          "annualized_sharpe": 1.1621046147001215,
+          "positive_month_share": 0.4444444444444444
+        },
+        "validation": {
+          "start_nav": 548.823024165152,
+          "net_pnl": 43.103628633825,
+          "return_on_start_nav_pct": 7.853830239610035,
+          "usd_per_calendar_day": 0.17593317809724487,
+          "max_continuous_drawdown_pct": 11.121395818781588,
+          "annualized_sharpe": 1.0854305347172832,
+          "positive_month_share": 0.625
+        },
+        "retrospective": {
+          "start_nav": 591.926652798977,
+          "net_pnl": -18.36050335640323,
+          "return_on_start_nav_pct": -3.101820684975745,
+          "usd_per_calendar_day": -0.07555762698108325,
+          "max_continuous_drawdown_pct": 5.580663044883694,
+          "annualized_sharpe": -0.8875762139380141,
+          "positive_month_share": 0.375
+        }
+      }
+    },
+    "eth_sol": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 50,
+        "long_decisions": 29,
+        "short_decisions": 21,
+        "cash_decisions": 59,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 591.2931721840948,
+        "net_pnl": 91.29317218409483,
+        "return_pct": 18.258634436818966,
+        "max_drawdown_pct": 9.539354663743715,
+        "annualized_sharpe": 0.8841085554011499,
+        "rebalances": 109,
+        "turnover_usd": 5926.946447964165,
+        "fees": 4.741557158371333,
+        "slippage": 2.963473223982084,
+        "funding_pnl": -5.368608148142116
+      },
+      "direction_pnl": {
+        "long_up_regime": 96.78995200709323,
+        "short_down_regime": -4.304237382387669,
+        "sideways_or_unclassified": -1.1925424406107368
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 60.08371783551365,
+          "short_down_regime": -2.704650547904521,
+          "sideways_or_unclassified": -0.29494390905961154
+        },
+        "validation": {
+          "long_up_regime": 37.71121427996218,
+          "short_down_regime": -2.6612091549220622,
+          "sideways_or_unclassified": -0.5445123699014403
+        },
+        "retrospective": {
+          "long_up_regime": -1.0049801083825969,
+          "short_down_regime": 1.0616223204389144,
+          "sideways_or_unclassified": -0.353086161649685
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 57.08412337854952,
+          "return_on_start_nav_pct": 11.416824675709904,
+          "usd_per_calendar_day": 0.20909935303497992,
+          "max_continuous_drawdown_pct": 9.155383905174407,
+          "annualized_sharpe": 1.3378213108305355,
+          "positive_month_share": 0.4444444444444444
+        },
+        "validation": {
+          "start_nav": 557.0841233785495,
+          "net_pnl": 34.505492755138675,
+          "return_on_start_nav_pct": 6.193946534658559,
+          "usd_per_calendar_day": 0.14083874593934154,
+          "max_continuous_drawdown_pct": 9.539354663743715,
+          "annualized_sharpe": 0.8702645905104819,
+          "positive_month_share": 0.625
+        },
+        "retrospective": {
+          "start_nav": 591.5896161336882,
+          "net_pnl": -0.2964439495933675,
+          "return_on_start_nav_pct": -0.05010972835033276,
+          "usd_per_calendar_day": -0.0012199339489438992,
+          "max_continuous_drawdown_pct": 4.050430048973663,
+          "annualized_sharpe": 0.010431522222429844,
+          "positive_month_share": 0.375
+        }
+      }
+    },
+    "all": {
+      "target_counts": {
+        "decisions": 109,
+        "invested_decisions": 53,
+        "long_decisions": 29,
+        "short_decisions": 24,
+        "cash_decisions": 56,
+        "sideways_decisions": 41
+      },
+      "summary": {
+        "initial_capital": 500.0,
+        "final_equity": 576.5771458936948,
+        "net_pnl": 76.57714589369482,
+        "return_pct": 15.31542917873896,
+        "max_drawdown_pct": 10.311540859663692,
+        "annualized_sharpe": 0.7498845285773158,
+        "rebalances": 109,
+        "turnover_usd": 6614.174038346051,
+        "fees": 5.29133923067684,
+        "slippage": 3.307087019173025,
+        "funding_pnl": -4.9859106750280215
+      },
+      "direction_pnl": {
+        "long_up_regime": 97.12311504268041,
+        "short_down_regime": -18.999358360936526,
+        "sideways_or_unclassified": -1.5466107880490654
+      },
+      "direction_pnl_by_slice": {
+        "development": {
+          "long_up_regime": 60.472095545176785,
+          "short_down_regime": -4.196564926828387,
+          "sideways_or_unclassified": -0.37654281699769854
+        },
+        "validation": {
+          "long_up_regime": 37.63098779382392,
+          "short_down_regime": 0.8012163302599902,
+          "sideways_or_unclassified": -0.543886909049661
+        },
+        "retrospective": {
+          "long_up_regime": -0.979968296320294,
+          "short_down_regime": -15.60400976436813,
+          "sideways_or_unclassified": -0.6261810620017059
+        }
+      },
+      "slices": {
+        "development": {
+          "start_nav": 500.0,
+          "net_pnl": 55.8989878013507,
+          "return_on_start_nav_pct": 11.17979756027014,
+          "usd_per_calendar_day": 0.20475819707454468,
+          "max_continuous_drawdown_pct": 9.665144565980055,
+          "annualized_sharpe": 1.3009724452200129,
+          "positive_month_share": 0.6666666666666666
+        },
+        "validation": {
+          "start_nav": 555.8989878013507,
+          "net_pnl": 37.88831721503425,
+          "return_on_start_nav_pct": 6.8156837926414,
+          "usd_per_calendar_day": 0.1546461927144255,
+          "max_continuous_drawdown_pct": 10.311540859663692,
+          "annualized_sharpe": 0.9455336742688384,
+          "positive_month_share": 0.625
+        },
+        "retrospective": {
+          "start_nav": 593.787305016385,
+          "net_pnl": -17.21015912269013,
+          "return_on_start_nav_pct": -2.8983710121952226,
+          "usd_per_calendar_day": -0.07082370009337502,
+          "max_continuous_drawdown_pct": 5.54829525197732,
+          "annualized_sharpe": -0.7894329184798325,
+          "positive_month_share": 0.375
+        }
+      }
+    }
+  }
+}

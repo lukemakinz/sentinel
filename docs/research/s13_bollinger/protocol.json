@@ -1,0 +1,66 @@
+{
+  "protocol_version": "S13-BB-v1.2-audited-2026-09-12",
+  "status": "retrospective_diagnostic_only_all_historical_months_previously_seen",
+  "hypotheses": [
+    {
+      "id": "H1_BB_SQUEEZE_EXPANSION",
+      "bars": "closed 15m; execution no earlier than next 1m open",
+      "bands": "SMA20 +/- 2 population sigma; breakout versus prior closed-bar band",
+      "squeeze": "at least 3 of previous 4 bandwidth values at/below causal 20th percentile of previous 1920 complete 15m values",
+      "filters": "body/range >=0.65; range 0.8-2.0 ATR14; volume >=1.25x prior-20 median; BTC close on directional side of prior BB middle; weekday London 02:00-05:00 ET or NY 07:00-11:00 ET",
+      "entry": "market at next minute open",
+      "risk": "stop beyond breakout extreme by 0.10 ATR; actual-fill stop width 0.50-1.50 ATR; reward must be at least 4x estimated round-trip friction; one trade per squeeze episode",
+      "exit": "1.8R; no partial or trailing; 180 minute time stop"
+    },
+    {
+      "id": "H2_BB_LIQUIDITY_FAILURE_SMT",
+      "bars": "closed 15m; execution no earlier than next 1m open",
+      "levels": "four-hour range frozen at London 02:00 ET or NY 07:00 ET session open",
+      "trigger": "alt exceeds both corresponding frozen session boundary and prior closed-bar BB outer band by >0.05 ATR, then directionally closes above/below both in outer 35% of candle; BTC must not have confirmed its own range sweep by 0.05 ATR at any earlier or current bar in that session",
+      "regime_veto": "1h BB bandwidth must not exceed causal 80th percentile of previous 480 complete hourly values",
+      "entry": "50% rejection-candle body resting limit; TTL 30m; 2bps base trade-through",
+      "risk": "stop 0.10 ATR beyond sweep; stop width 0.50-1.50 ATR; one attempt per session/range/side",
+      "exit": "nearer of prior frozen BB middle and 2R, requiring >=1.25R and >=4x estimated round-trip friction; no partial or trailing; 180 minute time stop"
+    }
+  ],
+  "bb_is_one_evidence_family": true,
+  "ai_policy": "AI may only APPROVE or REJECT a mechanically complete candidate. It may not change direction, entry, stop, target, size, leverage, or create a trade. Provider failure means REJECT. Historical tests measure the mechanical queue, not AI skill.",
+  "symbols": {
+    "reference_not_traded": "BTCUSDT",
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"]
+  },
+  "windows": {
+    "warmup": ["2025-07-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates, 100 AI APPROVE decisions, three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%, AI APPROVE cohort better than counterfactual REJECT cohort"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2 central configurations. No grid search. A failing gate stops that route; choose no least-bad winner. Simultaneous candidates use fixed liquidity priority ETH, then SOL, then BNB, but an execution-ineligible candidate falls through to the next candidate.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the 4x friction filter is reapplied and the fill cohort may shrink. A smaller severe loss is not evidence of robustness and is not a matched-cohort cost shock.",
+  "audit_amendments": [
+    "v1 used 180-minute admission spacing for both routes. Audit identified possible overlap when H2 filled near the end of its 30-minute TTL; that run was invalidated.",
+    "v1.1 replaced spacing with 210 minutes for H2, but independent per-symbol cash accounts still were not a true portfolio; that run was also invalidated before acceptance.",
+    "v1.2 uses one global minute event loop, enforces the stop-width cap at actual fill, records setup_id/evidence, and changes H2 from same-bar BTC non-confirmation to cumulative session-level SMT. These are audit corrections, not result-driven parameter tuning."
+  ],
+  "disclosure": "No profit is promised. Bollinger Bands are a falsifiable volatility/location hypothesis. Existing months are retrospective because earlier research already inspected them."
+}

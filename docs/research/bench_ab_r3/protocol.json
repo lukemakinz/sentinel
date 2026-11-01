@@ -1,0 +1,42 @@
+{
+  "benchmark_id": "BENCH_AB_R3",
+  "frozen_at_utc": "2026-10-13T11:00:00Z",
+  "purpose": "Correct Book A quantity ledger and one continuous A+B replay; all pre-freeze results are development-only.",
+  "capital_usd": 500.0,
+  "funding": {
+    "book_a_usd": 250.0,
+    "book_b_usd": 250.0,
+    "capital_transfer_between_books": false
+  },
+  "continuous_replay": {
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "execution_start": "2025-05-01T00:00:00Z",
+    "execution_end": "2026-09-01T00:00:00Z",
+    "window_resets": false,
+    "forced_liquidation_only_at_execution_end": true
+  },
+  "diagnostic_slices": {
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "former_validation_now_diagnostic": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+    "former_evaluation_now_diagnostic": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "book_a": {
+    "config": "BOOK_A_ALT_RM + BOOK_A_RISK_DEFAULT",
+    "ledger": "cash plus immutable quantities between weekly rebalances",
+    "turnover": "absolute dollar change from actual drifted notionals to target notionals",
+    "unallocated_exposure": "cash"
+  },
+  "book_b": {
+    "signal": "BookBQuietRouterConfig/S84 routed quiet breakout",
+    "initial_fixed_risk_usd": 6.0,
+    "single_continuous_account": true,
+    "position_and_halt_state_crosses_slice_boundaries": true
+  },
+  "cost_scenarios_bps": {
+    "base": {"book_a_one_way_turnover": 7, "book_b_fee_each_side": 7, "book_b_slippage_each_side": 2},
+    "stress": {"book_a_one_way_turnover": 12, "book_b_fee_each_side": 8, "book_b_slippage_each_side": 5},
+    "severe": {"book_a_one_way_turnover": 20, "book_b_fee_each_side": 10, "book_b_slippage_each_side": 10}
+  },
+  "prospective_t0": "2026-10-14T00:00:00Z",
+  "claim_policy": "No interval ending before prospective_t0 may be called out-of-sample."
+}

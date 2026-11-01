@@ -22,8 +22,14 @@ RISK_MULTIPLIER = {'NORMAL': 1.0, 'CAUTION': 0.5, 'DEFENSIVE': 0.25,
 
 
 def current() -> TradingState:
-    state = TradingState.objects.order_by('pk').first()
-    return state or TradingState.objects.create()
+    state, _ = TradingState.objects.get_or_create(pk=1)
+    return state
+
+
+def _locked_current() -> TradingState:
+    """Return the singleton row with a transaction lock held."""
+    TradingState.objects.get_or_create(pk=1)
+    return TradingState.objects.select_for_update().get(pk=1)
 
 
 def allows_new_entries(state: TradingState | None = None) -> bool:
@@ -58,7 +64,7 @@ def escalate(target: str, reason: str, by: str = 'system', manual_unlock: bool =
     if target not in SEVERITY:
         raise ValueError(f'Unknown trading state: {target}')
     with transaction.atomic():
-        state = current()
+        state = _locked_current()
         old = state.state
         harden = target == old and manual_unlock and not state.manual_unlock
         if SEVERITY[target] < SEVERITY[old] or (target == old and not harden):
@@ -76,7 +82,7 @@ def release(target: str, reason: str, by: str) -> bool:
     if target not in SEVERITY:
         raise ValueError(f'Unknown trading state: {target}')
     with transaction.atomic():
-        state = current()
+        state = _locked_current()
         old = state.state
         if SEVERITY[target] >= SEVERITY[old]:
             return False

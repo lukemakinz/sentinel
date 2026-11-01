@@ -1,0 +1,90 @@
+{
+  "protocol_version": "S35-POST-FUNDING-EXHAUSTION-v1.1-user-universe-frozen-2026-09-14",
+  "supersedes_protocol_sha256": "e8c2d058b34f99e17f091b011a5085096220f37a3db32f0cde11226a748c0a76",
+  "status": "retrospective_research_only_frozen_before_loading_5m_inputs",
+  "team_hypothesis": "An extreme completed funding payment, same-direction pre-settlement price extension and mark-index premium identify a crowded side. Trade only the first verified post-settlement reversal and premium compression; do not predict or capture the triggering funding payment.",
+  "market": "Binance USD-M perpetual",
+  "symbols": ["SUIUSDT", "DOGEUSDT", "XRPUSDT", "SOLUSDT", "ETHUSDT"],
+  "listing_policy": {
+    "ETHUSDT": "configured archive lower bound 2019-11-29; actual first common bar is detected and reported",
+    "XRPUSDT": "history available from 2020-01-06",
+    "DOGEUSDT": "configured archive lower bound 2020-07-10 09:00 UTC; actual first common bar is detected and reported",
+    "SOLUSDT": "configured archive lower bound 2020-09-14 07:00 UTC; actual first common bar is detected and reported",
+    "SUIUSDT": "launched 2023-05-03 16:00 UTC; all earlier periods are N/A, not missing data or zero performance",
+    "eligibility": "Each symbol must accumulate its own 180 earlier realized funding observations. History is never borrowed from another symbol and common evaluation windows are not shifted for SUI."
+  },
+  "data": {
+    "sources": ["5m perpetual OHLC", "5m mark-price OHLC", "5m index-price OHLC", "realized funding history"],
+    "access": "Anonymous public Binance data only; no account, API key, private file or application",
+    "missing_policy": "No interpolation or forward-fill. A missing bar in an event, open position or rolling threshold window invalidates that event. Duplicate or non-causal funding timestamps fail the affected replay.",
+    "rolling_statistics": "Every threshold excludes the classified funding event and all later observations. Minimum history is 180 earlier funding events per symbol.",
+    "funding_timestamp": "Preserve raw calc_time for audit, then ceil to the first 5m boundary at or after calc_time, never floor. A duplicate after normalization is a hard data error."
+  },
+  "event_at_completed_funding_T": {
+    "funding_extreme": "abs(funding[T]) >= max(0.0005, trailing Q95 of abs(funding) over the prior 180 events)",
+    "price_extension": "60m perpetual close return through the bar ending at T has the same sign as funding and abs(return) >= trailing Q80 of abs 60m event returns over the prior 180 funding events",
+    "premium": "mark/index - 1 at the final completed pre-T bar has the same sign as funding and abs(premium) >= 0.0003",
+    "deduplication": "One immutable setup id per symbol and funding timestamp"
+  },
+  "confirmation_and_entry": {
+    "confirmation_time": "At T+5m, after the first complete post-settlement 5m bar",
+    "reversal": "Return from the last pre-T close to the first post-T close has the opposite sign to funding",
+    "premium_compression": "abs(post premium) <= 0.75 * abs(pre premium)",
+    "entry": "Market at the open of the next 5m bar: positive funding => short, negative funding => long",
+    "portfolio_collision": "At most one global position. If multiple events qualify, maximize abs(funding)/funding_threshold + abs(return60)/return_threshold + abs(pre_premium)/0.0003 + (1 - abs(post_premium/pre_premium)); ties SUI, DOGE, XRP, SOL, ETH."
+  },
+  "position_management": {
+    "R": "max(2 * Wilder ATR(14) from completed 5m bars, 0.0040 * entry_price)",
+    "initial_stop": "1R adverse from entry",
+    "target": "2R favorable from entry",
+    "cost_breakeven": "After a completed 5m bar first reaches +1R, activate from the next bar a stop intended to leave +2 bps net after the full stress round trip; gaps and slippage may still make the realized result negative",
+    "maximum_holding_time": "180 minutes, then market at the next 5m open",
+    "intrabar_policy": "If stop and target are both possible in one bar, stop executes first. A gap through stop fills at the worse of bar open or stop, plus adverse slippage.",
+    "funding": "The settlement at T belongs to the pre-entry market and is excluded. Any later settlement while the position is open is booked with the correct long/short sign."
+  },
+  "capital_and_risk": {
+    "initial_capital_usd": 250,
+    "risk_per_trade": "min(0.50 USD, 0.20% of min(current equity, 250 USD)), inclusive of stress exit costs",
+    "maximum_notional": "50% of current equity",
+    "maximum_isolated_leverage": 2,
+    "maximum_positions": 1,
+    "daily_realized_loss_stop": "0.60% of start-of-day equity",
+    "weekly_realized_loss_stop": "1.50% of start-of-week equity",
+    "portfolio_drawdown_kill": "4.00% from high-water mark; permanent RISK_FAIL for that replay window",
+    "order_quantization": "Round quantity down to the symbol MARKET_LOT_SIZE and stop/target prices adversely to tick size. Use a conservative $20 minimum notional for every symbol because historical filter changes are not fully available. Reject a smaller order; never increase size or risk to meet the minimum.",
+    "liquidity_gate": "Order notional must be <=0.10% of the minimum perpetual quote volume among the prior 12 fully completed 5m bars.",
+    "prohibitions": ["no averaging", "no martingale", "no leverage increase after losses", "no partial fills assumed simultaneous"]
+  },
+  "costs": {
+    "base": {"taker_fee_bps_per_side": 5, "slippage_bps_per_side": 1, "round_trip_bps": 12},
+    "stress": {"taker_fee_bps_per_side": 5, "slippage_bps_per_side": 10, "round_trip_bps": 30}
+  },
+  "windows": {
+    "warmup": ["2021-07-01", "2022-01-01"],
+    "development": ["2022-01-01", "2023-07-01"],
+    "validation": ["2023-07-01", "2024-07-01"],
+    "retrospective_evaluation": ["2024-07-01", "2026-09-01"],
+    "genuine_oos": "first complete UTC day after implementation and code-hash freeze"
+  },
+  "historical_gate": [
+    "development: >=40 trades, stress PF >=1.20 and stress net >0",
+    "validation: >=25 trades, stress PF >=1.10 and stress net >0",
+    "retrospective evaluation: >=25 trades, stress PF >=1.10 and stress net >0",
+    "validation plus evaluation: lower 95% UTC-week block-bootstrap bound of mean trade PnL >0",
+    "stress maximum drawdown <=4% and no risk/collateral violation",
+    "long and short trades each >=20% of all trades",
+    "at least 3 symbols each have >=5 validation-plus-evaluation trades and positive stress net",
+    "no symbol supplies >40% of trades or positive stress gross PnL",
+    "after removing any one symbol, combined validation-plus-evaluation stress net remains >0 and PF >=1.00"
+  ],
+  "income_target_gate": {
+    "target": "25 USD average net per calendar day on 250 USD initial capital",
+    "calculation": "stress net PnL divided by every calendar day in the window, including no-trade days",
+    "required": "validation and retrospective evaluation must each average >=25 USD/day and the lower 95% UTC-week block-bootstrap bound of mean daily PnL must also be >=25 USD/day",
+    "reporting": ["mean and median daily PnL", "share of days >=25 USD", "every calendar month's PnL", "worst day", "diagnostic linear capital estimate only"],
+    "separate_decision": "Report EDGE_PASS/FAIL independently from INCOME_TARGET_PASS/FAIL. Never increase risk after seeing the result."
+  },
+  "ai_role": "After deterministic qualification, an AI ensemble may label APPROVE/REJECT in shadow only. Its cohort must prospectively beat the identical deterministic baseline over at least 100 candidates before any execution role is reconsidered.",
+  "promotion": "A historical pass authorizes only paper-forward. Live consideration requires >=40 prospective trades over >=6 months, stress-equivalent PF >=1.20, positive lower bootstrap bound, drawdown <=4% and no protocol mutation.",
+  "goal_reality": "No result may be described as guaranteeing $25/day. On $250 that target is 10% per day and cannot be made credible by sizing or leverage."
+}

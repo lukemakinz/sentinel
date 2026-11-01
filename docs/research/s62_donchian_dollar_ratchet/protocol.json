@@ -1,0 +1,23 @@
+{
+  "strategy_id": "S62_DONCHIAN_DOLLAR_RATCHET",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "signal": "S55 donchian_20 frozen",
+  "routes": [
+    "ratchet_all",
+    "ratchet_short"
+  ],
+  "disclosure": "S55-informed risk-overlay characterization; not independent discovery; not live approval"
+}

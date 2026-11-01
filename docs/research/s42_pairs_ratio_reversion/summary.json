@@ -1,0 +1,1039 @@
+{
+  "protocol_sha256": "a43b1e61c1a0f40d1d405a43392798a49a51b3890001cbda9ecebe7b005990f1",
+  "disclosure": "retrospective diagnostic; synthetic single-instrument two-leg proxy; not a live paper-forward result",
+  "results": {
+    "S42_pairs_reversion_rsi": {
+      "config": {
+        "name": "S42_pairs_reversion_rsi",
+        "route": "rsi_extreme",
+        "rsi_period": 14,
+        "rsi_oversold": 20.0,
+        "rsi_overbought": 80.0,
+        "bb_period": 20,
+        "bb_extreme_z": 2.5,
+        "swing_lookback_bars": 6,
+        "stop_buffer_atr_mult": 0.25,
+        "partial_r": 1.5,
+        "trail_atr": 2.5,
+        "target_r": 8.0
+      },
+      "raw_candidates_by_window": {
+        "development": 269,
+        "validation": 5,
+        "retrospective_evaluation": 29
+      },
+      "windows": {
+        "development": {
+          "base": {
+            "trades": 93,
+            "wins": 41,
+            "win_rate_pct": 44.086021505376344,
+            "profit_factor": 0.7419650662692739,
+            "net_pnl": -5.839699487440612,
+            "return_pct": -2.3358797949762478,
+            "max_drawdown_pct": 4.575893900400397,
+            "mean_net_r": -0.13683640143043713,
+            "fees": 3.793109758577627,
+            "funding_pnl": 0.0,
+            "per_symbol": {
+              "ETHBTC": {
+                "trades": 25,
+                "net_pnl": 0.02533612992090184,
+                "gross_profit": 6.832527136416019
+              },
+              "BNBBTC": {
+                "trades": 12,
+                "net_pnl": -2.2878199858199935,
+                "gross_profit": 0.20008560562709476
+              },
+              "SOLBTC": {
+                "trades": 4,
+                "net_pnl": -0.08479901745417351,
+                "gross_profit": 0.9054417985841496
+              },
+              "XRPBTC": {
+                "trades": 11,
+                "net_pnl": -2.7437057322398744,
+                "gross_profit": 0.7545956625526742
+              },
+              "ADABTC": {
+                "trades": 9,
+                "net_pnl": -0.25010448922444084,
+                "gross_profit": 1.7498955107755592
+              },
+              "SUIBTC": {
+                "trades": 19,
+                "net_pnl": -3.715989315078531,
+                "gross_profit": 1.2612065892019757
+              },
+              "DOGEBTC": {
+                "trades": 13,
+                "net_pnl": 3.2173829224554993,
+                "gross_profit": 5.0879780046197425
+              }
+            },
+            "positive_symbols": 2,
+            "largest_symbol_gross_profit_share_pct": 40.68983369302616,
+            "per_month": {
+              "2024-01": {
+                "trades": 6,
+                "pnl": -0.6744764757414146
+              },
+              "2024-02": {
+                "trades": 3,
+                "pnl": 3.1976279100292686
+              },
+              "2024-03": {
+                "trades": 3,
+                "pnl": -0.4855056764307335
+              },
+              "2024-04": {
+                "trades": 4,
+                "pnl": -1.134822995802864
+              },
+              "2024-05": {
+                "trades": 6,
+                "pnl": 2.66868157791194
+              },
+              "2024-06": {
+                "trades": 3,
+                "pnl": 0.26030845300124383
+              },
+              "2024-08": {
+                "trades": 3,
+                "pnl": -1.5
+              },
+              "2024-09": {
+                "trades": 3,
+                "pnl": -0.9855393230945424
+              },
+              "2024-10": {
+                "trades": 1,
+                "pnl": 0.006820660825297864
+              },
+              "2024-11": {
+                "trades": 6,
+                "pnl": 1.644804918959295
+              },
+              "2024-12": {
+                "trades": 3,
+                "pnl": -1.5
+              },
+              "2025-01": {
+                "trades": 3,
+                "pnl": 0.04757825603815036
+              },
+              "2025-02": {
+                "trades": 4,
+                "pnl": -0.6022928763288746
+              },
+              "2025-03": {
+                "trades": 3,
+                "pnl": 0.7745495162162683
+              },
+              "2025-04": {
+                "trades": 8,
+                "pnl": -2.470787023314273
+              },
+              "2025-05": {
+                "trades": 4,
+                "pnl": -0.7086500586928253
+              },
+              "2025-06": {
+                "trades": 2,
+                "pnl": -0.9931590342668528
+              },
+              "2025-07": {
+                "trades": 10,
+                "pnl": -2.914970626186687
+              },
+              "2025-08": {
+                "trades": 1,
+                "pnl": -0.2446301672031268
+              },
+              "2025-09": {
+                "trades": 6,
+                "pnl": -0.6210970876918509
+              },
+              "2025-10": {
+                "trades": 3,
+                "pnl": -0.0014115188544394641
+              },
+              "2025-11": {
+                "trades": 1,
+                "pnl": 0.006289576152909149
+              },
+              "2025-12": {
+                "trades": 1,
+                "pnl": 0.00813597800657817
+              },
+              "2026-01": {
+                "trades": 6,
+                "pnl": 0.38284652902692073
+              }
+            },
+            "diagnostics": {
+              "signals": 269,
+              "blocked_stop_width_or_gap": 64,
+              "entries": 93,
+              "entries_XRPBTC": 11,
+              "entries_DOGEBTC": 13,
+              "blocked_open_position": 94,
+              "entries_ETHBTC": 25,
+              "entries_SUIBTC": 19,
+              "entries_ADABTC": 9,
+              "entries_SOLBTC": 4,
+              "blocked_margin_stop_buffer": 1,
+              "entries_BNBBTC": 12,
+              "blocked_risk_halt_or_capital": 1
+            },
+            "drawdown_halted": false
+          },
+          "stress": {
+            "trades": 95,
+            "wins": 41,
+            "win_rate_pct": 43.15789473684211,
+            "profit_factor": 0.633975884023759,
+            "net_pnl": -8.306178539088904,
+            "return_pct": -3.322471415635564,
+            "max_drawdown_pct": 5.092200108171763,
+            "mean_net_r": -0.21783079423707244,
+            "fees": 5.3485605654123045,
+            "funding_pnl": 0.0,
+            "per_symbol": {
+              "ETHBTC": {
+                "trades": 28,
+                "net_pnl": -1.7410891553687406,
+                "gross_profit": 5.91799036172705
+              },
+              "BNBBTC": {
+                "trades": 12,
+                "net_pnl": -2.2643416218039363,
+                "gross_profit": 0.20623685338122755
+              },
+              "SOLBTC": {
+                "trades": 4,
+                "net_pnl": 0.05237453489431232,
+                "gross_profit": 0.7949892013632507
+              },
+              "XRPBTC": {
+                "trades": 11,
+                "net_pnl": -2.784025863032781,
+                "gross_profit": 0.7068272137086922
+              },
+              "ADABTC": {
+                "trades": 9,
+                "net_pnl": -0.9095805497412073,
+                "gross_profit": 1.0875872608442876
+              },
+              "SUIBTC": {
+                "trades": 19,
+                "net_pnl": -3.8181464066188084,
+                "gross_profit": 1.1265748724307798
+              },
+              "DOGEBTC": {
+                "trades": 12,
+                "net_pnl": 3.158630522582257,
+                "gross_profit": 4.546597325005365
+              }
+            },
+            "positive_symbols": 2,
+            "largest_symbol_gross_profit_share_pct": 41.13485341627942,
+            "per_month": {
+              "2024-01": {
+                "trades": 6,
+                "pnl": -0.6980424464211694
+              },
+              "2024-02": {
+                "trades": 3,
+                "pnl": 2.7593575125341374
+              },
+              "2024-03": {
+                "trades": 3,
+                "pnl": -0.4666691282547788
+              },
+              "2024-04": {
+                "trades": 4,
+                "pnl": -1.17473261078365
+              },
+              "2024-05": {
+                "trades": 7,
+                "pnl": 1.6613580477379344
+              },
+              "2024-06": {
+                "trades": 3,
+                "pnl": 0.2253900777340334
+              },
+              "2024-08": {
+                "trades": 3,
+                "pnl": -1.5
+              },
+              "2024-09": {
+                "trades": 3,
+                "pnl": -0.9691281972405932
+              },
+              "2024-10": {
+                "trades": 1,
+                "pnl": 0.01578477521653099
+              },
+              "2024-11": {
+                "trades": 7,
+                "pnl": 0.37518432713491734
+              },
+              "2024-12": {
+                "trades": 3,
+                "pnl": -1.4979150954212344
+              },
+              "2025-01": {
+                "trades": 3,
+                "pnl": -0.07225784895459242
+              },
+              "2025-02": {
+                "trades": 4,
+                "pnl": -0.7117125679039873
+              },
+              "2025-03": {
+                "trades": 3,
+                "pnl": 0.6560164358282066
+              },
+              "2025-04": {
+                "trades": 8,
+                "pnl": -2.415492173090712
+              },
+              "2025-05": {
+                "trades": 4,
+                "pnl": -0.7486730180395398
+              },
+              "2025-06": {
+                "trades": 2,
+                "pnl": -0.9807721184879199
+              },
+              "2025-07": {
+                "trades": 10,
+                "pnl": -2.0856441691280168
+              },
+              "2025-08": {
+                "trades": 1,
+                "pnl": -0.24237205180244814
+              },
+              "2025-09": {
+                "trades": 6,
+                "pnl": -0.6994427471873053
+              },
+              "2025-10": {
+                "trades": 3,
+                "pnl": -0.011241040307538697
+              },
+              "2025-11": {
+                "trades": 1,
+                "pnl": 0.013446935891067824
+              },
+              "2025-12": {
+                "trades": 1,
+                "pnl": 0.010365007035687768
+              },
+              "2026-01": {
+                "trades": 6,
+                "pnl": 0.251013554822066
+              }
+            },
+            "diagnostics": {
+              "signals": 269,
+              "blocked_stop_width_or_gap": 60,
+              "entries": 95,
+              "entries_XRPBTC": 11,
+              "entries_DOGEBTC": 12,
+              "blocked_open_position": 98,
+              "entries_ETHBTC": 28,
+              "entries_SUIBTC": 19,
+              "entries_ADABTC": 9,
+              "entries_SOLBTC": 4,
+              "blocked_margin_stop_buffer": 1,
+              "entries_BNBBTC": 12
+            },
+            "drawdown_halted": false
+          },
+          "severe": {
+            "trades": 104,
+            "wins": 39,
+            "win_rate_pct": 37.5,
+            "profit_factor": 0.4235315467083039,
+            "net_pnl": -14.003367508733135,
+            "return_pct": -5.601347003493251,
+            "max_drawdown_pct": 5.899949403584359,
+            "mean_net_r": -0.35882211598559305,
+            "fees": 6.735802652928981,
+            "funding_pnl": 0.0,
+            "per_symbol": {
+              "ETHBTC": {
+                "trades": 31,
+                "net_pnl": -5.439959147484728,
+                "gross_profit": 2.6167834285928393
+              },
+              "BNBBTC": {
+                "trades": 14,
+                "net_pnl": -3.2094762791764992,
+                "gross_profit": 0.16871146611350696
+              },
+              "SOLBTC": {
+                "trades": 6,
+                "net_pnl": -0.21617767640793772,
+                "gross_profit": 0.7573545075492234
+              },
+              "XRPBTC": {
+                "trades": 13,
+                "net_pnl": -3.098368456598763,
+                "gross_profit": 0.840778426804377
+              },
+              "ADABTC": {
+                "trades": 9,
+                "net_pnl": -1.007323920873631,
+                "gross_profit": 0.9532480729908457
+              },
+              "SUIBTC": {
+                "trades": 18,
+                "net_pnl": -3.4445784046648384,
+                "gross_profit": 0.9402101219575343
+              },
+              "DOGEBTC": {
+                "trades": 13,
+                "net_pnl": 2.4125163764732633,
+                "gross_profit": 4.011192313223603
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 38.98798401193739,
+            "per_month": {
+              "2024-01": {
+                "trades": 5,
+                "pnl": -0.25212496471735335
+              },
+              "2024-02": {
+                "trades": 5,
+                "pnl": -0.366717314829458
+              },
+              "2024-03": {
+                "trades": 3,
+                "pnl": -0.4380732155283056
+              },
+              "2024-04": {
+                "trades": 5,
+                "pnl": -1.706004373082152
+              },
+              "2024-05": {
+                "trades": 7,
+                "pnl": 0.7134753932405715
+              },
+              "2024-06": {
+                "trades": 3,
+                "pnl": -0.030298463371593698
+              },
+              "2024-08": {
+                "trades": 3,
+                "pnl": -1.4845484826475683
+              },
+              "2024-09": {
+                "trades": 3,
+                "pnl": -0.9329430479745326
+              },
+              "2024-10": {
+                "trades": 5,
+                "pnl": -0.8952452753042337
+              },
+              "2024-11": {
+                "trades": 7,
+                "pnl": 0.15806898621372056
+              },
+              "2024-12": {
+                "trades": 3,
+                "pnl": -1.4656583065058442
+              },
+              "2025-01": {
+                "trades": 3,
+                "pnl": -0.1851493556780497
+              },
+              "2025-02": {
+                "trades": 4,
+                "pnl": -0.8019976057114206
+              },
+              "2025-03": {
+                "trades": 3,
+                "pnl": 0.528721280979056
+              },
+              "2025-04": {
+                "trades": 8,
+                "pnl": -2.3162253212341284
+              },
+              "2025-05": {
+                "trades": 5,
+                "pnl": -0.8441066025157795
+              },
+              "2025-06": {
+                "trades": 2,
+                "pnl": -0.4791226654893421
+              },
+              "2025-07": {
+                "trades": 11,
+                "pnl": -1.8458266955728106
+              },
+              "2025-08": {
+                "trades": 1,
+                "pnl": -0.23735622397026646
+              },
+              "2025-09": {
+                "trades": 7,
+                "pnl": -0.9983316004707206
+              },
+              "2025-10": {
+                "trades": 3,
+                "pnl": -0.04155211907902867
+              },
+              "2025-11": {
+                "trades": 1,
+                "pnl": -0.23607898402676142
+              },
+              "2025-12": {
+                "trades": 1,
+                "pnl": 0.027315792085886414
+              },
+              "2026-01": {
+                "trades": 6,
+                "pnl": 0.12641165645698038
+              }
+            },
+            "diagnostics": {
+              "signals": 269,
+              "blocked_stop_width_or_gap": 49,
+              "entries": 104,
+              "entries_XRPBTC": 13,
+              "entries_DOGEBTC": 13,
+              "blocked_open_position": 100,
+              "entries_ETHBTC": 31,
+              "entries_ADABTC": 9,
+              "entries_SUIBTC": 18,
+              "entries_SOLBTC": 6,
+              "blocked_margin_stop_buffer": 1,
+              "entries_BNBBTC": 14
+            },
+            "drawdown_halted": false
+          }
+        }
+      },
+      "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+    },
+    "S42_pairs_reversion_bb": {
+      "config": {
+        "name": "S42_pairs_reversion_bb",
+        "route": "bb_extreme",
+        "rsi_period": 14,
+        "rsi_oversold": 20.0,
+        "rsi_overbought": 80.0,
+        "bb_period": 20,
+        "bb_extreme_z": 2.5,
+        "swing_lookback_bars": 6,
+        "stop_buffer_atr_mult": 0.25,
+        "partial_r": 1.5,
+        "trail_atr": 2.5,
+        "target_r": 8.0
+      },
+      "raw_candidates_by_window": {
+        "development": 331,
+        "validation": 36,
+        "retrospective_evaluation": 76
+      },
+      "windows": {
+        "development": {
+          "base": {
+            "trades": 82,
+            "wins": 32,
+            "win_rate_pct": 39.02439024390244,
+            "profit_factor": 0.5247418455027532,
+            "net_pnl": -9.238559933160388,
+            "return_pct": -3.695423973264156,
+            "max_drawdown_pct": 5.259719935261186,
+            "mean_net_r": -0.2672849450005336,
+            "fees": 3.7391206378437722,
+            "funding_pnl": 0.0,
+            "per_symbol": {
+              "ETHBTC": {
+                "trades": 24,
+                "net_pnl": -4.013184866459255,
+                "gross_profit": 1.5713952014228028
+              },
+              "BNBBTC": {
+                "trades": 14,
+                "net_pnl": -1.2336954939040083,
+                "gross_profit": 1.2429459047211537
+              },
+              "SOLBTC": {
+                "trades": 7,
+                "net_pnl": -1.6307157798988214,
+                "gross_profit": 0.595639431437462
+              },
+              "XRPBTC": {
+                "trades": 7,
+                "net_pnl": 2.9445329116999517,
+                "gross_profit": 4.163615369782832
+              },
+              "ADABTC": {
+                "trades": 10,
+                "net_pnl": -3.3342135262069235,
+                "gross_profit": 0.014608873978318115
+              },
+              "SUIBTC": {
+                "trades": 7,
+                "net_pnl": -1.9428959510984498,
+                "gross_profit": 0.0035643024230296305
+              },
+              "DOGEBTC": {
+                "trades": 13,
+                "net_pnl": -0.02838722729288179,
+                "gross_profit": 2.6087060543047755
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 40.81785714317681,
+            "per_month": {
+              "2024-01": {
+                "trades": 2,
+                "pnl": 0.533993751741292
+              },
+              "2024-02": {
+                "trades": 6,
+                "pnl": -1.6821538102934142
+              },
+              "2024-03": {
+                "trades": 1,
+                "pnl": -0.4977036798828749
+              },
+              "2024-04": {
+                "trades": 5,
+                "pnl": 4.274239672600714
+              },
+              "2024-05": {
+                "trades": 6,
+                "pnl": -2.4807025236655704
+              },
+              "2024-06": {
+                "trades": 7,
+                "pnl": -2.0881001774781396
+              },
+              "2024-07": {
+                "trades": 2,
+                "pnl": -0.9912460546391628
+              },
+              "2024-08": {
+                "trades": 3,
+                "pnl": -0.28196652921104715
+              },
+              "2024-09": {
+                "trades": 2,
+                "pnl": 0.030689396125353596
+              },
+              "2024-10": {
+                "trades": 3,
+                "pnl": -1.4779424702076653
+              },
+              "2024-11": {
+                "trades": 7,
+                "pnl": -1.1806355112381652
+              },
+              "2024-12": {
+                "trades": 2,
+                "pnl": -0.13512393002864087
+              },
+              "2025-01": {
+                "trades": 4,
+                "pnl": -0.18363736289006738
+              },
+              "2025-02": {
+                "trades": 3,
+                "pnl": -0.7267268378174947
+              },
+              "2025-03": {
+                "trades": 1,
+                "pnl": 0.595639431437462
+              },
+              "2025-04": {
+                "trades": 2,
+                "pnl": -0.48717353810573627
+              },
+              "2025-05": {
+                "trades": 3,
+                "pnl": -0.026246572441465332
+              },
+              "2025-06": {
+                "trades": 3,
+                "pnl": -0.15188681359788347
+              },
+              "2025-07": {
+                "trades": 3,
+                "pnl": -0.22423490665408963
+              },
+              "2025-08": {
+                "trades": 2,
+                "pnl": -0.48539534398599926
+              },
+              "2025-09": {
+                "trades": 1,
+                "pnl": -0.1566972392650996
+              },
+              "2025-10": {
+                "trades": 1,
+                "pnl": -0.24217698895051853
+              },
+              "2025-11": {
+                "trades": 3,
+                "pnl": -0.6134602373003304
+              },
+              "2025-12": {
+                "trades": 3,
+                "pnl": -0.2237796142140951
+              },
+              "2026-01": {
+                "trades": 7,
+                "pnl": -0.33613204319775036
+              }
+            },
+            "diagnostics": {
+              "signals": 331,
+              "blocked_stop_width_or_gap": 185,
+              "entries": 82,
+              "entries_SUIBTC": 7,
+              "blocked_open_position": 32,
+              "entries_DOGEBTC": 13,
+              "entries_ADABTC": 10,
+              "entries_XRPBTC": 7,
+              "entries_BNBBTC": 14,
+              "entries_SOLBTC": 7,
+              "entries_ETHBTC": 24,
+              "blocked_margin_stop_buffer": 1
+            },
+            "drawdown_halted": false
+          },
+          "stress": {
+            "trades": 85,
+            "wins": 31,
+            "win_rate_pct": 36.470588235294116,
+            "profit_factor": 0.4445512826420977,
+            "net_pnl": -11.30098949213803,
+            "return_pct": -4.520395796855214,
+            "max_drawdown_pct": 5.37266978746529,
+            "mean_net_r": -0.32313496466159625,
+            "fees": 5.472072203326608,
+            "funding_pnl": 0.0,
+            "per_symbol": {
+              "ETHBTC": {
+                "trades": 26,
+                "net_pnl": -5.128852938481231,
+                "gross_profit": 1.4041872923175163
+              },
+              "BNBBTC": {
+                "trades": 14,
+                "net_pnl": -1.3783153484498314,
+                "gross_profit": 1.0871643951277576
+              },
+              "SOLBTC": {
+                "trades": 7,
+                "net_pnl": -1.657687928241586,
+                "gross_profit": 0.5598490039827198
+              },
+              "XRPBTC": {
+                "trades": 8,
+                "net_pnl": 2.6318105705834682,
+                "gross_profit": 3.6001208080488993
+              },
+              "ADABTC": {
+                "trades": 10,
+                "net_pnl": -3.068010269818899,
+                "gross_profit": 0.03059732089428735
+              },
+              "SUIBTC": {
+                "trades": 6,
+                "net_pnl": -1.6838478200121472,
+                "gross_profit": 0.00852988175213909
+              },
+              "DOGEBTC": {
+                "trades": 14,
+                "net_pnl": -1.0160857577178035,
+                "gross_profit": 2.3542555466358124
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 39.80363214798107,
+            "per_month": {
+              "2024-01": {
+                "trades": 3,
+                "pnl": -0.008418422085156863
+              },
+              "2024-02": {
+                "trades": 6,
+                "pnl": -1.8486762911904293
+              },
+              "2024-03": {
+                "trades": 1,
+                "pnl": -0.496285810573454
+              },
+              "2024-04": {
+                "trades": 5,
+                "pnl": 3.545907705072608
+              },
+              "2024-05": {
+                "trades": 6,
+                "pnl": -2.4588889802392373
+              },
+              "2024-06": {
+                "trades": 7,
+                "pnl": -2.1125495986316594
+              },
+              "2024-07": {
+                "trades": 3,
+                "pnl": -1.4767690515195682
+              },
+              "2024-08": {
+                "trades": 3,
+                "pnl": -0.348916124371641
+              },
+              "2024-09": {
+                "trades": 2,
+                "pnl": 0.0637781636829402
+              },
+              "2024-10": {
+                "trades": 3,
+                "pnl": -1.4662187382352556
+              },
+              "2024-11": {
+                "trades": 7,
+                "pnl": -0.998066968872962
+              },
+              "2024-12": {
+                "trades": 2,
+                "pnl": -0.17340979882712304
+              },
+              "2025-01": {
+                "trades": 4,
+                "pnl": -0.22393586162363022
+              },
+              "2025-02": {
+                "trades": 3,
+                "pnl": -0.36970486321806106
+              },
+              "2025-03": {
+                "trades": 1,
+                "pnl": 0.5598490039827198
+              },
+              "2025-04": {
+                "trades": 2,
+                "pnl": -0.7260787077013333
+              },
+              "2025-05": {
+                "trades": 3,
+                "pnl": -0.09062722209881713
+              },
+              "2025-06": {
+                "trades": 3,
+                "pnl": -0.20608881774609245
+              },
+              "2025-07": {
+                "trades": 3,
+                "pnl": -0.2033974910380607
+              },
+              "2025-08": {
+                "trades": 2,
+                "pnl": -0.48168204274742266
+              },
+              "2025-09": {
+                "trades": 1,
+                "pnl": -0.15936841135700774
+              },
+              "2025-10": {
+                "trades": 2,
+                "pnl": -0.480400582889672
+              },
+              "2025-11": {
+                "trades": 3,
+                "pnl": -0.6134190103112189
+              },
+              "2025-12": {
+                "trades": 3,
+                "pnl": -0.20375895630900231
+              },
+              "2026-01": {
+                "trades": 7,
+                "pnl": -0.3238626132894922
+              }
+            },
+            "diagnostics": {
+              "signals": 331,
+              "blocked_stop_width_or_gap": 179,
+              "entries": 85,
+              "entries_SUIBTC": 6,
+              "blocked_open_position": 33,
+              "entries_DOGEBTC": 14,
+              "entries_ADABTC": 10,
+              "entries_XRPBTC": 8,
+              "entries_BNBBTC": 14,
+              "entries_SOLBTC": 7,
+              "entries_ETHBTC": 26,
+              "blocked_margin_stop_buffer": 1
+            },
+            "drawdown_halted": false
+          },
+          "severe": {
+            "trades": 81,
+            "wins": 23,
+            "win_rate_pct": 28.39506172839506,
+            "profit_factor": 0.3151802206277438,
+            "net_pnl": -14.10780513053848,
+            "return_pct": -5.6431220522153875,
+            "max_drawdown_pct": 6.010397745979345,
+            "mean_net_r": -0.47571278028828573,
+            "fees": 5.717072141611343,
+            "funding_pnl": 0.0,
+            "per_symbol": {
+              "ETHBTC": {
+                "trades": 23,
+                "net_pnl": -5.278954333048517,
+                "gross_profit": 0.47035034105243767
+              },
+              "BNBBTC": {
+                "trades": 17,
+                "net_pnl": -3.6757264914624557,
+                "gross_profit": 0.25292020489408173
+              },
+              "SOLBTC": {
+                "trades": 5,
+                "net_pnl": -1.2037180217577657,
+                "gross_profit": 0.5193414056001302
+              },
+              "XRPBTC": {
+                "trades": 7,
+                "net_pnl": 2.427696245561009,
+                "gross_profit": 3.146710301126376
+              },
+              "ADABTC": {
+                "trades": 9,
+                "net_pnl": -3.437148955937687,
+                "gross_profit": 0.0
+              },
+              "SUIBTC": {
+                "trades": 6,
+                "net_pnl": -1.178903474165054,
+                "gross_profit": 0.01627571768182179
+              },
+              "DOGEBTC": {
+                "trades": 14,
+                "net_pnl": -1.7610500997280099,
+                "gross_profit": 2.087352828601695
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 48.46348599518222,
+            "per_month": {
+              "2024-01": {
+                "trades": 4,
+                "pnl": -0.5494829606241751
+              },
+              "2024-02": {
+                "trades": 8,
+                "pnl": -2.9809760957308242
+              },
+              "2024-03": {
+                "trades": 1,
+                "pnl": -0.4929390818873003
+              },
+              "2024-04": {
+                "trades": 5,
+                "pnl": 2.139876404545163
+              },
+              "2024-05": {
+                "trades": 6,
+                "pnl": -2.408457080233376
+              },
+              "2024-06": {
+                "trades": 7,
+                "pnl": -2.116648384379886
+              },
+              "2024-07": {
+                "trades": 3,
+                "pnl": -1.4586270890675053
+              },
+              "2024-08": {
+                "trades": 3,
+                "pnl": -0.41507173579338996
+              },
+              "2024-09": {
+                "trades": 3,
+                "pnl": 0.18111213517818214
+              },
+              "2024-10": {
+                "trades": 3,
+                "pnl": -1.4484918664289523
+              },
+              "2024-11": {
+                "trades": 7,
+                "pnl": -0.3493409814832944
+              },
+              "2024-12": {
+                "trades": 2,
+                "pnl": -0.1062946989712259
+              },
+              "2025-01": {
+                "trades": 4,
+                "pnl": -0.28431058836918055
+              },
+              "2025-02": {
+                "trades": 5,
+                "pnl": -0.8796777422663808
+              },
+              "2025-03": {
+                "trades": 2,
+                "pnl": 0.2799913939600458
+              },
+              "2025-04": {
+                "trades": 2,
+                "pnl": -0.4779822125952933
+              },
+              "2025-05": {
+                "trades": 3,
+                "pnl": -0.4602442206469277
+              },
+              "2025-06": {
+                "trades": 4,
+                "pnl": -0.22283178721099262
+              },
+              "2025-07": {
+                "trades": 4,
+                "pnl": -0.950371667572
+              },
+              "2025-08": {
+                "trades": 2,
+                "pnl": -0.47376146424912235
+              },
+              "2025-09": {
+                "trades": 3,
+                "pnl": -0.6332754067120447
+              }
+            },
+            "diagnostics": {
+              "signals": 331,
+              "blocked_stop_width_or_gap": 136,
+              "entries": 81,
+              "entries_SUIBTC": 6,
+              "blocked_open_position": 29,
+              "entries_DOGEBTC": 14,
+              "entries_ADABTC": 9,
+              "entries_BNBBTC": 17,
+              "entries_XRPBTC": 7,
+              "entries_SOLBTC": 5,
+              "entries_ETHBTC": 23,
+              "blocked_risk_halt_or_capital": 61
+            },
+            "drawdown_halted": true
+          }
+        }
+      },
+      "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+    }
+  }
+}

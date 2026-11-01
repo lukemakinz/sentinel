@@ -1,0 +1,32 @@
+{
+  "status": "retrospective_only_all_months_previously_seen",
+  "strategy": {
+    "name": "S10_smt_first_mitigation_central",
+    "minutes": 15,
+    "target_r": 2.5,
+    "max_hold_minutes": 120,
+    "min_sweep_atr": 0.1,
+    "max_sweep_atr": 1.0,
+    "displacement_atr": 0.8,
+    "max_displacement_bars": 3,
+    "ob_entry_fraction": 0.5,
+    "leverage": 20.0
+  },
+  "reference_market_not_traded": "BTCUSDT",
+  "traded_symbols_available_offline": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "BNBUSDT"
+  ],
+  "window": [
+    "2025-08-01",
+    "2026-09-01"
+  ],
+  "capital": 250,
+  "risk": "fixed $0.75 per trade (0.30% of starting equity), costs included in sizing",
+  "portfolio_constraints": "one alt per BTC raid; at most one raid per side/session; 20x isolated cap; 5% margin cap",
+  "causality": "closed 5m bars; frozen ET session ranges; BTC raid -> alt non-confirmation -> later MSS/displacement -> exact-event OB first mitigation",
+  "execution": "post-only style limit, 2 bps penetration, maker 2 bps; taker exit 5 bps + 2 bps slippage; stop-first ambiguous bars",
+  "success_rule_for_future_oos": ">=100 trades, PF>1.15 base and >1.05 stress, positive median month, max DD<6%, >=70% positive weekly bootstrap blocks",
+  "disclosure": "No result in this folder is an untouched holdout. A genuine test requires new data or a frozen 12-week paper-forward run."
+}

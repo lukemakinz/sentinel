@@ -1,0 +1,12 @@
+{
+  "superseded_by_methodology": [
+    {
+      "sha256": "1bb47d1bdf25e5d7bb11bb1c2da1f1a33fa6a06a7223341d07a983c76dd00f18",
+      "reason": "The originally frozen 14-month sample was judged too short before any market-data load or result was observed."
+    },
+    {
+      "sha256": "c2ebeb66525422e8cf01a4abfa3966e30abfa3332a41b9600249fa09f9279bff",
+      "reason": "SOLUSDT's public daily and 5-minute archives are both missing 2022-02-26..02-28 and 2022-04-01..04-02 (confirmed: ETHUSDT and BNBUSDT have zero gaps across the full 2021-04-05..2026-09-01 range, checked exhaustively before any signal or result was computed). The strict execution-continuity check in simulate_xsm_pairs has no gap-tolerance option by design (it deliberately refuses to replay fills across missing bars), so the development window start moves from 2021-04-05 to the next Monday after the gap, 2022-04-04, rather than patching or interpolating the missing candles."
+    }
+  ]
+}

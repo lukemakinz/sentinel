@@ -1,0 +1,75 @@
+{
+  "strategy_id": "S91_intraday_level_reclaim",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "predecessor_decision": "S90 rejected: only 2 development fills, both losses. S91 is a new hypothesis, not a post-result parameter edit.",
+  "relationship_to_existing_books": "Candidate C is tested as the fixed 20% sleeve of A/B/C = 40/40/20 only after its standalone development gate passes.",
+  "hypothesis": "At a strong fresh intraday OB aligned with causal hourly support/resistance, a completed 5m close that reclaims the entire zone on the first contact is sufficient evidence of defense; a distal liquidity sweep is helpful but not mandatory. Direction must agree with the last completed BTC D1 close versus SMA200.",
+  "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "data": {
+    "source": "Binance public USD-M checksumed 1m kline and funding archives",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "validation": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "true_oos": "First UTC midnight after protocol/code freeze; minimum 180 days, 50 fills and 30 independent 4h event clusters"
+  },
+  "level": {
+    "timeframe_minutes": 15,
+    "mandatory_confluence_timeframe_minutes": 60,
+    "confirmed_swing_width": 2,
+    "structure_lookback_bars": 480,
+    "order_block": "exactly the last opposing candle among the prior 3 bars",
+    "minimum_body_displacement_atr": 1.2,
+    "minimum_relative_volume": 1.25,
+    "maximum_zone_width_atr": 0.9,
+    "maximum_1h_swing_distance_atr": 0.5,
+    "minimum_strength_score": 75,
+    "validity_hours": 48,
+    "touch_count_in_score": false
+  },
+  "regime": {
+    "indicator": "last completed BTC D1 close versus SMA200",
+    "long": "close above SMA200",
+    "short": "close below SMA200",
+    "same_day_partial_bar_forbidden": true
+  },
+  "freshness_and_trigger": {
+    "pre_arm_departure_atr": 0.1,
+    "any_return_after_departure_before_publication": "PREMITIGATED terminal",
+    "same_side_merge_midpoint_distance_atr": 0.25,
+    "first_contact_consumes_freshness": true,
+    "maximum_penetration_atr": 0.5,
+    "trigger": "completed 5m close beyond proximal edge on the first contact episode",
+    "maximum_contact_episode_minutes": 30,
+    "entry": "market/taker at the next actual 1m open",
+    "maximum_adverse_chase_atr": 0.2,
+    "gap_through": "observed and terminally invalidated"
+  },
+  "risk": {
+    "standalone_sleeve_capital_usd": 100,
+    "risk_fraction": 0.002,
+    "maximum_notional_equity": 0.5,
+    "maximum_open_positions_global": 1,
+    "stop": "contact extreme plus 0.10 ATR buffer",
+    "minimum_stop_atr": 0.35,
+    "maximum_stop_atr": 1.5,
+    "target": "exactly 2.0 net-R under stress costs and before nearest causal opposing level",
+    "maximum_hold_hours": 24,
+    "partials_or_trailing": false
+  },
+  "cost_scenarios_bps": {
+    "base": {"taker": 5, "slippage_each_side": 2},
+    "stress": {"taker": 8, "slippage_each_side": 5},
+    "severe": {"taker": 10, "slippage_each_side": 10}
+  },
+  "development_gate": {
+    "minimum_fills": 80,
+    "minimum_independent_4h_clusters": 40,
+    "minimum_stress_profit_factor": 1.2,
+    "minimum_stress_mean_net_r": 0.1,
+    "stress_pnl_positive": true,
+    "maximum_drawdown_pct": 6
+  },
+  "heldout_gates_and_portfolio_comparison": "Identical to S90 protocol: validation/evaluation minimum 50 fills and 25 clusters each, PF >= 1.15, mean R >= 0.08, then fixed $500 A/B/C 40/40/20 must beat BENCH_AB_R2 stress in both windows by max(0.50pp, 10% of absolute benchmark return) without worse ES95 and within the frozen DD limits.",
+  "disclosure": "Retrospective research only. A development pass can only unlock held-out replay; it cannot approve live trading."
+}

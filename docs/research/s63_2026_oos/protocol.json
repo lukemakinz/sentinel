@@ -1,0 +1,18 @@
+{
+  "strategy_id": "S63_2026_OOS",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "warmup": "2025-12-01",
+  "oos": [
+    "2026-01-01",
+    "2026-09-01"
+  ],
+  "strategies": [
+    "S55_donchian_20",
+    "S60_flow_reset_15m"
+  ],
+  "retune": false,
+  "disclosure": "selection-affected 2026 OOS characterization of frozen S55/S60; not live approval"
+}

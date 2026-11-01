@@ -1,0 +1,26 @@
+{
+  "strategy_id": "S51_FUNDING_SQUEEZE",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "crowded_fade",
+    "crowded_fade_sideline"
+  ],
+  "target_r": 1.0,
+  "max_hold_minutes": 120,
+  "trailing": false,
+  "funding_lookback_settlements": 42,
+  "disclosure": "cached-window historical characterization; not live approval"
+}

@@ -1,0 +1,50 @@
+{
+  "strategy_id": "S114_ob_reversal_broad_alts",
+  "status": "FROZEN_BEFORE_UNIVERSE_DOWNLOAD_AND_RESULTS",
+  "hypothesis": "The OB Liquidity Reversal setup (user's DOOD example) was rejected on the 8-12 largest markets (S112/S113). It may still work on smaller altcoins, where it was observed. This is a new population: none of these symbols were used by S112/S113.",
+  "rules": "Detector rules exactly as committed for S112/S113 (l1_filter/ob_liquidity_reversal.py); no parameter changes.",
+  "universe": {
+    "source": "every USDT-margined symbol with a Binance USD-M monthly kline archive (data.binance.vision bucket listing), including later-delisted symbols",
+    "selection_date": "2025-05-01T00:00:00Z, using only data before that date",
+    "exclusions": "BTC, ETH, stablecoins, gold/index tokens, and the 12 S113 symbols (BTC ETH BNB SOL XRP ADA DOGE AVAX LINK LTC BCH DOT)",
+    "eligibility": "daily klines exist for 2025-03-17 or earlier (>= 45 days of history at selection)",
+    "ranking": "median daily quote volume over 2025-04-01..2025-04-30",
+    "size": "top 48 by that ranking",
+    "fixed_thereafter": "no symbol is added later; symbols delisted later stay in and are simulated until their data ends (open positions closed at their last price)"
+  },
+  "data": {
+    "warmup_start": "2025-04-01T00:00:00Z",
+    "windows": {
+      "development": ["2025-05-01", "2025-10-01"],
+      "validation": ["2025-10-01", "2026-04-01"],
+      "retrospective_evaluation": ["2026-04-01", "2026-09-01"]
+    },
+    "missing_data": "a symbol whose minute data cannot be made continuous from checksumed monthly+daily archives is reported as excluded with the reason"
+  },
+  "routes": {
+    "STRICT": "nearest 1h BSL target, trade only if stress net R >= 3 (literal user rule)",
+    "EXTERNAL": "first 1h BSL with stress net R in [3, 10]",
+    "ABSORB_CVD": "EXTERNAL + CVD-divergence absorption + 4h discount (open-interest flush not used: metrics archives not loaded for 48 symbols)"
+  },
+  "execution": "each symbol simulated as a standalone $250 account at 0.2% risk (one position, one pending limit); results aggregated in R per trade, so capacity/portfolio effects are excluded by design",
+  "cost_scenarios_bps": {
+    "fees": {"base": {"maker": 2, "taker": 5}, "stress": {"maker": 5, "taker": 8}, "severe": {"maker": 10, "taker": 10}},
+    "slippage_each_side_by_liquidity_tier": {
+      "tier_1 (median daily quote volume >= $100M)": {"base": 2, "stress": 5, "severe": 10},
+      "tier_2 ($20M-$100M)": {"base": 5, "stress": 10, "severe": 20},
+      "tier_3 (< $20M)": {"base": 10, "stress": 20, "severe": 40}
+    }
+  },
+  "gate_stress_pooled_2025_05_to_2026_09": {
+    "minimum_trades": 100,
+    "minimum_profit_factor_on_R": 1.15,
+    "minimum_mean_net_r": 0.08,
+    "positive_mean_r_in_at_least_2_of_3_windows": true,
+    "severe_mean_net_r_positive": true,
+    "max_share_of_gross_positive_R_from_one_symbol_pct": 25,
+    "deflated_sharpe_reported": "trials = 133 prior studies + 3 routes"
+  },
+  "multiple_testing": "Three routes; each must pass on its own.",
+  "after_pass": "Shadow/paper on the same broad universe via setup search journal; no live approval.",
+  "disclosure": "Retrospective; all three windows are new for these symbols, but the rule family was designed after S112/S113 diagnostics on other markets."
+}

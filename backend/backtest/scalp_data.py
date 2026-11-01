@@ -104,16 +104,62 @@ def validate_minutes(frame):
         raise InvalidMarketDataError('Invalid OHLCV / taker volume')
 
 
+REST_KLINES_URL = 'https://fapi.binance.com/fapi/v1/klines'
+
+
+def _rest_day_klines(symbol: str, day: str, cache: str, session=None):
+    """Exact 1m klines for one past UTC day from Binance REST.
+
+    Fallback only for days Binance never published as a daily archive (e.g.
+    2026-10-28 for every symbol).  REST has no checksum, so the day must be
+    complete (1440 minutes) and is cached once it is.
+    """
+    path = Path(cache) / 'rest_daily' / symbol / f'{symbol}-1m-{day}.csv'
+    if not path.exists():
+        session = session or requests.Session()
+        start = pd.Timestamp(day, tz='UTC')
+        if start + pd.Timedelta(days=1) > pd.Timestamp.now(tz='UTC'):
+            raise MissingMarketDataError(f'{symbol} {day}: day not complete yet')
+        rows, cursor = [], int(start.value // 10**6)
+        end_ms = cursor + 86_400_000
+        while cursor < end_ms:
+            response = session.get(REST_KLINES_URL, params={
+                'symbol': symbol, 'interval': '1m', 'startTime': cursor,
+                'endTime': end_ms - 1, 'limit': 1500,
+            }, timeout=30)
+            response.raise_for_status()
+            batch = response.json()
+            if not batch:
+                break
+            rows.extend(batch)
+            cursor = int(batch[-1][0]) + 60_000
+        raw = pd.DataFrame(rows, columns=COLUMNS)
+        if len(raw) != 1440:
+            raise MissingMarketDataError(f'{symbol} {day}: REST returned {len(raw)} of 1440 minutes')
+        path.parent.mkdir(parents=True, exist_ok=True)
+        raw.to_csv(path, index=False)
+    raw = pd.read_csv(path)
+    raw.index = pd.to_datetime(raw.timestamp, unit='ms', utc=True)
+    frame = raw[['open', 'high', 'low', 'close', 'volume', 'taker_buy_volume']].astype(float)
+    return frame, {'url': REST_KLINES_URL, 'symbol': symbol, 'day': day,
+                   'source': 'rest_fallback_no_daily_archive', 'rows': len(frame)}
+
+
 def _daily_kline_archive(symbol: str, day: str, cache: str):
     relative = f'klines/{symbol}/1m/{symbol}-1m-{day}.zip'
     path = Path(cache) / 'daily' / relative
     checksum_path = path.with_suffix('.zip.CHECKSUM')
     url = f'{DAILY_BASE_URL}/{relative}'
+    rest_cached = Path(cache) / 'rest_daily' / symbol / f'{symbol}-1m-{day}.csv'
+    if (not path.exists() or not checksum_path.exists()) and rest_cached.exists():
+        return _rest_day_klines(symbol, day, cache)
     if not path.exists() or not checksum_path.exists():
         session = requests.Session()
         session.mount('https://', HTTPAdapter(max_retries=Retry(
             total=3, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])))
         response = _get_with_read_retries(session, url, timeout=60)
+        if response.status_code == 404:
+            return _rest_day_klines(symbol, day, cache)
         response.raise_for_status()
         checksum = _get_with_read_retries(
             session, f'{url}.CHECKSUM', timeout=30)

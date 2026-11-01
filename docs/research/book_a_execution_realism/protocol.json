@@ -1,0 +1,24 @@
+{
+  "study_id": "BOOK_A_EXECUTION_REALISM",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "question": "How much of frozen Book A's result survives perpetual funding and KuCoin contract sizes?",
+  "why": "simulate_book_a never charged funding although Book A holds long perpetuals; the intended venue (KuCoin) has integer contract sizes and, over 2026-09-27..10-27, charged longs about 1.6x the Binance funding on the same six markets.",
+  "subject": "BOOK_A_ALT_RM + BOOK_A_RISK_DEFAULT, stress cost (12 bps one-way turnover), unchanged rules",
+  "windows": {
+    "development": ["2025-05-01", "2025-10-01"],
+    "validation": ["2025-10-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "oos_2026_09_10": ["2026-09-01", "2026-10-27"]
+  },
+  "variants": {
+    "V0_frozen": "as frozen: no funding, fractional quantities, $250",
+    "V1_binance_funding": "V0 + Binance settled funding",
+    "V2_kucoin_funding": "V0 + Binance funding x1.6 (30-day KuCoin/Binance ratio; sensitivity, not a measured history)",
+    "V3_kucoin_250": "V2 + KuCoin contract steps (SOL 0.1, XRP 10, DOGE 100, BNB 0.01, ETH 0.01, BTC 0.001), $250",
+    "V4_kucoin_500": "V3 at $500",
+    "V5_kucoin_1000": "V3 at $1000"
+  },
+  "book_b_check": "Distribution of Book B BTC position sizes vs the 0.001 BTC contract (rounding error per trade).",
+  "decision_use": "V3 replaces V0 as the realistic expectation for a KuCoin canary; if V3 is <= 0 in the OOS window or in two of three historical windows, Book A is not canary-ready at $250.",
+  "disclosure": "Retrospective correction of an existing frozen benchmark; parameters unchanged."
+}

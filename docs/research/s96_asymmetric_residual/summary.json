@@ -1,0 +1,257 @@
+{
+  "protocol_sha256": "5e72de94aed736c5518ea7e04599e4300707b454a5274af3048908e752e1c5f3",
+  "config": {
+    "name": "S96_asymmetric_residual_reversal",
+    "beta_hours": 720,
+    "z_hours": 720,
+    "min_beta": 0.2,
+    "max_beta": 2.0,
+    "entry_z": -3.0,
+    "minimum_negative_residual": -0.015,
+    "volume_lookback_hours": 168,
+    "minimum_volume_multiple": 1.5,
+    "maximum_taker_buy_fraction": 0.42,
+    "exit_z": -0.5,
+    "stop_z": -5.0,
+    "max_hold_hours": 24,
+    "cooldown_hours": 24,
+    "alt_notional_usd": 60.0,
+    "maximum_btc_hedge_usd": 120.0,
+    "hard_stop_usd": 4.0,
+    "drawdown_halt_fraction": 0.06
+  },
+  "signals": {
+    "ETHUSDT": 7,
+    "SOLUSDT": 8,
+    "BNBUSDT": 5,
+    "XRPUSDT": 6,
+    "DOGEUSDT": 20,
+    "ADAUSDT": 13,
+    "AVAXUSDT": 24
+  },
+  "continuous_replays": {
+    "base": {
+      "trades": 50,
+      "net_pnl": -17.238200742258584,
+      "return_pct": -3.447640148451714,
+      "profit_factor": 0.2532415022379107,
+      "mean_net_r": -0.08619100371129328,
+      "max_drawdown_pct": 3.447640148451714,
+      "fees": 7.146378283138174,
+      "funding_pnl": 0.07249576184888028,
+      "drawdown_halted": false,
+      "diagnostics": {
+        "entries": 50
+      }
+    },
+    "stress": {
+      "trades": 50,
+      "net_pnl": -25.809970537577158,
+      "return_pct": -5.161994107515433,
+      "profit_factor": 0.11957098765524396,
+      "mean_net_r": -0.1290498526878884,
+      "max_drawdown_pct": 5.161994107515433,
+      "fees": 11.434765140020584,
+      "funding_pnl": 0.07250207745221417,
+      "drawdown_halted": false,
+      "diagnostics": {
+        "entries": 50
+      }
+    },
+    "severe": {
+      "trades": 40,
+      "net_pnl": -29.980541124187823,
+      "return_pct": -5.99610822483756,
+      "profit_factor": 0.017070120161647752,
+      "mean_net_r": -0.1873783820261742,
+      "max_drawdown_pct": 5.99610822483756,
+      "fees": 11.721667430044858,
+      "funding_pnl": 0.047943917909318186,
+      "drawdown_halted": true,
+      "diagnostics": {
+        "entries": 40
+      }
+    }
+  },
+  "slices": {
+    "development_1": {
+      "base": {
+        "net_pnl": -4.705353714435262,
+        "return_on_start_nav_pct": -0.9410707428870523,
+        "usd_per_calendar_day": -0.0307539458459821,
+        "max_continuous_drawdown_pct": 1.0109919231846454,
+        "trades": 19,
+        "profit_factor": 0.2076154994814384,
+        "mean_net_r": -0.0619125488741473,
+        "independent_clusters": 18,
+        "per_symbol_pnl": {
+          "ETHUSDT": -2.796032568981942,
+          "SOLUSDT": 0.47683459882060064,
+          "BNBUSDT": 0.21258846390045844,
+          "XRPUSDT": -1.2987504346726912,
+          "DOGEUSDT": -0.9486445143367909,
+          "ADAUSDT": -0.1489812678704881,
+          "AVAXUSDT": -0.2023679912943438
+        }
+      },
+      "stress": {
+        "net_pnl": -8.252331157605,
+        "return_on_start_nav_pct": -1.6504662315209997,
+        "usd_per_calendar_day": -0.05393680495166666,
+        "max_continuous_drawdown_pct": 1.6827702029142633,
+        "trades": 19,
+        "profit_factor": 0.029500637024563677,
+        "mean_net_r": -0.10858330470533034,
+        "independent_clusters": 18,
+        "per_symbol_pnl": {
+          "ETHUSDT": -3.329081218139832,
+          "SOLUSDT": -0.27049703003839576,
+          "BNBUSDT": 0.08932938145111155,
+          "XRPUSDT": -1.6536069231896038,
+          "DOGEUSDT": -1.9604163056175987,
+          "ADAUSDT": -0.5430153867828258,
+          "AVAXUSDT": -0.585043675287961
+        }
+      },
+      "severe": {
+        "net_pnl": -12.39169853157722,
+        "return_on_start_nav_pct": -2.478339706315444,
+        "usd_per_calendar_day": -0.08099149367043934,
+        "max_continuous_drawdown_pct": 2.4783397063154466,
+        "trades": 19,
+        "profit_factor": 0.0,
+        "mean_net_r": -0.1630486648891747,
+        "independent_clusters": 18,
+        "per_symbol_pnl": {
+          "ETHUSDT": -3.9506757843059677,
+          "SOLUSDT": -1.1428515533264187,
+          "BNBUSDT": -0.05463083953763383,
+          "XRPUSDT": -2.0677853616836845,
+          "DOGEUSDT": -3.1410385187926066,
+          "ADAUSDT": -1.003122809444055,
+          "AVAXUSDT": -1.0315936644869106
+        }
+      }
+    },
+    "development_2": {
+      "base": {
+        "net_pnl": -8.338681645646659,
+        "return_on_start_nav_pct": -1.6835800080178838,
+        "usd_per_calendar_day": -0.045816932118937684,
+        "max_continuous_drawdown_pct": 2.65832225182685,
+        "trades": 16,
+        "profit_factor": 0.14184701362958266,
+        "mean_net_r": -0.13029190071322916,
+        "independent_clusters": 15,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": -0.04824852342052047,
+          "BNBUSDT": 0.2660724069126438,
+          "XRPUSDT": -3.852943940233352,
+          "DOGEUSDT": -0.34685313036047294,
+          "ADAUSDT": -0.5640668129408397,
+          "AVAXUSDT": -3.7926416456041254
+        }
+      },
+      "stress": {
+        "net_pnl": -11.026610004550662,
+        "return_on_start_nav_pct": -2.2423309154689024,
+        "usd_per_calendar_day": -0.060585769255772866,
+        "max_continuous_drawdown_pct": 3.8557882324311343,
+        "trades": 16,
+        "profit_factor": 0.06905811912703352,
+        "mean_net_r": -0.1722907813211076,
+        "independent_clusters": 15,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": -0.23058711728203996,
+          "BNBUSDT": -0.08126422887231129,
+          "XRPUSDT": -4.004466126043756,
+          "DOGEUSDT": -1.173982433500506,
+          "ADAUSDT": -0.8916577178441698,
+          "AVAXUSDT": -4.644652381008102
+        }
+      },
+      "severe": {
+        "net_pnl": -12.857414657642266,
+        "return_on_start_nav_pct": -2.6368326008647545,
+        "usd_per_calendar_day": -0.07064513548155091,
+        "max_continuous_drawdown_pct": 5.049822637843892,
+        "trades": 16,
+        "profit_factor": 0.03891884296332526,
+        "mean_net_r": -0.20089710402566127,
+        "independent_clusters": 15,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": -0.4433776164434925,
+          "BNBUSDT": -0.4865722749836102,
+          "XRPUSDT": -2.8771372960760573,
+          "DOGEUSDT": -2.1389449980886606,
+          "ADAUSDT": -1.273734341787657,
+          "AVAXUSDT": -5.637648130262844
+        }
+      }
+    },
+    "development_3": {
+      "base": {
+        "net_pnl": -4.194165382176664,
+        "return_on_start_nav_pct": -0.861302804921603,
+        "usd_per_calendar_day": -0.02741284563514159,
+        "max_continuous_drawdown_pct": 3.447640148451714,
+        "trades": 15,
+        "profit_factor": 0.43541864703486693,
+        "mean_net_r": -0.06990275636961317,
+        "independent_clusters": 14,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": -0.21749886453687411,
+          "ADAUSDT": -2.3716924564180184,
+          "AVAXUSDT": -1.6049740612218977
+        }
+      },
+      "stress": {
+        "net_pnl": -6.531029375421497,
+        "return_on_start_nav_pct": -1.358590237592343,
+        "usd_per_calendar_day": -0.042686466506022855,
+        "max_continuous_drawdown_pct": 5.161994107515433,
+        "trades": 15,
+        "profit_factor": 0.2716973353748548,
+        "mean_net_r": -0.10885048959036163,
+        "independent_clusters": 14,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": -0.6986250037744915,
+          "ADAUSDT": -2.9985343939604308,
+          "AVAXUSDT": -2.833869977686775
+        }
+      },
+      "severe": {
+        "net_pnl": -4.7314279349683375,
+        "return_on_start_nav_pct": -0.9966127639597486,
+        "usd_per_calendar_day": -0.03092436558802835,
+        "max_continuous_drawdown_pct": 5.99610822483756,
+        "trades": 5,
+        "profit_factor": 0.0,
+        "mean_net_r": -0.23657139674841363,
+        "independent_clusters": 5,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": -1.2604147276039306,
+          "ADAUSDT": -3.471013207364342,
+          "AVAXUSDT": 0.0
+        }
+      }
+    }
+  },
+  "leave_one_symbol_out_stress": {},
+  "decision": "REJECTED_AT_HISTORICAL_GATE"
+}

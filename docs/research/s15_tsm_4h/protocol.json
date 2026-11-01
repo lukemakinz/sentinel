@@ -1,0 +1,65 @@
+{
+  "protocol_version": "S15-TSM-4H-v1.2-frozen-2026-09-13",
+  "supersedes_protocol_sha256_v1_1": "a84469d4255c2e11313dd447b67c736ba79acb2fce8936df6fc33846a2ea4570",
+  "pre_result_data_quality_amendment": "After checksum verification but before any signal or PnL computation, the public SOL archives were found to omit 2022-02-26 through 2022-02-28 and 2022-04-01 through 2022-04-02. The portfolio clock carries the last causal close, but those rows are permanently MTM-only: they cannot create a 4h/daily signal bar or execute an entry, exit, stop or time-stop. Counts are disclosed in data_quality.json. No strategy or risk parameter changed.",
+  "supersedes_protocol_sha256": "381b32b7882db6b2989df4a75cffc0eac4c81274c40dc54b01a6fe78b49d1a15",
+  "pre_data_amendment": "v1.0 used only 14 months. Before loading any market data or observing any result, the horizon was enlarged to cover multiple trend regimes; no trading rule or execution parameter changed.",
+  "status": "retrospective_diagnostic_only_all_historical_months_previously_seen",
+  "hypothesis": {
+    "id": "TSM_4H_DONCHIAN_WITH_DAILY_DUAL_REGIME",
+    "data": "Binance USD-M public monthly archives; 5m execution candles and historical fundingRate; no exchange API, account or private data",
+    "bars": "UTC closed 4h signal bars and UTC closed 1d regime bars built from complete 5m candles; a signal stamped T can execute no earlier than the 5m open at T",
+    "directional_regime": "alt and BTC latest complete daily close must both be above EMA50 for long or both below EMA50 for short; EMA50 must also have moved in that direction versus three complete daily bars earlier",
+    "entry": "first 4h close crossing above the prior 20 complete 4h highs for long or below the prior 20 complete 4h lows for short; market at next available 5m open",
+    "initial_stop": "2.0 x 4h Wilder ATR14 from the signal close; reject when actual fill-to-stop distance is outside 1.5-2.5 ATR",
+    "common_exit": "market exit at the 5m open after a complete 4h close crosses the opposite prior-10 Donchian boundary; hard maximum hold 30 days; end-of-window liquidation",
+    "duplicate_control": "require a breakout crossing from inside the prior channel; no repeated entry while price merely remains beyond a channel",
+    "symbols": {
+      "reference_not_traded": "BTCUSDT",
+      "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"]
+    }
+  },
+  "predeclared_exit_policies": [
+    {
+      "id": "INITIAL_SL_ONLY",
+      "rule": "initial structural/ATR stop remains unchanged until common exit"
+    },
+    {
+      "id": "DELAYED_COST_BE",
+      "rule": "after a complete 4h close reaches at least +1.5 price-R, compute a round-trip fee-and-slippage-aware zero-PnL stop; it activates only on the next 5m bar and never loosens"
+    },
+    {
+      "id": "DELAYED_COST_BE_CHANDELIER",
+      "rule": "same cost-BE; after a complete 4h close reaches at least +2.0 price-R, also trail at the best completed 4h extreme since entry minus/plus 2.5 current 4h ATR14; update activates only on the next 5m bar and never loosens"
+    }
+  ],
+  "windows": {
+    "warmup": ["2021-01-01", "2021-04-01"],
+    "development": ["2021-04-01", "2024-01-01"],
+    "validation": ["2024-01-01", "2025-01-01"],
+    "retrospective_evaluation": ["2025-01-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 under a frozen paper-forward protocol"
+  },
+  "promotion_gates": {
+    "development_to_validation_per_policy": "at least 30 closed trades, net PnL >0 and PF >1.05 in base costs; no least-bad policy advances",
+    "validation_to_retrospective_evaluation_per_policy": "at least 10 closed trades, base PF >1.10, stress PF >=1.00, net PnL >0 in base and at least 2 traded symbols represented",
+    "paper_to_live": "not authorized by this retrospective test; require at least three full frozen prospective months and 50 closed trades, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% weekly-block bootstrap lower bound >0 and max drawdown <=6%"
+  },
+  "portfolio_and_risk": {
+    "capital_usd": 250,
+    "risk_per_trade": "min(0.20% current cash, $0.50); halve new-trade risk after 4% peak drawdown; stop new entries after 6% peak drawdown",
+    "one_global_position": "one shared cash balance and at most one open position across ETH/SOL/BNB",
+    "candidate_priority": "highest normalized breakout distance first, then fixed ETH, SOL, BNB tie-break",
+    "notional_cap_usd_at_initial_equity": 125,
+    "leverage_cap": 5,
+    "margin_cap_usd_at_initial_equity": 25,
+    "realized_loss_controls": "block new entries for the remainder of a UTC day after 0.6% loss from day-start cash and for the ISO week after 1.8% loss from week-start cash; never widen or prematurely liquidate an existing swing because of an intraday mark",
+    "base_bps": {"taker_fee_each_side": 5, "adverse_slippage_each_side": 2},
+    "stress_bps": {"taker_fee_each_side": 8, "adverse_slippage_each_side": 5},
+    "severe_bps": {"taker_fee_each_side": 10, "adverse_slippage_each_side": 10},
+    "funding": "historical funding settlement rate applied to open perp notional with the Binance long/short sign; 5m open is a disclosed mark-price proxy",
+    "ambiguous_5m_bar": "old active stop is checked before any close-derived stop update; stop/gap first; no same-bar benefit from a newly computed BE or Chandelier"
+  },
+  "selection": "One fixed entry hypothesis and exactly three exit policies. No parameter grid. Each policy must pass every gate independently; do not promote the least negative result.",
+  "disclosure": "No profit is promised. All historical windows are retrospective because related research already inspected these months. A positive result can authorize only frozen paper-forward observation, never live capital."
+}

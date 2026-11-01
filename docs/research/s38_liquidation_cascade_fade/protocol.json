@@ -1,0 +1,56 @@
+{
+  "protocol_version": "S38-LIQUIDATION-CASCADE-FADE-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "Every route tested in this project so far (S13-S37, 40 routes across 15+ protocols) traded WITH some form of established structure or trend: an order block retest, a 4h EMA/ADX regime, a divergence pivot, OBV/CVD flow confirmation, or ICT premium/discount positioning. All 40 were rejected, most at the development gate, the two survivors to validation (S11 funding carry, S20 patient runner) both failing on stress costs or too small in dollar terms to matter. This protocol deliberately tests the opposite thesis: fading a single forced-deleveraging candle (liquidation cascade) rather than trading with structure. A 15m bar with an ATR-outlier range, a volume spike, AND an outlier drop in open interest in the same bar is the causal signature of positions being forcibly closed (liquidated), not fresh trend positioning -- distinct from every displacement/volume test used by the order-block family, which never conditions on open interest DECREASING. The hypothesis: such candles overshoot and partially mean-revert once forced flow is exhausted, so entry is against the cascade direction. XRPUSDT/SUIUSDT/DOGEUSDT are used (not the ETH/SOL/BNB cluster used by every S16-S37 route) because higher retail leverage and volatility on these instruments should produce more frequent and larger liquidation cascades -- a domain reason declared before any data is loaded, not a post-hoc universe swap.",
+  "hypotheses": [
+    {
+      "id": "H1_IMMEDIATE",
+      "entry_exit": "Cascade bar closes -> fade at the next 1m open. Stop beyond the cascade bar's extreme (low for a fade-long, high for a fade-short) plus a small ATR buffer. Partial at 1.0R, breakeven, chandelier trail at 1.5x ATR, hard cap at 3.0R.",
+      "cascade_definition": "Same 15m bar: (high-low) >= 2.5x ATR(14), volume >= 2.5x its 20-bar average, AND the open-interest change over the trailing 2 bars is more than 2.0 standard deviations below its own trailing 96-bar (24h) mean -- an outlier OI drop, not merely a negative one."
+    },
+    {
+      "id": "H2_CONFIRMED",
+      "entry_exit": "Identical cascade definition and stop/target/trail as H1, EXCEPT entry additionally requires the very next 15m bar to close back in the fade direction (a higher close for a fade-long, a lower close for a fade-short) before entering -- costs one bar of delay in exchange for filtering cascades that are still actively continuing.",
+      "cascade_definition": "Identical to H1."
+    }
+  ],
+  "single_variable_isolated": "Both hypotheses share an identical cascade-detection formula and an identical stop/target/trail execution model (copied unmodified from the S16-S20 lineage's breakeven+chandelier scheme, scaled down to a 3R cap appropriate for a bounce trade rather than a trend-continuation runner). H2 differs from H1 only in requiring one bar of post-cascade confirmation before entry.",
+  "symbols": {
+    "traded": ["XRPUSDT", "SUIUSDT", "DOGEUSDT"],
+    "note": "Reuses archives already cached for the S31-S36 funding-carry research on this same universe -- no new data source, same klines/funding/metrics pipeline as every prior scalp protocol."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated XRP/SUI/DOGE cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. No parameter grid over the 2.5x range multiplier, 2.5x volume multiplier, 96-bar OI z-score window or 2.0 extreme-z threshold -- all chosen a priori from domain reasoning (cascades need a genuine multi-sigma outlier on all three axes simultaneously, not merely an elevated bar) before any data is loaded. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Liquidation cascades are inferred from OI+volume+range, not from Binance's actual forceOrder liquidation stream, which has no clean historical archive on the free public data source this project uses throughout -- a proxy, disclosed, not the ground-truth signal.",
+    "XRP/SUI/DOGE are more thinly historied than ETH/SOL/BNB (SUI in particular listed 2023); the development window may contain fewer qualifying candles than prior order-block routes, a legitimate possible outcome given the rarer, more extreme condition being detected, not grounds to loosen thresholds afterward.",
+    "No order-book reconstruction, no ATR freeze differences from prior protocols, no regime/HTF trend filter by design -- this route deliberately does not condition on trend direction, since liquidation cascades are the thesis, not trend continuation.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation."
+  ]
+}

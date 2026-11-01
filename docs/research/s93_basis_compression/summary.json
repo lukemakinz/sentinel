@@ -1,0 +1,204 @@
+{
+  "protocol_sha256": "62f11ec6a4bf6e81b24347f19fa1e797cebe8c8ead6c1f6bfa0454ff6ca99071",
+  "config": {
+    "name": "S93_basis_compression",
+    "lookback_hours": 2160,
+    "minimum_history_fraction": 0.95,
+    "minimum_deviation": 0.0132,
+    "quantile": 0.95,
+    "mad_floor": 0.0001,
+    "funding_lookback_hours": 72,
+    "maximum_last_funding_age_hours": 12,
+    "cooldown_hours": 24,
+    "notional_cap_each_leg_usd": 60.0,
+    "futures_collateral_usd": 100.0,
+    "compression_fraction": 0.75,
+    "extension_stop": 0.0075,
+    "maximum_hold_hours": 168,
+    "minimum_futures_equity_usd": 75.0,
+    "maximum_mark_leverage": 1.25
+  },
+  "signals": {
+    "ETHUSDT": 0,
+    "SOLUSDT": 0,
+    "BNBUSDT": 0,
+    "XRPUSDT": 0,
+    "DOGEUSDT": 0
+  },
+  "continuous_replays": {
+    "base": {
+      "trades": 0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "profit_factor": null,
+      "max_drawdown_pct": 0.0,
+      "funding_pnl": 0.0,
+      "costs": 0.0,
+      "diagnostics": {}
+    },
+    "stress": {
+      "trades": 0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "profit_factor": null,
+      "max_drawdown_pct": 0.0,
+      "funding_pnl": 0.0,
+      "costs": 0.0,
+      "diagnostics": {}
+    },
+    "severe": {
+      "trades": 0,
+      "net_pnl": 0.0,
+      "return_pct": 0.0,
+      "profit_factor": null,
+      "max_drawdown_pct": 0.0,
+      "funding_pnl": 0.0,
+      "costs": 0.0,
+      "diagnostics": {}
+    }
+  },
+  "slices": {
+    "development_1": {
+      "base": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      },
+      "stress": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      },
+      "severe": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      }
+    },
+    "development_2": {
+      "base": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      },
+      "stress": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      },
+      "severe": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      }
+    },
+    "development_3": {
+      "base": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      },
+      "stress": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      },
+      "severe": {
+        "net_pnl": 0.0,
+        "return_on_start_nav_pct": 0.0,
+        "usd_per_calendar_day": 0.0,
+        "max_continuous_drawdown_pct": 0.0,
+        "trades": 0,
+        "profit_factor": null,
+        "per_symbol_pnl": {
+          "ETHUSDT": 0.0,
+          "SOLUSDT": 0.0,
+          "BNBUSDT": 0.0,
+          "XRPUSDT": 0.0,
+          "DOGEUSDT": 0.0
+        }
+      }
+    }
+  },
+  "decision": "INCONCLUSIVE_NO_EPISODES_AT_FROZEN_COST_THRESHOLD"
+}

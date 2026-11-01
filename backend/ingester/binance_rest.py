@@ -155,20 +155,24 @@ class BinanceRESTClient:
             except Exception as e:
                 logger.error(f"Error fetching data for {symbol}: {e}")
 
-    def fetch_historical_candles(self, symbol, interval='1h', limit=500):
-        """Fetch historical klines for backfilling."""
-        data = self._get('/fapi/v1/klines', {
-            'symbol': symbol,
-            'interval': interval,
-            'limit': limit,
-        })
+    def fetch_historical_candles(self, symbol, interval='1h', limit=500, start_ms=None):
+        """Fetch historical klines for backfilling (latest ``limit``, or from ``start_ms``)."""
+        params = {'symbol': symbol, 'interval': interval, 'limit': limit}
+        if start_ms is not None:
+            params['startTime'] = int(start_ms)
+        data = self._get('/fapi/v1/klines', params)
         if not data:
             return []
 
+        import time as _time
+
         from .models import Candle
         candles = []
+        now_ms = int(_time.time() * 1000)
         for k in data:
             ts = datetime.fromtimestamp(k[0] / 1000, tz=timezone.utc)
+            # k[6] = bar close time; the in-progress bar stays open.
+            is_closed = int(k[6]) < now_ms
             obj, _ = Candle.objects.update_or_create(
                 symbol=symbol,
                 interval=interval,
@@ -183,7 +187,7 @@ class BinanceRESTClient:
                     'taker_buy_volume': Decimal(str(k[9])),
                     'taker_buy_quote_volume': Decimal(str(k[10])),
                     'num_trades': int(k[8]),
-                    'is_closed': True,
+                    'is_closed': is_closed,
                 }
             )
             candles.append(obj)

@@ -1,0 +1,35 @@
+{
+  "strategy_id": "S70_HOLD_UNTIL_FLIP",
+  "parent_signal": "S68_xs_mom_20",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": {
+    "hold_until_flip": {
+      "max_hold_days": 20,
+      "flip_on_opposite_signal": true
+    },
+    "monday_hold": {
+      "max_hold_days": 7,
+      "weekday": "Monday"
+    }
+  },
+  "unchanged_from_s68": {
+    "lookback": 20,
+    "min_spread": 0.03,
+    "fixed_risk_usd": 15.0
+  },
+  "daily_goal_usd": 5.0,
+  "disclosure": "cached-window historical characterization; not live approval"
+}

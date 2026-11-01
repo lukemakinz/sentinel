@@ -1,0 +1,23 @@
+{
+  "study_id": "OOS_2026_09_10",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "purpose": "First replay of an already-frozen portfolio on data that no study used: every research window so far ended at 2026-09-01.",
+  "subject": "BENCH_AB_R2 exactly as frozen (protocol sha256 09ab58db864683c26d05141d7e63f925fa0342e1d5880c10a0337272311eb7cb): Book A BOOK_A_ALT_RM + BOOK_A_RISK_DEFAULT on $250, Book B S84 quiet router on BTCUSDT on $250, same simulators and cost scenarios. No parameter changes.",
+  "honesty_note": "BENCH_AB_R2 was frozen on 2026-10-12, after September had happened, but no backtest window included any data after 2026-09-01 and Book A/B parameters date from earlier studies. This is untouched-data OOS, not a prospective forward test.",
+  "data": {
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "oos_september": ["2026-09-01T00:00:00Z", "2026-10-01T00:00:00Z"],
+    "oos_full": ["2026-09-01T00:00:00Z", "2026-10-27T00:00:00Z"],
+    "klines": "Binance checksumed monthly 1m archives through 2026-09; checksumed daily 1m archives for 2026-10-01..2026-10-26",
+    "funding": "monthly fundingRate archives through 2026-09; public REST /fapi/v1/fundingRate for October"
+  },
+  "metrics": ["net PnL", "$/day and gap to $5/day", "return", "max drawdown", "ES95", "daily Sharpe", "PSR vs 0", "DSR with N=133 prior studies (SR variance across trials assumed 1/(T-1), disclosed)", "Book A and Book B separately"],
+  "expectation_from_history": "Stress $/day on $500: development 0.178, validation 0.105, retrospective evaluation 0.160.",
+  "decision_rule": {
+    "consistent": "oos_full stress PnL > 0 and max drawdown <= 10% -> proceed to daily paper-forward of BENCH_AB_R2 as the reference book",
+    "inconsistent": "stress PnL <= 0 or drawdown > 10% -> no capital, continue research; report which book failed",
+    "note": "56 days cannot establish significance; this check can only falsify, not prove."
+  },
+  "fcm_safe25": "Not replayed: monthly episodes give 1-2 observations in this window, which is uninformative.",
+  "disclosure": "Retrospective replay on untouched data; not a live-performance claim."
+}

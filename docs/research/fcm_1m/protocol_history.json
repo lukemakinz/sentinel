@@ -1,0 +1,16 @@
+{
+  "superseded_by_data_quality_amendment": [
+    {
+      "sha256": "58ccf8b42c93437d1f7dad92032ba6532cf4a537381f0784c25b9500f6ede3f4",
+      "reason": "Sparse missing 1h observations were found during verified archive inspection; the exact-observation fallback policy was frozen before any strategy result was computed."
+    },
+    {
+      "sha256": "76e962fb9bb2786f5977fa7d35212a6e7f06a458999800f869fb68bc2f2a6b9b",
+      "reason": "Several exact 1m observations were also absent. The final causal MTM-only hierarchy was frozen before any strategy target or PnL was computed."
+    },
+    {
+      "sha256": "e1dc2b6991531dd495fab0cec2707ff148676ee3955437b92c2632cbbaab4a6e",
+      "reason": "A single planned monthly SOL execution hour lacked both 1h and 1m perpetual data. A bounded atomic next-real-open policy was frozen before any strategy target or PnL was computed."
+    }
+  ]
+}

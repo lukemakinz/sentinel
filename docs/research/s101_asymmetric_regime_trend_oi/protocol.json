@@ -1,0 +1,62 @@
+{
+  "status": "frozen_after_s100_rejection_before_s101_replay",
+  "strategy_id": "S101_ASYMMETRIC_REGIME_TREND_OI",
+  "capital_usd": 500.0,
+  "lineage": "S100 was rejected because its DOWN state preceded a positive mean 20-day BTC return and both pullback directions lost. S101 replaces both the slow symmetric state model and pullback executor. It does not retune S100.",
+  "architecture": {
+    "up": "BTC above SMA200 with positive 84-day momentum, at least 50% of the six-asset universe above SMA200, and at least 50% with positive 84-day momentum; two daily confirmations.",
+    "down": "BTC below EMA50 with both 28-day and 84-day momentum negative, and no more than one third of the six assets with positive 28-day momentum; two daily confirmations.",
+    "sideways": "Every other state; mandatory cash.",
+    "long_executor": "S99-style own SMA200 plus positive 84-day momentum, top three momentum/volatility rank, 28-day mean funding <= +0.0001. Market OI attention is the fraction of BTC/ETH/SOL with positive EMA7-versus-EMA28 OI oscillator; low attention scales long exposure to 75% rather than selecting direction.",
+    "short_executor": "Only BTC/ETH/SOL; own close below EMA50, 28-day and 84-day momentum negative, 28-day mean funding >= -0.0001, and OI EMA7-versus-EMA28 spread >= +0.05%; top two downside momentum/volatility rank.",
+    "decision_frequency": "Every seven days at UTC open using only information timestamped strictly earlier."
+  },
+  "universe": {
+    "regime_and_longs": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+    "oi_and_shorts": ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+  },
+  "data": {
+    "source": "checksum-verified public Binance USD-M 1d, funding and 5m metrics archives",
+    "price_warmup_start": "2022-04-04T00:00:00Z",
+    "oi_warmup_start": "2024-01-01T00:00:00Z",
+    "execution_start": "2024-08-01T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z"
+  },
+  "diagnostic_slices": {
+    "development": ["2024-08-01T00:00:00Z", "2025-05-01T00:00:00Z"],
+    "validation": ["2025-05-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-01-01T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "risk": {
+    "long_annual_volatility_target": 0.15,
+    "short_annual_volatility_target": 0.075,
+    "single_asset_cap": 0.45,
+    "max_long_positions": 3,
+    "max_short_positions": 2,
+    "unused_weight": "cash"
+  },
+  "costs_bps_per_traded_notional": {
+    "base": {"fee": 5.0, "slippage": 2.0},
+    "stress": {"fee": 8.0, "slippage": 5.0},
+    "severe": {"fee": 10.0, "slippage": 10.0}
+  },
+  "predeclared_robustness": {
+    "paired_volatility_targets": [[0.125, 0.0625], [0.175, 0.0875]],
+    "weekly_phase_offsets_days": [2, 4],
+    "leave_one_long_universe_symbol_out": true,
+    "regime_diagnostic": "Sample every seven days and report subsequent 20-day BTC returns.",
+    "bootstrap": "5000 deterministic circular 28-day blocks on stress daily returns."
+  },
+  "historical_gate": {
+    "full_stress": "PnL > 0, Sharpe >= 0.50, max drawdown <= 15%, daily-PnL PF > 1.05, positive-month share >= 40%.",
+    "directions": "At least five invested short decisions; long-regime and short-regime stress PnL each >= 0.",
+    "time_dispersion": "Development and validation stress PnL > 0, retrospective stress PnL >= 0, severe full PnL > 0.",
+    "robustness": "Both risk neighbors, both phase offsets, at least five of six leave-one-out replays and bootstrap p10 terminal PnL > 0.",
+    "promotion": "Historical pass authorizes paper-forward only for at least 180 days and 26 weekly decisions; live disabled."
+  },
+  "disclosures": [
+    "S101 was designed after inspecting S100 and is not independent validation.",
+    "No S101 parameter may change after this file is hashed.",
+    "Open interest confirms participation and never identifies direction by itself."
+  ]
+}

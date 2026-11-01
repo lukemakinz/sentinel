@@ -1,0 +1,48 @@
+{
+  "strategy_id": "S113_ob_absorption_reversal",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "predecessor": "S112 EXTERNAL rejected at development (stress: 52 fills, PF 0.82, mean -0.139R). Diagnostics on the burned S112 development trades: 18 of 41 stopped trades never reached +0.5R (false sweeps); 6 reached 2-3R before stopping; 47 of 165 limits expired; 39 signals blocked by the single position/pending slot.",
+  "hypothesis": "A sweep into demand is a real reversal only if sellers were absorbed or positions were flushed. Requiring that evidence, plus a 4h discount location, removes false sweeps; a 50% scale-out at 2R captures trades that reach 2-3R and then fail.",
+  "selection_disclosure": "Designed after inspecting S112 development results; the S112 development window is therefore in-sample for S113 and is reported only as a reference. Warmup-only feasibility (2024-08..2025-05, counts only, no PnL): 330 S112-EXTERNAL signals vs 101 S113 signals on 8 symbols (64 CVD divergence, 37 OI flush). Because 8 symbols could not reach a held-out sample, the universe is the predeclared 12-symbol S110 combined universe and the two held-out windows are pooled into one test.",
+  "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT", "LINKUSDT", "LTCUSDT", "BCHUSDT", "DOTUSDT"],
+  "data": {
+    "klines": "Binance public USD-M checksumed 1m kline and funding archives",
+    "open_interest": "Binance public USD-M daily metrics archives, 5m sum_open_interest; a sample is used only after its 5-minute period has ended",
+    "cvd": "per 15m bar sum of (2 x taker_buy_volume - volume) from the 1m klines, cumulative",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "in_sample_reference": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "held_out": ["2025-10-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "held_out_subwindows": {"validation": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"], "evaluation": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"]}
+  },
+  "unchanged_from_s112": "context, 1h OB zone, SSL sweep, MSS, FVG, maker limit at FVG proximal edge (240 min), stop beyond sweep extreme - 0.10 ATR (0.35-3.0 ATR), target = first 1h BSL with stress net R in [3, 10], max hold 72h, costs, risk 0.2%",
+  "added_filters": {
+    "absorption": "required: CVD at the sweep-extreme 15m bar > CVD at the swept swing-low pivot bar (cvd_divergence), OR open interest at the extreme bar close is >= 0.5% below the value one hour before the sweep bar opened (oi_flush)",
+    "discount": "sweep low <= low + 1/3 x (high - low) of the last 30 closed 4h bars known at the previous 15m close"
+  },
+  "capacity_change": "maximum open positions 2 (S112: 1); still one pending limit globally",
+  "routes": {
+    "CONTROL": "S112 EXTERNAL rules with the S113 universe and capacity; not promotable, measures the filters' incremental effect",
+    "ABSORB": "CONTROL + absorption + discount; single target",
+    "ABSORB_PARTIAL": "ABSORB + 50% scale-out at +2R gross from the limit price; stop never moved"
+  },
+  "risk": {"capital_usd": 250, "risk_fraction": 0.002, "maximum_notional_equity": 0.5, "leverage": 5, "daily_loss_fraction": 0.010, "weekly_loss_fraction": 0.018, "drawdown_halt_fraction": 0.060},
+  "cost_scenarios_bps": {
+    "base": {"maker": 2, "taker": 5, "slippage_each_side": 2},
+    "stress": {"maker": 5, "taker": 8, "slippage_each_side": 5},
+    "severe": {"maker": 10, "taker": 10, "slippage_each_side": 10}
+  },
+  "held_out_gate_stress": {
+    "minimum_fills": 60,
+    "minimum_independent_4h_clusters": 30,
+    "minimum_profit_factor": 1.15,
+    "minimum_mean_net_r": 0.08,
+    "pnl_positive": true,
+    "severe_pnl_positive": true,
+    "maximum_drawdown_pct": 6,
+    "both_subwindows_profit_factor_at_least": 1.0,
+    "beats_control_mean_net_r": true
+  },
+  "multiple_testing": "Two candidate routes (ABSORB, ABSORB_PARTIAL). Each must pass on its own; the held-out window is opened once for all routes.",
+  "after_pass": "Shadow paper-forward only, alongside the mechanical baseline; no live approval.",
+  "disclosure": "Retrospective research only."
+}

@@ -1,0 +1,27 @@
+{
+  "strategy_id": "BOOK_A_S73_BTC",
+  "capital_usd": 250,
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "XRPUSDT",
+    "DOGEUSDT",
+    "BNBUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ],
+    "holdout": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "disclosure": "Reduced alt panel vs scratchpad S73; same rules"
+}

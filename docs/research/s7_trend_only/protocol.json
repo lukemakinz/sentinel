@@ -1,0 +1,88 @@
+{
+  "created_at": "2026-09-08T09:08:47.534571+00:00",
+  "variants_fixed_before_run": [
+    {
+      "name": "S7vp_trend_5m_market_RR",
+      "minutes": 5,
+      "profile_days": 1,
+      "entry_style": "market",
+      "min_profit_usd": 0,
+      "leverage": 20
+    },
+    {
+      "name": "S7vp_trend_5m_market_goal10",
+      "minutes": 5,
+      "profile_days": 1,
+      "entry_style": "market",
+      "min_profit_usd": 10,
+      "leverage": 20
+    },
+    {
+      "name": "S7vp_trend_5m_limit_RR",
+      "minutes": 5,
+      "profile_days": 1,
+      "entry_style": "limit",
+      "min_profit_usd": 0,
+      "leverage": 20
+    },
+    {
+      "name": "S7vp_trend_5m_limit_goal10",
+      "minutes": 5,
+      "profile_days": 1,
+      "entry_style": "limit",
+      "min_profit_usd": 10,
+      "leverage": 20
+    },
+    {
+      "name": "S7vp_trend_15m_market_RR",
+      "minutes": 15,
+      "profile_days": 1,
+      "entry_style": "market",
+      "min_profit_usd": 0,
+      "leverage": 20
+    },
+    {
+      "name": "S7vp_trend_15m_market_goal10",
+      "minutes": 15,
+      "profile_days": 1,
+      "entry_style": "market",
+      "min_profit_usd": 10,
+      "leverage": 20
+    },
+    {
+      "name": "S7vp_trend_15m_limit_RR",
+      "minutes": 15,
+      "profile_days": 1,
+      "entry_style": "limit",
+      "min_profit_usd": 0,
+      "leverage": 20
+    },
+    {
+      "name": "S7vp_trend_15m_limit_goal10",
+      "minutes": 15,
+      "profile_days": 1,
+      "entry_style": "limit",
+      "min_profit_usd": 10,
+      "leverage": 20
+    }
+  ],
+  "capital_per_pair": 1000,
+  "margin_cap_usd": 10,
+  "risk_cap_usd": 2.5,
+  "development": [
+    "2025-08-01/2026-02-01",
+    "2026-02-01/2026-04-01"
+  ],
+  "unused_evaluation": "2026-04-01/2026-08-01",
+  "trend_only": "No countertrend branch. bias4h == side is a hard requirement for every entry, with no \"strong reversal\" exception. A prior revision (S7vp) had such an exception and did not survive holdout; it is removed here, not tuned.",
+  "selection": "At least 40 validation trades across four pairs. Prefer positive portfolio in both splits, then validation return minus half EOD DD. Freeze one global configuration before unused evaluation.",
+  "disclosure": "December-March and August periods were used by earlier S7 revisions (indicator-confluence and countertrend variants). April-July 2026 has not been used to pick parameters for any S7 variant and is held aside as holdout. This is a retrospective screen, not real-time forward trading.",
+  "scenarios": "20x development; frozen holdout at 20x and 30x, with 2 and 5 bps slippage.",
+  "fees_bps": {
+    "taker": 5,
+    "maker_entry": 2
+  },
+  "limit_model": "Must be non-marketable at placement, penetrate 2 bps, expire after 30 minutes. No same-fill-minute profit target. No queue model.",
+  "liquidation": "Conservative deposit-vs-stop buffer only; no historical mark-price liquidation simulation.",
+  "stopping_rule": "If no variant reaches profit_factor > 1 after costs on holdout for at least 3 of 4 pairs, this closes the indicator/price-action S7 scalping research direction. No further variant search follows a negative holdout."
+}

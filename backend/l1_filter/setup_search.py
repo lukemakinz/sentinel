@@ -108,6 +108,24 @@ def fetch_open_interest(session, symbol: str) -> pd.Series:
     return pd.Series([float(r['sumOpenInterest']) for r in rows], index=index).sort_index()
 
 
+def market_context(session, now: pd.Timestamp, long_rows: list[dict]) -> dict:
+    """BTC 1h trend and alt breadth at scan time, attached to every setup."""
+    context = {'btc_above_ema50_1h': None, 'btc_return_24h_pct': None,
+               'alt_breadth_above_ema50_1h': None}
+    try:
+        btc = klines_to_bars(_get(session, '/fapi/v1/klines', {
+            'symbol': 'BTCUSDT', 'interval': '1h', 'limit': 200}), 60, now)
+        ema = btc.close.ewm(span=50, adjust=False).mean()
+        context['btc_above_ema50_1h'] = bool(btc.close.iloc[-1] > ema.iloc[-1])
+        context['btc_return_24h_pct'] = round((btc.close.iloc[-1] / btc.close.iloc[-25] - 1) * 100, 3)
+    except Exception:  # context is optional; never fail the scan for it
+        pass
+    flags = [row['above_ema50_1h'] for row in long_rows if row.get('above_ema50_1h') is not None]
+    if flags:
+        context['alt_breadth_above_ema50_1h'] = round(sum(flags) / len(flags), 3)
+    return context
+
+
 def _fmt(value):
     return None if value is None else float(f'{value:.6g}')
 
@@ -145,6 +163,9 @@ def _evaluate_side(bars: dict, side: int, config: SetupSearchConfig,
     real = lambda v: None if v is None else side * v  # noqa: E731
     checks = dict.fromkeys(CHECKLIST, False)
     result = {'side': 'LONG' if side == 1 else 'SHORT', 'price': _fmt(real(ctx['close']))}
+    if side == 1:
+        hourly = bars['1h'].close
+        result['above_ema50_1h'] = bool(hourly.iloc[-1] > hourly.ewm(span=50, adjust=False).mean().iloc[-1])
     atr = ctx['atr']
 
     setups = scan['setups']
@@ -175,6 +196,24 @@ def _evaluate_side(bars: dict, side: int, config: SetupSearchConfig,
         checks['retest_wejscie'] = path['state'] in {'FILLED', 'STOPPED', 'TP1_HIT'}
         checks['rr_tp1_min_1_3'] = rr1 >= strategy.min_net_r
         evidence = latest['evidence']
+        atr = latest['atr']
+        mss_close = evidence['mss_close']
+        fvg = evidence['fvg']
+        zone_age = pd.Timestamp(latest['time'], tz='UTC') - pd.Timestamp(evidence['zone_ob_time'])
+        # Mirror-space geometry is side-symmetric, so distances need no sign.
+        result['features'] = {
+            'atr_15m': round(atr, 10),
+            'sweep_depth_atr': round((evidence['ssl'] - evidence['sweep_extreme']) / atr, 3),
+            'displacement_atr': round((mss_close - evidence['sweep_extreme']) / atr, 3),
+            'fvg_size_atr': round((fvg[1] - fvg[0]) / atr, 3),
+            'stop_atr': round((latest['limit'] - latest['stop']) / atr, 3),
+            'zone_age_hours': round(zone_age.total_seconds() / 3600, 1),
+            'mss_hour_utc': int(pd.Timestamp(latest['time'], tz='UTC').hour),
+            'fvg_mid': _fmt(side * (fvg[0] + fvg[1]) / 2),
+            'mss_close': _fmt(side * mss_close),
+            'discount_4h': (ctx['range_4h'] is not None and evidence['sweep_extreme'] <= (
+                ctx['range_4h'][0] + (ctx['range_4h'][1] - ctx['range_4h'][0]) / 3)),
+        }
         result.update({
             'mss_time': str(setup['time']),
             'entry_limit': _fmt(setup['limit']),
@@ -292,6 +331,10 @@ def run_setup_search(config: SetupSearchConfig = SetupSearchConfig(),
     with ThreadPoolExecutor(max_workers=8) as pool:
         outcomes = list(pool.map(scan, universe))
     rows = [row for found, _ in outcomes for row in found]
+    context = market_context(session, now, [row for row in rows if row['side'] == 'LONG'])
+    for row in rows:
+        if 'features' in row:
+            row['features'].update(context)
     rows.sort(key=lambda r: (STATUS_PRIORITY[r['status']], -r['score'], r['symbol']))
     return {
         'as_of': str(now),

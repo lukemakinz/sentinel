@@ -46,6 +46,7 @@ export const fetchConsensusHistory = (symbol, hours = 24) =>
 
 export const fetchSystemStats    = ()        => api.get(`/system/stats/`);
 export const fetchMTF            = (symbol)  => api.get(`/mtf/${symbol}/`);
+export const fetchAuctionResearch = (symbol) => api.get('/auction/research/', { params: { symbol } });
 export const fetchLatestScan     = (symbol) => api.get(`/scan/${symbol}/`);
 export const fetchLatestAnalysis = (symbol) => api.get(`/analysis/${symbol}/`);
 

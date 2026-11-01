@@ -1,0 +1,44 @@
+{
+  "strategy_id": "BOOK_AB_R4_QUIET_V2",
+  "status": "FROZEN_BEFORE_R4_REPLAY",
+  "frozen_at_utc": "2026-10-13T12:00:00Z",
+  "benchmark": "BENCH_AB_R3",
+  "capital_usd": 500,
+  "modification": "Keep corrected Book A unchanged. Replace the S84 v1/v2 router in the $250 Book B sleeve with the already-defined strict S83 quiet Donchian v2 for every signal.",
+  "reason_fixed_before_replay": "Prior research already showed v2 reduced Book B losses over full 2025; R3 revealed that Book B loss avoidance is the main repair opportunity. No new parameter is fitted here.",
+  "book_a": {
+    "capital_usd": 250,
+    "config": "BOOK_A_ALT_RM + BOOK_A_RISK_DEFAULT",
+    "ledger": "BENCH_AB_R3 quantity/cash ledger"
+  },
+  "book_b_challenger": {
+    "capital_usd": 250,
+    "config": "BOOK_B_QUIET_V2",
+    "btc_above_sma200": true,
+    "maximum_btc_vol_percentile": 0.45,
+    "minimum_alt_breadth_sma50": 0.50,
+    "maximum_signals_per_iso_week": 2,
+    "fixed_risk_usd": 6.0
+  },
+  "continuous_replay": {
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "execution": ["2025-05-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "reset_at_slice_boundaries": false
+  },
+  "cost_scenarios_bps": {
+    "base": {"book_a_turnover": 7, "book_b_fee_each_side": 7, "book_b_slippage_each_side": 2},
+    "stress": {"book_a_turnover": 12, "book_b_fee_each_side": 8, "book_b_slippage_each_side": 5},
+    "severe": {"book_a_turnover": 20, "book_b_fee_each_side": 10, "book_b_slippage_each_side": 10}
+  },
+  "historical_selection_gate": {
+    "stress_total_pnl_improves_vs_r3": true,
+    "stress_max_drawdown_not_worse": true,
+    "stress_expected_shortfall_not_worse": true,
+    "severe_total_return_not_worse": true,
+    "positive_monthly_excess_share_minimum": 0.60,
+    "paired_28d_block_bootstrap_95pct_lower_excess_above_zero": true
+  },
+  "prospective_t0": "2026-10-14T00:00:00Z",
+  "prospective_gate": "Run R3 and R4 in parallel for the later of 180 days and 26 weekly decisions. Require at least 15 closed Book B trades or mark result INCONCLUSIVE.",
+  "claim_policy": "All historical comparisons are discovery-affected diagnostics. Any rule change resets prospective T0."
+}

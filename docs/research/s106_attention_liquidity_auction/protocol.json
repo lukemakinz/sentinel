@@ -1,0 +1,46 @@
+{
+  "status": "frozen_before_first_s106_replay",
+  "strategy_id": "S106_ATTENTION_LIQUIDITY_AUCTION",
+  "capital_usd_per_universe": 500.0,
+  "lineage": "S105 established that a fresh FVG plus a 20-bar liquidity sweep and an exact 2-4 ATR sweep stop was positive after stress costs but statistically weak. S106 keeps that geometry, replaces the binary two-of-three micro gate with attention-based position sizing, and tests a farther 24-hour external-liquidity target.",
+  "common_rules": {
+    "research_window": ["2025-05-01T00:00:00Z", "2026-10-01T00:00:00Z"],
+    "primary_universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+    "portability_universe": ["BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+    "global_direction": "S101 asymmetric daily UP/DOWN/SIDEWAYS regime; SIDEWAYS is flat for S106.",
+    "local_direction": "Closed 4h EMA50 trend must agree with the trade side.",
+    "formation": "S105 one-hour displaced FVG/IFVG state machine; zone age <=24h.",
+    "entry": "A 15m sweep of the previous 20 closed bars, reclaim/rejection, then a later break; fill at the next 5m open.",
+    "stop": "Exact sweep extreme plus 0.15 ATR; accept only decision stops between 2.0 and 4.0 ATR; never widen artificially.",
+    "attention": "No minimum micro confirmations. OI expansion, aligned dual taker flow and relative volume each add 0.25 to risk scale: 0.25/0.50/0.75/1.00. Veto only when both taker measurements oppose the intended side.",
+    "risk": "0.2% equity capped at $0.50, multiplied by signal attention scale; 75% notional; leverage <=5; one global position.",
+    "maximum_hold": "12 hours.",
+    "costs": {
+      "base": {"fee_bps": 5.0, "slippage_bps": 2.0},
+      "stress": {"fee_bps": 8.0, "slippage_bps": 5.0},
+      "severe": {"fee_bps": 10.0, "slippage_bps": 10.0}
+    }
+  },
+  "predeclared_variants": {
+    "fixed_control": "Attention-sized S105 geometry with unchanged fixed 2.5R target.",
+    "external_target": "Target 90% toward the opposite extreme of the prior 96 closed 15m bars. Require >=1.5R at decision and actual fill; cap take-profit at 2.5R when more space exists. This is the S106 candidate."
+  },
+  "predeclared_slices": {
+    "development": ["2025-05-01", "2025-10-01"],
+    "validation": ["2025-10-01", "2026-01-01"],
+    "retrospective": ["2026-01-01", "2026-09-01"],
+    "opened_design_month": ["2026-09-01", "2026-10-01"]
+  },
+  "historical_gate_for_external_target": {
+    "primary": "Stress >=24 fills, PnL >0, PF >1.10, DD <=5%, severe PnL >0, both long and short non-negative, at least two symbols, two positive leave-one-out results and bootstrap p10 >0.",
+    "portability": "Stress >=12 fills, PnL >0, PF >1.05, severe PnL >0, both long and short non-negative and at least two symbols.",
+    "time_breadth": "Development, validation and retrospective stress PnL must each be positive. The opened September design month is reported but cannot count as independent validation.",
+    "promotion": "A full pass can start prospective paper observation only; it cannot authorize live trading."
+  },
+  "disclosures": [
+    "BTC/ETH/SOL history and September 2026 are selection-contaminated by S103-S105 diagnostics.",
+    "The portability symbols were used by other project strategies; this is a cross-asset portability check, not pristine out-of-sample evidence.",
+    "No S106 rule may change after the first replay is opened.",
+    "Live trading remains disabled."
+  ]
+}

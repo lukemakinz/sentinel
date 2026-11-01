@@ -1,0 +1,53 @@
+{
+  "protocol_version": "S23-OB-OI-WIDER-UNIVERSE-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_context": "S20 H1 (order block + OI confirmation, patient exit) is the first strategy in this project to show positive PF in both development and validation under base costs, but only produced ~137 fills over 6 months across ETH/SOL/BNB (~0.75 fills/day) — too infrequent for the user's stated goal of more regular daily activity. This protocol changes ONLY the traded symbol universe (adds ADAUSDT, XRPUSDT, DOGEUSDT) while keeping the exact same entry signal, exit management, position sizing and the single-global-position risk discipline (still only one position open at a time across the whole cluster) — testing whether more candidate diversity fills more of the 'no signal available' gaps without taking on simultaneous, uncontrolled correlation risk.",
+  "hypotheses": [
+    {
+      "id": "H1_SIX_SYMBOLS",
+      "entry_exit_sizing": "byte-for-byte identical to S20 H1 (order_block_oi_confirmation_scalp, route='oi', partial_r=1.5, trail_atr=2.5, target_r=8.0, default sizing)",
+      "universe": "ETHUSDT, SOLUSDT, BNBUSDT, ADAUSDT, XRPUSDT, DOGEUSDT — still ONE global position across all six, same as S20's three-symbol cluster; no simultaneous positions are ever held",
+      "symbol_priority": "ETHUSDT, SOLUSDT, BNBUSDT, ADAUSDT, XRPUSDT, DOGEUSDT — the original three keep priority over the three additions when multiple candidates tie at the same timestamp"
+    }
+  ],
+  "single_variable_isolated": "Only the traded symbol set changes versus S20 H1. Entry signal generation, regime, structure, flow, OI confirmation, stop placement, exit management, position sizing and the one-global-position discipline are otherwise byte-for-byte identical.",
+  "single_hypothesis_disclosure": "Only one hypothesis is declared here (not the usual two) because there is no natural second, equally-motivated universe size to pre-register without it becoming a parameter search (4 symbols? 8? 12?). Six was chosen as roughly double the original three, a natural pre-declared multiple, not tuned by trying several sizes and keeping the best.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT", "ADAUSDT", "XRPUSDT", "DOGEUSDT"],
+    "note": "ADAUSDT, XRPUSDT, DOGEUSDT klines/funding/metrics archives are downloaded fresh for this protocol; ETH/SOL/BNB reuse the existing cache."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 of traded symbols net positive (proportionally adjusted for six symbols: at least 4/6), no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the whole six-symbol cluster — unchanged from S20's three-symbol discipline",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1. No parameter grid over universe size or symbol choice beyond this one pre-declared set. A failing gate stops the route; no least-bad winner is chosen.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "ADA/XRP/DOGE have different liquidity and volatility characteristics than ETH/SOL/BNB; the OB displacement/volume thresholds and OI-confirmation logic were originally designed and validated only on the original three.",
+    "More symbols in the SAME single-global-position cluster increases candidate diversity but does not increase simultaneous exposure — this protocol deliberately does not test allowing multiple concurrent positions, which would introduce uncontrolled cross-symbol correlation risk.",
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18/S20.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

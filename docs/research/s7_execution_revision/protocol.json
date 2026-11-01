@@ -1,0 +1,212 @@
+{
+  "created_at": "2026-09-08T08:20:00.923514+00:00",
+  "variants": [
+    {
+      "name": "S7v3_absorption_15m_limit_3R_20x",
+      "setup": "absorption",
+      "minutes": 15,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 360,
+      "entry_style": "limit",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_absorption_15m_limit_4R_20x",
+      "setup": "absorption",
+      "minutes": 15,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 360,
+      "entry_style": "limit",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_exhaustion_15m_limit_3R_20x",
+      "setup": "exhaustion",
+      "minutes": 15,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 360,
+      "entry_style": "limit",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_exhaustion_15m_limit_4R_20x",
+      "setup": "exhaustion",
+      "minutes": 15,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 360,
+      "entry_style": "limit",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_breakout_retest_15m_limit_3R_20x",
+      "setup": "breakout_retest",
+      "minutes": 15,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 360,
+      "entry_style": "limit",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_breakout_retest_15m_limit_4R_20x",
+      "setup": "breakout_retest",
+      "minutes": 15,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 360,
+      "entry_style": "limit",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_channel_breakout_15m_3R_20x",
+      "setup": "channel_breakout",
+      "minutes": 15,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_channel_breakout_15m_4R_20x",
+      "setup": "channel_breakout",
+      "minutes": 15,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_channel_breakout_60m_3R_20x",
+      "setup": "channel_breakout",
+      "minutes": 60,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_channel_breakout_60m_4R_20x",
+      "setup": "channel_breakout",
+      "minutes": 60,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_squeeze_breakout_15m_3R_20x",
+      "setup": "squeeze_breakout",
+      "minutes": 15,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_squeeze_breakout_15m_4R_20x",
+      "setup": "squeeze_breakout",
+      "minutes": 15,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_squeeze_breakout_60m_3R_20x",
+      "setup": "squeeze_breakout",
+      "minutes": 60,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_squeeze_breakout_60m_4R_20x",
+      "setup": "squeeze_breakout",
+      "minutes": 60,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_range_sweep_15m_3R_20x",
+      "setup": "range_sweep",
+      "minutes": 15,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_range_sweep_15m_4R_20x",
+      "setup": "range_sweep",
+      "minutes": 15,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_range_sweep_60m_3R_20x",
+      "setup": "range_sweep",
+      "minutes": 60,
+      "exit_style": "fixed",
+      "stop_atr": 1.5,
+      "target_r": 3,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    },
+    {
+      "name": "S7v3_range_sweep_60m_4R_20x",
+      "setup": "range_sweep",
+      "minutes": 60,
+      "exit_style": "trail",
+      "stop_atr": 1.5,
+      "target_r": 4,
+      "max_hold": 720,
+      "entry_style": "market",
+      "leverage": 20
+    }
+  ],
+  "development": [
+    "2025-12-03/2026-02-01",
+    "2026-02-01/2026-04-01"
+  ],
+  "unused_evaluation": "2026-04-01/2026-08-01",
+  "disclosure": "December-March and August were examined in v1. March is now development, not an untouched holdout. April-July have not been examined; this is a retrospective unused-period evaluation, not actual forward trading.",
+  "selection": "At least 100 validation trades combined. Rank by positive return in BOTH development splits first, then validation portfolio return minus half EOD DD. One global rule for all symbols. No required minimum daily trade count.",
+  "costs": "5 bps fee, 2 bps adverse slippage each side, historical funding; no optimistic maker fills.",
+  "holdout_plan": "Evaluate the locked candidate on four unused months, and 5 bps slippage stress."
+}

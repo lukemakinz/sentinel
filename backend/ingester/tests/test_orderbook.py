@@ -93,3 +93,47 @@ class OrderBookIngestionTest(TestCase):
                 'data': DEPTH,
             }))
             handler.assert_called_once_with(DEPTH)
+
+
+@override_settings(
+    TRADING_PAIRS=['SOLUSDT'],
+    GLOBAL_CONTEXT_PAIRS=['BTCUSDT', 'ETHUSDT'],
+    BREADTH_PAIRS=['SOLUSDT', 'XRPUSDT', 'DOGEUSDT'],
+    BREADTH_INTERVALS=['15m', '1h', '4h'],
+)
+class BreadthPairIngestionTest(TestCase):
+    def test_breadth_pairs_get_context_klines_only(self):
+        client = BinanceWebSocketClient()
+
+        # SOL is already a trade pair, so it is not duplicated as breadth-only.
+        self.assertEqual(client.breadth_pairs, ['xrpusdt', 'dogeusdt'])
+        urls = client._build_stream_urls()
+        for interval in ('15m', '1h', '4h'):
+            self.assertIn(f'xrpusdt@kline_{interval}', urls['market'])
+        self.assertNotIn('xrpusdt@kline_1m', urls['market'])
+        self.assertNotIn('xrpusdt@aggTrade', urls['market'])
+        self.assertNotIn('xrpusdt@markPrice', urls['market'])
+        self.assertNotIn('xrpusdt@depth20', urls.get('public', ''))
+        self.assertEqual(client.trade_pairs, ['solusdt'])
+
+    def test_breadth_pairs_persist_closed_candles_only(self):
+        from asgiref.sync import async_to_sync
+
+        from ingester.models import Candle
+
+        client = BinanceWebSocketClient()
+
+        def kline(symbol, closed):
+            return {'k': {
+                't': 1_760_000_000_000, 's': symbol, 'i': '1h', 'o': '1', 'h': '2',
+                'l': '0.5', 'c': '1.5', 'v': '10', 'q': '15', 'V': '5', 'Q': '7',
+                'n': 3, 'x': closed,
+            }}
+
+        async_to_sync(client._handle_kline)(kline('XRPUSDT', False))
+        self.assertFalse(Candle.objects.filter(symbol='XRPUSDT').exists())
+        async_to_sync(client._handle_kline)(kline('XRPUSDT', True))
+        self.assertTrue(Candle.objects.filter(symbol='XRPUSDT', is_closed=True).exists())
+        # Evaluated instruments keep live (unclosed) updates.
+        async_to_sync(client._handle_kline)(kline('SOLUSDT', False))
+        self.assertTrue(Candle.objects.filter(symbol='SOLUSDT', is_closed=False).exists())

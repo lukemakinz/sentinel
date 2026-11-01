@@ -51,6 +51,30 @@ class FlowWindowQualityTest(TestCase):
         self.assertEqual(flow['whale_cvd_change'], 250.0)
         self.assertEqual(flow['whale_cvd_window_seconds'], 300)
 
+    def test_oi_ignores_duplicate_poll_and_uses_valid_window(self):
+        now = timezone.now()
+        OpenInterest.objects.create(
+            symbol='SOLUSDT', timestamp=now - timedelta(minutes=5),
+            open_interest=Decimal('100'),
+        )
+        OpenInterest.objects.create(
+            symbol='SOLUSDT', timestamp=now - timedelta(minutes=1),
+            open_interest=Decimal('100.5'),
+        )
+        OpenInterest.objects.create(
+            symbol='SOLUSDT', timestamp=now,
+            open_interest=Decimal('101'),
+        )
+
+        flow = _flow_snapshot('SOLUSDT', now)
+
+        self.assertAlmostEqual(flow['open_interest_change_pct'], 1.0)
+        self.assertEqual(flow['open_interest_sample_gap_seconds'], 300)
+        self.assertEqual(
+            flow['open_interest_previous_timestamp'],
+            (now - timedelta(minutes=5)).isoformat(),
+        )
+
     def test_stale_global_context_is_a_hard_failure(self):
         now = timezone.now()
         timeframes = {

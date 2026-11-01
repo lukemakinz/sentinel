@@ -1,0 +1,329 @@
+{
+  "protocol_sha256": "09cbf4caac0908063f2eee9bb04c1acdd0336beec75edf276976a721db7daa9c",
+  "config": {
+    "formation_minutes": 60,
+    "confirmation_minutes": 15,
+    "atr_period": 14,
+    "volume_lookback": 20,
+    "displacement_atr": 0.8,
+    "displacement_volume": 1.15,
+    "min_gap_atr": 0.05,
+    "max_gap_atr": 1.25,
+    "max_zone_age_hours": 24,
+    "break_buffer_atr": 0.03,
+    "reaction_body_atr": 0.1,
+    "confirmation_window_bars": 3,
+    "ema4h_span": 50,
+    "oi_lookback_minutes": 60,
+    "min_oi_change_pct": 0.05,
+    "long_taker_ratio": 0.52,
+    "short_taker_ratio": 0.48,
+    "min_relative_volume": 1.0,
+    "max_metrics_age_minutes": 15.0,
+    "min_micro_confluence": 2,
+    "require_liquidity_sweep": true,
+    "liquidity_lookback_bars": 20,
+    "liquidity_sweep_atr": 0.02,
+    "require_liquidity_reset": false,
+    "maximum_sweep_oi_change_15m_pct": 0.0,
+    "require_liquidity_target": false,
+    "minimum_liquidity_target_r": 2.5,
+    "target_front_run_fraction": 0.9,
+    "stop_buffer_atr": 0.15,
+    "minimum_stop_atr": 2.0,
+    "maximum_stop_atr": 4.0,
+    "target_r": 2.5,
+    "max_hold_minutes": 720
+  },
+  "regime_config": {
+    "btc_symbol": "BTCUSDT",
+    "long_sma_days": 200,
+    "long_momentum_days": 84,
+    "down_ema_days": 50,
+    "down_fast_momentum_days": 28,
+    "down_slow_momentum_days": 84,
+    "up_breadth_threshold": 0.5,
+    "down_breadth_threshold": 0.3333333333333333,
+    "confirmation_days": 2
+  },
+  "raw_signals": {
+    "BTCUSDT": 0,
+    "ETHUSDT": 0,
+    "SOLUSDT": 0
+  },
+  "signal_diagnostics": {
+    "BTCUSDT": {
+      "zones": 1123,
+      "touched": 950,
+      "defense_without_liquidity_sweep": 541,
+      "expired": 199,
+      "invalidated_by_close": 285,
+      "ifvg_failed_reclaim": 46,
+      "ifvg_first_retest_no_rejection": 180,
+      "ifvg_without_liquidity_sweep": 40,
+      "liquidity_sweep_seen": 202,
+      "defense_armed": 122,
+      "break_confirmed": 97,
+      "confluence_veto": 96,
+      "ifvg_armed": 2,
+      "confirmation_expired": 20,
+      "defense_failed_to_ifvg": 6,
+      "stop_too_tight": 1,
+      "deduplicated_signals": 0,
+      "config": {
+        "formation_minutes": 60,
+        "confirmation_minutes": 15,
+        "atr_period": 14,
+        "volume_lookback": 20,
+        "displacement_atr": 0.8,
+        "displacement_volume": 1.15,
+        "min_gap_atr": 0.05,
+        "max_gap_atr": 1.25,
+        "max_zone_age_hours": 24,
+        "break_buffer_atr": 0.03,
+        "reaction_body_atr": 0.1,
+        "confirmation_window_bars": 3,
+        "ema4h_span": 50,
+        "oi_lookback_minutes": 60,
+        "min_oi_change_pct": 0.05,
+        "long_taker_ratio": 0.52,
+        "short_taker_ratio": 0.48,
+        "min_relative_volume": 1.0,
+        "max_metrics_age_minutes": 15.0,
+        "min_micro_confluence": 2,
+        "require_liquidity_sweep": true,
+        "liquidity_lookback_bars": 20,
+        "liquidity_sweep_atr": 0.02,
+        "require_liquidity_reset": false,
+        "maximum_sweep_oi_change_15m_pct": 0.0,
+        "require_liquidity_target": false,
+        "minimum_liquidity_target_r": 2.5,
+        "target_front_run_fraction": 0.9,
+        "stop_buffer_atr": 0.15,
+        "minimum_stop_atr": 2.0,
+        "maximum_stop_atr": 4.0,
+        "target_r": 2.5,
+        "max_hold_minutes": 720
+      }
+    },
+    "ETHUSDT": {
+      "zones": 1097,
+      "touched": 917,
+      "defense_without_liquidity_sweep": 521,
+      "liquidity_sweep_seen": 195,
+      "defense_armed": 100,
+      "break_confirmed": 79,
+      "confluence_veto": 79,
+      "expired": 200,
+      "invalidated_by_close": 294,
+      "ifvg_first_retest_no_rejection": 191,
+      "ifvg_failed_reclaim": 41,
+      "ifvg_without_liquidity_sweep": 54,
+      "defense_failed_to_ifvg": 12,
+      "confirmation_expired": 11,
+      "ifvg_armed": 2,
+      "deduplicated_signals": 0,
+      "config": {
+        "formation_minutes": 60,
+        "confirmation_minutes": 15,
+        "atr_period": 14,
+        "volume_lookback": 20,
+        "displacement_atr": 0.8,
+        "displacement_volume": 1.15,
+        "min_gap_atr": 0.05,
+        "max_gap_atr": 1.25,
+        "max_zone_age_hours": 24,
+        "break_buffer_atr": 0.03,
+        "reaction_body_atr": 0.1,
+        "confirmation_window_bars": 3,
+        "ema4h_span": 50,
+        "oi_lookback_minutes": 60,
+        "min_oi_change_pct": 0.05,
+        "long_taker_ratio": 0.52,
+        "short_taker_ratio": 0.48,
+        "min_relative_volume": 1.0,
+        "max_metrics_age_minutes": 15.0,
+        "min_micro_confluence": 2,
+        "require_liquidity_sweep": true,
+        "liquidity_lookback_bars": 20,
+        "liquidity_sweep_atr": 0.02,
+        "require_liquidity_reset": false,
+        "maximum_sweep_oi_change_15m_pct": 0.0,
+        "require_liquidity_target": false,
+        "minimum_liquidity_target_r": 2.5,
+        "target_front_run_fraction": 0.9,
+        "stop_buffer_atr": 0.15,
+        "minimum_stop_atr": 2.0,
+        "maximum_stop_atr": 4.0,
+        "target_r": 2.5,
+        "max_hold_minutes": 720
+      }
+    },
+    "SOLUSDT": {
+      "zones": 1119,
+      "expired": 199,
+      "touched": 943,
+      "defense_without_liquidity_sweep": 534,
+      "invalidated_by_close": 284,
+      "ifvg_first_retest_no_rejection": 172,
+      "liquidity_sweep_seen": 208,
+      "ifvg_failed_reclaim": 42,
+      "defense_armed": 123,
+      "break_confirmed": 104,
+      "confluence_veto": 103,
+      "defense_failed_to_ifvg": 8,
+      "ifvg_without_liquidity_sweep": 55,
+      "confirmation_expired": 13,
+      "ifvg_armed": 2,
+      "stop_too_tight": 1,
+      "deduplicated_signals": 0,
+      "config": {
+        "formation_minutes": 60,
+        "confirmation_minutes": 15,
+        "atr_period": 14,
+        "volume_lookback": 20,
+        "displacement_atr": 0.8,
+        "displacement_volume": 1.15,
+        "min_gap_atr": 0.05,
+        "max_gap_atr": 1.25,
+        "max_zone_age_hours": 24,
+        "break_buffer_atr": 0.03,
+        "reaction_body_atr": 0.1,
+        "confirmation_window_bars": 3,
+        "ema4h_span": 50,
+        "oi_lookback_minutes": 60,
+        "min_oi_change_pct": 0.05,
+        "long_taker_ratio": 0.52,
+        "short_taker_ratio": 0.48,
+        "min_relative_volume": 1.0,
+        "max_metrics_age_minutes": 15.0,
+        "min_micro_confluence": 2,
+        "require_liquidity_sweep": true,
+        "liquidity_lookback_bars": 20,
+        "liquidity_sweep_atr": 0.02,
+        "require_liquidity_reset": false,
+        "maximum_sweep_oi_change_15m_pct": 0.0,
+        "require_liquidity_target": false,
+        "minimum_liquidity_target_r": 2.5,
+        "target_front_run_fraction": 0.9,
+        "stop_buffer_atr": 0.15,
+        "minimum_stop_atr": 2.0,
+        "maximum_stop_atr": 4.0,
+        "target_r": 2.5,
+        "max_hold_minutes": 720
+      }
+    }
+  },
+  "replays": {
+    "base": {
+      "summary": {
+        "trades": 0,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": null,
+        "net_pnl": 0.0,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0.0,
+        "mean_net_r": 0.0,
+        "fees": 0.0,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "represented_symbols": 0,
+        "diagnostics": {
+          "signals": 0
+        },
+        "drawdown_halted": false
+      }
+    },
+    "stress": {
+      "summary": {
+        "trades": 0,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": null,
+        "net_pnl": 0.0,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0.0,
+        "mean_net_r": 0.0,
+        "fees": 0.0,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "represented_symbols": 0,
+        "diagnostics": {
+          "signals": 0
+        },
+        "drawdown_halted": false
+      }
+    },
+    "severe": {
+      "summary": {
+        "trades": 0,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": null,
+        "net_pnl": 0.0,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0.0,
+        "mean_net_r": 0.0,
+        "fees": 0.0,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "represented_symbols": 0,
+        "diagnostics": {
+          "signals": 0
+        },
+        "drawdown_halted": false
+      }
+    }
+  },
+  "live_enabled": false,
+  "interpretation": "INCONCLUSIVE_TINY_SAMPLE"
+}

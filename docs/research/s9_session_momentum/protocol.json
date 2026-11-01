@@ -1,0 +1,166 @@
+{
+  "created_at": "2026-09-08T12:12:21.162733+00:00",
+  "variants_fixed_before_run": [
+    {
+      "name": "S9_session_pullback_5m_2of4_market_tp100",
+      "minutes": 5,
+      "min_score": 2,
+      "target_r": 1.0,
+      "entry_style": "market",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_5m_2of4_market_tp125",
+      "minutes": 5,
+      "min_score": 2,
+      "target_r": 1.25,
+      "entry_style": "market",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_5m_2of4_limit_tp100",
+      "minutes": 5,
+      "min_score": 2,
+      "target_r": 1.0,
+      "entry_style": "limit",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_5m_2of4_limit_tp125",
+      "minutes": 5,
+      "min_score": 2,
+      "target_r": 1.25,
+      "entry_style": "limit",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_5m_3of4_market_tp100",
+      "minutes": 5,
+      "min_score": 3,
+      "target_r": 1.0,
+      "entry_style": "market",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_5m_3of4_market_tp125",
+      "minutes": 5,
+      "min_score": 3,
+      "target_r": 1.25,
+      "entry_style": "market",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_5m_3of4_limit_tp100",
+      "minutes": 5,
+      "min_score": 3,
+      "target_r": 1.0,
+      "entry_style": "limit",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_5m_3of4_limit_tp125",
+      "minutes": 5,
+      "min_score": 3,
+      "target_r": 1.25,
+      "entry_style": "limit",
+      "max_hold_minutes": 75,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_2of4_market_tp100",
+      "minutes": 15,
+      "min_score": 2,
+      "target_r": 1.0,
+      "entry_style": "market",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_2of4_market_tp125",
+      "minutes": 15,
+      "min_score": 2,
+      "target_r": 1.25,
+      "entry_style": "market",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_2of4_limit_tp100",
+      "minutes": 15,
+      "min_score": 2,
+      "target_r": 1.0,
+      "entry_style": "limit",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_2of4_limit_tp125",
+      "minutes": 15,
+      "min_score": 2,
+      "target_r": 1.25,
+      "entry_style": "limit",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_3of4_market_tp100",
+      "minutes": 15,
+      "min_score": 3,
+      "target_r": 1.0,
+      "entry_style": "market",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_3of4_market_tp125",
+      "minutes": 15,
+      "min_score": 3,
+      "target_r": 1.25,
+      "entry_style": "market",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_3of4_limit_tp100",
+      "minutes": 15,
+      "min_score": 3,
+      "target_r": 1.0,
+      "entry_style": "limit",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    },
+    {
+      "name": "S9_session_pullback_15m_3of4_limit_tp125",
+      "minutes": 15,
+      "min_score": 3,
+      "target_r": 1.25,
+      "entry_style": "limit",
+      "max_hold_minutes": 120,
+      "leverage": 20
+    }
+  ],
+  "capital_per_pair": 1000,
+  "risk_per_trade": "0.2% of current capital, stop-distance sized",
+  "leverage": 20,
+  "hypothesis": "In a moderate 1h trend, a pullback into EMA20 or session VWAP followed by a closed micro-break has positive short-horizon expectancy. RSI5 recovery, EMA9/20 alignment, candle delta and relative volume are scored x-of-y; they do not replace mandatory regime/location/price trigger.",
+  "development": [
+    "2025-08-01/2026-02-01",
+    "2026-02-01/2026-04-01"
+  ],
+  "holdout": "2026-08-01/2026-09-01; untouched by S9 parameter selection",
+  "selection": "At least 80 validation trades. Prefer positive train and validation, then number of profitable validation pairs, then validation return minus half drawdown. Freeze exactly one global variant before holdout.",
+  "costs_bps": {
+    "taker_fee_each_side": 5,
+    "maker_entry": 2,
+    "slippage_each_taker_fill": 2
+  },
+  "risk_controls": "London+NY hours only, daily loss stop 1%, ADX 18-45, 65% off at 0.6R then cost-aware breakeven/0.85ATR trail, max hold 75/120m.",
+  "success_rule": "Positive holdout portfolio, PF>1, at least 3/4 profitable pairs, max DD<5%, and at least 40 holdout trades. Passing is evidence for paper trading only, never a profit guarantee."
+}

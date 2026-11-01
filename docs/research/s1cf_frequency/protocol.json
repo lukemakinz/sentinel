@@ -1,0 +1,29 @@
+{
+  "strategies": {
+    "S1C": "unchanged reference strategy; hourly scan, New York window",
+    "S1CF": "copy of S1C; 15-minute scan, London + New York windows; same 1h sweep, 15m FVG/CHoCH and exits"
+  },
+  "symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "BNBUSDT"
+  ],
+  "capital_per_pair": 1000.0,
+  "risk_per_trade": 0.003,
+  "leverage_cap": 20,
+  "stop_profile": "tight",
+  "development_windows": [
+    "2026-05",
+    "2026-06"
+  ],
+  "validation_window": "2026-07",
+  "holdout_window": "2026-08",
+  "costs": "legacy engine: limit entry 2bps; market entry/exit 5bps fee and 10bps adverse slippage",
+  "causality_fixes": [
+    "time-kill age is evaluated at candle timestamp, not wall clock",
+    "liquidity targets are built as-of the signal timestamp with an upper time bound",
+    "exit slippage is adverse and all positions are settled at end of test"
+  ],
+  "success_rule": "On holdout S1CF must have more trades than S1C, positive net PnL, PF>1, and no fewer than 50% winning trades. Research only; passing does not authorize live trading."
+}

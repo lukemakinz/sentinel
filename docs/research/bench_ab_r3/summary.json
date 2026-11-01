@@ -1,0 +1,175 @@
+{
+  "protocol_sha256": "c728537e61a7f85ec531b68e21a4dcaf0aa51e3ec2dc70d8daada9556f253dd9",
+  "continuous_execution": {
+    "base": {
+      "book_a_net_pnl": 123.44005213637212,
+      "book_a_fees": 1.5357524761557346,
+      "book_a_rebalances": 70,
+      "book_b_net_pnl": -23.499804045618504,
+      "book_b_trades": 68,
+      "start_nav": 500.0,
+      "end_nav": 599.9402480907536,
+      "net_pnl": 99.94024809075361,
+      "return_on_slice_start_pct": 19.988049618150722,
+      "usd_per_calendar_day": 0.20479559034990494,
+      "max_continuous_drawdown_pct": 9.238521821485223,
+      "expected_shortfall_95_daily_return_pct": -1.1445058604720242,
+      "positive_month_share": 0.25
+    },
+    "stress": {
+      "book_a_net_pnl": 122.1464877622862,
+      "book_a_fees": 2.628363785128316,
+      "book_a_rebalances": 70,
+      "book_b_net_pnl": -63.789599506666804,
+      "book_b_trades": 58,
+      "start_nav": 500.0,
+      "end_nav": 558.3568882556194,
+      "net_pnl": 58.356888255619396,
+      "return_on_slice_start_pct": 11.67137765112388,
+      "usd_per_calendar_day": 0.11958378740905613,
+      "max_continuous_drawdown_pct": 9.88320889497084,
+      "expected_shortfall_95_daily_return_pct": -1.1836453318083175,
+      "positive_month_share": 0.1875
+    },
+    "severe": {
+      "book_a_net_pnl": 122.21104922562341,
+      "book_a_fees": 4.385997927840784,
+      "book_a_rebalances": 70,
+      "book_b_net_pnl": -64.28490085569388,
+      "book_b_trades": 49,
+      "start_nav": 500.0,
+      "end_nav": 557.9261483699295,
+      "net_pnl": 57.926148369929535,
+      "return_on_slice_start_pct": 11.585229673985907,
+      "usd_per_calendar_day": 0.118701123708872,
+      "max_continuous_drawdown_pct": 10.975916533979168,
+      "expected_shortfall_95_daily_return_pct": -1.1845207153829598,
+      "positive_month_share": 0.25
+    }
+  },
+  "slices": {
+    "development": {
+      "base": {
+        "start_nav": 500.0,
+        "end_nav": 541.2230225864356,
+        "net_pnl": 41.22302258643563,
+        "return_on_slice_start_pct": 8.244604517287128,
+        "usd_per_calendar_day": 0.26943152017278194,
+        "max_continuous_drawdown_pct": 9.238521821485223,
+        "expected_shortfall_95_daily_return_pct": -1.6081582557310796,
+        "positive_month_share": 0.4,
+        "book_a_net_pnl": 91.96320721727795,
+        "book_b_net_pnl": -50.74018463084232,
+        "book_b_trades_closed": 59
+      },
+      "stress": {
+        "start_nav": 500.0,
+        "end_nav": 527.174131848508,
+        "net_pnl": 27.174131848507926,
+        "return_on_slice_start_pct": 5.434826369701586,
+        "usd_per_calendar_day": 0.17760870489220867,
+        "max_continuous_drawdown_pct": 9.88320889497084,
+        "expected_shortfall_95_daily_return_pct": -1.6528767893635368,
+        "positive_month_share": 0.4,
+        "book_a_net_pnl": 90.96373135517473,
+        "book_b_net_pnl": -63.789599506666804,
+        "book_b_trades_closed": 58
+      },
+      "severe": {
+        "start_nav": 500.0,
+        "end_nav": 527.0345568222828,
+        "net_pnl": 27.034556822282752,
+        "return_on_slice_start_pct": 5.40691136445655,
+        "usd_per_calendar_day": 0.17669644981884153,
+        "max_continuous_drawdown_pct": 10.975916533979168,
+        "expected_shortfall_95_daily_return_pct": -1.6325598009841704,
+        "positive_month_share": 0.6,
+        "book_a_net_pnl": 91.31945767797663,
+        "book_b_net_pnl": -64.28490085569388,
+        "book_b_trades_closed": 49
+      }
+    },
+    "former_validation_now_diagnostic": {
+      "base": {
+        "start_nav": 541.2230225864356,
+        "end_nav": 584.5947725971986,
+        "net_pnl": 43.37175001076301,
+        "return_on_slice_start_pct": 8.013655776041263,
+        "usd_per_calendar_day": 0.2383063187404561,
+        "max_continuous_drawdown_pct": 4.45323025137786,
+        "expected_shortfall_95_daily_return_pct": -0.539333296750878,
+        "positive_month_share": 0.16666666666666666,
+        "book_a_net_pnl": 35.65690491882549,
+        "book_b_net_pnl": 7.714845091937519,
+        "book_b_trades_closed": 8
+      },
+      "stress": {
+        "start_nav": 527.174131848508,
+        "end_nav": 562.6372414546984,
+        "net_pnl": 35.46310960619036,
+        "return_on_slice_start_pct": 6.727020061064236,
+        "usd_per_calendar_day": 0.1948522505834635,
+        "max_continuous_drawdown_pct": 4.824970967994757,
+        "expected_shortfall_95_daily_return_pct": -0.5633609654946822,
+        "positive_month_share": 0.16666666666666666,
+        "book_a_net_pnl": 35.46310960619036,
+        "book_b_net_pnl": 0.0,
+        "book_b_trades_closed": 0
+      },
+      "severe": {
+        "start_nav": 527.0345568222828,
+        "end_nav": 562.3910676614915,
+        "net_pnl": 35.356510839208795,
+        "return_on_slice_start_pct": 6.708575439984117,
+        "usd_per_calendar_day": 0.1942665430725758,
+        "max_continuous_drawdown_pct": 3.8870821894312124,
+        "expected_shortfall_95_daily_return_pct": -0.5641932412730701,
+        "positive_month_share": 0.16666666666666666,
+        "book_a_net_pnl": 35.356510839208795,
+        "book_b_net_pnl": 0.0,
+        "book_b_trades_closed": 0
+      }
+    },
+    "former_evaluation_now_diagnostic": {
+      "base": {
+        "start_nav": 584.5947725971987,
+        "end_nav": 599.9402480907537,
+        "net_pnl": 15.345475493554972,
+        "return_on_slice_start_pct": 2.6249765158485965,
+        "usd_per_calendar_day": 0.10029722544807171,
+        "max_continuous_drawdown_pct": 1.2039916703126763,
+        "expected_shortfall_95_daily_return_pct": -0.23294428053237531,
+        "positive_month_share": 0.2,
+        "book_a_net_pnl": -4.180059999731327,
+        "book_b_net_pnl": 19.5255354932863,
+        "book_b_trades_closed": 1
+      },
+      "stress": {
+        "start_nav": 562.6372414546983,
+        "end_nav": 558.3568882556194,
+        "net_pnl": -4.280353199078888,
+        "return_on_slice_start_pct": -0.7607660644738051,
+        "usd_per_calendar_day": -0.027976164699862017,
+        "max_continuous_drawdown_pct": 1.297020357298584,
+        "expected_shortfall_95_daily_return_pct": -0.2518499612057622,
+        "positive_month_share": 0.0,
+        "book_a_net_pnl": -4.280353199078888,
+        "book_b_net_pnl": 0.0,
+        "book_b_trades_closed": 0
+      },
+      "severe": {
+        "start_nav": 562.3910676614915,
+        "end_nav": 557.9261483699295,
+        "net_pnl": -4.464919291562012,
+        "return_on_slice_start_pct": -0.7939171776194511,
+        "usd_per_calendar_day": -0.029182479029817073,
+        "max_continuous_drawdown_pct": 1.3125584460158102,
+        "expected_shortfall_95_daily_return_pct": -0.2562150498484564,
+        "positive_month_share": 0.0,
+        "book_a_net_pnl": -4.464919291562012,
+        "book_b_net_pnl": 0.0,
+        "book_b_trades_closed": 0
+      }
+    }
+  }
+}

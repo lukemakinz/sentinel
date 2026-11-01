@@ -1,0 +1,50 @@
+{
+  "protocol_version": "S14-BB-EVENT-v1-frozen-2026-09-12",
+  "status": "retrospective_queue_diagnostic_only_not_live",
+  "purpose": "Test the team's full event sequencing after S13 falsified simpler BB momentum/rejection. Historical replay measures approve-all candidate quality; AI value is prospective only.",
+  "shared": {
+    "bars": "closed 15m signals; 1m global execution; BB20 +/- 2 population sigma frozen on prior bar; ATR14 Wilder",
+    "sessions": "weekdays, London 02:00-05:00 ET and NY 07:00-11:00 ET; four-hour range frozen at session open",
+    "markets": "ETHUSDT, SOLUSDT, BNBUSDT traded; BTCUSDT context only",
+    "portfolio": "$250 single global cash/pending/position; $0.50 fixed risk; <=$125 notional; <=$25 margin; <=5x isolated cap; daily stop 0.60%; weekly stop 1.80%; half risk at 4% DD and halt at 6%",
+    "ai": "Candidate must pass all hard conditions and route quorum. AI may only APPROVE/REJECT and cannot change side, entry, stop, target, size or leverage. Historical run assumes approve-all; provider failure in forward means REJECT."
+  },
+  "routes": [
+    {
+      "id": "SQUEEZE_EVENT_OB_4_OF_6",
+      "hard": "3/4 prior bars in causal bottom-20% bandwidth; close beyond frozen prior-four-bar box by 0.10 ATR and beyond prior BB; exact last opposing candle within five bars defines event OB; risk geometry",
+      "confirmations": ["range >=1.30 ATR", "body >=70%", "volume >=1.25x prior-20 median", "bandwidth expands >=25%", "BTC directional BB regime", "confirmed 1h structure"],
+      "quorum": "at least 4/6",
+      "entry": "50% exact event OB, first resting mitigation, 45m TTL, trade-through required",
+      "exit": "stop 0.10 ATR beyond distal; actual-fill width 0.35-1.50 ATR; target 2R and >=4x friction; 120m time stop"
+    },
+    {
+      "id": "LIQUIDITY_MSS_3_OF_6",
+      "hard": "alt sweeps frozen session boundary and prior BB outer band by 0.05 ATR then reclaims both; BTC has not swept its own session boundary at any prior/current bar; within four later bars close breaks a pivot known before sweep; risk geometry",
+      "confirmations": ["MSS range >=1.20 ATR", "body >=70%", "close in outer 20%", "exact displacement FVG >=0.03 ATR", "bandwidth expands >=25%", "confirmed 1h structure"],
+      "quorum": "at least 3/6",
+      "entry": "50% exact FVG when present, otherwise 50% displacement body; 30m TTL; trade-through required",
+      "exit": "stop 0.10 ATR beyond event extreme; actual-fill width 0.50-1.80 ATR; nearer of opposite frozen liquidity and 2R, requiring >=1.50R and >=4x friction; 90m time stop"
+    }
+  ],
+  "windows": {
+    "warmup": ["2025-07-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 or frozen paper-forward"
+  },
+  "gates": {
+    "development": "at least 30 fills, positive net PnL and PF >1.05",
+    "validation": "at least 15 base fills, base PF >1.10, stress PF >=1.00, positive PnL in at least 2/3 symbols and no symbol >60% gross profit",
+    "ai_forward": "at least 200 resolved candidates and 100 APPROVE; APPROVE PF >=1.25 base and >=1.10 stress; expectancy >=0.10R; 95% session-block bootstrap lower bound >0; APPROVE beats counterfactual REJECT"
+  },
+  "costs": {
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "semantics": "cost-aware deployability cohorts; fewer fills in stress is not robustness"
+  },
+  "selection": "Exactly two central routes, no grid search or rescue mutation. Simultaneous equal-score candidates use ETH, then SOL, then BNB; ineligible execution falls through.",
+  "disclosure": "All historical months have been inspected in earlier strategy work. Passing retrospective gates would allow paper-forward only, never live deployment. No profit is promised."
+}

@@ -1,0 +1,56 @@
+{
+  "protocol_version": "S28-OB-OI-WIDER-QUALITY-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_context": "S24 H2 (order_block_oi_confirmation_scalp, route='oi', displacement_atr_mult raised from 1.5 to 2.5, everything else identical to S20 H1) produced the best raw PF of this entire project (1.32 development base) but was REJECTED for insufficient sample size — only 22 fills on the original three-symbol universe, below the 40-fill minimum. S23 and S27 separately showed that simply widening the universe (with S20's original, looser thresholds) does NOT help — mixed or alt-only clusters both underperformed. This protocol tests the specific, previously untried combination: S24's higher-conviction threshold(s), applied to a WIDER six-symbol pool, so there are enough qualifying candidates to clear the sample-size bar without lowering signal quality.",
+  "hypotheses": [
+    {
+      "id": "H1_WIDER_STRONGER_STRUCTURE",
+      "entry_exit": "identical to S24 H2 (order_block_oi_confirmation_scalp, route='oi', displacement_atr_mult=2.5, adx_threshold=20.0 unchanged, partial_r=1.5, trail_atr=2.5, target_r=8.0)",
+      "universe": "ETHUSDT, SOLUSDT, BNBUSDT, XRPUSDT, ADAUSDT, DOGEUSDT — six symbols, single global position across all six (same one-position-at-a-time discipline as every prior protocol), symbol priority in that listed order"
+    },
+    {
+      "id": "H2_WIDER_MODERATE_BOTH",
+      "entry_exit": "identical to H1 EXCEPT displacement_atr_mult=2.0 (between S20's 1.5 and S24's 2.5) AND adx_threshold=25.0 (moderately raised, between S20's 20.0 and S24 H1's 30.0) — a balanced tightening of both conviction levers together rather than either alone at its most extreme value tested so far",
+      "universe": "identical to H1"
+    }
+  ],
+  "single_variable_isolated": "Versus S20 H1 on the original three-symbol universe, both hypotheses change the traded universe (widened to six) AND the selectivity threshold(s) (H1: displacement only, matching S24 H2 exactly; H2: displacement+regime moderately, a new untested combination) together, as one coherent, motivated change — not an isolated single-variable test like most prior protocols, because the whole point is testing whether wider breadth specifically compensates for stricter selectivity's sample-size cost. Entry structure logic, OBV/OI confirmation mechanics, stop placement, exit management and position sizing are otherwise unchanged from S20/S24.",
+  "why_these_two_points_and_not_a_grid": "H1 reuses S24 H2's exact already-tested threshold value (no new number invented). H2 is the single natural midpoint between S20's baseline and S24 H1/H2's tested extremes on both axes at once — chosen before seeing any result from this protocol, not swept.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT"],
+    "note": "All six already have cached klines/funding/metrics archives from S23/S27 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 4/6 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the whole six-symbol cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. No further parameter grid. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Order-block displacement/volume thresholds and OI-confirmation logic were designed and validated on ETH/SOL/BNB; XRP/ADA/DOGE were individually shown (S23, S27) to behave differently under S20's original, looser thresholds. Whether a stricter filter equalizes quality across symbols, or simply passes through fewer alt-driven trades, is exactly what this protocol measures rather than assumes.",
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18/S20/S24.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

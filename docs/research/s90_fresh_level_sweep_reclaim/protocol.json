@@ -1,0 +1,89 @@
+{
+  "strategy_id": "S90_fresh_level_sweep_reclaim",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "relationship_to_existing_books": "Candidate C is tested first as a standalone edge and then only as a frozen 20% sleeve in A/B/C = 40/40/20. It does not replace or retune Book A or Book B after results are seen.",
+  "hypothesis": "A fresh, high-quality 1h order block aligned with causal 4h support/resistance has edge only after the first return removes liquidity beyond the distal edge and a completed 5m bar reclaims the entire zone.",
+  "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "data": {
+    "source": "Binance public USD-M checksumed 1m kline and funding archives",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "validation": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "true_oos": "First UTC midnight after protocol and code freeze; minimum 180 days, 50 fills and 30 independent 4h event clusters"
+  },
+  "level": {
+    "timeframe": "closed 1h bars",
+    "confirmed_swing_width": 2,
+    "structure_lookback_bars": 240,
+    "order_block": "exactly the last opposing candle among the prior 3 bars",
+    "minimum_body_displacement_atr": 1.2,
+    "minimum_relative_volume": 1.25,
+    "maximum_zone_width_atr": 0.9,
+    "mandatory_4h_swing_distance_atr": 0.35,
+    "minimum_strength_score": 75,
+    "validity_hours": 120,
+    "strength_score": {"confirmed_BOS": 25, "displacement": 20, "4h_location": 20, "imbalance": 15, "relative_volume": 10, "trend_alignment": 10},
+    "touch_count_in_score": false
+  },
+  "freshness_and_merge": {
+    "pre_arm_departure_atr": 0.1,
+    "any_return_after_departure_before_publication": "PREMITIGATED terminal",
+    "same_side_overlap_or_midpoint_distance_atr": 0.25,
+    "merge_rule": "oldest ID, boundaries and TTL survive; alias cannot refresh or resurrect the level",
+    "first_contact_consumes_freshness": true
+  },
+  "trigger": {
+    "minimum_distal_sweep_atr": 0.05,
+    "maximum_distal_sweep_atr": 0.5,
+    "reclaim": "completed 5m close beyond proximal edge",
+    "maximum_contact_episode_minutes": 30,
+    "entry": "market/taker at the next actual 1m open",
+    "maximum_adverse_chase_atr": 0.2,
+    "shallow_touch": "terminally consumed",
+    "gap_through": "observed and terminally invalidated, never silently skipped"
+  },
+  "risk": {
+    "standalone_sleeve_capital_usd": 100,
+    "risk_fraction": 0.002,
+    "maximum_notional_equity": 0.5,
+    "maximum_open_positions_global": 1,
+    "stop": "actual sweep extreme plus 0.10 ATR buffer",
+    "minimum_stop_atr": 0.35,
+    "maximum_stop_atr": 1.5,
+    "target": "exactly 2.0 net-R under stress fees/slippage and before the nearest causal opposing level",
+    "maximum_hold_hours": 24,
+    "partials_or_trailing": false
+  },
+  "cost_scenarios_bps": {
+    "base": {"maker": 2, "taker": 5, "slippage_each_side": 2, "penetration": 2},
+    "stress": {"maker": 5, "taker": 8, "slippage_each_side": 5, "penetration": 5},
+    "severe": {"maker": 10, "taker": 10, "slippage_each_side": 10, "penetration": 10}
+  },
+  "minimum_samples": {
+    "development": {"fills": 80, "independent_4h_clusters": 40},
+    "validation": {"fills": 50, "independent_4h_clusters": 25},
+    "retrospective_evaluation": {"fills": 50, "independent_4h_clusters": 25},
+    "validation_plus_evaluation": {"longs": 20, "shorts": 20, "positive_symbols": 4, "symbols_with_at_least_10_fills": 3}
+  },
+  "absolute_gates": {
+    "stress_pnl_positive_each_window": true,
+    "minimum_stress_profit_factor": {"development": 1.2, "validation": 1.15, "retrospective_evaluation": 1.15},
+    "minimum_stress_mean_net_r": {"development": 0.1, "validation": 0.08, "retrospective_evaluation": 0.08},
+    "maximum_drawdown_pct": 6,
+    "severe_validation_plus_evaluation_pnl_nonnegative": true,
+    "week_block_bootstrap_95pct_lower_mean_r_positive": true
+  },
+  "primary_portfolio_comparison": {
+    "benchmark": {"A_pct": 50, "B_pct": 50},
+    "challenger": {"A_pct": 40, "B_pct": 40, "S90_pct": 20},
+    "same_total_capital_usd": 500,
+    "required_stress_return_improvement_each_heldout_window": "max(0.50 percentage point, 10% of absolute benchmark return)",
+    "maximum_challenger_drawdown": "min(benchmark DD + 0.50 percentage point, 1.10 * benchmark DD)",
+    "expected_shortfall_95_not_worse": true,
+    "positive_monthly_excess_share_minimum": 0.6,
+    "paired_month_block_bootstrap_95pct_lower_excess_positive": true,
+    "severe_return_and_drawdown_not_worse": true
+  },
+  "disclosure": "Retrospective research only. Historical windows overlap earlier S87-S89 discovery, so even a full pass permits paper-forward, never immediate live trading or a guarantee of profit."
+}

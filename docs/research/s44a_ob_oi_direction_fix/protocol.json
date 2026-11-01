@@ -1,0 +1,54 @@
+{
+  "protocol_version": "S44A-OB-OI-DIRECTION-FIX-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "An outside trader review of S43 (docs/research/s43_session_filtered_ob_oi) flagged a real asymmetry in generate_order_block_oi_signals (l1_filter/order_block_oi_confirmation_scalp.py, used unmodified by S18 through S43 -- most of this project's 47 prior tests): the OI confirmation requires open interest non-decreasing for longs but non-INCREASING for shorts (`oi_change >= 0 if side==1 else oi_change <= 0`). Under the classic price/OI quadrant this project's own S18 docstring cites as its rationale ('healthy continuation... not a pure short squeeze burning out'), a healthy SHORT continuation is price-down-with-OI-UP (fresh short interest entering), mirroring price-up-with-OI-up for longs -- OI-down-with-price-down is the long-liquidation/exhaustion quadrant, the short-side analogue of a squeeze, not continuation. The as-shipped code selects that exhaustion quadrant for shorts instead. This protocol tests the smallest possible isolated fix: OI must be non-decreasing for BOTH sides, nothing else changed. If S18's H1 exit shape is what actually clears validation with this fix (S20 H1 already came close: base PF passed at both dev and validation, only validation stress PF -- 0.857 -- failed), this could explain part of this project's persistent short-side fragility across the whole S18-S43 lineage.",
+  "hypotheses": [
+    {
+      "id": "H1_PATIENT",
+      "entry_exit": "Identical to S20 H1 (order block + regime + OBV + OI confirmation, patient breakeven/chandelier exit: partial 1.5R, trail 2.5x ATR, cap 8R) EXCEPT the OI confirmation is `oi_change >= 0` for both longs and shorts instead of the sign-flipped version."
+    },
+    {
+      "id": "H2_VERY_PATIENT",
+      "entry_exit": "Identical to S20 H2 (partial 2.0R, trail 3.0x ATR, cap 10R) with the same corrected OI confirmation as H1."
+    }
+  ],
+  "single_variable_isolated": "Both hypotheses are byte-for-byte copies of S20's own H1/H2 exit parameters. The ONLY code difference from order_block_oi_confirmation_scalp.generate_order_block_oi_signals, across the whole module, is the single line implementing the OI direction check. No other parameter, filter, universe or window differs from S20.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Identical to S20 -- reuses the exact same cached klines/funding/metrics archives, no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2, mirroring S20's own two hypotheses exactly. No parameter grid, no threshold tuning (the fix is a sign correction, not a new percentage/z-score threshold -- that is deferred to a separate S44B if this shows anything, per the same single-variable discipline). A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "This protocol is explicitly motivated by an external review flagging a specific line of existing code, not a blind a priori hypothesis -- disclosed rather than presented as independent.",
+    "Fixing the OI direction changes which candidates qualify on the short side only; long-side signals are unaffected by this change (longs already required OI non-decreasing). Any change in outcome should be interpretable through that lens.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation.",
+    "A pass here does not by itself validate the broader S43 session filter, S22 sizing, or any other downstream route built on the buggy function -- those would each need their own re-test with the fix applied, which this protocol does not attempt."
+  ]
+}

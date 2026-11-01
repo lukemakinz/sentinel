@@ -1,0 +1,95 @@
+{
+  "status": "frozen_before_market_data_load",
+  "strategy": "XSM-28 cross-sectional beta-neutral momentum",
+  "capital_usd": 250.0,
+  "universe": [
+    "ETHUSDT",
+    "SOLUSDT",
+    "BNBUSDT"
+  ],
+  "reference": "BTCUSDT",
+  "data": {
+    "source": "public Binance USD-M monthly archives",
+    "ranking_interval": "1d",
+    "execution_interval": "5m",
+    "funding": "historical fundingRate settlements",
+    "warmup_start": "2021-01-01T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z"
+  },
+  "windows": {
+    "development": [
+      "2022-04-04T00:00:00Z",
+      "2024-01-01T00:00:00Z"
+    ],
+    "validation": [
+      "2024-01-01T00:00:00Z",
+      "2025-01-06T00:00:00Z"
+    ],
+    "retrospective_evaluation": [
+      "2025-01-06T00:00:00Z",
+      "2026-09-01T00:00:00Z"
+    ]
+  },
+  "signal": {
+    "decision_time": "Monday 00:00 UTC",
+    "causality": "Only daily candles whose close_time is strictly before decision_time are eligible.",
+    "momentum_lookback_daily_returns": 28,
+    "score": "28-day simple return divided by sample standard deviation of the same 28 daily log returns",
+    "entry_filter": "Leader 28-day return > 0 and laggard 28-day return < 0",
+    "selection": "Long highest score, short lowest score; deterministic symbol order breaks exact ties.",
+    "while_open": "Ignore later weekly rankings until the pair closes; after a close wait until the next Monday decision."
+  },
+  "beta_neutral_weights": {
+    "lookback_completed_daily_returns": 60,
+    "method": "OLS beta = covariance(asset,BTC)/variance(BTC), sample covariance",
+    "valid_beta_range": [
+      0.25,
+      3.0
+    ],
+    "weights": "long gross weight = short beta/(long beta+short beta); short gross weight = long beta/(long beta+short beta)",
+    "weight_guard": [
+      0.25,
+      0.75
+    ],
+    "invalid_action": "Skip the entry; never clip a weight because clipping would break beta neutrality."
+  },
+  "risk": {
+    "initial_risk_fraction_of_current_equity": 0.005,
+    "pair_volatility": "Sample standard deviation of long minus short daily log returns over the same 28 completed returns.",
+    "stop_distance_gross_fraction": "clip(1.5 * pair_volatility, 0.03, 0.12)",
+    "gross_notional": "min(0.75 * current equity, risk budget / stop distance)",
+    "pair_hard_stop": "Close-confirmed net liquidation PnL <= -1R; exit both legs at next 5m open.",
+    "pair_take_profit": "Close-confirmed net liquidation PnL >= +2R; exit both legs at next 5m open.",
+    "same_bar_precedence": "STOP before TARGET (relevant only to synthetic/unit fixtures); production triggers use one pair close mark.",
+    "maximum_hold": "28 calendar days; exit both legs at the first 5m open at or after the deadline.",
+    "leverage": "1x gross notional against a shared cash ledger",
+    "drawdown_halt": "Do not open new pairs after a 6% peak-to-marked-equity drawdown; no automatic restart inside a window."
+  },
+  "execution": {
+    "entry": "First aligned 5m open at the Monday decision time.",
+    "exit": "Both legs at the same aligned 5m open after a close-confirmed pair trigger, or at the max-hold/end boundary.",
+    "base": {
+      "taker_fee_bps_per_leg_per_side": 5.0,
+      "slippage_bps_per_leg_per_side": 2.0
+    },
+    "stress": {
+      "taker_fee_bps_per_leg_per_side": 8.0,
+      "slippage_bps_per_leg_per_side": 5.0
+    },
+    "funding": "For each actual settlement strictly after entry and up to exit, long pays positive rate and short receives positive rate, using the aligned 5m open as mark proxy."
+  },
+  "ledger": "One shared cash balance; both legs form one indivisible pair episode. No summing of standalone-symbol accounts.",
+  "gates": {
+    "development": "At least 4 closed pair episodes, net PnL > 0, episode profit factor > 1.05 in base, and net PnL > 0 under stress.",
+    "validation": "Run only if development passes; at least 2 episodes, base net PnL > 0 and PF > 1.10, stress net PnL >= 0 and PF >= 1.00.",
+    "promotion": "Even if historical gates pass: paper-forward only for at least 26 weekly decisions and 12 closed episodes; live remains disabled."
+  },
+  "disclosures": [
+    "The universe has only three tradable assets, so cross-sectional breadth and episode count are intrinsically small.",
+    "Futures open is used as the funding mark proxy; exchange-specific mark price, liquidation engine, outages, latency and taxes are not modelled.",
+    "The 2025-2026 evaluation months were inspected in earlier strategy research and are not an untouched holdout; the 2024 validation is chronologically later than development but not claimed as pristine without an audit of all prior work.",
+    "No parameter grid or post-result retuning is permitted in this run."
+  ],
+  "supersedes_protocol_sha256": "c2ebeb66525422e8cf01a4abfa3966e30abfa3332a41b9600249fa09f9279bff",
+  "supersession_reason": "Methodology correction before any market-data load or result was observed: SOLUSDT's public daily and 5-minute archives are both missing 2022-02-26..02-28 and 2022-04-01..04-02 (ETHUSDT and BNBUSDT checked gap-free across the full range). simulate_xsm_pairs' execution-continuity check has no gap-tolerance option by design, so the development window start moves from 2021-04-05 to 2022-04-04 (the next Monday after the gap) rather than patching or interpolating missing candles. See protocol_history.json for the full chain, including the prior 14-month-to-5-year sample-size correction."
+}

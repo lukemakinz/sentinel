@@ -1,0 +1,77 @@
+{
+  "protocol_version": "S32-XFRD-v1.2-frozen-2026-09-13",
+  "supersedes_protocol_sha256": "2fe6f87acf41e1300186af54554854d209e37ae6c3a053453c448dcee33ab321",
+  "supersedes_protocol_sha256_v1_0": "df2a86a03d766773158670520230ec72380c1869731e8abf4994dddcbf27bb34",
+  "pre_result_data_quality_amendment": "After both venue files were downloaded but before any signal or PnL was computed, the Binance February 2023 H1 mark archives were found to omit 48 hours for both symbols. Exact timestamps are attempted first from checksum-verified public Binance 1m mark archives. Those archives omit the same outage, so the remaining marks use only the real same-hour Binance perpetual OHLC as a disclosed MTM/basis proxy; it can never fill an order. No interpolation, trading rule or risk parameter changed. An hour without native mark, exact 1m mark and same-hour perpetual rejects the replay.",
+  "status": "retrospective_research_only_no_historical_results_seen_before_freeze",
+  "hypothesis": "A persistent same-asset funding-rate difference plus a non-negative cross-venue basis can produce market-neutral net PnL after conservative execution costs.",
+  "venues": ["Binance USD-M", "Bybit linear USDT perpetual"],
+  "symbols": ["ETHUSDT", "SOLUSDT"],
+  "capital": {
+    "total_usd": 250,
+    "collateral_each_venue_usd": 100,
+    "off_venue_reserve_usd": 50,
+    "notional_each_leg_usd": 60,
+    "initial_effective_mark_leverage_each_venue": 0.60,
+    "maximum_global_positions": 1,
+    "margin_mode": "isolated and separately accounted; no cross-venue collateral netting"
+  },
+  "signal": {
+    "decision_time": "Immediately after a funding timestamp shared by both venues, using only settlements at or before that timestamp",
+    "funding_normalization": "Each realized funding rate divided by its actual elapsed hours since the preceding settlement on that venue; only paired timestamps are compared",
+    "estimate": "EWMA of the latest 9 paired hourly-normalized funding differences with half-life 3 observations",
+    "persistence": "The selected orientation must have the same non-zero sign in at least 5 of the latest 6 paired observations",
+    "minimum_projected_7d_spread_bps": 60,
+    "basis": "On the latest fully completed H1 mark bar, ln(mark_short_venue / mark_long_venue) must be between 0 and +100 bps",
+    "selection": "When flat, choose the qualifying symbol with the highest projected 7d funding spread; deterministic ETH then SOL tie-break",
+    "execution_delay": "Decision at settlement t; atomic two-leg market fill at the first common real traded H1 open at or after t+1h; no synthetic fill",
+    "quantity": "Identical base-asset quantity on both venues, set so neither entry leg exceeds $60 notional"
+  },
+  "position_management": {
+    "minimum_hold_hours": 72,
+    "maximum_hold_hours": 336,
+    "normal_exit": [
+      "after minimum hold, projected 7d spread <=10 bps at two consecutive paired settlement updates",
+      "after minimum hold, original funding orientation reverses at two consecutive paired settlement updates",
+      "maximum hold of 14 days"
+    ],
+    "risk_exit_immediate_next_real_h1_open": [
+      "cross-venue basis moves adversely by 150 bps from entry",
+      "either venue equity falls below $75",
+      "either venue effective mark leverage exceeds 0.80x"
+    ],
+    "cooldown": "Two subsequent paired settlement observations after exit",
+    "funding": "Booked on each venue only for settlements strictly after fill and at or before exit, using that venue's mark price and the actual position side"
+  },
+  "execution_costs_bps_per_leg_per_side": {
+    "base": {"fee": 2, "adverse_slippage": 1, "combined_round_trip": 12},
+    "stress": {"fee": 5, "adverse_slippage": 5, "combined_round_trip": 40}
+  },
+  "data": {
+    "source": "Anonymous public Binance Data Vision archives and Bybit V5 public market endpoints; no account, private application or API key",
+    "streams": "H1 traded perpetual OHLC, H1 mark OHLC and realized funding history for both venues",
+    "missing_policy": "Missing or duplicate execution/funding data is never forward-filled into a signal or fill. A missing Binance H1 mark uses the exact same timestamp from its checksum-verified public 1m mark archive, then only the real same-hour Binance perpetual price as a disclosed MTM/basis proxy. Proxy marks can never fill an order. A setup waits for a common real H1 open; every unresolved valuation gap rejects the affected replay."
+  },
+  "windows": {
+    "warmup_start": "2022-12-01",
+    "development": ["2023-01-01", "2024-01-01"],
+    "validation": ["2024-01-01", "2025-01-01"],
+    "retrospective_evaluation": ["2025-01-01", "2026-09-01"],
+    "genuine_oos": "data after 2026-09-01 under the unchanged protocol"
+  },
+  "historical_gate": [
+    "stress total net PnL >0 in development, validation and retrospective evaluation",
+    "funding PnL minus all fees and slippage >0 in every window so basis timing cannot rescue the mechanism",
+    "zero venue collateral exhaustion, minimum venue equity >=$75 and maximum venue mark leverage <=0.80x",
+    "portfolio maximum drawdown <=5%",
+    "at least 30 independent episodes total and at least 8 in validation and 8 in retrospective evaluation",
+    "no symbol contributes more than 70% of positive net PnL"
+  ],
+  "paper_gate": "Even a historical pass permits only frozen paper-forward. Live requires at least 6 prospective months, 20 closed episodes, positive stress-adjusted PnL, hedge success above 99%, and measured one-leg exposure below two seconds at the 99th percentile.",
+  "anti_overfit": "One central configuration only. EWMA 6/12, threshold 50/70 bps and minimum hold 48/96h may be reported later only as a non-selective neighborhood; they cannot replace a failing center configuration.",
+  "limitations": [
+    "Historical H1 data cannot model order-book queue, partial fills, API outage, ADL or withdrawal suspension.",
+    "Venue default, USDT depeg and transfer latency remain unhedged operational risks.",
+    "A positive historical result is not a promise of $25/day; target capital must be computed from prospective lower-bound yield, not leverage."
+  ]
+}

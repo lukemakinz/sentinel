@@ -1,0 +1,56 @@
+{
+  "protocol_version": "S39-LIQUIDATION-CASCADE-CONTINUATION-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "S38 (liquidation_cascade_fade, protocol.json in docs/research/s38_liquidation_cascade_fade, run before this one in the same session) tested fading a forced-deleveraging candle (ATR-outlier range + volume spike + outlier open-interest drop in one 15m bar, on XRP/SUI/DOGE) and was REJECTED_AT_DEVELOPMENT_GATE on BOTH routes with a clear, non-marginal loss: PF 0.452 (immediate, 103 fills) and PF 0.552 (confirmed, 59 fills) on base costs alone. That is a directional finding, not just a failed threshold: in this data, cascade candles on this instrument set tend to continue rather than mean-revert. This protocol tests that directional complement exactly once -- the identical cascade-detection formula, the opposite trade direction, evaluated under the exact same gates with no loosening. This is disclosed explicitly as informed by S38's outcome (a single directional flip after a clean rejection, not a parameter search), and it will not be followed by a third variant of this same mechanism regardless of outcome.",
+  "hypotheses": [
+    {
+      "id": "H1_IMMEDIATE",
+      "entry_exit": "Cascade bar closes -> enter WITH the cascade direction at the next 1m open. Stop at the cascade bar's own midpoint (a retrace through the middle of the forcing candle invalidates the thesis). Exit reuses S20 H1's patient breakeven+chandelier runner unmodified: partial at 1.5R, breakeven, chandelier trail at 2.5x ATR, hard cap at 8R.",
+      "cascade_definition": "Identical to S38: same 15m bar, (high-low) >= 2.5x ATR(14), volume >= 2.5x its 20-bar average, AND the open-interest change over the trailing 2 bars is more than 2.0 standard deviations below its own trailing 96-bar (24h) mean."
+    },
+    {
+      "id": "H2_CONFIRMED",
+      "entry_exit": "Identical cascade definition, direction and stop/target/trail as H1, EXCEPT entry additionally requires the very next 15m bar to close further in the cascade direction before entering.",
+      "cascade_definition": "Identical to H1."
+    }
+  ],
+  "single_variable_isolated": "Both hypotheses share an identical cascade-detection formula (unchanged from S38) and an identical stop/target/trail execution model (S20 H1's patient runner, unmodified). H2 differs from H1 only in requiring one bar of post-cascade confirmation before entry -- the same single variable S38 isolated between its own H1/H2.",
+  "symbols": {
+    "traded": ["XRPUSDT", "SUIUSDT", "DOGEUSDT"],
+    "note": "Identical universe and cached archives as S38 -- no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated XRP/SUI/DOGE cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2, both a direct directional flip of S38's already-frozen H1/H2 -- no new parameter grid, no change to the cascade-detection thresholds. A failing gate stops that route; choose no least-bad winner. This is the last variant of the liquidation-cascade mechanism tested in this line of research regardless of outcome -- disclosed upfront to prevent this becoming an unbounded search.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "This protocol is explicitly informed by S38's rejection (a directional flip after a clean loss, not a blind a priori hypothesis) -- disclosed rather than presented as independent, since honest reporting of that dependency matters more than the appearance of a fully blind test.",
+    "Liquidation cascades are inferred from OI+volume+range, not Binance's forceOrder stream, which has no clean historical archive on this project's free public data source -- a proxy, disclosed, not the ground-truth signal.",
+    "No order-book reconstruction, no regime/HTF trend filter -- unchanged from S38.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation."
+  ]
+}

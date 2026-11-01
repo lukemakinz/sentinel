@@ -1,0 +1,13 @@
+{
+  "status": "post_selection_diagnostic_not_a_gate",
+  "purpose": "Measure the same-period incremental return, drawdown and daily PnL correlation from allocating R5's $250 cash reserve to S99.",
+  "window": ["2025-05-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+  "capital": {"book_a_usd": 250.0, "s99_usd": 250.0, "total_usd": 500.0},
+  "costs": {
+    "book_a_one_way_turnover_bps": 12.0,
+    "s99_fee_bps": 8.0,
+    "s99_slippage_bps": 5.0
+  },
+  "book_a_reproduction": "Use checksum-verified 1d futures closes shifted to their causal availability time. Compare reproduced Book A PnL with the official corrected 1m-ledger R5 result and disclose the difference.",
+  "selection_disclosure": "S99 and this allocation were selected after historical results were known. The combination is an economic diagnostic only and must begin a new paper-forward clock."
+}

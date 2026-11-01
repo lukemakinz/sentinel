@@ -1,0 +1,153 @@
+{
+  "protocol_sha256": "2b12b8d7420ced033258ed13605e3285328dbff59d3e5395ec2ca8f821fa9dfb",
+  "disclosure": "retrospective research; not paper-forward and not live-approved",
+  "config": {
+    "name": "S88_hourly_strong_level_retest",
+    "swing_width": 2,
+    "structure_lookback": 240,
+    "cluster_atr": 0.45,
+    "min_prior_touches": 2,
+    "displacement_atr": 1.5,
+    "volume_multiple": 1.25,
+    "min_score": 70.0,
+    "entry_fraction": 0.5,
+    "stop_buffer_atr": 0.2,
+    "validity_hours": 36,
+    "target_r": 3.0,
+    "min_target_r": 2.0
+  },
+  "raw_candidates_by_window": {
+    "development": 12,
+    "validation": 5,
+    "retrospective_evaluation": 3
+  },
+  "windows": {
+    "development": {
+      "base": {
+        "trades": 1,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": 0.0,
+        "net_pnl": -0.5,
+        "return_pct": -0.20000000000000018,
+        "max_drawdown_pct": 0.20000000000000018,
+        "mean_net_r": -1.0,
+        "fees": 0.11880214177896696,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 1,
+            "net_pnl": -0.5,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": null,
+        "per_month": {
+          "2025-07": {
+            "trades": 1,
+            "pnl": -0.5
+          }
+        },
+        "diagnostics": {
+          "signals": 12,
+          "entries": 1,
+          "entries_ETHUSDT": 1,
+          "expired_or_cancelled_limit": 7,
+          "blocked_reward_cost_or_target": 1,
+          "blocked_pending_order": 2
+        },
+        "drawdown_halted": false
+      },
+      "stress": {
+        "trades": 0,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": null,
+        "net_pnl": 0.0,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0.0,
+        "mean_net_r": 0.0,
+        "fees": 0.0,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": null,
+        "per_month": {},
+        "diagnostics": {
+          "signals": 12,
+          "blocked_reward_cost_or_target": 2,
+          "expired_or_cancelled_limit": 7,
+          "blocked_pending_order": 2
+        },
+        "drawdown_halted": false
+      },
+      "severe": {
+        "trades": 0,
+        "wins": 0,
+        "win_rate_pct": 0.0,
+        "profit_factor": null,
+        "net_pnl": 0.0,
+        "return_pct": 0.0,
+        "max_drawdown_pct": 0.0,
+        "mean_net_r": 0.0,
+        "fees": 0.0,
+        "funding_pnl": 0.0,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": null,
+        "per_month": {},
+        "diagnostics": {
+          "signals": 12,
+          "blocked_reward_cost_or_target": 2,
+          "expired_or_cancelled_limit": 7,
+          "blocked_pending_order": 2
+        },
+        "drawdown_halted": false
+      }
+    }
+  },
+  "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+}

@@ -1,0 +1,26 @@
+{
+  "status": "frozen_before_september_2026_data_download_or_replay",
+  "strategy_id": "S105_GEOMETRY_BLIND_SEPTEMBER_HOLDOUT",
+  "capital_usd": 500.0,
+  "lineage": "Exact S105 geometry variant, selected before any September 2026 archive was present in the research cache. No rule or parameter may change after the holdout is opened.",
+  "holdout": {
+    "start": "2026-09-01T00:00:00Z",
+    "end": "2026-10-01T00:00:00Z",
+    "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+    "signal": "Exact S105 geometry configuration and S101 asymmetric global regime.",
+    "execution": "Closed 15m decision; next 5m open; one global position; exact sweep stop; fixed 2.5R target; 12h maximum hold.",
+    "risk": "0.2% equity capped at $0.50; 75% notional; leverage <=5.",
+    "costs": {
+      "base": {"fee_bps": 5.0, "slippage_bps": 2.0},
+      "stress": {"fee_bps": 8.0, "slippage_bps": 5.0},
+      "severe": {"fee_bps": 10.0, "slippage_bps": 10.0}
+    }
+  },
+  "interpretation": {
+    "positive": "Useful new evidence only; it does not reverse the failed S105 historical robustness gate and does not authorize live trading.",
+    "negative": "Immediate falsification of the S105 geometry lead.",
+    "zero_or_tiny_sample": "Inconclusive; continue locked observation without changing parameters.",
+    "no_post_holdout_tuning": true
+  },
+  "live_enabled": false
+}

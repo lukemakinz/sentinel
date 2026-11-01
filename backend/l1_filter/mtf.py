@@ -56,20 +56,31 @@ def get_tf_trend(candles: list) -> dict:
 
 
 def analyze_mtf(symbol: str) -> dict:
-    """Run MTF analysis for all timeframes. Returns alignment + trade type."""
-    from ingester.models import Candle
+    """Expose the same replayable Trend State Engine used by Auction research."""
+    from l2_agents.market_intelligence import MarketSnapshotBuilder
 
+    trend_state = MarketSnapshotBuilder().build(symbol.upper())['trend_state']
+    direction_map = {'UP': 'BULLISH', 'DOWN': 'BEARISH', 'RANGE': 'NEUTRAL'}
     result = {}
     for tf in TIMEFRAMES:
-        candles = list(
-            Candle.objects.filter(symbol=symbol, interval=tf, is_closed=True)
-            .order_by('-timestamp')[:100]
-            .values('open', 'high', 'low', 'close', 'volume')
+        state = (trend_state.get('timeframes') or {}).get(tf) or {}
+        direction = direction_map.get(state.get('direction'), 'NEUTRAL')
+        reason = (
+            f"{state.get('structure', 'UNKNOWN')}; "
+            f"EMA20 slope {state.get('ema20_slope_atr_per_bar')} ATR/bar"
+            if state.get('available') else state.get('reason', 'insufficient data')
         )
-        candle_dicts = [{'open': float(c['open']), 'high': float(c['high']),
-                         'low':  float(c['low']),  'close': float(c['close']),
-                         'volume': float(c['volume'])} for c in reversed(candles)]
-        result[tf] = get_tf_trend(candle_dicts)
+        result[tf] = {
+            'direction': direction,
+            'strength': int(round(float(state.get('strength_0_100') or 0.0))),
+            'ema20': state.get('ema20'),
+            'ema50': state.get('ema50'),
+            'close': state.get('close'),
+            'structure': state.get('structure'),
+            'volatility_percentile': state.get('volatility_percentile_0_100'),
+            'available': bool(state.get('available')),
+            'reason': reason,
+        }
 
     # Classify trade type based on HTF alignment
     d1  = result.get('1d',  {}).get('direction', 'NEUTRAL')
@@ -81,8 +92,16 @@ def analyze_mtf(symbol: str) -> dict:
 
     return {
         'symbol':     symbol,
+        'version': trend_state['version'],
+        'learning_only': True,
+        'execution_authorized': False,
         'timeframes': result,
         'alignment':  alignment,   # 'full' | 'partial' | 'conflict'
+        'engine_alignment': trend_state['alignment'],
+        'regime': trend_state['regime'],
+        'directional_bias': trend_state['directional_bias'],
+        'alignment_score': trend_state['alignment_score_minus100_100'],
+        'coverage': trend_state['coverage_0_1'],
         'trade_type': trade_type,  # 'TREND_FOLLOW' | 'SWING' | 'SCALP' | 'COUNTER_TREND'
         'risk_level': risk,        # 'LOW' | 'MEDIUM' | 'HIGH'
         'note':       note,

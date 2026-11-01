@@ -1,5 +1,6 @@
 from io import StringIO
 import json
+from datetime import timedelta
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -381,11 +382,124 @@ class MechanicalBaselineTest(TestCase):
         result = record_mechanical_baseline(snapshot)
 
         self.assertEqual(result['action'], 'ARM')
-        plan = AuctionAnalysis.objects.get().shadow_plan
+        plan = AuctionAnalysis.objects.get(
+            baseline_candidate__isnull=False,
+        ).shadow_plan
         self.assertEqual(plan.direction, 'LONG')
         report = build_report()
-        self.assertEqual(report['paired_comparison']['mechanical_baseline']['plans'], 1)
+        self.assertEqual(report['candidate_cohort']['plans'], 1)
+        self.assertEqual(report['paired_comparison']['mechanical_baseline']['plans'], 0)
         self.assertEqual(report['paired_comparison']['ai']['plans'], 0)
+
+    def test_repeated_candidate_bars_create_one_outcome_plan(self):
+        from l2_agents.auction_service import record_mechanical_baseline
+        from l2_agents.models import AuctionCandidate, AuctionShadowPlan
+
+        first = {
+            **baseline_snapshot('TREND_UP', 100.5),
+            'version': 'v', 'symbol': 'SOLUSDT', 'snapshot_hash': 'h1',
+            'as_of': '2026-10-26T12:07:00+00:00',
+        }
+        second = {
+            **first, 'snapshot_hash': 'h2', 'as_of': '2026-10-26T12:22:00+00:00',
+        }
+        record_mechanical_baseline(first)
+        result = record_mechanical_baseline(second)
+
+        self.assertFalse(result['plan_created'])
+        self.assertEqual(AuctionCandidate.objects.count(), 1)
+        self.assertEqual(AuctionShadowPlan.objects.count(), 1)
+        # First episode: M0 + prospective M1 + M3. Repeated bar: only a new M0 audit.
+        self.assertEqual(AuctionAnalysis.objects.count(), 4)
+
+    def test_paired_report_scores_ai_rejection_as_zero_on_same_candidate(self):
+        from l2_agents.auction_service import record_mechanical_baseline
+        from l2_agents.management.commands.auction_shadow_report import build_report
+        from l2_agents.models import AuctionCandidate
+
+        snapshot = {
+            **baseline_snapshot('TREND_UP', 100.5),
+            'version': 'v', 'symbol': 'SOLUSDT', 'snapshot_hash': 'h',
+            'as_of': '2026-10-26T12:07:00+00:00',
+        }
+        record_mechanical_baseline(snapshot)
+        candidate = AuctionCandidate.objects.get()
+        ai = AuctionAnalysis.objects.create(
+            symbol='SOLUSDT', snapshot_hash='h', snapshot_version='v',
+            provider='openai', model='test', action='PASS', direction='NONE',
+            strategy_id='NONE', snapshot=snapshot, decision={'action': 'PASS'},
+            runtime={'candidate_key': candidate.fingerprint}, shadow_only=True,
+        )
+        candidate.ai_analysis = ai
+        candidate.save(update_fields=['ai_analysis'])
+        plan = candidate.baseline_analysis.shadow_plan
+        plan.state = 'CLOSED'
+        plan.net_r = 1.0
+        plan.save(update_fields=['state', 'net_r'])
+
+        paired = build_report()['paired_comparison']
+
+        self.assertEqual(paired['paired_closed_candidates'], 1)
+        self.assertEqual(
+            paired['mechanical_baseline']['policy_expectancy_per_candidate_r'], 1.0,
+        )
+        self.assertEqual(paired['m1_trend_filter']['policy_expectancy_per_candidate_r'], 0.0)
+        self.assertEqual(paired['ai']['policy_expectancy_per_candidate_r'], 0.0)
+        self.assertEqual(paired['ai_uplift_per_candidate_r'], -1.0)
+
+    def test_global_report_keeps_resolved_no_trigger_and_separates_missing_data(self):
+        from l2_agents.auction_service import record_mechanical_baseline
+        from l2_agents.management.commands.auction_shadow_report import build_report
+        from l2_agents.models import AuctionCandidate
+
+        snapshot = {
+            **baseline_snapshot('TREND_UP', 100.5),
+            'version': 'v', 'symbol': 'SOLUSDT', 'snapshot_hash': 'h',
+            'as_of': '2026-10-26T12:07:00+00:00',
+        }
+        record_mechanical_baseline(snapshot)
+        candidate = AuctionCandidate.objects.get()
+        plan = candidate.baseline_analysis.shadow_plan
+        plan.state = 'EXPIRED'
+        plan.exit_reason = 'NO_TRIGGER'
+        plan.save(update_fields=['state', 'exit_reason'])
+
+        comparison = build_report()['global_context_comparison']
+
+        self.assertEqual(comparison['paired_closed_candidates'], 0)
+        self.assertEqual(comparison['paired_resolved_candidates'], 1)
+        self.assertEqual(
+            comparison['m0_mechanical_baseline']['policy_expectancy_per_candidate_r'],
+            0.0,
+        )
+        self.assertEqual(comparison['reason_codes']['DATA_INELIGIBLE'], 1)
+        self.assertEqual(comparison['context_eligible_only']['candidates'], 0)
+
+    def test_trend_filter_allows_alignment_and_vetoes_strong_opposition(self):
+        from l2_agents.mechanical_baseline import mechanical_decision, trend_filtered_decision
+
+        snapshot = baseline_snapshot('TREND_UP', 100.5)
+        baseline = mechanical_decision(snapshot)
+
+        def state(direction, strength=80.0):
+            return {'available': True, 'direction': direction,
+                    'strength_0_100': strength}
+
+        aligned = {
+            **snapshot,
+            'trend_state': {'timeframes': {
+                '1h': state('UP'), '4h': state('UP'), '1d': state('RANGE'),
+            }},
+        }
+        opposed = {
+            **snapshot,
+            'trend_state': {'timeframes': {
+                '1h': state('DOWN'), '4h': state('DOWN'), '1d': state('DOWN'),
+            }},
+        }
+
+        self.assertEqual(trend_filtered_decision(aligned, baseline).action, 'ARM')
+        self.assertEqual(trend_filtered_decision(opposed, baseline).action, 'PASS')
 
 
 
@@ -443,3 +557,24 @@ class CandidateGateTest(TestCase):
         self.assertEqual(candidate['direction'], 'LONG')
         self.assertEqual(candidate['entry_zone'], [99.0, 99.0])
         self.assertIsNone(mechanical_candidate({**baseline_snapshot('TRANSITION', 100.0), 'symbol': 'X'}))
+
+    def test_rejected_provider_payload_is_not_a_valid_paired_verdict(self):
+        from django.utils import timezone
+        from l2_agents.auction_service import _attach_ai
+        from l2_agents.models import AuctionCandidate
+
+        candidate = AuctionCandidate.objects.create(
+            fingerprint=self.candidate['key'], active_fingerprint=self.candidate['key'],
+            symbol='XUSDT', direction='SHORT', strategy_id='SAI1_FAILED_AUCTION',
+            entry_zone=[100.0, 101.0],
+            adjudication_expires_at=timezone.now() + timedelta(hours=4),
+        )
+        invalid = AuctionAnalysis.objects.create(
+            symbol='XUSDT', snapshot_hash='h', snapshot_version='v', provider='openai',
+            action='PASS', direction='NONE', strategy_id='NONE', snapshot={},
+            decision={}, runtime={'error_type': 'ValueError'}, shadow_only=True,
+        )
+
+        self.assertFalse(_attach_ai(candidate, invalid))
+        candidate.refresh_from_db()
+        self.assertIsNone(candidate.ai_analysis_id)

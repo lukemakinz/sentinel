@@ -1,0 +1,57 @@
+{
+  "strategy_id": "S107_TWO_SPEED_REGIME_PORTFOLIO",
+  "status": "FROZEN_BEFORE_FIRST_S107_REPLAY",
+  "capital_usd": 500.0,
+  "research_question": "Can the unused $250 cash reserve in the selected Book A baseline earn a robust incremental return by holding the frozen S102 regime strategy, or is S102 useful only as a DOWN-regime ETH short hedge?",
+  "selection_disclosure": "Both parent strategies and the shared history were inspected before S107 was conceived. S107 is a portfolio-construction diagnostic and can reject a candidate, but historical success can authorize paper-forward observation only.",
+  "execution_window": {
+    "start_inclusive": "2025-05-01T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z",
+    "slices": {
+      "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+      "former_validation_now_diagnostic": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+      "former_evaluation_now_diagnostic": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"]
+    }
+  },
+  "fixed_sleeves": {
+    "book_a": {
+      "capital_usd": 250.0,
+      "definition": "BOOK_A_ALT_RM plus BOOK_A_RISK_DEFAULT and corrected quantity/cash ledger",
+      "parent_protocol_sha256": "2c284c1ba019d03483e2c42fb326d51c4662c15e11ca49434ce1c86e61798622"
+    },
+    "s102": {
+      "capital_usd": 250.0,
+      "definition": "Frozen S102 six-asset long book in UP, ETH-only short in DOWN, cash in SIDEWAYS",
+      "parent_protocol_sha256": "e97a9e5b495f52097215414c55ba0e0fd67c407f61f2ba026213e1e2e8e23094",
+      "price_warmup_start": "2022-04-04T00:00:00Z",
+      "oi_warmup_start": "2024-01-01T00:00:00Z"
+    }
+  },
+  "variants": {
+    "book_a_cash": "Control: $250 Book A plus $250 uninvested cash.",
+    "book_a_s102_full": "Candidate: $250 Book A plus the complete frozen $250 S102 sleeve.",
+    "book_a_s102_short_only": "Candidate: $250 Book A plus a mechanical S102 target filter retaining negative weights only. Empty weekly targets are retained so shorts close when S102 exits DOWN."
+  },
+  "costs_bps_per_traded_notional": {
+    "base": {"book_a_one_way": 7.0, "s102_fee": 5.0, "s102_slippage": 2.0},
+    "stress": {"book_a_one_way": 12.0, "s102_fee": 8.0, "s102_slippage": 5.0},
+    "severe": {"book_a_one_way": 20.0, "s102_fee": 10.0, "s102_slippage": 10.0}
+  },
+  "predeclared_historical_gate_per_candidate": {
+    "profit": "Candidate net PnL must exceed Book A plus cash under base, stress and severe costs; candidate stress and severe net PnL must remain positive.",
+    "tail_risk": "Under stress, candidate continuous drawdown may be at most 1.00 percentage point worse than control and candidate daily ES95 may be at most 0.10 percentage point worse than control.",
+    "breadth": "Stress excess PnL versus control must be positive in at least 50% of calendar months.",
+    "paired_uncertainty": "Deterministic 10,000-sample 28-day block bootstrap 95% lower bound of stress excess PnL must be greater than zero.",
+    "time_slices": "No predeclared stress slice may underperform control by more than $2.00.",
+    "short_evidence": "The filtered S102 short contribution under stress must be positive and the shared window must contain at least five non-empty short decisions.",
+    "decision": "A candidate passing every check becomes a paper-forward challenger only. Otherwise it is rejected at the historical gate. If both candidates pass, select the one with higher stress net PnL; break an exact tie with lower stress drawdown."
+  },
+  "paper_forward": {
+    "earliest_t0": "date_after_replay_completion",
+    "minimum_calendar_days": 180,
+    "minimum_s102_weekly_decisions": 26,
+    "promotion_requires": "Positive stress PnL and positive paired excess with bootstrap lower bound above zero on untouched post-t0 observations; no worse drawdown or ES95 than the control.",
+    "live_enabled": false
+  },
+  "claim_policy": "No backtest or paper result guarantees profit. No leverage or live capital is authorized by this protocol."
+}

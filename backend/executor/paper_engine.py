@@ -110,6 +110,7 @@ class PaperTradingEngine:
             tier=trade_params.get('tier', ''),
             consensus_signal_id=consensus_signal.id if consensus_signal else None,
             analyst_snapshot=snapshot,
+            source='paper',
         )
 
         logger.info(
@@ -122,8 +123,10 @@ class PaperTradingEngine:
         return position
 
     def check_positions(self):
-        """Check all open positions against current prices for SL/TP hits."""
-        positions = Position.objects.filter(status='OPEN')
+        """Check paper positions only; exchange mirrors are never simulated."""
+        positions = Position.objects.filter(
+            status='OPEN', source__in=('paper', 'auto'),
+        )
 
         for position in positions:
             market_bar = self._update_position_price(position)
@@ -458,7 +461,9 @@ class PaperTradingEngine:
         reserve_transfer = pnl_change * reserve_ratio if pnl_change > 0 else 0.0
         state.spot_reserve_balance += reserve_transfer
         state.balance += (pnl_change - reserve_transfer)
-        open_positions = Position.objects.filter(status='OPEN')
+        open_positions = Position.objects.filter(
+            status='OPEN', source__in=('paper', 'auto'),
+        )
         state.unrealized_pnl = sum(p.unrealized_pnl for p in open_positions)
         state.equity = state.balance + state.unrealized_pnl
 

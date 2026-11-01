@@ -1,0 +1,57 @@
+{
+  "protocol_version": "S25-ONE-DOLLAR-FLAT-TARGET-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_context": "User-proposed concept: enter long or short, earn a flat ~$1, exit — 1:1 risk:reward ('R:R 50/50'), no greed, on a 5-15 minute scale, relying on entry quality rather than letting winners run. This protocol operationalizes it honestly using the project's best-validated entry (order block + OI + OBV + regime confirmation, identical to S20 H1) so the test is fair — it is not a strawman built to fail, and it is not the market-order-vs-limit or sizing experiments already run. Only the exit shape changes: target_r=1.0 (flat 1:1), trailing disabled entirely (no let-it-run), and a plausible position size where the target genuinely nets about $1 (fixed_risk_usd raised from S20's $0.50 to $1.00, risk_fraction raised so that figure actually binds — same fix applied after S22's sizing bug).",
+  "disclosed_prior": "The most directly relevant existing evidence is S19 (activation moved from +1.0R to +0.5R, i.e. also a much earlier/flatter exit than S20): PF fell from 1.066 to 0.583. A flat 1:1 target with zero trailing is an even more extreme version of 'exit early' than S19 tested. This protocol does not assume that prior generalizes to a genuinely flat 1:1 exit — it measures it directly, honestly, without loading the dice either way.",
+  "hypotheses": [
+    {
+      "id": "H1_FLAT_1R_STANDARD_HOLD",
+      "entry": "identical to S20 H1 (order_block_oi_confirmation_scalp, route='oi'): regime (4h EMA200 trend+slope, 1h ADX>=20) + order-block structure (displacement>=1.5xATR, volume>=1.2x avg, first-touch trigger) + OBV flow confirmation + OI confirmation",
+      "exit": "target_r=1.0 (flat 1:1 R:R), trailing=False (no let-it-run at all — exits the instant target or stop is hit), 240 minute time stop (unchanged from S20)",
+      "sizing": "fixed_risk_usd=1.00, fixed_margin_usd=50.00, max_margin_fraction=0.20, risk_fraction=0.01 (raised together so $1.00 genuinely binds, not S22's silent-no-op mistake) — a winning trade nets close to +$1 before costs, matching the user's stated target",
+      "risk": "identical stop placement to S20"
+    },
+    {
+      "id": "H2_FLAT_1R_FAST_HOLD",
+      "entry": "identical to H1",
+      "exit": "identical to H1 except a 90 minute time stop (was 240) — a faster, more 'scalp-shaped' turnover matching the user's stated 5-15 minute chart scale and 'don't be greedy about time either' framing",
+      "sizing": "identical to H1",
+      "risk": "identical to H1"
+    }
+  ],
+  "single_variable_isolated": "Both hypotheses change ONLY the exit shape (flat 1:1 target, no trailing) and position sizing (to make the target genuinely ~$1) versus S20 H1. Entry signal generation, regime, structure, flow, OI confirmation and stop placement are otherwise byte-for-byte identical. H2 additionally shortens the time stop versus H1.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Reuses the exact same cached klines/funding/metrics archives already downloaded for S18/S20 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "leverage_cap": 5,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. No parameter grid over the target R, hold time, or position size beyond these two named points. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink. A flat $1 target is proportionally MORE exposed to fee/slippage stress than S20's wider R targets, since fixed round-trip costs eat a larger share of a smaller target.",
+  "known_limitations": [
+    "This tests the concept's exit *shape* (flat 1:1, no trailing) on the best entry already found. It does not test a from-scratch 'good enough to win at 1:1' discretionary entry style the user may have used manually, which cannot be backtested without a precise, codified rule.",
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18/S20.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

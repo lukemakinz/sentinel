@@ -1,0 +1,18 @@
+{
+  "status": "PROSPECTIVE_PAPER_CHALLENGER_ONLY",
+  "selected_at_utc": "2026-10-15T00:00:00Z",
+  "prospective_t0": "2026-10-16T00:00:00Z",
+  "baseline": "R5: corrected Book A $250 plus $250 cash",
+  "challenger": "Corrected Book A $250 plus S99 $250",
+  "s99_rules": "Frozen by protocol hash 3cb21e1f942f2ede0f274a6e413ba23c22a1ea3c59e720602b7d6d6627bee9a1",
+  "minimum_observation": "later of 180 calendar days and 26 weekly decisions",
+  "promotion_checks": [
+    "S99 standalone net PnL after recorded paper costs and funding is positive",
+    "challenger cumulative PnL exceeds R5 baseline cumulative PnL",
+    "challenger maximum drawdown is at most 8% and no more than 2 percentage points above R5",
+    "no single month contributes more than 60% of total positive challenger PnL",
+    "no data gap, look-ahead, missed rebalance or unmodelled manual override"
+  ],
+  "reset_rule": "Any signal, universe, cost, sizing or risk-rule change resets prospective_t0.",
+  "live_trading": "disabled"
+}

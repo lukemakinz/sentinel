@@ -1,0 +1,74 @@
+{
+  "development": {
+    "name": "BOOK_A_S73_BTC",
+    "initial_capital": 250.0,
+    "final_equity": 430.9116084843395,
+    "net_pnl": 180.91160848433952,
+    "fees_paid": 2.810959095357024,
+    "rebalances": 22,
+    "calendar_days": 153,
+    "mean_calendar_day_pnl": 1.1824288136231342,
+    "max_drawdown_fraction": -0.12506245737107327,
+    "config": {
+      "name": "BOOK_A_S73_BTC",
+      "mom_lookback_days": 20,
+      "sma_gate_days": 200,
+      "top_n": 6,
+      "min_position_usd": 15.0,
+      "vol_target_annual": 0.3,
+      "rebalance_weekday": 0,
+      "taker_fee_bps": 7.0,
+      "include_btc_in_universe": true
+    },
+    "hits_5_usd_day": false,
+    "gap_to_5_usd_day": 3.817571186376866
+  },
+  "validation": {
+    "name": "BOOK_A_S73_BTC",
+    "initial_capital": 250.0,
+    "final_equity": 230.90126215669588,
+    "net_pnl": -19.09873784330412,
+    "fees_paid": 0.5571907052454088,
+    "rebalances": 13,
+    "calendar_days": 92,
+    "mean_calendar_day_pnl": -0.2075949765576535,
+    "max_drawdown_fraction": -0.16987697024338017,
+    "config": {
+      "name": "BOOK_A_S73_BTC",
+      "mom_lookback_days": 20,
+      "sma_gate_days": 200,
+      "top_n": 6,
+      "min_position_usd": 15.0,
+      "vol_target_annual": 0.3,
+      "rebalance_weekday": 0,
+      "taker_fee_bps": 7.0,
+      "include_btc_in_universe": true
+    },
+    "hits_5_usd_day": false,
+    "gap_to_5_usd_day": 5.207594976557654
+  },
+  "holdout": {
+    "name": "BOOK_A_S73_BTC",
+    "initial_capital": 250.0,
+    "final_equity": 230.90126215669588,
+    "net_pnl": -19.09873784330412,
+    "fees_paid": 0.5571907052454088,
+    "rebalances": 13,
+    "calendar_days": 92,
+    "mean_calendar_day_pnl": -0.2075949765576535,
+    "max_drawdown_fraction": -0.16987697024338017,
+    "config": {
+      "name": "BOOK_A_S73_BTC",
+      "mom_lookback_days": 20,
+      "sma_gate_days": 200,
+      "top_n": 6,
+      "min_position_usd": 15.0,
+      "vol_target_annual": 0.3,
+      "rebalance_weekday": 0,
+      "taker_fee_bps": 7.0,
+      "include_btc_in_universe": true
+    },
+    "hits_5_usd_day": false,
+    "gap_to_5_usd_day": 5.207594976557654
+  }
+}

@@ -1,8 +1,10 @@
 import numpy as np
 from django.test import TestCase
+from executor.models import Position
 
 from risk.exposure import (
-    ExposureLimits, _leg, beta_from_returns, check_new_trade, portfolio_exposure,
+    ExposureLimits, _leg, beta_from_returns, check_new_trade,
+    legs_from_open_positions, portfolio_exposure,
 )
 
 
@@ -34,3 +36,15 @@ class ExposureTests(TestCase):
         ok, reason, _ = check_new_trade(existing, large, 250, limits)
         self.assertFalse(ok)
         self.assertIn('open risk', reason)
+
+    def test_exchange_mirror_is_not_double_counted_with_local_intent(self):
+        common = dict(
+            symbol='BTCUSDT', side='LONG', entry_price=100, current_price=100,
+            quantity=1, remaining_quantity=1, position_size_usd=100, stop_loss=99,
+        )
+        Position.objects.create(**common, source='auto')
+        Position.objects.create(**common, source='exchange')
+
+        legs = legs_from_open_positions({'BTCUSDT': {'beta': 1.0}})
+
+        self.assertEqual(len(legs), 1)

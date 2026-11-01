@@ -1,0 +1,109 @@
+{
+  "created_at": "2026-09-08T10:55:28.768264+00:00",
+  "coarse_variants_fixed_before_run": [
+    {
+      "name": "S8_mr_5m_tp60",
+      "minutes": 5,
+      "tp_width_mult": 0.6,
+      "max_hold_minutes": 90,
+      "stop_atr_mult": 0.6,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8_mr_5m_tp70",
+      "minutes": 5,
+      "tp_width_mult": 0.7,
+      "max_hold_minutes": 90,
+      "stop_atr_mult": 0.6,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8_mr_5m_tp80",
+      "minutes": 5,
+      "tp_width_mult": 0.8,
+      "max_hold_minutes": 90,
+      "stop_atr_mult": 0.6,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8_mr_15m_tp60",
+      "minutes": 15,
+      "tp_width_mult": 0.6,
+      "max_hold_minutes": 90,
+      "stop_atr_mult": 0.6,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8_mr_15m_tp70",
+      "minutes": 15,
+      "tp_width_mult": 0.7,
+      "max_hold_minutes": 90,
+      "stop_atr_mult": 0.6,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8_mr_15m_tp80",
+      "minutes": 15,
+      "tp_width_mult": 0.8,
+      "max_hold_minutes": 90,
+      "stop_atr_mult": 0.6,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    }
+  ],
+  "capital_per_pair": 1000,
+  "risk_per_trade": "0.3% of current capital, sized from stop distance; independent of leverage. Leverage (20x default) only scales required margin / max notional, per scalp_simulator.execute risk_budget vs margin_budget.",
+  "regime_filter": "htf_adx (1h ADX14) <= 20 AND 1h range contained within the prior 24 1h bars (no fresh extreme). Opposite of S7 trend-only: absence of trend is required, not agreement with one.",
+  "entry": "Resting limit order at VAL/VAH (profile_edge) or a rolling VWAP +/-1 sigma band (vwap_band), 6h window. Maker fee 2bps, no entry slippage, 120min TTL.",
+  "exit": "Single fixed target = entry + side * tp_width_mult * (VAH-VAL), no trailing, no partial. Stop = level -/+ 0.25*ATR(14). Time-kill per max_hold_minutes.",
+  "development": [
+    "2025-08-01/2026-02-01",
+    "2026-02-01/2026-04-01"
+  ],
+  "unused_evaluation": "2026-04-01/2026-08-01",
+  "selection": "Stage 1: rank the 6 coarse (timeframe x tp_width_mult) variants at max_hold_minutes=90, >= 20 validation trades on the combined 4-pair portfolio. Stage 2: for the winning (timeframe, tp_width_mult), also test max_hold_minutes=60 and re-rank all 7 variants together. Freeze one global configuration before unused evaluation.",
+  "disclosure": "December-March and August periods were used by earlier S7 revisions. April-July 2026 has not been used to pick parameters for S8 and is held aside as holdout. This is a retrospective screen, not real-time forward trading.",
+  "scenarios": "20x development; frozen holdout at 20x and 30x, with 2 and 5 bps slippage.",
+  "fees_bps": {
+    "taker": 5,
+    "maker_entry": 2
+  },
+  "limit_model": "Fills only if the bar actually trades through the level (2bps penetration), expires after 120 minutes. No same-fill-minute profit target. No queue model.",
+  "liquidation": "Conservative deposit-vs-stop buffer only; no historical mark-price liquidation simulation.",
+  "stopping_rule": "If no variant reaches profit_factor > 1 after costs on holdout for at least 3 of 4 pairs, S8 is a negative result. No further variant search follows a negative holdout."
+}

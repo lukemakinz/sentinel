@@ -1,0 +1,66 @@
+{
+  "strategy_id": "S94_WYCKOFF_PHASE_C_V1",
+  "status": "FROZEN_BEFORE_REPLAY",
+  "frozen_at_utc": "2026-10-13T11:30:00Z",
+  "hypothesis": "A mature balanced auction has directional edge only after a failed boundary auction (spring or UTAD), a later lower-volume test that holds the extreme, and a confirming directional bar while entry remains near that boundary.",
+  "difference_from_s90_s92": "S90-S92 reacted to a single level or reclaim. S94 requires a multi-day range, separated touches on both sides, a prior trend, an absorption event, a distinct test and a distinct confirmation in causal order.",
+  "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "data": {
+    "source": "Binance public USD-M checksumed 1m kline and actual funding archives",
+    "signal_bars": "complete 1h bars",
+    "execution": "first actual 1m open after the confirming 1h close",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "historical_development": ["2025-05-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "prospective_t0": "2026-10-14T00:00:00Z"
+  },
+  "range": {
+    "hours": 120,
+    "boundaries": "10th percentile of lows and 90th percentile of highs, frozen before sweep",
+    "width_atr": [4.0, 14.0],
+    "maximum_efficiency_ratio": 0.35,
+    "minimum_separated_touch_clusters_each_side": 2,
+    "touch_separation_hours": 8
+  },
+  "phase_c": {
+    "prior_trend_hours": 336,
+    "minimum_prior_trend_move_pct": 3.0,
+    "sweep_depth_atr": [0.10, 1.25],
+    "minimum_sweep_relative_volume": 1.10,
+    "minimum_wick_fraction": 0.35,
+    "absorption": "long taker-buy fraction <= 0.48; short >= 0.52",
+    "test_delay_hours": [2, 24],
+    "maximum_test_to_sweep_volume": 0.80,
+    "test_must_hold_sweep_extreme": true,
+    "confirmation_deadline_hours_after_test": 12,
+    "entry_must_remain_within_boundary_side_45pct_of_range": true
+  },
+  "risk": {
+    "capital_usd": 500,
+    "maximum_global_positions": 1,
+    "fixed_risk_usd": 2.0,
+    "maximum_notional_equity": 1.0,
+    "stop": "sweep extreme plus 0.10 ATR buffer",
+    "target": "opposite range boundary minus 0.10 ATR buffer",
+    "minimum_reward_risk_at_signal_close": 2.20,
+    "maximum_hold_hours": 72,
+    "daily_loss_halt_pct": 1.5,
+    "weekly_loss_halt_pct": 3.0,
+    "portfolio_drawdown_halt_pct": 6.0
+  },
+  "cost_scenarios_bps_each_side": {
+    "base": {"fee": 5, "slippage": 2},
+    "stress": {"fee": 8, "slippage": 5},
+    "severe": {"fee": 10, "slippage": 10}
+  },
+  "historical_gate": {
+    "minimum_stress_trades": 30,
+    "minimum_stress_profit_factor": 1.15,
+    "minimum_stress_mean_net_r": 0.08,
+    "stress_pnl_positive": true,
+    "severe_pnl_nonnegative": true,
+    "maximum_drawdown_pct": 6.0,
+    "leave_one_symbol_out_positive": true
+  },
+  "prospective_gate": "Later of 180 days, 100 fills and 60 independent event clusters for validation, followed by the same untouched evaluation requirement.",
+  "claim_policy": "All data before prospective_t0 is contaminated development. Passing historical gates permits paper-forward only and never guarantees profit."
+}

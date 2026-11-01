@@ -1,0 +1,198 @@
+[
+  {
+    "window": "development",
+    "leg": "A",
+    "name": "A_RM_base",
+    "usd_per_day": 1.3055828129953293,
+    "pnl": 199.7541703882854,
+    "max_dd": -0.10637760939141118,
+    "trades": null
+  },
+  {
+    "window": "development",
+    "leg": "A",
+    "name": "A_RM_top3",
+    "usd_per_day": 1.2196390357572422,
+    "pnl": 186.60477247085805,
+    "max_dd": -0.19133225581624544,
+    "trades": null
+  },
+  {
+    "window": "development",
+    "leg": "A",
+    "name": "A_RM_noBTC",
+    "usd_per_day": 1.3209944124278197,
+    "pnl": 202.1121451014564,
+    "max_dd": -0.15169759301274124,
+    "trades": null
+  },
+  {
+    "window": "development",
+    "leg": "A",
+    "name": "A_RM_mom3pct",
+    "usd_per_day": 1.2725700968312066,
+    "pnl": 194.70322481517462,
+    "max_dd": -0.10637760939141096,
+    "trades": null
+  },
+  {
+    "window": "development",
+    "leg": "A",
+    "name": "A_RM_biweekly",
+    "usd_per_day": 0.8361916110957152,
+    "pnl": 127.93731649764442,
+    "max_dd": -0.10657663085566195,
+    "trades": null
+  },
+  {
+    "window": "development",
+    "leg": "A",
+    "name": "A_RM_tight",
+    "usd_per_day": 1.1771995653480856,
+    "pnl": 180.11153349825707,
+    "max_dd": -0.10635806296067708,
+    "trades": null
+  },
+  {
+    "window": "development",
+    "leg": "B",
+    "name": "B_S82",
+    "usd_per_day": -0.07336808412494791,
+    "pnl": -11.22531687111703,
+    "max_dd": null,
+    "trades": 11
+  },
+  {
+    "window": "development",
+    "leg": "B",
+    "name": "B_complement",
+    "usd_per_day": 0.0,
+    "pnl": 0.0,
+    "max_dd": null,
+    "trades": 0
+  },
+  {
+    "window": "development",
+    "leg": "B",
+    "name": "B_CPI_only",
+    "usd_per_day": 0.013067749766072676,
+    "pnl": 1.9993657142091195,
+    "max_dd": null,
+    "trades": 4
+  },
+  {
+    "window": "development",
+    "leg": "B",
+    "name": "B_S83_quiet",
+    "usd_per_day": -0.3873352456453518,
+    "pnl": -59.26229258373883,
+    "max_dd": null,
+    "trades": 68
+  },
+  {
+    "window": "development",
+    "leg": "AB",
+    "name": "A_RM_noBTC+B_CPI_only",
+    "usd_per_day": 1.3340621621938924,
+    "pnl": 204.11151081566553,
+    "gap_to_5": 3.6659378378061076
+  },
+  {
+    "window": "validation",
+    "leg": "A",
+    "name": "A_RM_base",
+    "usd_per_day": -0.041921644605978116,
+    "pnl": -3.8567913037499864,
+    "max_dd": -0.11098056191115958,
+    "trades": null
+  },
+  {
+    "window": "validation",
+    "leg": "A",
+    "name": "A_RM_top3",
+    "usd_per_day": -0.041921644605978116,
+    "pnl": -3.8567913037499864,
+    "max_dd": -0.11098056191115958,
+    "trades": null
+  },
+  {
+    "window": "validation",
+    "leg": "A",
+    "name": "A_RM_noBTC",
+    "usd_per_day": 0.3097054372552908,
+    "pnl": 28.492900227486757,
+    "max_dd": -0.1560940895595483,
+    "trades": null
+  },
+  {
+    "window": "validation",
+    "leg": "A",
+    "name": "A_RM_mom3pct",
+    "usd_per_day": -0.041921644605978116,
+    "pnl": -3.8567913037499864,
+    "max_dd": -0.11098056191115958,
+    "trades": null
+  },
+  {
+    "window": "validation",
+    "leg": "A",
+    "name": "A_RM_biweekly",
+    "usd_per_day": -0.2661068344614602,
+    "pnl": -24.481828770454342,
+    "max_dd": -0.1484885274526009,
+    "trades": null
+  },
+  {
+    "window": "validation",
+    "leg": "A",
+    "name": "A_RM_tight",
+    "usd_per_day": -0.041921644605978116,
+    "pnl": -3.8567913037499864,
+    "max_dd": -0.11098056191115958,
+    "trades": null
+  },
+  {
+    "window": "validation",
+    "leg": "B",
+    "name": "B_S82",
+    "usd_per_day": -0.01786574607776529,
+    "pnl": -1.6436486391544065,
+    "max_dd": null,
+    "trades": 1
+  },
+  {
+    "window": "validation",
+    "leg": "B",
+    "name": "B_complement",
+    "usd_per_day": 0.0,
+    "pnl": 0.0,
+    "max_dd": null,
+    "trades": 0
+  },
+  {
+    "window": "validation",
+    "leg": "B",
+    "name": "B_CPI_only",
+    "usd_per_day": 0.0,
+    "pnl": 0.0,
+    "max_dd": null,
+    "trades": 0
+  },
+  {
+    "window": "validation",
+    "leg": "B",
+    "name": "B_S83_quiet",
+    "usd_per_day": 0.10521064133469214,
+    "pnl": 9.679379002791677,
+    "max_dd": null,
+    "trades": 8
+  },
+  {
+    "window": "validation",
+    "leg": "AB",
+    "name": "A_RM_noBTC+B_S83_quiet",
+    "usd_per_day": 0.414916078589983,
+    "pnl": 38.172279230278434,
+    "gap_to_5": 4.585083921410017
+  }
+]

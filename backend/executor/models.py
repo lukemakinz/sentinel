@@ -134,6 +134,51 @@ class AccountState(models.Model):
         return f"Balance: ${self.balance:,.2f} | WR: {wr:.0f}%"
 
 
+class ExchangeExecutionIntent(models.Model):
+    """Durable at-most-once intent written before a live exchange mutation."""
+
+    STATUS_CHOICES = [
+        ('PREPARED', 'Prepared'),
+        ('ACCEPTED', 'Accepted'),
+        ('UNCERTAIN', 'Uncertain'),
+        ('OPEN', 'Open'),
+        ('CLOSING', 'Closing'),
+        ('CLOSED', 'Closed'),
+        ('REJECTED', 'Rejected'),
+        ('CANCELLED', 'Cancelled'),
+    ]
+
+    client_oid = models.CharField(max_length=100, unique=True, db_index=True)
+    signal_ref = models.CharField(max_length=100, blank=True, default='', db_index=True)
+    order_id = models.CharField(max_length=100, blank=True, default='', db_index=True)
+    symbol = models.CharField(max_length=20, db_index=True)
+    side = models.CharField(max_length=5, choices=Position.SIDE_CHOICES)
+    strategy = models.CharField(max_length=20, blank=True, default='')
+    requested_quantity = models.FloatField(default=0)
+    submitted_quantity = models.FloatField(default=0)
+    stop_loss = models.FloatField(default=0)
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, default='PREPARED', db_index=True)
+    response = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [models.Index(fields=['status', 'symbol'])]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['symbol'],
+                condition=models.Q(status__in=(
+                    'PREPARED', 'ACCEPTED', 'UNCERTAIN', 'OPEN', 'CLOSING',
+                )),
+                name='one_active_execution_intent_per_symbol',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.client_oid} {self.symbol} {self.side} {self.status}'
+
+
 class ExchangeOpenOrder(models.Model):
     """Normalized snapshot of open orders currently resting on the exchange."""
     order_id = models.CharField(max_length=100, unique=True, db_index=True)

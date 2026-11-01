@@ -1,0 +1,60 @@
+{
+  "protocol_version": "S33-DATED-CARRY-v1.2-frozen-2026-09-14",
+  "supersedes_protocol_sha256": "7ca27ed0c48cad03a4bc36ccbe7523da97d479e8ca6319d849e36cfdf3f78a87",
+  "pre_result_data_quality_amendment": "After downloading spot and quarterly series but before any signal or PnL computation, both BTC and ETH spot archives were found to omit exactly 2023-03-24 13:00 UTC from H1 and 1m data. Binance's public incident notice confirms a venue-wide spot halt. No price is invented: a missing spot mark is omitted from portfolio-MTM sampling while the complete futures series continues to drive collateral risk. Every feature, entry and planned exit timestamp still requires real spot and futures observations; otherwise that expiry cannot execute. A triggered risk exit uses the first subsequent common tradable H1 open. No signal, threshold, sizing, cost or risk parameter changed.",
+  "status": "retrospective_research_only_frozen_before_loading_quarterly_prices",
+  "hypothesis": "A positive fixed-expiry futures premium can be locked with equal-quantity long spot and short quarterly USD-M futures, avoiding uncertain perpetual funding and cross-venue transfers.",
+  "venue": "Binance",
+  "symbols": ["BTCUSDT", "ETHUSDT"],
+  "capital": {
+    "total_usd": 250,
+    "spot_notional_usd": 50,
+    "isolated_futures_margin_usd": 175,
+    "cash_reserve_usd": 25,
+    "futures_short_quantity": "exactly equal base-asset quantity to the spot long",
+    "maximum_positions": 1
+  },
+  "schedule": {
+    "expiry_definition": "Last Friday of March, June, September and December at 08:00 UTC",
+    "decision": "Exactly 30 days before expiry at 08:00 UTC using only the H1 spot and CURRENT_QUARTER futures bar completed at 08:00",
+    "entry": "At the 09:00 UTC H1 open on the decision day",
+    "planned_exit": "At the 07:00 UTC H1 open one hour before expiry, avoiding delivery mechanics and continuous-series roll",
+    "selection": "Choose BTC or ETH with the larger known entry premium; deterministic BTC tie-break",
+    "qualification": "CURRENT_QUARTER premium over spot must be at least 1.00% and annualized simple premium at least 12.00%; otherwise hold cash for the quarter",
+    "duplicate_control": "At most one trade per quarterly expiry"
+  },
+  "risk": {
+    "initial_futures_mark_leverage": "approximately 0.29x",
+    "risk_exit": "At the next common tradable H1 open if futures equity falls below $100 or futures mark leverage exceeds 0.80x",
+    "no_rebalancing": "No transfer from spot proceeds or reserve to rescue the short; no leverage increase, martingale or averaging",
+    "end_of_window": "Close both legs at the last common real H1 open"
+  },
+  "execution_costs_bps_per_leg_per_side": {
+    "base": {"spot_fee": 10, "futures_fee": 2, "spot_slippage": 1, "futures_slippage": 1, "combined_round_trip": 28},
+    "stress": {"spot_fee": 10, "futures_fee": 5, "spot_slippage": 5, "futures_slippage": 5, "combined_round_trip": 50}
+  },
+  "data": {
+    "source": "Anonymous public Binance Data Vision spot H1 archives with published checksums and public USD-M CURRENT_QUARTER continuous H1 klines; no account or API key",
+    "missing_policy": "No interpolation, forward-fill, proxy price or synthetic execution. A missing H1 spot observation may use only the exact same timestamp from a checksum-verified public Binance spot 1m archive. A verified venue-halt spot gap is retained and omitted from portfolio-MTM sampling while futures collateral remains evaluated hourly. Missing feature, entry or exit observations cancel that expiry; any futures-series gap rejects the replay.",
+    "continuous_contract_limit": "The position exits before the expiry/roll boundary. No PnL is allowed to cross the continuous-series roll."
+  },
+  "windows": {
+    "development": ["2023-01-01", "2024-01-01"],
+    "validation": ["2024-01-01", "2025-01-01"],
+    "retrospective_evaluation": ["2025-01-01", "2026-09-01"],
+    "genuine_oos": "quarterly opportunities after 2026-09-01 under the unchanged protocol"
+  },
+  "historical_gate": [
+    "stress net PnL >0 in every window",
+    "at least 2 executed expiries in development, validation and retrospective evaluation",
+    "zero collateral exhaustion, minimum futures equity >=$100 and maximum futures mark leverage <=0.80x",
+    "maximum portfolio drawdown <=3%",
+    "both BTC and ETH must either contribute positive stress PnL or the strategy is concentration-rejected"
+  ],
+  "paper_gate": "Historical pass permits paper-forward only. Live requires at least 8 prospective quarterly observations, which implies approximately two years, with positive stress PnL and observed basis/costs inside assumptions.",
+  "limitations": [
+    "The current-quarter continuous series must not silently roll before the stated boundary; every trade is audited around expiry.",
+    "H1 bars do not model order-book depth, outage or liquidation-engine tiers.",
+    "Expected returns are low and cannot credibly produce $25/day on $250."
+  ]
+}

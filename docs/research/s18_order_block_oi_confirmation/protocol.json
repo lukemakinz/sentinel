@@ -1,0 +1,73 @@
+{
+  "protocol_version": "S18-OB-OI-CONFIRMATION-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "new_evidence_family": "Binance public 'metrics' archive (data.binance.vision/data/futures/um/daily/metrics/{symbol}/), 5-minute granularity: open interest, top-trader position ratio, global retail long/short account ratio, taker buy/sell volume ratio. Same free, unauthenticated host already used for klines/fundingRate. No prior strategy in this codebase (S1-S17b) has used this data in a backtest, even though ingester/models.py already carries live DB models for it (OpenInterest, LongShortRatio, TopTraderPosition) used only by the live analysts.volume_flow agent.",
+  "hypotheses": [
+    {
+      "id": "H1_OI_CONFIRM",
+      "bars": "closed 15m; execution no earlier than next 1m open",
+      "regime": "identical to S16/S17: 4h EMA200 trend+slope confirmed by 1h ADX(14) >= 20",
+      "structure": "identical order-block detection to S17 (first-touch trigger, not S17b's rejection variant, since S17 had the better development PF of the two): displacement >=1.5x ATR within 3 bars, 3-bar peak volume >=1.2x trailing-20-bar average, confirmed 3 bars after formation, zone active up to 32 bars, consumed on first touch",
+      "flow": "OBV must still be on the trend side of its own EMA(9) at the touch bar (identical to S17)",
+      "positioning": "open interest change over the prior 8 bars (2h) must be non-negative for LONG (new long positioning behind the rally, not a pure short squeeze) and non-positive for SHORT (mirrored) — the price/OI quadrant used by derivatives desks (price up + OI up = healthy continuation; price up + OI down = squeeze more likely to fade)",
+      "entry": "market at next minute open",
+      "risk": "stop = zone boundary opposite the trend direction, minus/plus 0.15 ATR buffer; actual-fill stop width clamped 0.50-3.00 ATR",
+      "exit": "identical to S16/S17/S17b: breakeven-then-chandelier trailing activated at +1.0R, trail at best-price minus 1.5x ATR (ATR frozen at entry); 5.0R hard cap; 240 minute time stop",
+      "one_trade_per_zone": true
+    },
+    {
+      "id": "H2_TOPTRADER_EXTREME",
+      "bars": "same as H1",
+      "regime": "identical to H1",
+      "structure": "identical to H1",
+      "flow": "identical to H1",
+      "positioning": "identical to H1, PLUS: the top-trader position ratio z-score (vs its own trailing 672-bar / ~7-day mean and population std) must NOT be at or beyond +/-1.5 in the SAME direction as the trade at the touch bar — avoiding entries where large accounts are already at a statistical positioning extreme in the trade's own direction",
+      "entry": "identical to H1",
+      "risk": "identical to H1",
+      "exit": "identical to H1",
+      "one_trade_per_zone": true
+    }
+  ],
+  "positioning_is_an_orthogonal_evidence_family_from_price_and_volume": true,
+  "toptrader_extreme_is_an_additional_family_only_in_h2": true,
+  "execution_intentionally_identical_to_s16_s17_s17b": "so any performance delta versus S17 is attributable ONLY to the OI/positioning confirmation",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "No BTC reference series is used."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward",
+    "warmup_rationale": "same 4h EMA200 convergence rationale as S16/S17; also gives the top-trader z-score its full 672-bar (~7 day) baseline well before development starts"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2 central configurations. No parameter grid over the OI lookback window, the z-score window, or the extreme threshold (fixed at 1.5, a conventional statistical-extreme cutoff, not tuned on this data). A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Open interest and top-trader ratios are exchange-wide (Binance) aggregates, not a reconstruction of the full order book or cross-exchange positioning.",
+    "Metrics snapshots are treated as known at their own timestamp (same treatment as funding-rate settlement elsewhere in this codebase) with small gaps forward-filled — Binance's own metrics feed is not gap-free, unlike 1-minute klines.",
+    "Same order-block, ATR-freeze and no-order-book-reconstruction simplifications as S17.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

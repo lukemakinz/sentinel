@@ -1,0 +1,69 @@
+{
+  "protocol_version": "S21-OB-OI-LIMIT-ENTRY-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_diagnostic": "S20 H1 (patient runner) is the first strategy in this project's history to show positive PF/PnL in BOTH the development (PF 1.066, +$2.08) and validation (PF 1.117, +$1.04) windows under base costs. It failed only the stress-cost leg of the validation gate (stress PF 0.857 < 1.00 threshold). All entries in S16-S20 were market orders at next-bar-open (taker fee 5bps). This protocol changes ONLY the fill mechanism — a resting limit order at the order block's OTE level (default 50% of the zone) instead of chasing at market — to capture the maker fee (2bps vs 5bps) and a better average entry price, both of which widen the realized R on every trade that fills. Entry signal (regime + structure + OI + OBV) and exit management (breakeven+chandelier activated at +1.5R, 2.5x ATR trail, 8.0R cap) are otherwise identical to S20 H1.",
+  "hypotheses": [
+    {
+      "id": "H1_LIMIT_ENTRY",
+      "regime": "identical to S16-S20: 4h EMA200 trend+slope confirmed by 1h ADX(14) >= 20",
+      "structure": "identical order-block detection to S17-S20 (displacement>=1.5xATR, volume>=1.2x avg, first-touch trigger, zone active up to 32 bars, consumed on first touch)",
+      "flow": "OBV must still be on the trend side of its own EMA(9) at the touch bar",
+      "positioning": "open interest change over the prior 8 bars must be non-negative/non-positive in the trade direction (identical to S18/S20)",
+      "entry": "resting LIMIT order at 50% of the order-block zone (bottom + 0.5 * range), registered at the touch/confirmation bar, TTL 45 minutes (3 bars); may go unfilled if price does not return to that level in time",
+      "risk": "stop = zone boundary opposite the trend direction, minus/plus 0.15 ATR buffer, measured from the OTE limit price (not the touch-bar close); actual-fill stop width clamped 0.50-3.00 ATR",
+      "exit": "identical to S20 H1: breakeven+chandelier trailing activated at +1.5R, trail at best-price minus 2.5x ATR (ATR frozen at entry); 8.0R hard cap; 240 minute time stop",
+      "one_trade_per_zone": true
+    },
+    {
+      "id": "H2_LIMIT_ENTRY_KILLZONE",
+      "regime": "identical to H1",
+      "structure": "identical to H1",
+      "flow": "identical to H1",
+      "positioning": "identical to H1",
+      "session_filter": "additionally restricted to the London (02:00-05:00 ET) and New York (07:00-11:00 ET) killzones already used by S13 (l1_filter.bollinger_regime_scalp._in_trading_window) — an ICT selectivity filter: fewer, higher-liquidity-window fills, further improving the fee/edge ratio",
+      "entry": "identical to H1",
+      "risk": "identical to H1",
+      "exit": "identical to H1",
+      "one_trade_per_zone": true
+    }
+  ],
+  "single_variable_isolated_h1": "Only the fill mechanism (limit at OTE vs market at next open) changes versus S20 H1. Entry signal generation, regime, structure, flow, OI confirmation, stop placement, exit management and position sizing are otherwise byte-for-byte identical.",
+  "single_variable_isolated_h2": "H2 adds exactly one further filter (killzone session) on top of H1; nothing else changes between H1 and H2.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Reuses the exact same cached klines/funding/metrics archives already downloaded for S18/S19/S20 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute; no favorable TP/target award on the same minute a limit order fills"
+  },
+  "selection": "Exactly H1 and H2 central configurations. No parameter grid over the OTE ratio (fixed at 0.5, the textbook midpoint) or limit TTL (fixed at 45 minutes / 3 bars). A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink. A resting limit under stress needs a deeper penetration to count as filled, so H1/H2 fill counts are expected to fall further under stress than S20's market-entry routes did.",
+  "known_limitations": [
+    "A resting limit may simply not fill at all if price never returns to the OTE level within the TTL — this trades fill rate for entry quality, and the honest backtest will show whether that trade is net positive.",
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18/S20.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

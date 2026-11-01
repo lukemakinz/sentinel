@@ -1,0 +1,75 @@
+{
+  "status": "frozen_before_first_s103_market_replay",
+  "strategy_id": "S103_FVG_IFVG_DECISION_TREE",
+  "capital_usd": 500.0,
+  "hypothesis": "A fresh displaced 1h FVG has conditional value only after closed 15m candles resolve whether the zone was defended or inverted. Global direction, 4h trend and market-attention/flow confluence should reduce false touches.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+  "architecture": {
+    "formation": "Standard three-candle 1h FVG. The middle candle must point in the gap direction, have body at least 0.80 ATR14 and volume at least 1.15 times its prior 20-bar median. Gap depth must be 0.05 to 1.25 ATR.",
+    "defense_route": "After first overlap, require a closed 15m directional candle beyond the near edge by 0.03 ATR15, then a later closed candle within three bars breaking the reaction extreme.",
+    "inversion_route": "IFVG exists only after a 15m close beyond the far edge by 0.03 ATR15. Use the first later retest from the opposite side, require directional rejection, then a later closed candle within three bars breaking its extreme.",
+    "wick_policy": "A wick through the far edge without a close does not create IFVG.",
+    "entry_time": "Next 5m open after the completed breakout candle; never inside the source candle.",
+    "zone_policy": "First interaction only; maximum age 120 hours; strongest signal only when multiple zones resolve on one candle."
+  },
+  "confluence": {
+    "mandatory_global_regime": "Long only in S101 UP, short only in S101 DOWN; SIDEWAYS is cash.",
+    "mandatory_4h_trend": "Long above and short below closed-bar EMA50 on 4h.",
+    "micro_score": "Require at least two of three: OI expands by at least 0.05% over 60 minutes; 15m taker-buy share and Binance taker ratio agree (>0.52 and >1 for long, <0.48 and <1 for short); 15m volume is at least its prior 20-bar median.",
+    "metrics_freshness": "OI can score only when the last public metrics observation is at most 15 minutes old.",
+    "interpretation": "Open interest is participation/attention, not a directional signal by itself."
+  },
+  "exits_and_risk": {
+    "initial_stop": "Beyond touch/retest extreme plus 0.15 ATR15, never tighter than 0.50 ATR15 and never wider than 4.0 ATR15.",
+    "target": "Fixed 2.5R from actual next-open fill.",
+    "time_exit_minutes": 720,
+    "intrabar_ambiguity": "Stop is evaluated before target on the same 5m candle.",
+    "one_global_position": true,
+    "risk_per_trade_usd_cap": 0.5,
+    "risk_fraction_equity": 0.002,
+    "max_notional_fraction_equity": 0.75,
+    "leverage_cap": 5.0,
+    "daily_loss_fraction": 0.006,
+    "weekly_loss_fraction": 0.018
+  },
+  "data": {
+    "daily_regime_warmup_start": "2024-01-01T00:00:00Z",
+    "intraday_warmup_start": "2025-01-01T00:00:00Z",
+    "execution_start": "2025-05-01T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z",
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "validation": ["2025-10-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-01-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "source": "Checksum-verified public Binance USD-M monthly 5m/1d/funding archives and daily 5m metrics archives.",
+    "gap_policy": "Missing 5m prices are prior-close MTM rows only and are excluded from formation, confirmation, entries, stops and targets."
+  },
+  "costs_bps_per_side": {
+    "base": {"fee": 5.0, "slippage": 2.0},
+    "stress": {"fee": 8.0, "slippage": 5.0},
+    "severe": {"fee": 10.0, "slippage": 10.0}
+  },
+  "predeclared_checks": {
+    "report_routes": ["DEFENSE", "IFVG"],
+    "report_directions": ["LONG", "SHORT"],
+    "leave_one_symbol_out": true,
+    "micro_score_neighbors": [1, 3],
+    "target_r_neighbors": [2.0, 3.0],
+    "bootstrap": "5000 deterministic circular 28-day blocks"
+  },
+  "historical_gate": {
+    "full_stress": "At least 30 trades, positive PnL, profit factor above 1.05, max drawdown at most 10%.",
+    "validation": "Stress PnL positive with at least 8 trades.",
+    "breadth": "Both routes and both directions must trade; neither direction may have negative stress PnL; at least two symbols must trade.",
+    "robustness": "Severe PnL positive, at least two of three leave-one-out replays positive, and bootstrap p10 terminal PnL positive."
+  },
+  "decision_policy": {
+    "historical": "All periods are research-contaminated. The replay may reject the strategy but cannot validate live profitability.",
+    "paper_forward": "Only a complete gate pass may start a new prospective paper-forward clock after the report is frozen.",
+    "live": "Disabled."
+  },
+  "disclosures": [
+    "Parameters were fixed before downloading or inspecting S103 5m kline history.",
+    "The S101 global regime was selected using earlier research and is not independent.",
+    "No profit is guaranteed; all reported PnL is simulated after stated costs."
+  ]
+}

@@ -94,7 +94,13 @@ class Command(BaseCommand):
 
             # Bulk upsert
             to_create = []
+            now_ms = int(time.time() * 1000)
             for row in rows:
+                # row[6] is the bar close time.  The in-progress bar must never
+                # be stored as closed (it would leak a partial bar into trend
+                # state and historical replays); the WebSocket owns it.
+                if int(row[6]) >= now_ms:
+                    continue
                 ts = datetime.fromtimestamp(row[0] / 1000, tz=timezone.utc)
                 to_create.append(Candle(
                     symbol=symbol, interval=interval, timestamp=ts,
@@ -108,6 +114,8 @@ class Command(BaseCommand):
                     is_closed=True,
                 ))
 
+            if not to_create:
+                break
             Candle.objects.bulk_create(
                 to_create,
                 update_conflicts=True,

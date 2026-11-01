@@ -1,0 +1,1020 @@
+{
+  "CONTROL:BTCUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17218,
+      "reject_context_not_bearish": 13214,
+      "armed": 321,
+      "reject_zone_failed": 105,
+      "reject_no_active_zone": 3682,
+      "reject_mss_without_fvg": 27,
+      "reject_mss_timeout": 142,
+      "mss_confirmed": 47,
+      "reject_no_lh_above": 1,
+      "signals": 44,
+      "reject_no_bsl_in_net_r_range": 3
+    },
+    "SHORT": {
+      "ssl_sweeps": 17525,
+      "reject_context_not_bearish": 13349,
+      "reject_no_active_zone": 3843,
+      "armed": 330,
+      "reject_zone_failed": 105,
+      "reject_mss_timeout": 154,
+      "reject_mss_without_fvg": 29,
+      "mss_confirmed": 42,
+      "reject_no_lh_above": 3,
+      "signals": 42
+    }
+  },
+  "CONTROL:ETHUSDT": {
+    "LONG": {
+      "ssl_sweeps": 16109,
+      "reject_context_not_bearish": 12461,
+      "reject_no_active_zone": 3338,
+      "armed": 310,
+      "reject_mss_without_fvg": 29,
+      "mss_confirmed": 48,
+      "reject_zone_failed": 81,
+      "reject_mss_timeout": 152,
+      "signals": 46,
+      "reject_no_bsl_in_net_r_range": 2
+    },
+    "SHORT": {
+      "ssl_sweeps": 16716,
+      "reject_context_not_bearish": 12341,
+      "reject_no_active_zone": 4058,
+      "armed": 314,
+      "reject_zone_failed": 105,
+      "reject_mss_timeout": 139,
+      "mss_confirmed": 43,
+      "reject_mss_without_fvg": 27,
+      "reject_no_lh_above": 3,
+      "signals": 43
+    }
+  },
+  "CONTROL:BNBUSDT": {
+    "LONG": {
+      "ssl_sweeps": 16977,
+      "reject_context_not_bearish": 13165,
+      "reject_no_active_zone": 3484,
+      "armed": 328,
+      "reject_zone_failed": 96,
+      "reject_mss_timeout": 150,
+      "mss_confirmed": 61,
+      "reject_mss_without_fvg": 21,
+      "signals": 59,
+      "reject_no_bsl_in_net_r_range": 2
+    },
+    "SHORT": {
+      "ssl_sweeps": 18540,
+      "reject_context_not_bearish": 13808,
+      "armed": 358,
+      "reject_mss_timeout": 146,
+      "reject_no_active_zone": 4374,
+      "reject_zone_failed": 129,
+      "reject_mss_without_fvg": 24,
+      "mss_confirmed": 59,
+      "signals": 59
+    }
+  },
+  "CONTROL:SOLUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17351,
+      "reject_context_not_bearish": 13259,
+      "reject_no_active_zone": 3766,
+      "armed": 323,
+      "reject_zone_failed": 99,
+      "reject_mss_timeout": 137,
+      "mss_confirmed": 61,
+      "reject_mss_without_fvg": 26,
+      "reject_no_lh_above": 3,
+      "signals": 59,
+      "reject_no_bsl_in_net_r_range": 2
+    },
+    "SHORT": {
+      "ssl_sweeps": 17976,
+      "reject_context_not_bearish": 13558,
+      "reject_no_active_zone": 4119,
+      "armed": 296,
+      "reject_mss_timeout": 109,
+      "reject_zone_failed": 104,
+      "mss_confirmed": 59,
+      "reject_mss_without_fvg": 24,
+      "reject_no_lh_above": 3,
+      "signals": 59
+    }
+  },
+  "CONTROL:XRPUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17590,
+      "reject_context_not_bearish": 13440,
+      "reject_no_active_zone": 3842,
+      "armed": 307,
+      "reject_mss_timeout": 146,
+      "mss_confirmed": 46,
+      "reject_zone_failed": 92,
+      "reject_mss_without_fvg": 23,
+      "reject_no_lh_above": 1,
+      "signals": 46
+    },
+    "SHORT": {
+      "ssl_sweeps": 17200,
+      "reject_context_not_bearish": 13373,
+      "reject_no_active_zone": 3474,
+      "armed": 352,
+      "mss_confirmed": 44,
+      "reject_mss_timeout": 170,
+      "reject_mss_without_fvg": 31,
+      "reject_zone_failed": 107,
+      "reject_no_lh_above": 1,
+      "signals": 44
+    }
+  },
+  "CONTROL:ADAUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17750,
+      "reject_context_not_bearish": 13735,
+      "reject_no_active_zone": 3677,
+      "armed": 337,
+      "reject_zone_failed": 106,
+      "reject_mss_timeout": 133,
+      "reject_mss_without_fvg": 39,
+      "mss_confirmed": 59,
+      "reject_no_lh_above": 1,
+      "signals": 58,
+      "reject_no_bsl_in_net_r_range": 1
+    },
+    "SHORT": {
+      "ssl_sweeps": 17711,
+      "reject_context_not_bearish": 13672,
+      "reject_no_active_zone": 3747,
+      "armed": 290,
+      "reject_mss_timeout": 124,
+      "mss_confirmed": 52,
+      "reject_mss_without_fvg": 28,
+      "reject_zone_failed": 86,
+      "reject_no_lh_above": 2,
+      "signals": 52
+    }
+  },
+  "CONTROL:DOGEUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17189,
+      "reject_context_not_bearish": 13213,
+      "reject_no_active_zone": 3649,
+      "armed": 325,
+      "reject_zone_failed": 87,
+      "reject_mss_timeout": 153,
+      "reject_mss_without_fvg": 39,
+      "mss_confirmed": 46,
+      "reject_no_lh_above": 2,
+      "signals": 46
+    },
+    "SHORT": {
+      "ssl_sweeps": 16982,
+      "reject_context_not_bearish": 12975,
+      "reject_no_active_zone": 3601,
+      "armed": 405,
+      "reject_mss_timeout": 175,
+      "mss_confirmed": 57,
+      "reject_zone_failed": 134,
+      "reject_mss_without_fvg": 39,
+      "reject_no_lh_above": 1,
+      "signals": 54,
+      "reject_no_bsl_in_net_r_range": 3
+    }
+  },
+  "CONTROL:AVAXUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17506,
+      "reject_context_not_bearish": 13005,
+      "reject_no_active_zone": 4122,
+      "armed": 377,
+      "reject_zone_failed": 134,
+      "reject_mss_timeout": 169,
+      "reject_mss_without_fvg": 16,
+      "mss_confirmed": 58,
+      "reject_no_lh_above": 2,
+      "signals": 57,
+      "reject_no_bsl_in_net_r_range": 1
+    },
+    "SHORT": {
+      "ssl_sweeps": 17601,
+      "reject_context_not_bearish": 13269,
+      "reject_no_active_zone": 4013,
+      "armed": 318,
+      "reject_zone_failed": 122,
+      "reject_mss_timeout": 118,
+      "reject_no_lh_above": 1,
+      "mss_confirmed": 60,
+      "reject_mss_without_fvg": 18,
+      "signals": 60
+    }
+  },
+  "CONTROL:LINKUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17838,
+      "reject_context_not_bearish": 13821,
+      "reject_no_active_zone": 3706,
+      "armed": 310,
+      "reject_zone_failed": 90,
+      "reject_mss_timeout": 146,
+      "reject_mss_without_fvg": 26,
+      "mss_confirmed": 48,
+      "reject_no_lh_above": 1,
+      "signals": 48
+    },
+    "SHORT": {
+      "ssl_sweeps": 17924,
+      "reject_context_not_bearish": 13310,
+      "reject_no_active_zone": 4267,
+      "armed": 344,
+      "reject_zone_failed": 127,
+      "reject_mss_without_fvg": 25,
+      "reject_mss_timeout": 145,
+      "mss_confirmed": 47,
+      "reject_no_lh_above": 3,
+      "signals": 47
+    }
+  },
+  "CONTROL:LTCUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17341,
+      "reject_context_not_bearish": 13382,
+      "reject_no_active_zone": 3619,
+      "armed": 337,
+      "reject_zone_failed": 95,
+      "reject_mss_timeout": 154,
+      "reject_mss_without_fvg": 25,
+      "mss_confirmed": 63,
+      "reject_no_lh_above": 3,
+      "signals": 61,
+      "reject_no_bsl_in_net_r_range": 2
+    },
+    "SHORT": {
+      "ssl_sweeps": 18663,
+      "reject_context_not_bearish": 14141,
+      "reject_no_active_zone": 4198,
+      "armed": 323,
+      "reject_zone_failed": 104,
+      "reject_mss_timeout": 137,
+      "mss_confirmed": 57,
+      "reject_mss_without_fvg": 25,
+      "reject_no_lh_above": 1,
+      "signals": 57
+    }
+  },
+  "CONTROL:BCHUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17591,
+      "reject_context_not_bearish": 13194,
+      "reject_no_active_zone": 4102,
+      "armed": 293,
+      "reject_mss_timeout": 129,
+      "mss_confirmed": 49,
+      "reject_no_lh_above": 2,
+      "reject_zone_failed": 85,
+      "reject_mss_without_fvg": 30,
+      "signals": 48,
+      "reject_no_bsl_in_net_r_range": 1
+    },
+    "SHORT": {
+      "ssl_sweeps": 16749,
+      "reject_context_not_bearish": 12979,
+      "reject_no_active_zone": 3461,
+      "armed": 305,
+      "reject_mss_timeout": 135,
+      "reject_mss_without_fvg": 25,
+      "reject_zone_failed": 99,
+      "mss_confirmed": 46,
+      "reject_no_lh_above": 4,
+      "signals": 46
+    }
+  },
+  "CONTROL:DOTUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18192,
+      "reject_context_not_bearish": 14120,
+      "reject_no_active_zone": 3747,
+      "armed": 323,
+      "reject_zone_failed": 95,
+      "mss_confirmed": 57,
+      "reject_mss_without_fvg": 27,
+      "reject_mss_timeout": 144,
+      "reject_no_lh_above": 2,
+      "signals": 57
+    },
+    "SHORT": {
+      "ssl_sweeps": 18180,
+      "reject_context_not_bearish": 14316,
+      "reject_no_active_zone": 3570,
+      "armed": 294,
+      "reject_mss_timeout": 124,
+      "reject_zone_failed": 99,
+      "mss_confirmed": 42,
+      "reject_mss_without_fvg": 29,
+      "signals": 40,
+      "reject_no_bsl_in_net_r_range": 2
+    }
+  },
+  "ABSORB:BTCUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17726,
+      "reject_context_not_bearish": 13272,
+      "reject_not_in_4h_discount": 577,
+      "reject_no_active_zone": 3674,
+      "armed": 202,
+      "reject_mss_without_fvg": 22,
+      "reject_mss_timeout": 91,
+      "reject_no_lh_above": 1,
+      "reject_zone_failed": 62,
+      "reject_no_absorption": 16,
+      "mss_confirmed": 11,
+      "signals": 11
+    },
+    "SHORT": {
+      "ssl_sweeps": 18071,
+      "reject_context_not_bearish": 13443,
+      "reject_no_active_zone": 3837,
+      "reject_not_in_4h_discount": 583,
+      "armed": 206,
+      "reject_zone_failed": 68,
+      "reject_mss_timeout": 92,
+      "mss_confirmed": 11,
+      "reject_mss_without_fvg": 21,
+      "reject_no_absorption": 14,
+      "reject_no_lh_above": 2,
+      "signals": 11
+    }
+  },
+  "ABSORB:ETHUSDT": {
+    "LONG": {
+      "ssl_sweeps": 16480,
+      "reject_context_not_bearish": 12507,
+      "reject_no_active_zone": 3335,
+      "armed": 210,
+      "reject_mss_without_fvg": 20,
+      "reject_not_in_4h_discount": 428,
+      "mss_confirmed": 9,
+      "reject_mss_timeout": 109,
+      "reject_zone_failed": 54,
+      "reject_no_absorption": 18,
+      "signals": 9
+    },
+    "SHORT": {
+      "ssl_sweeps": 17152,
+      "reject_context_not_bearish": 12427,
+      "reject_no_active_zone": 4069,
+      "reject_not_in_4h_discount": 462,
+      "armed": 192,
+      "reject_mss_timeout": 85,
+      "reject_zone_failed": 61,
+      "mss_confirmed": 16,
+      "reject_mss_without_fvg": 16,
+      "reject_no_absorption": 14,
+      "reject_no_lh_above": 2,
+      "signals": 16
+    }
+  },
+  "ABSORB:BNBUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17473,
+      "reject_context_not_bearish": 13221,
+      "reject_no_active_zone": 3503,
+      "reject_not_in_4h_discount": 557,
+      "armed": 192,
+      "reject_mss_timeout": 92,
+      "reject_zone_failed": 55,
+      "mss_confirmed": 8,
+      "reject_mss_without_fvg": 14,
+      "reject_no_absorption": 23,
+      "signals": 8
+    },
+    "SHORT": {
+      "ssl_sweeps": 19104,
+      "reject_context_not_bearish": 13891,
+      "reject_not_in_4h_discount": 584,
+      "reject_no_active_zone": 4405,
+      "armed": 224,
+      "reject_mss_timeout": 90,
+      "reject_zone_failed": 85,
+      "reject_mss_without_fvg": 15,
+      "reject_no_absorption": 19,
+      "mss_confirmed": 15,
+      "signals": 15
+    }
+  },
+  "ABSORB:SOLUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17701,
+      "reject_context_not_bearish": 13261,
+      "reject_no_active_zone": 3691,
+      "reject_not_in_4h_discount": 529,
+      "armed": 217,
+      "reject_mss_timeout": 98,
+      "mss_confirmed": 11,
+      "reject_zone_failed": 71,
+      "reject_no_absorption": 25,
+      "reject_no_lh_above": 3,
+      "reject_mss_without_fvg": 12,
+      "signals": 11
+    },
+    "SHORT": {
+      "ssl_sweeps": 18454,
+      "reject_context_not_bearish": 13630,
+      "reject_no_active_zone": 4122,
+      "armed": 168,
+      "reject_mss_timeout": 74,
+      "reject_not_in_4h_discount": 533,
+      "reject_zone_failed": 54,
+      "reject_mss_without_fvg": 10,
+      "reject_no_absorption": 14,
+      "mss_confirmed": 16,
+      "reject_no_lh_above": 1,
+      "signals": 16
+    }
+  },
+  "ABSORB:XRPUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18071,
+      "reject_context_not_bearish": 13513,
+      "reject_no_active_zone": 3863,
+      "reject_not_in_4h_discount": 500,
+      "armed": 194,
+      "reject_mss_timeout": 85,
+      "reject_no_absorption": 18,
+      "mss_confirmed": 13,
+      "reject_zone_failed": 65,
+      "reject_mss_without_fvg": 13,
+      "reject_no_lh_above": 1,
+      "signals": 13
+    },
+    "SHORT": {
+      "ssl_sweeps": 17652,
+      "reject_context_not_bearish": 13405,
+      "reject_no_active_zone": 3520,
+      "reject_not_in_4h_discount": 495,
+      "armed": 232,
+      "reject_mss_timeout": 117,
+      "reject_zone_failed": 67,
+      "reject_mss_without_fvg": 21,
+      "mss_confirmed": 20,
+      "reject_no_absorption": 7,
+      "signals": 20
+    }
+  },
+  "ABSORB:ADAUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18208,
+      "reject_context_not_bearish": 13761,
+      "reject_no_active_zone": 3655,
+      "reject_not_in_4h_discount": 572,
+      "armed": 220,
+      "reject_mss_timeout": 101,
+      "reject_mss_without_fvg": 24,
+      "reject_zone_failed": 60,
+      "reject_no_absorption": 20,
+      "mss_confirmed": 15,
+      "signals": 15
+    },
+    "SHORT": {
+      "ssl_sweeps": 18143,
+      "reject_context_not_bearish": 13737,
+      "reject_no_active_zone": 3749,
+      "armed": 189,
+      "reject_mss_timeout": 82,
+      "reject_not_in_4h_discount": 466,
+      "mss_confirmed": 16,
+      "reject_mss_without_fvg": 20,
+      "reject_no_absorption": 18,
+      "reject_zone_failed": 53,
+      "reject_no_lh_above": 2,
+      "signals": 16
+    }
+  },
+  "ABSORB:DOGEUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17636,
+      "reject_context_not_bearish": 13268,
+      "reject_no_active_zone": 3607,
+      "reject_not_in_4h_discount": 551,
+      "armed": 208,
+      "reject_zone_failed": 56,
+      "reject_mss_timeout": 94,
+      "mss_confirmed": 4,
+      "reject_no_absorption": 26,
+      "reject_mss_without_fvg": 28,
+      "reject_no_lh_above": 2,
+      "signals": 4
+    },
+    "SHORT": {
+      "ssl_sweeps": 17595,
+      "reject_context_not_bearish": 13066,
+      "reject_no_active_zone": 3630,
+      "armed": 242,
+      "reject_mss_timeout": 104,
+      "mss_confirmed": 21,
+      "reject_zone_failed": 87,
+      "reject_not_in_4h_discount": 657,
+      "reject_mss_without_fvg": 18,
+      "reject_no_absorption": 12,
+      "signals": 21
+    }
+  },
+  "ABSORB:AVAXUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18090,
+      "reject_context_not_bearish": 13065,
+      "reject_no_active_zone": 4168,
+      "reject_not_in_4h_discount": 614,
+      "armed": 240,
+      "mss_confirmed": 12,
+      "reject_mss_without_fvg": 13,
+      "reject_mss_timeout": 107,
+      "reject_no_absorption": 24,
+      "reject_zone_failed": 84,
+      "reject_no_lh_above": 3,
+      "signals": 12
+    },
+    "SHORT": {
+      "ssl_sweeps": 18163,
+      "reject_context_not_bearish": 13345,
+      "reject_no_active_zone": 4065,
+      "armed": 190,
+      "reject_zone_failed": 79,
+      "reject_not_in_4h_discount": 562,
+      "reject_no_lh_above": 1,
+      "reject_mss_timeout": 69,
+      "mss_confirmed": 15,
+      "reject_no_absorption": 18,
+      "reject_mss_without_fvg": 9,
+      "signals": 15
+    }
+  },
+  "ABSORB:LINKUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18358,
+      "reject_context_not_bearish": 13875,
+      "reject_no_active_zone": 3776,
+      "reject_not_in_4h_discount": 514,
+      "armed": 192,
+      "reject_mss_timeout": 99,
+      "reject_no_absorption": 20,
+      "reject_zone_failed": 49,
+      "mss_confirmed": 10,
+      "reject_no_lh_above": 1,
+      "reject_mss_without_fvg": 14,
+      "signals": 10
+    },
+    "SHORT": {
+      "ssl_sweeps": 18471,
+      "reject_context_not_bearish": 13388,
+      "reject_no_active_zone": 4303,
+      "reject_not_in_4h_discount": 560,
+      "armed": 219,
+      "reject_mss_without_fvg": 16,
+      "reject_mss_timeout": 89,
+      "mss_confirmed": 17,
+      "reject_zone_failed": 86,
+      "reject_no_absorption": 11,
+      "reject_no_lh_above": 1,
+      "signals": 17
+    }
+  },
+  "ABSORB:LTCUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17896,
+      "reject_context_not_bearish": 13434,
+      "reject_no_active_zone": 3652,
+      "reject_not_in_4h_discount": 613,
+      "armed": 196,
+      "reject_mss_without_fvg": 19,
+      "reject_zone_failed": 55,
+      "reject_mss_timeout": 90,
+      "reject_no_absorption": 20,
+      "mss_confirmed": 12,
+      "reject_no_lh_above": 1,
+      "signals": 12
+    },
+    "SHORT": {
+      "ssl_sweeps": 19198,
+      "reject_context_not_bearish": 14226,
+      "reject_no_active_zone": 4202,
+      "armed": 197,
+      "reject_zone_failed": 65,
+      "reject_mss_timeout": 81,
+      "reject_no_absorption": 17,
+      "reject_not_in_4h_discount": 573,
+      "reject_mss_without_fvg": 18,
+      "mss_confirmed": 16,
+      "signals": 16
+    }
+  },
+  "ABSORB:BCHUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17931,
+      "reject_context_not_bearish": 13221,
+      "reject_no_active_zone": 4042,
+      "reject_not_in_4h_discount": 466,
+      "armed": 202,
+      "reject_no_absorption": 25,
+      "reject_mss_timeout": 83,
+      "reject_zone_failed": 64,
+      "reject_mss_without_fvg": 21,
+      "mss_confirmed": 9,
+      "signals": 9
+    },
+    "SHORT": {
+      "ssl_sweeps": 17200,
+      "reject_context_not_bearish": 13043,
+      "reject_no_active_zone": 3472,
+      "reject_not_in_4h_discount": 484,
+      "armed": 199,
+      "reject_mss_timeout": 88,
+      "reject_mss_without_fvg": 16,
+      "reject_zone_failed": 67,
+      "reject_no_absorption": 14,
+      "mss_confirmed": 14,
+      "reject_no_lh_above": 2,
+      "signals": 14
+    }
+  },
+  "ABSORB:DOTUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18603,
+      "reject_context_not_bearish": 14189,
+      "reject_no_active_zone": 3713,
+      "reject_not_in_4h_discount": 478,
+      "armed": 223,
+      "reject_mss_timeout": 100,
+      "reject_mss_without_fvg": 19,
+      "reject_zone_failed": 60,
+      "reject_no_absorption": 25,
+      "mss_confirmed": 19,
+      "signals": 19
+    },
+    "SHORT": {
+      "ssl_sweeps": 18713,
+      "reject_context_not_bearish": 14376,
+      "reject_no_active_zone": 3617,
+      "armed": 160,
+      "reject_mss_timeout": 66,
+      "reject_zone_failed": 62,
+      "reject_not_in_4h_discount": 560,
+      "reject_no_absorption": 11,
+      "reject_mss_without_fvg": 9,
+      "mss_confirmed": 12,
+      "signals": 12
+    }
+  },
+  "ABSORB_PARTIAL:BTCUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17726,
+      "reject_context_not_bearish": 13272,
+      "reject_not_in_4h_discount": 577,
+      "reject_no_active_zone": 3674,
+      "armed": 202,
+      "reject_mss_without_fvg": 22,
+      "reject_mss_timeout": 91,
+      "reject_no_lh_above": 1,
+      "reject_zone_failed": 62,
+      "reject_no_absorption": 16,
+      "mss_confirmed": 11,
+      "signals": 11
+    },
+    "SHORT": {
+      "ssl_sweeps": 18071,
+      "reject_context_not_bearish": 13443,
+      "reject_no_active_zone": 3837,
+      "reject_not_in_4h_discount": 583,
+      "armed": 206,
+      "reject_zone_failed": 68,
+      "reject_mss_timeout": 92,
+      "mss_confirmed": 11,
+      "reject_mss_without_fvg": 21,
+      "reject_no_absorption": 14,
+      "reject_no_lh_above": 2,
+      "signals": 11
+    }
+  },
+  "ABSORB_PARTIAL:ETHUSDT": {
+    "LONG": {
+      "ssl_sweeps": 16480,
+      "reject_context_not_bearish": 12507,
+      "reject_no_active_zone": 3335,
+      "armed": 210,
+      "reject_mss_without_fvg": 20,
+      "reject_not_in_4h_discount": 428,
+      "mss_confirmed": 9,
+      "reject_mss_timeout": 109,
+      "reject_zone_failed": 54,
+      "reject_no_absorption": 18,
+      "signals": 9
+    },
+    "SHORT": {
+      "ssl_sweeps": 17152,
+      "reject_context_not_bearish": 12427,
+      "reject_no_active_zone": 4069,
+      "reject_not_in_4h_discount": 462,
+      "armed": 192,
+      "reject_mss_timeout": 85,
+      "reject_zone_failed": 61,
+      "mss_confirmed": 16,
+      "reject_mss_without_fvg": 16,
+      "reject_no_absorption": 14,
+      "reject_no_lh_above": 2,
+      "signals": 16
+    }
+  },
+  "ABSORB_PARTIAL:BNBUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17473,
+      "reject_context_not_bearish": 13221,
+      "reject_no_active_zone": 3503,
+      "reject_not_in_4h_discount": 557,
+      "armed": 192,
+      "reject_mss_timeout": 92,
+      "reject_zone_failed": 55,
+      "mss_confirmed": 8,
+      "reject_mss_without_fvg": 14,
+      "reject_no_absorption": 23,
+      "signals": 8
+    },
+    "SHORT": {
+      "ssl_sweeps": 19104,
+      "reject_context_not_bearish": 13891,
+      "reject_not_in_4h_discount": 584,
+      "reject_no_active_zone": 4405,
+      "armed": 224,
+      "reject_mss_timeout": 90,
+      "reject_zone_failed": 85,
+      "reject_mss_without_fvg": 15,
+      "reject_no_absorption": 19,
+      "mss_confirmed": 15,
+      "signals": 15
+    }
+  },
+  "ABSORB_PARTIAL:SOLUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17701,
+      "reject_context_not_bearish": 13261,
+      "reject_no_active_zone": 3691,
+      "reject_not_in_4h_discount": 529,
+      "armed": 217,
+      "reject_mss_timeout": 98,
+      "mss_confirmed": 11,
+      "reject_zone_failed": 71,
+      "reject_no_absorption": 25,
+      "reject_no_lh_above": 3,
+      "reject_mss_without_fvg": 12,
+      "signals": 11
+    },
+    "SHORT": {
+      "ssl_sweeps": 18454,
+      "reject_context_not_bearish": 13630,
+      "reject_no_active_zone": 4122,
+      "armed": 168,
+      "reject_mss_timeout": 74,
+      "reject_not_in_4h_discount": 533,
+      "reject_zone_failed": 54,
+      "reject_mss_without_fvg": 10,
+      "reject_no_absorption": 14,
+      "mss_confirmed": 16,
+      "reject_no_lh_above": 1,
+      "signals": 16
+    }
+  },
+  "ABSORB_PARTIAL:XRPUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18071,
+      "reject_context_not_bearish": 13513,
+      "reject_no_active_zone": 3863,
+      "reject_not_in_4h_discount": 500,
+      "armed": 194,
+      "reject_mss_timeout": 85,
+      "reject_no_absorption": 18,
+      "mss_confirmed": 13,
+      "reject_zone_failed": 65,
+      "reject_mss_without_fvg": 13,
+      "reject_no_lh_above": 1,
+      "signals": 13
+    },
+    "SHORT": {
+      "ssl_sweeps": 17652,
+      "reject_context_not_bearish": 13405,
+      "reject_no_active_zone": 3520,
+      "reject_not_in_4h_discount": 495,
+      "armed": 232,
+      "reject_mss_timeout": 117,
+      "reject_zone_failed": 67,
+      "reject_mss_without_fvg": 21,
+      "mss_confirmed": 20,
+      "reject_no_absorption": 7,
+      "signals": 20
+    }
+  },
+  "ABSORB_PARTIAL:ADAUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18208,
+      "reject_context_not_bearish": 13761,
+      "reject_no_active_zone": 3655,
+      "reject_not_in_4h_discount": 572,
+      "armed": 220,
+      "reject_mss_timeout": 101,
+      "reject_mss_without_fvg": 24,
+      "reject_zone_failed": 60,
+      "reject_no_absorption": 20,
+      "mss_confirmed": 15,
+      "signals": 15
+    },
+    "SHORT": {
+      "ssl_sweeps": 18143,
+      "reject_context_not_bearish": 13737,
+      "reject_no_active_zone": 3749,
+      "armed": 189,
+      "reject_mss_timeout": 82,
+      "reject_not_in_4h_discount": 466,
+      "mss_confirmed": 16,
+      "reject_mss_without_fvg": 20,
+      "reject_no_absorption": 18,
+      "reject_zone_failed": 53,
+      "reject_no_lh_above": 2,
+      "signals": 16
+    }
+  },
+  "ABSORB_PARTIAL:DOGEUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17636,
+      "reject_context_not_bearish": 13268,
+      "reject_no_active_zone": 3607,
+      "reject_not_in_4h_discount": 551,
+      "armed": 208,
+      "reject_zone_failed": 56,
+      "reject_mss_timeout": 94,
+      "mss_confirmed": 4,
+      "reject_no_absorption": 26,
+      "reject_mss_without_fvg": 28,
+      "reject_no_lh_above": 2,
+      "signals": 4
+    },
+    "SHORT": {
+      "ssl_sweeps": 17595,
+      "reject_context_not_bearish": 13066,
+      "reject_no_active_zone": 3630,
+      "armed": 242,
+      "reject_mss_timeout": 104,
+      "mss_confirmed": 21,
+      "reject_zone_failed": 87,
+      "reject_not_in_4h_discount": 657,
+      "reject_mss_without_fvg": 18,
+      "reject_no_absorption": 12,
+      "signals": 21
+    }
+  },
+  "ABSORB_PARTIAL:AVAXUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18090,
+      "reject_context_not_bearish": 13065,
+      "reject_no_active_zone": 4168,
+      "reject_not_in_4h_discount": 614,
+      "armed": 240,
+      "mss_confirmed": 12,
+      "reject_mss_without_fvg": 13,
+      "reject_mss_timeout": 107,
+      "reject_no_absorption": 24,
+      "reject_zone_failed": 84,
+      "reject_no_lh_above": 3,
+      "signals": 12
+    },
+    "SHORT": {
+      "ssl_sweeps": 18163,
+      "reject_context_not_bearish": 13345,
+      "reject_no_active_zone": 4065,
+      "armed": 190,
+      "reject_zone_failed": 79,
+      "reject_not_in_4h_discount": 562,
+      "reject_no_lh_above": 1,
+      "reject_mss_timeout": 69,
+      "mss_confirmed": 15,
+      "reject_no_absorption": 18,
+      "reject_mss_without_fvg": 9,
+      "signals": 15
+    }
+  },
+  "ABSORB_PARTIAL:LINKUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18358,
+      "reject_context_not_bearish": 13875,
+      "reject_no_active_zone": 3776,
+      "reject_not_in_4h_discount": 514,
+      "armed": 192,
+      "reject_mss_timeout": 99,
+      "reject_no_absorption": 20,
+      "reject_zone_failed": 49,
+      "mss_confirmed": 10,
+      "reject_no_lh_above": 1,
+      "reject_mss_without_fvg": 14,
+      "signals": 10
+    },
+    "SHORT": {
+      "ssl_sweeps": 18471,
+      "reject_context_not_bearish": 13388,
+      "reject_no_active_zone": 4303,
+      "reject_not_in_4h_discount": 560,
+      "armed": 219,
+      "reject_mss_without_fvg": 16,
+      "reject_mss_timeout": 89,
+      "mss_confirmed": 17,
+      "reject_zone_failed": 86,
+      "reject_no_absorption": 11,
+      "reject_no_lh_above": 1,
+      "signals": 17
+    }
+  },
+  "ABSORB_PARTIAL:LTCUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17896,
+      "reject_context_not_bearish": 13434,
+      "reject_no_active_zone": 3652,
+      "reject_not_in_4h_discount": 613,
+      "armed": 196,
+      "reject_mss_without_fvg": 19,
+      "reject_zone_failed": 55,
+      "reject_mss_timeout": 90,
+      "reject_no_absorption": 20,
+      "mss_confirmed": 12,
+      "reject_no_lh_above": 1,
+      "signals": 12
+    },
+    "SHORT": {
+      "ssl_sweeps": 19198,
+      "reject_context_not_bearish": 14226,
+      "reject_no_active_zone": 4202,
+      "armed": 197,
+      "reject_zone_failed": 65,
+      "reject_mss_timeout": 81,
+      "reject_no_absorption": 17,
+      "reject_not_in_4h_discount": 573,
+      "reject_mss_without_fvg": 18,
+      "mss_confirmed": 16,
+      "signals": 16
+    }
+  },
+  "ABSORB_PARTIAL:BCHUSDT": {
+    "LONG": {
+      "ssl_sweeps": 17931,
+      "reject_context_not_bearish": 13221,
+      "reject_no_active_zone": 4042,
+      "reject_not_in_4h_discount": 466,
+      "armed": 202,
+      "reject_no_absorption": 25,
+      "reject_mss_timeout": 83,
+      "reject_zone_failed": 64,
+      "reject_mss_without_fvg": 21,
+      "mss_confirmed": 9,
+      "signals": 9
+    },
+    "SHORT": {
+      "ssl_sweeps": 17200,
+      "reject_context_not_bearish": 13043,
+      "reject_no_active_zone": 3472,
+      "reject_not_in_4h_discount": 484,
+      "armed": 199,
+      "reject_mss_timeout": 88,
+      "reject_mss_without_fvg": 16,
+      "reject_zone_failed": 67,
+      "reject_no_absorption": 14,
+      "mss_confirmed": 14,
+      "reject_no_lh_above": 2,
+      "signals": 14
+    }
+  },
+  "ABSORB_PARTIAL:DOTUSDT": {
+    "LONG": {
+      "ssl_sweeps": 18603,
+      "reject_context_not_bearish": 14189,
+      "reject_no_active_zone": 3713,
+      "reject_not_in_4h_discount": 478,
+      "armed": 223,
+      "reject_mss_timeout": 100,
+      "reject_mss_without_fvg": 19,
+      "reject_zone_failed": 60,
+      "reject_no_absorption": 25,
+      "mss_confirmed": 19,
+      "signals": 19
+    },
+    "SHORT": {
+      "ssl_sweeps": 18713,
+      "reject_context_not_bearish": 14376,
+      "reject_no_active_zone": 3617,
+      "armed": 160,
+      "reject_mss_timeout": 66,
+      "reject_zone_failed": 62,
+      "reject_not_in_4h_discount": 560,
+      "reject_no_absorption": 11,
+      "reject_mss_without_fvg": 9,
+      "mss_confirmed": 12,
+      "signals": 12
+    }
+  }
+}

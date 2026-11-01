@@ -22,6 +22,9 @@ FORWARD_START = pd.Timestamp('2026-10-27', tz='UTC')
 CAPITAL = 500.0
 TARGET_USD_PER_DAY = 5.0
 REFERENCE_USD_PER_DAY = 0.14
+MIN_EXPECTATION_RATIO = 0.50
+MIN_STATUS_DAYS = 30
+MIN_PROMOTION_DAYS = 90
 PRIOR_STUDIES = 133
 PROTOCOL = Path(settings.BASE_DIR).parent / 'docs/research/paper_forward_bench_ab_r2/protocol.json'
 
@@ -35,20 +38,39 @@ def _as_dict(series: pd.Series) -> dict:
     return {pd.Timestamp(k).strftime('%Y-%m-%d'): round(float(v), 6) for k, v in series.sort_index().items()}
 
 
-def status_for(stress: dict, days: int) -> str:
+def status_for(stress: dict, days: int, revisions: dict | None = None) -> str:
     if stress['max_drawdown_pct'] > 10.0:
         return 'BREACH_STOP'
-    if days < 30:
+    if revisions:
+        return 'DATA_REVISED'
+    if days < MIN_STATUS_DAYS:
         return 'INSUFFICIENT'
-    return 'BELOW_EXPECTATION' if stress['net_pnl'] < 0 else 'ON_TRACK'
+    rate = float(stress.get(
+        'usd_per_calendar_day', stress['net_pnl'] / max(days, 1),
+    ))
+    if stress['net_pnl'] <= 0 or rate < REFERENCE_USD_PER_DAY * MIN_EXPECTATION_RATIO:
+        return 'BELOW_EXPECTATION'
+    if days < MIN_PROMOTION_DAYS:
+        return 'OBSERVE'
+    if float(stress.get('positive_month_share', 0.0)) < 0.5:
+        return 'BELOW_EXPECTATION'
+    return 'ON_TRACK'
 
 
 def run_paper_forward(cache: str, now: pd.Timestamp | None = None) -> dict:
     now = now or pd.Timestamp.now(tz='UTC')
-    monthly_end, end = available_bounds(now)
+    monthly_end, end = available_bounds(now, cache)
     if end <= FORWARD_START:
         return {'status': 'NOT_STARTED', 'forward_start': str(FORWARD_START.date()),
                 'data_through': str((end - pd.Timedelta(days=1)).date())}
+    path = ledger_path()
+    previous = json.loads(path.read_text()) if path.exists() else {}
+    data_through = str((end - pd.Timedelta(days=1)).date())
+    if (previous.get('forward_start') == str(FORWARD_START.date())
+            and previous.get('data_through') == data_through):
+        # Publication probes are cheap; a two-year replay is not. Returning the
+        # immutable ledger also makes hourly publication retries inexpensive.
+        return {**previous, 'unchanged': True}
     minutes, funding, _ = load_market(cache, monthly_end, end)
     signals_b = book_b_signals(minutes)
 
@@ -72,23 +94,32 @@ def run_paper_forward(cache: str, now: pd.Timestamp | None = None) -> dict:
 
     stress = scenarios['stress']
     days = len(stress['days']['total'])
-    path = ledger_path()
-    previous = json.loads(path.read_text()) if path.exists() else {}
     old_days = (previous.get('scenarios', {}).get('stress', {}).get('days', {}).get('total', {}))
     revisions = {
         day: {'before': value, 'after': stress['days']['total'][day]}
         for day, value in old_days.items()
         if day in stress['days']['total'] and abs(stress['days']['total'][day] - value) > 1e-6
     }
+    monitoring_status = status_for(stress, days, revisions)
+    dsr = stress.get('sharpe', {}).get('dsr')
     report = {
         'protocol_sha256': sha256(PROTOCOL.read_bytes()).hexdigest() if PROTOCOL.exists() else None,
         'computed_at': str(now),
         'forward_start': str(FORWARD_START.date()),
-        'data_through': str((end - pd.Timedelta(days=1)).date()),
+        'data_through': data_through,
         'forward_days': days,
-        'status': status_for(stress, days),
+        'status': monitoring_status,
         'expected_stress_usd_per_day': REFERENCE_USD_PER_DAY,
         'revisions': revisions,
+        'promotion_gate': {
+            'allowed': False,
+            'minimum_days': MIN_PROMOTION_DAYS,
+            'statistical_support': dsr is not None and dsr >= 0.5,
+            'book_b_risk_compliant': False,
+            'reason': (
+                'Book B exceeds the frozen portfolio risk limit; composite promotion is blocked.'
+            ),
+        },
         'scenarios': scenarios,
     }
     path.parent.mkdir(parents=True, exist_ok=True)

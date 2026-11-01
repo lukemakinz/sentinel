@@ -1,0 +1,41 @@
+{
+  "status": "retrospective_candidate-queue_research_then_prospective_ai_shadow",
+  "purpose": "Measure whether an X-of-Y queue plus AI adjudication can outperform both strict gates and approve-all quorum candidates.",
+  "assets": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+  "btc_traded": false,
+  "capital_for_comparison": "3 independent $1000 symbol sleeves; compare percentages, not nominal PnL",
+  "development": ["2026-05-01", "2026-07-01"],
+  "locked_evaluation": ["2026-07-01", "2026-09-01"],
+  "candidate_variants": [
+    {"id": "Q7-S2", "minimum": "7/9", "minimum_structural": "2/3"},
+    {"id": "Q7-S3", "minimum": "7/9", "minimum_structural": "3/3"},
+    {"id": "Q8-S3", "minimum": "8/9", "minimum_structural": "3/3"}
+  ],
+  "selection_rule": "Choose the highest development PF only if PF > 1.0, net PnL > 0 and at least 30 filled trades. Otherwise no approve-all quorum qualifies and locked evaluation remains unused for threshold selection.",
+  "development_results_before_final_execution_geometry": {
+    "note": "Diagnostic only: these runs exposed that S12AI fell through to legacy S3 entry geometry. They are invalidated and must be rerun after the dedicated mid-FVG execution fix.",
+    "Q7-S2": {"trades": 212, "profit_factor": 0.604, "net_pnl_usd": -182.72},
+    "Q7-S3": {"trades": 185, "profit_factor": 0.623, "net_pnl_usd": -153.05},
+    "Q8-S3": {"trades": 151, "profit_factor": 0.673, "net_pnl_usd": -108.15}
+  },
+  "valid_development_results": {
+    "execution": "dedicated S12AI 50% FVG resting limit, structural stop, <=5x leverage, causal bars and full costs",
+    "Q7-S2": {"trades": 125, "wins": 26, "win_rate_pct": 20.8, "profit_factor": 0.166, "net_pnl_usd": -188.19, "return_pct": -6.273},
+    "Q7-S3": {"trades": 91, "wins": 17, "win_rate_pct": 18.68, "profit_factor": 0.104, "net_pnl_usd": -147.91, "return_pct": -4.930},
+    "Q8-S3": {"trades": 66, "wins": 9, "win_rate_pct": 13.64, "profit_factor": 0.068, "net_pnl_usd": -118.30, "return_pct": -3.943}
+  },
+  "development_decision": {
+    "approve_all_variant_selected_for_trading": null,
+    "locked_evaluation_opened": false,
+    "reason": "No candidate met PF > 1 and positive-PnL requirements.",
+    "prospective_shadow_collection_policy": "Q7-S2 (7/9, minimum 2/3 structural) solely because it offers the least-bad base PF and enough observations to test incremental AI selection.",
+    "minimum_loss_value_rejection_needed_if_all_wins_are_retained": "more than 83.4% before claiming PF > 1"
+  },
+  "ai_claim_rule": "AI adds value only if prospective APPROVE trades beat the counterfactual REJECT cohort after identical costs, with at least 100 resolved candidates and lower drawdown.",
+  "safety": "S12AI is shadow_only, saved L2 decisions are dismissed, and execution is hard-disabled in settings.",
+  "disclosures": [
+    "All historical price months were seen by earlier strategy work; this is not a pristine market holdout.",
+    "The actual language-model selector cannot be backtested without timestamped historical model outputs.",
+    "Approve-all results measure queue quality, not AI performance."
+  ]
+}

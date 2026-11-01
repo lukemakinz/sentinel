@@ -1,0 +1,26 @@
+{
+  "strategy_id": "S61_DOLLAR_RATCHET_DAY_HALT",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "signal": "S60 flow_reset_15m frozen",
+  "routes": [
+    "ratchet_all",
+    "ratchet_short"
+  ],
+  "dollar_ratchet_lock_fraction": 0.5,
+  "consecutive_loss_halt": 2,
+  "target_cap_r": 8.0,
+  "disclosure": "S60-informed risk-overlay characterization; not independent discovery; not live approval"
+}

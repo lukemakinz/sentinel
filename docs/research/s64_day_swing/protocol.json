@@ -1,0 +1,26 @@
+{
+  "strategy_id": "S64_DAY_SWING",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "daily_turtle_20",
+    "prior_day_htc"
+  ],
+  "fixed_risk_usd": 10.0,
+  "daily_goal_usd": 10.0,
+  "drawdown_halt_fraction": 0.25,
+  "trailing": false,
+  "disclosure": "cached-window historical characterization; not live approval"
+}

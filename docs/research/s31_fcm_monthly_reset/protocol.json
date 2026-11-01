@@ -1,0 +1,46 @@
+{
+  "protocol_version": "S31-FCM-SAFE-MONTHLY-RESET-v1-frozen-2026-09-13",
+  "status": "single_risk_motivated_retrospective_mutation_all_periods_previously_seen",
+  "hypothesis": "The positive funding-carry mechanism observed in FCM-1M can survive costs without collateral exhaustion if exposure is smaller, the isolated futures collateral is much larger, and the short entry basis is reset every month.",
+  "supersedes_strategy": "FCM-1M cc7bf5a9e15c25c19bf819d9949152250e161334ab4e5139820146a952b34008",
+  "mutation_reason": "The predecessor had positive stress PnL in every historical window but two modelled futures-collateral exhaustions. This changes risk plumbing only; selection features and thresholds are unchanged. Exactly one allocation/reset variant is tested, with no grid search.",
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+  "capital_usd": 250,
+  "allocation": {
+    "spot_long_usd": 50,
+    "perpetual_short_quantity": "exactly equal base-asset quantity to the spot leg",
+    "isolated_futures_margin_usd": 190,
+    "cash_reserve_usd": 10,
+    "initial_futures_mark_leverage_cap": 0.30
+  },
+  "monthly_rule": {
+    "decision": "First UTC day 00:00 using completed prior-month funding and completed prior daily spot closes only",
+    "execution": "Planned at 01:00; both legs atomically use the first common real spot/perpetual hourly open within 168 hours",
+    "qualification": [
+      "prior calendar-month funding sum >= 50 bps",
+      "30-calendar-day spot return > 0",
+      "last completed spot daily close > EMA50"
+    ],
+    "selection": "highest prior-month funding among qualified assets, deterministic symbol tie-break",
+    "forced_reset": "At every monthly requalification close both legs and reopen both legs, even when the selected asset is unchanged; this realizes basis PnL and resets isolated short collateral. No synthetic price may fill an order."
+  },
+  "costs_bps_per_leg_per_side": {
+    "base": {"spot_fee": 10, "futures_fee": 2, "spot_slippage": 1, "futures_slippage": 1, "round_trip_total": 28},
+    "stress": {"spot_fee": 10, "futures_fee": 5, "spot_slippage": 5, "futures_slippage": 5, "round_trip_total": 50}
+  },
+  "data": "Same checksum-verified public anonymous Binance spot 1h, USD-M perpetual 1h, mark-price 1h and funding archives and the same disclosed causal gap hierarchy as FCM-1M; no account, API key or private app data.",
+  "windows": {
+    "development": ["2021-01-01", "2023-01-01"],
+    "validation": ["2023-01-01", "2024-07-01"],
+    "retrospective_evaluation": ["2024-07-01", "2026-09-01"],
+    "all_available": ["2021-01-01", "2026-09-01"]
+  },
+  "historical_gate": "Stress net PnL must be positive in every named window, all-available stress must have zero modelled collateral exhaustions, minimum futures equity must remain at least $95 (50% of initial isolated margin), and diagnostic mark leverage must never exceed 1.0x.",
+  "promotion_gate": "A historical pass authorizes only a frozen paper-forward observation. Live remains disabled until at least 12 prospective months and 12 independent closed monthly episodes are observed with positive stress-adjusted net PnL and measured live basis/costs within assumptions.",
+  "limitations": [
+    "All historical periods were already viewed in related research; none is a genuine untouched holdout.",
+    "Maintenance-margin tiers and liquidation-engine mechanics are not simulated; the collateral floor is deliberately stricter than merely remaining above zero.",
+    "Exchange default/outage, transfer constraints, taxes, order-book impact and scalable capacity are absent.",
+    "Any capital estimate for $25/day is a linear diagnostic extrapolation, not a forecast or promise."
+  ]
+}

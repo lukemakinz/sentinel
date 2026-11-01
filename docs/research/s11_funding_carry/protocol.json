@@ -1,0 +1,64 @@
+{
+  "status": "chronological_research_not_live_ready",
+  "strategy": {
+    "name": "S11_monthly_funding_carry",
+    "notional_usd": 100.0,
+    "futures_margin_usd": 100.0,
+    "entry_score_bps": 10.0,
+    "exit_score_bps": 0.0,
+    "switch_hurdle_bps": 28.0,
+    "decision_delay_minutes": 1,
+    "costs": {
+      "spot_fee_bps": 10.0,
+      "futures_fee_bps": 2.0,
+      "spot_slippage_bps": 1.0,
+      "futures_slippage_bps": 1.0
+    }
+  },
+  "capital_usd": 250,
+  "allocation": "$100 long spot + $100 isolated short-perpetual margin + $50 reserve",
+  "leverage": "1x futures notional/margin; BTC is never traded",
+  "decision_rule": "At 00:01 UTC on the first day of each month, rank the completed prior-month funding sum. Enter the leader at >=10 bps; exit the held asset at <=0 bps; switch only after a full round-trip cost hurdle.",
+  "causality": "Every decision uses funding observations strictly before that UTC month.",
+  "base_costs": {
+    "spot_fee_bps": 10.0,
+    "futures_fee_bps": 2.0,
+    "spot_slippage_bps": 1.0,
+    "futures_slippage_bps": 1.0
+  },
+  "stress_costs": {
+    "spot_fee_bps": 10.0,
+    "futures_fee_bps": 5.0,
+    "spot_slippage_bps": 5.0,
+    "futures_slippage_bps": 5.0
+  },
+  "limitations": [
+    "Perpetual minute price is a proxy for both spot and funding mark price.",
+    "Spot/perpetual basis, transfer delays, outages, taxes and liquidation-engine details are absent.",
+    "The hedge is exact by quantity, so directional price PnL cancels by construction.",
+    "There are too few independent carry episodes to call the edge proven."
+  ],
+  "promotion_rule": "Freeze parameters and paper-forward for >=12 months or >=12 independent episodes; require positive net result under stress, no liquidation breach, and realized basis/cost tracking within the stress allowance.",
+  "windows": {
+    "development": [
+      "2025-08-01",
+      "2026-01-01"
+    ],
+    "validation": [
+      "2026-01-01",
+      "2026-04-01"
+    ],
+    "evaluation": [
+      "2026-04-01",
+      "2026-09-01"
+    ],
+    "forward_combined": [
+      "2026-01-01",
+      "2026-09-01"
+    ],
+    "all_available": [
+      "2025-08-01",
+      "2026-09-01"
+    ]
+  }
+}

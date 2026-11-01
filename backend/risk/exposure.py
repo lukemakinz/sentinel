@@ -126,7 +126,15 @@ def check_new_trade(existing: list[dict], proposed: dict, equity: float,
 def legs_from_open_positions(betas: dict | None = None) -> list[dict]:
     from executor.models import Position
 
-    positions = list(Position.objects.filter(status='OPEN'))
+    all_positions = list(Position.objects.filter(status='OPEN'))
+    local = [p for p in all_positions if p.source != 'exchange']
+    locally_represented = {(p.symbol, p.side) for p in local}
+    # Exchange rows are mirrors.  Include them only when no local intended row
+    # represents the same leg, otherwise gross/open risk would be counted twice.
+    positions = local + [
+        p for p in all_positions
+        if p.source == 'exchange' and (p.symbol, p.side) not in locally_represented
+    ]
     betas = betas or estimate_betas([p.symbol for p in positions])
     return [
         _leg(p.symbol, p.side, p.remaining_quantity or p.quantity, p.entry_price,

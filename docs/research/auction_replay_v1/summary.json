@@ -1,0 +1,270 @@
+{
+  "candidates": 123562,
+  "days": 1004.0,
+  "usd_per_r": 1.25,
+  "policies": {
+    "m0": {
+      "candidates_kept": 123562,
+      "filled_trades": 36219,
+      "fill_rate": 0.2931,
+      "win_rate": 0.3012,
+      "expectancy_per_trade_r": -0.978,
+      "expectancy_per_candidate_r": -0.2867,
+      "total_r": -35420.96,
+      "profit_factor": 0.255,
+      "max_drawdown_r": -35423.06,
+      "trades_per_day": 36.075,
+      "usd_per_day": -44.1,
+      "avg_cost_r": 0.5264
+    },
+    "m1": {
+      "candidates_kept": 107674,
+      "filled_trades": 31556,
+      "fill_rate": 0.2931,
+      "win_rate": 0.3008,
+      "expectancy_per_trade_r": -0.9827,
+      "expectancy_per_candidate_r": -0.251,
+      "total_r": -31009.99,
+      "profit_factor": 0.254,
+      "max_drawdown_r": -31012.09,
+      "trades_per_day": 31.43,
+      "usd_per_day": -38.608,
+      "avg_cost_r": 0.529
+    },
+    "m3": {
+      "candidates_kept": 113147,
+      "filled_trades": 33007,
+      "fill_rate": 0.2917,
+      "win_rate": 0.3005,
+      "expectancy_per_trade_r": -0.9898,
+      "expectancy_per_candidate_r": -0.2644,
+      "total_r": -32668.99,
+      "profit_factor": 0.252,
+      "max_drawdown_r": -32671.1,
+      "trades_per_day": 32.875,
+      "usd_per_day": -40.674,
+      "avg_cost_r": 0.5336
+    }
+  },
+  "expectancy_per_candidate_ci": {
+    "m0": {
+      "mean": -0.2867,
+      "ci95": [
+        -0.2957,
+        -0.2773
+      ],
+      "p_le_0": 1.0
+    },
+    "m1": {
+      "mean": -0.251,
+      "ci95": [
+        -0.26,
+        -0.2419
+      ],
+      "p_le_0": 1.0
+    },
+    "m3": {
+      "mean": -0.2644,
+      "ci95": [
+        -0.274,
+        -0.2548
+      ],
+      "p_le_0": 1.0
+    }
+  },
+  "paired_uplift_vs_m0": {
+    "m1": {
+      "mean": 0.0357,
+      "ci95": [
+        0.0316,
+        0.0397
+      ],
+      "p_le_0": 0.0
+    },
+    "m3": {
+      "mean": 0.0223,
+      "ci95": [
+        0.0183,
+        0.0263
+      ],
+      "p_le_0": 0.0
+    }
+  },
+  "vetoed_candidate_mean_r": {
+    "m1": -0.2776,
+    "m3": -0.2642
+  },
+  "exit_reasons": {
+    "NO_TRIGGER": 59223,
+    "PRE_INVALIDATION": 28109,
+    "STOP": 25284,
+    "TARGET": 10897,
+    "TIME": 38,
+    "NONE": 11
+  },
+  "by_year": {
+    "2024": {
+      "m0": -11760.18,
+      "m1": -10438.29,
+      "m3": -10968.41,
+      "candidates": 43368
+    },
+    "2025": {
+      "m0": -13529.47,
+      "m1": -11787.24,
+      "m3": -12165.5,
+      "candidates": 45285
+    },
+    "2026": {
+      "m0": -10131.3,
+      "m1": -8784.46,
+      "m3": -9535.08,
+      "candidates": 34909
+    }
+  },
+  "by_symbol": {
+    "ADAUSDT": {
+      "m0": -2861.39,
+      "m1": -2441.21,
+      "m3": -2577.52,
+      "candidates": 13260,
+      "filled": 3434
+    },
+    "AVAXUSDT": {
+      "m0": -3541.41,
+      "m1": -2974.33,
+      "m3": -3128.33,
+      "candidates": 13761,
+      "filled": 4118
+    },
+    "BNBUSDT": {
+      "m0": -5256.83,
+      "m1": -4565.22,
+      "m3": -4750.33,
+      "candidates": 14045,
+      "filled": 4445
+    },
+    "BTCUSDT": {
+      "m0": -4884.9,
+      "m1": -4414.81,
+      "m3": -4884.9,
+      "candidates": 13009,
+      "filled": 4016
+    },
+    "DOGEUSDT": {
+      "m0": -3377.38,
+      "m1": -2994.28,
+      "m3": -3111.79,
+      "candidates": 13480,
+      "filled": 3799
+    },
+    "ETHUSDT": {
+      "m0": -3563.61,
+      "m1": -3206.16,
+      "m3": -3563.61,
+      "candidates": 12297,
+      "filled": 3437
+    },
+    "LINKUSDT": {
+      "m0": -3963.75,
+      "m1": -3448.72,
+      "m3": -3521.7,
+      "candidates": 14113,
+      "filled": 4404
+    },
+    "MATICUSDT": {
+      "m0": -825.65,
+      "m1": -714.91,
+      "m3": -769.96,
+      "candidates": 3110,
+      "filled": 915
+    },
+    "SOLUSDT": {
+      "m0": -3619.75,
+      "m1": -3118.27,
+      "m3": -3208.35,
+      "candidates": 13180,
+      "filled": 3988
+    },
+    "XRPUSDT": {
+      "m0": -3526.28,
+      "m1": -3132.08,
+      "m3": -3152.49,
+      "candidates": 13307,
+      "filled": 3663
+    }
+  },
+  "by_regime": {
+    "RANGE": {
+      "candidates": 83022,
+      "m0_total_r": -24740.23
+    },
+    "TREND_DOWN": {
+      "candidates": 25917,
+      "m0_total_r": -6818.46
+    },
+    "TREND_UP": {
+      "candidates": 14623,
+      "m0_total_r": -3862.28
+    }
+  },
+  "by_global_state_m0": {
+    "ALT_RISK_OFF": {
+      "candidates": 36006,
+      "filled": 10393,
+      "m0_mean_r_per_candidate": -0.2576
+    },
+    "ALT_RISK_ON": {
+      "candidates": 27452,
+      "filled": 7675,
+      "m0_mean_r_per_candidate": -0.2775
+    },
+    "BROAD_RISK_OFF": {
+      "candidates": 16568,
+      "filled": 5029,
+      "m0_mean_r_per_candidate": -0.2842
+    },
+    "BTC_LED_ALT_HEADWIND": {
+      "candidates": 12,
+      "filled": 4,
+      "m0_mean_r_per_candidate": 0.1562
+    },
+    "TRANSITION": {
+      "candidates": 43524,
+      "filled": 13118,
+      "m0_mean_r_per_candidate": -0.3175
+    }
+  },
+  "multiple_testing_note": "Three pre-registered policies, zero fitted parameters. Treat a CI that excludes 0 at 95% as suggestive only; Bonferroni for 2 uplift tests would require ~97.5%.",
+  "version": "auction-replay-v1",
+  "start": "2024-01-01",
+  "end": "2026-10-01",
+  "targets": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "AVAXUSDT",
+    "XRPUSDT",
+    "ADAUSDT",
+    "DOGEUSDT",
+    "MATICUSDT",
+    "LINKUSDT",
+    "BNBUSDT"
+  ],
+  "assumptions": {
+    "data_quality": "candles_only (no historical order book / OI / CVD)",
+    "arm_latency_minutes": 3.0,
+    "watched_pairs_in_m0_regime": [
+      "SOLUSDT"
+    ],
+    "fvg_zone": "absent (M0 does not use it)",
+    "breadth_universe": "point-in-time per quarter, top 20 by prior-month median daily quote volume, listed >= 730d, no Alpha-tag filter (no history)",
+    "costs": "live shadow cost model (plan_geometry)",
+    "overlap": "each candidate resolved independently; concurrent positions not netted"
+  },
+  "verdict": [
+    "M1 trend filter: improves M0 per candidate (CI +0.032..+0.040 R).",
+    "M3 global context: improves M0 per candidate (CI +0.018..+0.026 R).",
+    "M0 baseline edge is negative (CI -0.296..-0.277 R per candidate)."
+  ]
+}

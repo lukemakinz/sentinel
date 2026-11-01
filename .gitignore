@@ -87,3 +87,13 @@ coverage.xml
 # Long-term market data archive (Parquet); back up separately
 data/archive/
 data/paper_forward/
+
+# Research evidence kept in Git: protocols, hashes, manifests, summaries and
+# human reports.  Large replay payloads belong in external/local artifact storage.
+docs/research/**/*.json.gz
+docs/research/**/results.json
+docs/research/**/*.parquet
+
+# Local DB backups and regenerable research artifacts
+*.sqlite3.bak*
+docs/research/auction_replay_v1/records_*.json

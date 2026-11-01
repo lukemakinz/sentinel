@@ -1,0 +1,59 @@
+{
+  "protocol_version": "S19-OB-OI-EARLY-BREAKEVEN-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_diagnostic": "Across S16, S17, S17b and S18 — four different entry mechanisms tested with IDENTICAL execution — the average losing trade sits at approximately -0.95R regardless of entry quality, and 84% of S18's trades (118/140) closed via STOP. This means the vast majority of trades never reach the +1.0R activation threshold for breakeven+chandelier trailing at all: the risk-management mechanism almost never gets a chance to act. This protocol changes ONLY the activation threshold (and, in H2, the trail width), keeping S18's best entry (order block + open interest confirmation, route 'oi') completely unchanged, to isolate whether earlier activation converts some full losers into scratches/small winners without materially shrinking winners.",
+  "hypotheses": [
+    {
+      "id": "H1_EARLY_BREAKEVEN",
+      "entry": "identical to S18 H1 (order_block_oi_confirmation_scalp, route='oi'): regime (4h EMA200 trend+slope, 1h ADX>=20) + order-block structure (displacement>=1.5xATR, volume>=1.2x avg, first-touch trigger) + OBV flow confirmation + OI confirmation (non-negative/non-positive change over 8 bars in the trade direction)",
+      "exit": "breakeven+chandelier trailing activated at +0.5R (was +1.0R in S16-S18); trail at best-price minus 1.5x ATR (unchanged); 5.0R hard cap; 240 minute time stop",
+      "risk": "identical to S18",
+      "one_trade_per_zone": true
+    },
+    {
+      "id": "H2_EARLY_BREAKEVEN_TIGHT_TRAIL",
+      "entry": "identical to H1",
+      "exit": "breakeven+chandelier trailing activated at +0.5R, trail at best-price minus 1.0x ATR (tighter than H1's 1.5x — banks gains faster once activated, since activation now happens much earlier in a trade's life); 5.0R hard cap; 240 minute time stop",
+      "risk": "identical to H1",
+      "one_trade_per_zone": true
+    }
+  ],
+  "single_variable_isolated": "Only partial_r (breakeven/trailing activation threshold) and, in H2, trail_atr change versus S18 H1. Entry signal generation, regime, structure, flow, OI confirmation, stop placement and position sizing are byte-for-byte identical to S18.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Reuses the exact same cached klines/funding/metrics archives already downloaded for S18 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. No parameter grid over the activation threshold (only 0.5 tested, chosen as half of S18's 1.0 — a natural, pre-declared halving, not swept) or trail width beyond these two named points. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "risk_acknowledged_before_running": "Earlier breakeven activation could just as easily convert some CURRENT WINNERS into scratches (stopped at breakeven by ordinary noise before the move extends) as it could save losers — this is not assumed to help; it is measured.",
+  "known_limitations": [
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

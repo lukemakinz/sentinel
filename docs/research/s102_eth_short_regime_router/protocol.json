@@ -1,0 +1,48 @@
+{
+  "status": "post_selection_candidate_frozen_before_full_s102_replay",
+  "strategy_id": "S102_ETH_SHORT_REGIME_ROUTER",
+  "capital_usd": 500.0,
+  "lineage": "S101 was profitable overall but its three-asset short sleeve lost. A disclosed post-hoc instrument ablation found ETH-only short positive while BTC and SOL shorts were negative. S102 freezes that narrow selection without changing S101's global regime, long rules or risk parameters.",
+  "architecture": {
+    "global_regime": "Byte-identical to S101 asymmetric UP/DOWN/SIDEWAYS classifier.",
+    "up_execution": "Byte-identical to S101: six-asset S99-style long momentum book, with market OI attention only scaling exposure.",
+    "down_execution": "Byte-identical S101 short rules but ETHUSDT is the only permitted short instrument: below EMA50, negative 28d and 84d momentum, mean funding >= -0.0001, OI EMA7/EMA28 spread >= +0.05%.",
+    "sideways": "Cash.",
+    "decision_frequency": "Weekly at UTC open; strictly prior data only."
+  },
+  "data": {
+    "price_warmup_start": "2022-04-04T00:00:00Z",
+    "oi_warmup_start": "2024-01-01T00:00:00Z",
+    "execution_start": "2024-08-01T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z",
+    "source": "checksum-verified public Binance USD-M 1d, funding and 5m metrics archives"
+  },
+  "risk": {
+    "long_annual_volatility_target": 0.15,
+    "short_annual_volatility_target": 0.075,
+    "single_asset_cap": 0.45,
+    "max_long_positions": 3,
+    "max_short_positions": 1
+  },
+  "costs_bps_per_traded_notional": {
+    "base": {"fee": 5.0, "slippage": 2.0},
+    "stress": {"fee": 8.0, "slippage": 5.0},
+    "severe": {"fee": 10.0, "slippage": 10.0}
+  },
+  "predeclared_checks": {
+    "paired_volatility_targets": [[0.125, 0.0625], [0.175, 0.0875]],
+    "short_oi_threshold_neighbors_pct": [0.0, 0.10],
+    "weekly_phase_offsets_days": [2, 4],
+    "bootstrap": "5000 deterministic circular 28-day blocks"
+  },
+  "decision_policy": {
+    "historical": "Report profitability, costs, drawdown, time slices, short sleeve and all checks, but never label the selected history independent OOS.",
+    "paper_forward": "Eligible only if base, stress and severe full replay are positive, total ETH short-sleeve stress PnL is positive, and at least 15 weekly short decisions occurred. Then observe from 2026-10-19 for at least 180 days and 26 weekly decisions; no early live promotion.",
+    "live": "Disabled."
+  },
+  "disclosures": [
+    "ETH was selected after inspecting S101 short ablations, creating material selection bias.",
+    "The historical replay can reject S102 but cannot validate it for live capital.",
+    "No S102 parameter may change after this file is hashed."
+  ]
+}

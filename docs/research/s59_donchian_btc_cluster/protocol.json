@@ -1,0 +1,25 @@
+{
+  "strategy_id": "S59_DONCHIAN_BTC_CLUSTER",
+  "traded": [
+    "BTCUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "donchian_20",
+    "donchian_10"
+  ],
+  "target_r": 2.5,
+  "trailing": false,
+  "disclosure": "S55-informed breadth test; not independent discovery; not live approval"
+}

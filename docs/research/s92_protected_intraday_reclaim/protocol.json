@@ -1,0 +1,46 @@
+{
+  "strategy_id": "S92_protected_intraday_reclaim",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "predecessor_decision": "S91 rejected in development: 89 stress fills, PF 0.455, mean -0.464R. Development path audit found that 48 of 73 eventual stops first reached at least +0.25 raw R.",
+  "development_disclosure": "The protection mechanism was selected after inspecting S91 development paths. It is therefore a development change, not independent evidence; validation remains locked until the frozen development gate passes.",
+  "signal": "Exactly S91: causal fresh 15m OB, mandatory causal 1h swing confluence, first-contact full 5m reclaim, next 1m market entry, BTC completed-D1 SMA200 direction filter.",
+  "execution_change_only": {
+    "activation": "+0.25 raw price R reached on a completed 1m bar",
+    "activation_timing": "new stop becomes active only from the following minute; stop is evaluated first on the activation bar",
+    "minimum_protected_stop": "cost-aware break-even",
+    "ratchet": "lock 50% of the best gross price excursion seen after activation",
+    "target": "unchanged exact 2.0 net-R under stress costs",
+    "initial_stop": "unchanged contact extreme plus 0.10 ATR",
+    "partials": false,
+    "maximum_hold_hours": 24
+  },
+  "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "data": {
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "validation": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "cost_scenarios_bps": {
+    "base": {"taker": 5, "slippage_each_side": 2},
+    "stress": {"taker": 8, "slippage_each_side": 5},
+    "severe": {"taker": 10, "slippage_each_side": 10}
+  },
+  "capital_and_risk": {
+    "standalone_sleeve_usd": 100,
+    "risk_fraction": 0.002,
+    "maximum_notional_equity": 0.5,
+    "maximum_global_positions": 1
+  },
+  "development_gate": {
+    "minimum_fills": 80,
+    "minimum_independent_4h_clusters": 40,
+    "minimum_stress_profit_factor": 1.2,
+    "minimum_stress_mean_net_r": 0.1,
+    "stress_pnl_positive": true,
+    "maximum_drawdown_pct": 6
+  },
+  "heldout_and_portfolio_gates": "Unchanged from frozen S91/S90 protocols. If development passes, validation and evaluation each require >=50 fills, >=25 clusters, PF>=1.15, mean R>=0.08 and positive stress PnL. Only then may fixed A/B/C 40/40/20 be compared with BENCH_AB_R2 on $500.",
+  "terminal_rule": "If S92 misses its frozen development gate, the first-contact OB/SR family is rejected; no further threshold tuning on these historical windows.",
+  "disclosure": "Retrospective research only; no live approval or guarantee of profit."
+}

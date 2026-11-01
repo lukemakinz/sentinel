@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from pathlib import Path
 
 import pandas as pd
 import requests
@@ -20,6 +21,10 @@ from .scalp_data import BASE_URL, DAILY_BASE_URL
 BOOK_CAPITAL = 250.0
 
 
+class ArchiveAvailabilityError(RuntimeError):
+    """Archive publication could not be determined safely."""
+
+
 def _utc(value) -> pd.Timestamp:
     ts = pd.Timestamp(value)
     return ts.tz_localize('UTC') if ts.tzinfo is None else ts.tz_convert('UTC')
@@ -27,25 +32,67 @@ def _utc(value) -> pd.Timestamp:
 
 def _published(url: str) -> bool:
     try:
-        return requests.head(url, timeout=20, allow_redirects=True).status_code == 200
-    except requests.RequestException:
+        response = requests.head(url, timeout=20, allow_redirects=True)
+        if response.status_code == 200:
+            return True
+        if response.status_code == 404:
+            return False
+        response.raise_for_status()
         return False
+    except requests.RequestException as exc:
+        raise ArchiveAvailabilityError(f'cannot probe Binance archive: {url}') from exc
 
 
-def available_bounds(today: pd.Timestamp) -> tuple[pd.Timestamp, pd.Timestamp]:
+def _cached_archive(cache: str | None, period: str, symbol: str, stamp: str) -> bool:
+    if not cache:
+        return False
+    prefix = Path(cache)
+    if period == 'monthly':
+        archive = prefix / 'klines' / symbol / '1m' / f'{symbol}-1m-{stamp}.zip'
+    else:
+        archive = prefix / 'daily' / 'klines' / symbol / '1m' / f'{symbol}-1m-{stamp}.zip'
+    return archive.is_file() and archive.with_suffix(archive.suffix + '.CHECKSUM').is_file()
+
+
+def _all_cached(cache: str | None, period: str, stamp: str) -> bool:
+    return all(_cached_archive(cache, period, symbol, stamp) for symbol in SYMBOLS)
+
+
+def _all_published(period: str, stamp: str) -> bool:
+    base = BASE_URL if period == 'monthly' else DAILY_BASE_URL
+    return all(_published(f'{base}/klines/{symbol}/1m/{symbol}-1m-{stamp}.zip')
+               for symbol in SYMBOLS)
+
+
+def available_bounds(today: pd.Timestamp, cache: str | None = None) -> tuple[pd.Timestamp, pd.Timestamp]:
     """(monthly_end, end): first month without a monthly archive, last published day + 1."""
     today = today.tz_convert('UTC').normalize()
     month_start = today.replace(day=1)
     previous = (month_start - pd.Timedelta(days=1)).replace(day=1)
-    probe = f"{BASE_URL}/klines/BTCUSDT/1m/BTCUSDT-1m-{previous:%Y-%m}.zip"
-    monthly_end = month_start if _published(probe) else previous
+    month_stamp = previous.strftime('%Y-%m')
+    if _all_cached(cache, 'monthly', month_stamp):
+        monthly_end = month_start
+    else:
+        monthly_end = month_start if _all_published('monthly', month_stamp) else previous
+
+    probe_error = None
     end = today
     while end > monthly_end:
         day = end - pd.Timedelta(days=1)
-        if all(_published(f"{DAILY_BASE_URL}/klines/{s}/1m/{s}-1m-{day:%Y-%m-%d}.zip")
-               for s in SYMBOLS):
+        stamp = day.strftime('%Y-%m-%d')
+        if _all_cached(cache, 'daily', stamp):
             break
+        try:
+            if _all_published('daily', stamp):
+                break
+        except ArchiveAvailabilityError as exc:
+            # A transient network failure must not be mistaken for months of
+            # missing data. Continue backwards and use the newest complete,
+            # checksumed day already present in the local cache.
+            probe_error = exc
         end = day
+    if end == monthly_end and probe_error is not None:
+        raise probe_error
     return monthly_end, end
 
 

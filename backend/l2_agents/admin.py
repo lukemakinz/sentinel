@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import AuctionAnalysis, AuctionShadowPlan, L2Decision
+from .models import AuctionAnalysis, AuctionCandidate, AuctionShadowPlan, L2Decision
 
 
 @admin.register(L2Decision)
@@ -30,5 +30,22 @@ class AuctionShadowPlanAdmin(admin.ModelAdmin):
     ordering = ['-armed_at']
     readonly_fields = [
         'analysis', 'armed_at', 'triggered_at', 'closed_at',
-        'cost_assumptions', 'trigger_evidence',
+        'cost_assumptions', 'trigger_evidence', 'postmortem_version',
+        'postmortem', 'postmortem_at',
+    ]
+
+
+@admin.register(AuctionCandidate)
+class AuctionCandidateAdmin(admin.ModelAdmin):
+    list_display = [
+        'symbol', 'first_seen_at', 'strategy_id', 'direction',
+        'baseline_analysis', 'trend_filter_analysis',
+        'global_context_analysis', 'ai_analysis',
+    ]
+    list_filter = ['symbol', 'strategy_id', 'direction']
+    ordering = ['-first_seen_at']
+    readonly_fields = [
+        'fingerprint', 'active_fingerprint', 'first_seen_at',
+        'adjudication_expires_at', 'baseline_analysis',
+        'trend_filter_analysis', 'global_context_analysis', 'ai_analysis',
     ]

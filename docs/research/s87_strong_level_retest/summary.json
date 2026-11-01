@@ -1,0 +1,158 @@
+{
+  "protocol_sha256": "a9f405c584eee5687cf5a9c0c84d2c540adbd47fa4a31eb03472c501c34b518a",
+  "disclosure": "retrospective research; not paper-forward and not live-approved",
+  "config": {
+    "name": "S87_strong_level_retest",
+    "swing_width": 2,
+    "structure_lookback": 90,
+    "cluster_atr": 0.35,
+    "min_prior_touches": 2,
+    "displacement_atr": 1.2,
+    "volume_multiple": 1.2,
+    "min_score": 70.0,
+    "entry_fraction": 0.5,
+    "stop_buffer_atr": 0.2,
+    "validity_hours": 72,
+    "target_r": 3.0,
+    "min_target_r": 2.0
+  },
+  "raw_candidates_by_window": {
+    "development": 1,
+    "validation": 1,
+    "retrospective_evaluation": 2
+  },
+  "windows": {
+    "development": {
+      "base": {
+        "trades": 1,
+        "wins": 1,
+        "win_rate_pct": 100.0,
+        "profit_factor": "Infinity",
+        "net_pnl": 1.3292886748303374,
+        "return_pct": 0.5317154699321369,
+        "max_drawdown_pct": 0.22508936251264267,
+        "mean_net_r": 2.658577349660716,
+        "fees": 0.033651271209236264,
+        "funding_pnl": 0.00586160239601357,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 1,
+            "net_pnl": 1.329288674830358,
+            "gross_profit": 1.329288674830358
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-08": {
+            "trades": 1,
+            "pnl": 1.329288674830358
+          }
+        },
+        "diagnostics": {
+          "signals": 1,
+          "entries": 1,
+          "entries_ETHUSDT": 1
+        },
+        "drawdown_halted": false
+      },
+      "stress": {
+        "trades": 1,
+        "wins": 1,
+        "win_rate_pct": 100.0,
+        "profit_factor": "Infinity",
+        "net_pnl": 1.1810189374083109,
+        "return_pct": 0.4724075749633183,
+        "max_drawdown_pct": 0.20690847600226547,
+        "mean_net_r": 2.3620378748166146,
+        "fees": 0.05756621116017242,
+        "funding_pnl": 0.0053832816720047645,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 1,
+            "net_pnl": 1.1810189374083073,
+            "gross_profit": 1.1810189374083073
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-08": {
+            "trades": 1,
+            "pnl": 1.1810189374083073
+          }
+        },
+        "diagnostics": {
+          "signals": 1,
+          "entries": 1,
+          "entries_ETHUSDT": 1
+        },
+        "drawdown_halted": false
+      },
+      "severe": {
+        "trades": 1,
+        "wins": 1,
+        "win_rate_pct": 100.0,
+        "profit_factor": "Infinity",
+        "net_pnl": 1.0172131166081897,
+        "return_pct": 0.40688524664327375,
+        "max_drawdown_pct": 0.18680962286733438,
+        "mean_net_r": 2.034426233216408,
+        "fees": 0.08015410727173672,
+        "funding_pnl": 0.004855324870996229,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 1,
+            "net_pnl": 1.017213116608204,
+            "gross_profit": 1.017213116608204
+          },
+          "SOLUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-08": {
+            "trades": 1,
+            "pnl": 1.017213116608204
+          }
+        },
+        "diagnostics": {
+          "signals": 1,
+          "entries": 1,
+          "entries_ETHUSDT": 1
+        },
+        "drawdown_halted": false
+      }
+    }
+  },
+  "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+}

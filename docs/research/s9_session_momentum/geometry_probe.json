@@ -1,0 +1,12 @@
+{
+  "purpose": "Bounded follow-up requested by the small-frequent-profit hypothesis: 15m, 2-of-4, limit entry, one fixed target, no partial exit or trailing.",
+  "variants": [
+    {"target_r": 0.60, "max_hold_minutes": 45, "train_return_pct": -5.968, "train_pf": 0.453, "validation_return_pct": -0.761, "validation_pf": 0.676},
+    {"target_r": 0.60, "max_hold_minutes": 75, "train_return_pct": -5.353, "train_pf": 0.516, "validation_return_pct": -0.543, "validation_pf": 0.768},
+    {"target_r": 0.75, "max_hold_minutes": 45, "train_return_pct": -7.204, "train_pf": 0.458, "validation_return_pct": -1.064, "validation_pf": 0.631},
+    {"target_r": 0.75, "max_hold_minutes": 75, "train_return_pct": -6.467, "train_pf": 0.528, "validation_return_pct": -0.921, "validation_pf": 0.695},
+    {"target_r": 0.90, "max_hold_minutes": 45, "train_return_pct": -7.981, "train_pf": 0.464, "validation_return_pct": -0.733, "validation_pf": 0.744},
+    {"target_r": 0.90, "max_hold_minutes": 75, "train_return_pct": -7.223, "train_pf": 0.528, "validation_return_pct": -0.545, "validation_pf": 0.820}
+  ],
+  "decision": "All six variants were negative on train and validation. Do not consume the untouched August holdout."
+}

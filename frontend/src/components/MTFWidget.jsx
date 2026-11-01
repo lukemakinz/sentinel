@@ -52,6 +52,12 @@ export default function MTFWidget({ symbol }) {
 
     return (
         <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-2 text-[9px] font-mono uppercase tracking-wider text-gray-600">
+                <span>Regime <span className="text-white">{data.regime || 'INSUFFICIENT'}</span></span>
+                <span>Bias <span className="text-white">{data.directional_bias || 'NEUTRAL'}</span></span>
+                <span>Score <span className="text-white">{data.alignment_score ?? 0}</span></span>
+                <span className="ml-auto text-[#D4AF37]">learning only</span>
+            </div>
             {/* TF boxes */}
             <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[9px] uppercase tracking-widest text-gray-600 font-mono w-full">

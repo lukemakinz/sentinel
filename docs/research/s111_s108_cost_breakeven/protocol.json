@@ -1,0 +1,52 @@
+{
+  "strategy_id": "S111_S108_COST_BREAKEVEN",
+  "status": "FROZEN_BEFORE_FIRST_S111_REPLAY",
+  "capital_usd": 500.0,
+  "research_question": "Can a causal cost-covering breakeven stop improve S108 after a confirmed favorable move without changing its entries, initial liquidity-sweep stop or target?",
+  "selection_disclosure": "S111 was designed after S110 path diagnostics showed that some losing positions first exceeded +1R. The 1R threshold is a conventional predeclared risk rule, but every historical result is selection-contaminated and diagnostic.",
+  "data": {
+    "daily_regime_warmup_start": "2024-01-01T00:00:00Z",
+    "intraday_and_metrics_warmup_start": "2025-01-01T00:00:00Z",
+    "execution_start_inclusive": "2025-05-01T00:00:00Z",
+    "execution_end_exclusive": "2026-10-01T00:00:00Z",
+    "symbols": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+    "source": "the checksum-verified archives and global-regime construction used by S108"
+  },
+  "frozen_change": {
+    "entries": "FailedAuctionConfig() and all S108 entry, sizing, initial-stop, target, time-stop and cost rules are unchanged.",
+    "management_clock": "Only fully completed 15-minute candles are observed. A decision computed at the candle close is active from the next 5-minute candle.",
+    "trigger": "When a completed 15-minute close is at least +1.00 initial price-R from the slipped entry, move the stop once to the exact cost-covering breakeven price.",
+    "cost_breakeven": "The stop price covers entry fee and slippage plus exit fee and slippage under the active cost scenario.",
+    "no_extra_profit_management": "No partial exit and no chandelier/trailing stop. The original target remains unchanged. The stop is never widened."
+  },
+  "s108_reference": {
+    "stress_trades": 8,
+    "stress_net_pnl_usd": 1.5964011161114513,
+    "stress_profit_factor": 3.1331481102869208,
+    "stress_max_drawdown_pct": 0.18329711843448893,
+    "stress_bootstrap_p10_usd": 0.23052250500251165,
+    "severe_net_pnl_usd": 1.142401644881943
+  },
+  "predeclared_slices": {
+    "development": ["2025-05-01", "2025-10-01"],
+    "former_validation_now_diagnostic": ["2025-10-01", "2026-01-01"],
+    "retrospective": ["2026-01-01", "2026-09-01"],
+    "opened_design_month": ["2026-09-01", "2026-10-01"]
+  },
+  "predeclared_historical_gate": {
+    "signal_regression": "The nine raw S108 signals and their setup IDs must reproduce exactly.",
+    "sample": "At least 18 stress fills and at least five fills in each direction.",
+    "improvement": "Stress and severe PnL must each exceed S108 by at least $0.25; stress PF must exceed S108 and stress DD must not exceed S108.",
+    "direction": "Long and short stress PnL must each be non-negative.",
+    "time": "At least three of four stress slices positive and no stress slice below -$0.50.",
+    "uncertainty": "Deterministic circular 28-day bootstrap p10 terminal PnL must exceed the S108 reference p10.",
+    "promotion": "Passing every check can start paper-forward observation only. Live remains disabled."
+  },
+  "paper_forward": {
+    "minimum_calendar_days": 180,
+    "minimum_fills": 24,
+    "requires_both_directions": true,
+    "live_enabled": false
+  },
+  "claim_policy": "No historical result guarantees profit. No parameter may change after this protocol is hashed and before the frozen replay completes."
+}

@@ -1,0 +1,154 @@
+{
+  "strategy_id": "S47_OI_STATE_TRANSITION",
+  "frozen_at": "2026-09-25",
+  "status": "FROZEN_BEFORE_STUDY_DATA_LOAD",
+  "disclosure": "All data through 2026-08-31 are discovery-affected and cannot authorize live trading.",
+  "capital": {
+    "initial_usd": 250.0,
+    "single_shared_account": true,
+    "max_global_positions": 1
+  },
+  "universe": {
+    "traded": [
+      "SOLUSDT",
+      "XRPUSDT",
+      "DOGEUSDT",
+      "ETHUSDT",
+      "BNBUSDT"
+    ],
+    "benchmark_only": [
+      "BTCUSDT"
+    ],
+    "symbol_priority": [
+      "SOLUSDT",
+      "XRPUSDT",
+      "DOGEUSDT",
+      "ETHUSDT",
+      "BNBUSDT"
+    ]
+  },
+  "data": {
+    "warmup_start": "2020-10-01",
+    "evaluation_start": "2021-01-01",
+    "historical_end_exclusive": "2026-09-01",
+    "klines_interval": "1m",
+    "metrics_interval": "5m",
+    "metrics_max_age_minutes": 10,
+    "reject_missing_execution_minutes": true,
+    "record_url_sha256_rows": true
+  },
+  "folds": [
+    {
+      "name": "fold_2021",
+      "start": "2021-01-01",
+      "end": "2022-01-01"
+    },
+    {
+      "name": "fold_2022",
+      "start": "2022-01-01",
+      "end": "2023-01-01"
+    },
+    {
+      "name": "fold_2023",
+      "start": "2023-01-01",
+      "end": "2024-01-01"
+    },
+    {
+      "name": "fold_2024",
+      "start": "2024-01-01",
+      "end": "2025-01-01"
+    },
+    {
+      "name": "fold_2025",
+      "start": "2025-01-01",
+      "end": "2026-01-01"
+    },
+    {
+      "name": "fold_2026",
+      "start": "2026-01-01",
+      "end": "2026-09-01"
+    }
+  ],
+  "purge_embargo_hours": 24,
+  "signal": {
+    "four_hour_pivot_width": 2,
+    "one_hour_pivot_width": 2,
+    "fifteen_minute_pivot_width": 2,
+    "sweep_penetration_atr_1h": 0.1,
+    "stop_buffer_atr_1h": 0.15,
+    "oi_reset_floor_fraction": 0.002,
+    "oi_reset_quantile": 0.7,
+    "oi_reset_lookback_15m_bars": 2880,
+    "oi_rebuild_fraction": 0.5,
+    "confirmation_expiry_15m_bars": 4,
+    "displacement_body_atr_15m": 0.8,
+    "confirmation_close_location": 0.75,
+    "require_directional_taker_volume": true,
+    "entry": "NEXT_1M_OPEN_MARKET",
+    "target_r": 2.5,
+    "minimum_capped_target_r": 1.5,
+    "time_stop_minutes": 240,
+    "one_attempt_per_setup": true,
+    "partials": false,
+    "trailing": false,
+    "breakeven_move": false
+  },
+  "risk": {
+    "risk_fraction": 0.002,
+    "fixed_risk_usd": 0.5,
+    "leverage": 5.0,
+    "max_notional_equity": 0.5,
+    "max_margin_fraction": 0.1,
+    "fixed_margin_usd": 25.0,
+    "daily_loss_fraction": 0.006,
+    "weekly_loss_fraction": 0.018,
+    "minimum_reward_cost_ratio": 3.0
+  },
+  "cost_scenarios_bps_per_side": {
+    "base": {
+      "taker_fee": 5.0,
+      "slippage": 2.0
+    },
+    "stress": {
+      "taker_fee": 8.0,
+      "slippage": 5.0
+    },
+    "severe": {
+      "taker_fee": 10.0,
+      "slippage": 10.0
+    }
+  },
+  "statistics": {
+    "bootstrap_unit": "ISO_WEEK",
+    "bootstrap_samples": 10000,
+    "bootstrap_seed": 47,
+    "confidence": 0.95,
+    "deflated_sharpe_prior_trials": 48,
+    "primary_metric": "STRESS_MEAN_NET_R"
+  },
+  "historical_gate": {
+    "minimum_fills": 100,
+    "minimum_stress_profit_factor_exclusive": 1.1,
+    "minimum_stress_mean_net_r_exclusive": 0.0,
+    "minimum_bootstrap_lower_bound_exclusive": 0.0,
+    "minimum_deflated_sharpe_probability": 0.95,
+    "minimum_positive_fold_fraction": 0.7,
+    "require_positive_leave_one_symbol_out": true,
+    "maximum_symbol_gross_profit_share": 0.4,
+    "maximum_month_gross_profit_share": 0.4,
+    "minimum_break_even_cost_multiple_of_stress": 1.5
+  },
+  "forward_gate": {
+    "minimum_calendar_days": 180,
+    "minimum_paper_fills": 100,
+    "same_gate_as_historical": true,
+    "early_go_allowed": false,
+    "futility_stop_only": true
+  },
+  "post_go_sizing_policy": {
+    "maximum_drawdown": 0.3,
+    "ruin_equity_fraction": 0.5,
+    "maximum_twelve_month_ruin_probability": 0.05,
+    "maximum_kelly_fraction": 0.25
+  }
+}

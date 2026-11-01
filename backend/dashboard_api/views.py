@@ -464,6 +464,14 @@ def mtf_analysis(request, symbol):
 
 
 @api_view(['GET'])
+def auction_research(request):
+    """Read-only M0/M1/M2/M3 and deterministic post-mortem evidence."""
+    from l2_agents.management.commands.auction_shadow_report import build_report
+
+    return Response(build_report(symbol=request.query_params.get('symbol')))
+
+
+@api_view(['GET'])
 def latest_scan(request, symbol):
     """Last L1 scan result for a symbol — gates status + trade context."""
     from l1_filter.models import L1Result

@@ -1,0 +1,63 @@
+{
+  "status": "frozen_before_s100_oi_data_load",
+  "strategy_id": "S100_GLOBAL_REGIME_OI_SWING",
+  "capital_usd": 500.0,
+  "hypothesis": "An independent global UP/DOWN/SIDEWAYS classifier can suppress counter-regime trades, while a rising fast-versus-slow open-interest oscillator after an EMA20 pullback can identify fresh participation for both trend-aligned longs and shorts.",
+  "architecture": {
+    "layer_1": "Direction-only model. Four votes: BTC relative to a rising/falling SMA200, BTC 84-day momentum, six-asset breadth versus SMA100, and median six-asset 28-day momentum. Score >=3 is UP, <=-3 is DOWN, otherwise SIDEWAYS; two consecutive daily labels are required.",
+    "layer_2": "Every three days, enter up to two BTC/ETH/SOL positions after a three-day pullback touches EMA20, price reclaims EMA20 in the global direction, the asset remains beyond EMA50 with aligned 28-day momentum, OI EMA7/EMA28 spread is at least +0.05% and rising over three days, and seven-day mean funding is not crowded.",
+    "direction": "UP permits longs only; DOWN permits shorts only; SIDEWAYS is mandatory cash.",
+    "oi_interpretation": "OI confirms expansion in participation only. It never determines long versus short direction because every open futures contract has both counterparties. Direction comes from price and breadth."
+  },
+  "universe": {
+    "regime": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+    "traded": ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+  },
+  "data": {
+    "source": "checksum-verified public Binance USD-M monthly 1d klines/funding and daily 5m metrics archives",
+    "price_warmup_start": "2022-04-04T00:00:00Z",
+    "oi_warmup_start": "2024-01-01T00:00:00Z",
+    "execution_start": "2024-08-01T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z",
+    "causality": "Only daily candles with close_time strictly earlier than a decision and OI/funding observations timestamped strictly earlier than the decision may be used. Orders rebalance at that decision day's open."
+  },
+  "diagnostic_slices": {
+    "development": ["2024-08-01T00:00:00Z", "2025-05-01T00:00:00Z"],
+    "validation": ["2025-05-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-01-01T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "risk": {
+    "annual_volatility_target": 0.12,
+    "gross_cap": 0.75,
+    "single_asset_cap": 0.40,
+    "max_positions": 2,
+    "max_long_hold_days": 21,
+    "max_short_hold_days": 12,
+    "short_risk_multiplier": 0.75,
+    "unused_weight": "cash"
+  },
+  "costs_bps_per_traded_notional": {
+    "base": {"fee": 5.0, "slippage": 2.0},
+    "stress": {"fee": 8.0, "slippage": 5.0},
+    "severe": {"fee": 10.0, "slippage": 10.0}
+  },
+  "predeclared_robustness": {
+    "oi_spread_threshold_neighbors_pct": [0.0, 0.10],
+    "decision_phase_offsets_days": [1, 2],
+    "trade_universe_leave_one_out": true,
+    "regime_diagnostic": "Sample every seven days and report subsequent 20-day BTC return by label.",
+    "bootstrap": "5000 deterministic circular 28-day blocks on stress daily returns."
+  },
+  "historical_gate": {
+    "full_stress": "Net PnL > 0, Sharpe >= 0.50, max drawdown <= 15%, profit factor proxy from positive/negative daily PnL > 1.05 and positive-month share >= 40%.",
+    "directions": "Long-regime and short-regime stress PnL must each be non-negative.",
+    "time_dispersion": "Development and validation stress PnL > 0; retrospective stress PnL >= 0; severe full PnL > 0.",
+    "robustness": "Both OI-threshold neighbors, both decision phases and at least two of three leave-one-traded-symbol-out replays must be profitable under stress; bootstrap p10 terminal PnL > 0.",
+    "promotion": "A pass authorizes paper-forward observation only for at least 180 calendar days and 60 decisions. Live trading remains disabled."
+  },
+  "disclosures": [
+    "All history is discovery-contaminated and cannot constitute true out-of-sample evidence.",
+    "No post-result parameter adjustment is allowed in S100.",
+    "Daily bars cannot represent intraday liquidation, latency, outages, spread spikes or taxes."
+  ]
+}

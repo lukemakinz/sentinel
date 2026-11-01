@@ -1,0 +1,54 @@
+{
+  "strategy_id": "S112_ob_liquidity_reversal",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "origin": "User-supplied ICT/SMC description: downtrend -> sweep of sell-side liquidity into a demand OB -> MSS with displacement/FVG -> retest entry -> target buy-side liquidity, minimum RR 1:3. Mirrored for shorts.",
+  "pre_result_feasibility_disclosure": "Before freezing, the detector was run on the warmup period only (2024-08-01..2025-05-01, outside every evaluation window), reading geometry counts and gross RR only, never PnL. 245 MSS-confirmed setups on 6 symbols; only 2 had the NEAREST 1h BSL at >= 3R, 190 had some 1h BSL at 3-10R. Therefore two routes are frozen.",
+  "routes": {
+    "STRICT": "target = nearest confirmed 1h swing high above the MSS close; trade only if its stress net R >= 3 (literal user rule; expected to be sparse)",
+    "EXTERNAL": "target = nearest confirmed 1h swing high above the MSS close whose stress net R is in [3, 10] (user's 'TP2 - next BSL' read as the first external liquidity worth 3R)"
+  },
+  "multiple_testing": "Two routes are tested; a route passing only by chance is plausible. Each route must pass every gate on its own.",
+  "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "data": {
+    "source": "Binance public USD-M checksumed 1m kline and funding archives",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "validation": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "setup_long": {
+    "context": "last two confirmed 1h swing highs descending AND last two confirmed 1h swing lows descending (swing width 2), known at the previous closed 15m bar",
+    "zone": "1h bullish OB = last bearish 1h candle among the 3 bars before a 1h candle with body >= 1.0 ATR14(1h) and close in top 30% of range; zone [OB low, OB open]; published at the displacement close; dead after a 1h close below the zone or after 240h; one setup per zone",
+    "sweep": "closed 15m low below the latest confirmed 15m swing low (pivot within the last 96 bars) by >= 0.05 ATR14(15m), with the low inside [zone bottom - 0.5 ATR, zone top]; a confirmed 15m swing high (LH) must exist above the sweep close",
+    "mss": "within 16 closed 15m bars a close >= LH + 0.05 ATR; abort if a close falls below zone bottom - 0.5 ATR",
+    "fvg": "latest bullish 3-bar FVG (low[i] - high[i-2] >= 0.10 ATR) inside the sweep..MSS leg; none -> no trade"
+  },
+  "execution": {
+    "entry": "maker limit at the FVG proximal edge, placed at the MSS bar close, valid 240 minutes; 1 open position and 1 pending order globally",
+    "stop": "sweep extreme (lowest low sweep..MSS) - 0.10 ATR; stop width must be 0.35-3.0 ATR(15m)",
+    "target": "single target per route; no partials, no breakeven, no trailing",
+    "max_hold_hours": 72,
+    "same_bar": "stop checked before target; no target on the limit fill bar"
+  },
+  "risk": {
+    "capital_usd": 250,
+    "risk_fraction": 0.002,
+    "maximum_notional_equity": 0.5,
+    "leverage": 5,
+    "daily_loss_fraction": 0.010,
+    "weekly_loss_fraction": 0.018,
+    "drawdown_halt_fraction": 0.060
+  },
+  "cost_scenarios_bps": {
+    "base": {"maker": 2, "taker": 5, "slippage_each_side": 2},
+    "stress": {"maker": 5, "taker": 8, "slippage_each_side": 5},
+    "severe": {"maker": 10, "taker": 10, "slippage_each_side": 10}
+  },
+  "gates_on_stress": {
+    "development": {"minimum_fills": 80, "minimum_independent_4h_clusters": 40, "minimum_profit_factor": 1.2, "minimum_mean_net_r": 0.1, "pnl_positive": true, "maximum_drawdown_pct": 6},
+    "validation_and_evaluation": {"minimum_fills": 50, "minimum_independent_4h_clusters": 25, "minimum_profit_factor": 1.15, "minimum_mean_net_r": 0.08, "pnl_positive": true, "maximum_drawdown_pct": 6},
+    "sequence": "a window is only replayed after the previous window's gate passed; a failed gate is terminal, no tuning"
+  },
+  "after_historical_pass": "Compare against corrected BENCH_AB_R2 on identical windows, then shadow paper-forward only. No live approval from this study.",
+  "disclosure": "Retrospective research only."
+}

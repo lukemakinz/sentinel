@@ -1,0 +1,52 @@
+{
+  "status": "frozen_before_s99_replay",
+  "strategy_id": "S99_INDEPENDENT_DUAL_MOMENTUM_SAFE15",
+  "capital_usd": 500.0,
+  "research_lineage": "Risk-only repair defined after S98 produced positive and broadly robust historical PnL but missed its frozen 15% drawdown ceiling by 0.25 percentage point. S99 does not claim new alpha and all history is contaminated development.",
+  "signal": "Exactly S98: own close above SMA200, positive 84-day return, top-three return/vol rank, 28-day mean-funding veto above +0.0001.",
+  "portfolio_change_from_s98": "Annual volatility target is reduced from 20% to 15%; every other signal, concentration, execution and cost rule is unchanged.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+  "data": {
+    "source": "checksum-verified public Binance USD-M monthly 1d and fundingRate archives",
+    "warmup_start": "2022-04-04T00:00:00Z",
+    "execution_start": "2023-01-02T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z"
+  },
+  "diagnostic_slices": {
+    "development": ["2023-01-02T00:00:00Z", "2024-01-01T00:00:00Z"],
+    "validation": ["2024-01-01T00:00:00Z", "2025-01-06T00:00:00Z"],
+    "retrospective_evaluation": ["2025-01-06T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "risk": {
+    "annual_volatility_target": 0.15,
+    "predeclared_neighbor_targets": [0.125, 0.175],
+    "single_asset_cap": 0.45,
+    "gross_cap": 1.0,
+    "unused_weight": "cash"
+  },
+  "costs_bps_per_traded_notional": {
+    "base": {"fee": 5.0, "slippage": 2.0},
+    "stress": {"fee": 8.0, "slippage": 5.0},
+    "severe": {"fee": 10.0, "slippage": 10.0}
+  },
+  "robustness": {
+    "risk_target_neighbors": "12.5% and 17.5% must each be profitable under stress and remain at or below 15% drawdown",
+    "momentum_neighbors_days": [63, 126],
+    "rebalance_phase_checks": ["Wednesday", "Friday"],
+    "leave_one_symbol_out": "at least five of six stress replays profitable",
+    "bootstrap": "5000 deterministic circular 28-day blocks; 10th percentile terminal PnL must be positive",
+    "continuous_ledger": "one replay without resets across report slices"
+  },
+  "historical_gate": {
+    "full_stress": "net PnL > 0, Sharpe >= 0.50, max drawdown <= 15%, positive-month share >= 45%",
+    "time_dispersion": "all three stress slices non-negative, at least two positive, largest positive month <= 60% of total positive monthly PnL",
+    "cost_survival": "full severe net PnL > 0",
+    "all_predeclared_robustness_checks": "pass",
+    "promotion": "historical pass means paper-forward challenger only for at least 26 decisions and 180 days; live remains disabled"
+  },
+  "disclosures": [
+    "S99 was selected after inspecting S98 and is therefore a candidate risk budget, not independent validation.",
+    "No post-result adjustment is permitted after this protocol is hashed.",
+    "Daily funding uses same-day close as mark proxy; intraday liquidation, outages, latency and taxes are not modelled."
+  ]
+}

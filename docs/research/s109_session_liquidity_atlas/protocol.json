@@ -1,0 +1,67 @@
+{
+  "strategy_id": "S109_SESSION_LIQUIDITY_ATLAS",
+  "status": "FROZEN_BEFORE_FIRST_S109_REPLAY",
+  "capital_usd": 500.0,
+  "lineage": "S108 produced positive stress and severe PnL, positive long and short attribution, positive primary and portability clusters, six-of-six positive leave-one-out PnL and positive bootstrap p10, but failed only the predeclared sample-count checks with eight fills. S109 preserves S108 flow, funding, direction, execution, stop, target and risk rules while replacing its single rolling extreme with named professional liquidity anchors.",
+  "selection_disclosure": "S109 was designed after S108 results and diagnostics were inspected. Historical success may reject or start paper observation only; it cannot validate live profitability.",
+  "window": {
+    "execution_start_inclusive": "2025-05-01T00:00:00Z",
+    "execution_end_exclusive": "2026-10-01T00:00:00Z",
+    "daily_warmup_start": "2024-01-01T00:00:00Z",
+    "intraday_and_metrics_warmup_start": "2025-01-01T00:00:00Z"
+  },
+  "universes": {
+    "combined": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+    "primary": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+    "portability": ["BNBUSDT", "XRPUSDT", "DOGEUSDT"]
+  },
+  "unchanged_from_s108": {
+    "direction": "S101 daily global regime plus completed 4h EMA50 trend; UP long, DOWN short, SIDEWAYS flat.",
+    "sweep_attention": "15m sweep with 60m OI expansion >=0.05%, relative volume >=1.10, metrics age <=15m, aggressive taker flow and seven-day funding filter.",
+    "confirmation": "Later break of the sweep candle in the reversal direction with both candle and archive taker-flow flip; fill next 5m open.",
+    "stop": "Beyond sweep plus 0.20 ATR, widened only to 1.25 ATR minimum, rejected above 3.50 ATR; initial stop never moves.",
+    "target": "90% toward opposite rolling 96-bar liquidity, minimum 1.80R, maximum 3.00R.",
+    "risk": "One global position; 0.2% NAV capped at $0.50 then multiplied by 0.50; leverage <=5, notional <=75%, margin <=15%; maximum hold 24h.",
+    "costs": {
+      "base": {"fee_bps": 5.0, "slippage_bps": 2.0},
+      "stress": {"fee_bps": 8.0, "slippage_bps": 5.0},
+      "severe": {"fee_bps": 10.0, "slippage_bps": 10.0}
+    }
+  },
+  "session_liquidity_atlas": {
+    "previous_day_high_low_weight": 2,
+    "previous_week_high_low_weight": 3,
+    "asia_0000_0800_utc_high_low_weight": 1,
+    "anchor_alignment_tolerance": "0.25 ATR; aligned anchor weights add.",
+    "repeated_touch_bonus": "One point per prior touch beyond the first within 0.25 ATR, capped at two, measured over 96 closed 15m candles.",
+    "minimum_strength_score": 2,
+    "confirmation_window": "Six later closed 15m candles (90 minutes), replacing S108's three-bar window."
+  },
+  "predeclared_slices": {
+    "development": ["2025-05-01", "2025-10-01"],
+    "former_validation_now_diagnostic": ["2025-10-01", "2026-01-01"],
+    "retrospective": ["2026-01-01", "2026-09-01"],
+    "opened_design_month": ["2026-09-01", "2026-10-01"]
+  },
+  "s108_frozen_reference": {
+    "stress_pnl_usd": 1.5964011161114513,
+    "severe_pnl_usd": 1.142401644881943,
+    "stress_trades": 8
+  },
+  "predeclared_historical_gate": {
+    "combined": "At least 18 stress fills; stress PnL >$1.5964011161, PF >1.15, DD <=5%; severe PnL >$1.1424016449.",
+    "direction": "At least five stress longs and five stress shorts; both direction PnLs non-negative.",
+    "breadth": "At least three represented symbols and at least four of six leave-one-symbol-out stress PnLs positive.",
+    "clusters": "Primary and portability groups each have at least six stress fills and non-negative stress and severe PnL.",
+    "time": "At least three of four stress slices positive, no slice below -$1.00 and at least 35% positive calendar months.",
+    "uncertainty": "Circular 28-day block-bootstrap p10 terminal PnL positive.",
+    "decision": "Every check must pass to start paper-forward observation. Live remains disabled."
+  },
+  "paper_forward": {
+    "minimum_calendar_days": 180,
+    "minimum_fills": 24,
+    "requires_both_directions": true,
+    "live_enabled": false
+  },
+  "claim_policy": "No backtest guarantees profit. No S109 rule may change after this file is hashed and before replay completion."
+}

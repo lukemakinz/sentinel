@@ -1,0 +1,56 @@
+{
+  "protocol_version": "S24-OB-OI-QUALITY-FILTER-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_context": "S20 H1 (order block + OI confirmation, patient exit) is the best-validated strategy in this project (PF 1.066 development, 1.117 validation, both base costs) but fails validation stress (PF 0.857 < 1.00). Four subsequent attempts to fix this by changing EXECUTION (S19 earlier breakeven, S21/S21c limit entry, S22 larger size) all made results worse, not better. None of those touched WHICH candidates get traded. This protocol tests the one remaining, previously untried lever: taking fewer, more convicted candidates by raising the existing regime/structure thresholds already built into order_block_oi_confirmation_scalp.py — not inventing a new composite score (which would risk being tuned to this data), just raising two knobs that already existed with principled, round-number values.",
+  "hypotheses": [
+    {
+      "id": "H1_STRONGER_REGIME",
+      "entry_exit": "identical to S20 H1 (order_block_oi_confirmation_scalp, route='oi', partial_r=1.5, trail_atr=2.5, target_r=8.0) EXCEPT adx_threshold raised to 30.0 (was 20.0) — a materially stronger, pre-declared round-number conviction bar on the regime confirmation, not tuned by scanning multiple values against this data",
+      "structure": "unchanged from S20 (displacement_atr_mult=1.5, volume_mult=1.2)"
+    },
+    {
+      "id": "H2_STRONGER_STRUCTURE",
+      "entry_exit": "identical to S20 H1 EXCEPT displacement_atr_mult raised to 2.5 (was 1.5) — a materially stronger, pre-declared round-number conviction bar on the order-block displacement itself",
+      "regime": "unchanged from S20 (adx_threshold=20.0)"
+    }
+  ],
+  "single_variable_isolated": "H1 changes only adx_threshold versus S20 H1. H2 changes only displacement_atr_mult versus S20 H1. Everything else (entry structure logic, flow/OI confirmation, stop placement, exit management, position sizing) is byte-for-byte identical to S20 H1 in both.",
+  "why_these_two_values_and_not_a_grid": "30.0 and 2.5 are round-number, roughly 1.5x-1.67x increases over S20's 20.0/1.5 — chosen before looking at any result from this protocol, not selected from a swept range. Only these two, pre-declared, single-variable changes are tested; no other threshold combination is tried.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Reuses the exact same cached klines/funding/metrics archives already downloaded for S18/S20 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. Both may plausibly fall below the 40-fill development minimum given the tighter thresholds — that is a legitimate, disclosed possible outcome of this protocol, not grounds to loosen the bar afterward. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Fewer candidates could fall below statistically meaningful sample size even if the per-trade PF genuinely improved — the 40/20-fill minimums in the promotion gates exist precisely to guard against over-interpreting a small, lucky sample.",
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18/S20.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

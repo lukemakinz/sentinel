@@ -1,0 +1,37 @@
+{
+  "version": "auction-replay-v1.2-intraday-management",
+  "period": ["2024-01-01", "2026-10-01"],
+  "symbol": "SOLUSDT",
+  "research_only": true,
+  "retrospective": true,
+  "candidates": 13180,
+  "filled_trades": 3988,
+  "p0": {
+    "win_rate": 0.3062,
+    "expectancy_per_trade_r": -0.9077,
+    "expectancy_per_candidate_r": -0.2746,
+    "total_r": -3619.75,
+    "profit_factor": 0.278
+  },
+  "p1": {
+    "tp1_hit_rate": 0.4315,
+    "win_rate": 0.34,
+    "expectancy_per_trade_r": -0.9283,
+    "expectancy_per_candidate_r": -0.2809,
+    "total_r": -3702.26,
+    "profit_factor": 0.116,
+    "uplift_per_candidate_r": -0.0063,
+    "uplift_ci95": [-0.014, 0.0016]
+  },
+  "p2": {
+    "tp1_hit_rate": 0.405,
+    "win_rate": 0.3007,
+    "expectancy_per_trade_r": -0.9522,
+    "expectancy_per_candidate_r": -0.2881,
+    "total_r": -3797.35,
+    "profit_factor": 0.099,
+    "uplift_per_candidate_r": -0.0135,
+    "uplift_ci95": [-0.0217, -0.005]
+  },
+  "verdict": "REJECTED_FOR_M0"
+}

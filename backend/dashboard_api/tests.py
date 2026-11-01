@@ -30,6 +30,33 @@ class DashboardAuthTest(TestCase):
         response = self.client.get('/api/status/')
         self.assertEqual(response.status_code, 200)
 
+    def test_mtf_endpoint_exposes_non_executable_trend_state_contract(self):
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+
+        response = self.client.get('/api/mtf/BTCUSDT/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['version'], 'trend-state-v1')
+        self.assertTrue(response.data['learning_only'])
+        self.assertFalse(response.data['execution_authorized'])
+        self.assertEqual(
+            set(response.data['timeframes']),
+            {'5m', '15m', '1h', '4h', '1d'},
+        )
+
+    def test_auction_research_endpoint_is_read_only_and_exposes_learning(self):
+        token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')
+
+        response = self.client.get('/api/auction/research/')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.data['shadow_only'])
+        self.assertFalse(response.data['execution_authorized'])
+        self.assertIn('m1_trend_filter', response.data['paired_comparison'])
+        self.assertIn('learning_postmortems', response.data)
+
     def test_rotate_token_replaces_old_token(self):
         token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Token {token.key}')

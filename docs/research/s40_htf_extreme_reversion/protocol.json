@@ -1,0 +1,56 @@
+{
+  "protocol_version": "S40-HTF-EXTREME-REVERSION-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "User-proposed hypothesis, tested directly rather than debated: every route so far (S13-S39, 41 routes) entered on a 15m signal conditioned on structure, flow, or a forced-deleveraging signature. This protocol tests a mechanically different shape entirely -- fewer, larger trades -- by only entering when price is at a genuine statistical extreme on the 4H timeframe (oversold -> long, overbought -> short), with a wide stop beyond the recent 4H swing and the patient breakeven+chandelier exit that is the only execution style anywhere in this project with any track record (S20 H1). Universe is widened from the usual 3-6 symbols to 8 liquid pairs (BTC, ETH, BNB, SOL, XRP, ADA, SUI, DOGE), also user-requested, because a genuinely rare per-symbol trigger needs more independent symbols to reach a meaningful sample size -- this widens breadth of opportunity, it does not change the entry logic itself. Pure price/momentum signal: no open interest, funding, or order-block features are used.",
+  "pre_freeze_calibration_disclosure": "H1's RSI threshold was checked for whether it fires at all (a functional smoke test, not a performance check) before this protocol was frozen: RSI(14) beyond 10/90 on 4H never fired even once on BTCUSDT, ETHUSDT or XRPUSDT across the full development window. It was loosened one standard tier to 20/80 (still stricter than the conventional 30/70) before any PnL was computed on any symbol -- disclosed per this project's audit-amendment convention.",
+  "hypotheses": [
+    {
+      "id": "H1_RSI_EXTREME",
+      "entry_exit": "4H bar closes with RSI(14) <= 20 (long) or >= 80 (short). Stop beyond the trailing 6-bar (24h) 4H swing low/high plus a 0.25x ATR buffer. Exit reuses S20 H1's patient breakeven+chandelier runner: partial at 1.5R, breakeven, chandelier trail at 2.5x (4H) ATR, hard cap at 8R, max hold 3 days."
+    },
+    {
+      "id": "H2_BOLLINGER_EXTREME",
+      "entry_exit": "Identical stop/target/trail as H1, EXCEPT the trigger is a 20-period Bollinger z-score beyond +-2.5 sigma on the 4H close instead of RSI.",
+      "note": "A price-distance definition of 'extreme', independent of RSI's momentum definition -- the two frozen hypotheses test two standard, unrelated ways of defining the same concept, not a parameter sweep of one."
+    }
+  ],
+  "single_variable_isolated": "Both hypotheses share an identical stop/target/trail execution model (S20 H1, unmodified) and an identical universe. H1 and H2 differ only in which standard technical definition of 'extreme' triggers entry -- RSI momentum extreme vs Bollinger price-distance extreme.",
+  "symbols": {
+    "traded": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "SUIUSDT", "DOGEUSDT"],
+    "note": "Widened from the 3-6 symbol clusters used by every prior scalp route in this project, per user request and because this signal is rare per symbol. Reuses already-cached klines archives -- no funding/OI metrics archive required since the signal is pure price/momentum."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 (of contributing) symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated 8-symbol cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. No parameter grid beyond the single pre-freeze RSI-threshold correctness fix disclosed above (a firing-rate check, not a performance check). A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Rare per-symbol signal even at the loosened 20/80 threshold (4-12 raw candidates per symbol over 6 months in the pre-freeze smoke check) -- reaching the 40-fill development minimum depends on the 8-symbol breadth, a legitimate, disclosed possible outcome if it still falls short, not grounds to loosen thresholds further after seeing PnL.",
+    "No trend/regime filter: this route deliberately fades whatever the 4H extreme is, including during strong sustained trends where RSI/price can stay extreme for a long time before any reversion -- the classic mean-reversion-into-a-trend risk, left unmitigated on purpose so the raw hypothesis is tested cleanly.",
+    "4H ATR-based stop/trail is coarser and the max hold (3 days) far longer than any prior route in this project -- funding costs accrue over a materially longer average hold than the 15m-entry family, which the simulator already models via the loaded funding archive.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation."
+  ]
+}

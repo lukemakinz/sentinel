@@ -97,7 +97,15 @@ services:
       redis:
         condition: service_healthy
 
-  # Separate process so feed-stale alerts still fire if the ingester dies.
+  # Safety is independent of both the ingester and notification channel.
+  risk_watchdog:
+    <<: *backend-base
+    command: python manage.py run_risk_watchdog
+    depends_on:
+      backend:
+        condition: service_started
+
+  # Operator channel only; safety does not depend on Telegram configuration.
   telegram_bot:
     <<: *backend-base
     command: python manage.py run_telegram_bot

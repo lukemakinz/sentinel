@@ -1,0 +1,15 @@
+{
+  "strategy_id": "S82_MACRO_RM",
+  "macro": "S80_book_b_macro_burst",
+  "risk": "BOOK_B_RM_align_v1",
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  }
+}

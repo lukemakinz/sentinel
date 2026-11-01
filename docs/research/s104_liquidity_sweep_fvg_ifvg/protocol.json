@@ -1,0 +1,57 @@
+{
+  "status": "post_s103_hypothesis_frozen_before_first_s104_replay",
+  "strategy_id": "S104_LIQUIDITY_SWEEP_FVG_IFVG",
+  "capital_usd": 500.0,
+  "lineage": "S103 lost under every cost tier. S104 tests the user's specific diagnosis that an FVG reaction extreme is not a valid stop anchor unless it first sweeps observable prior liquidity. No other signal or confluence rule is intentionally changed.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+  "unchanged_from_s103": {
+    "formation": "Displaced 1h three-candle FVG: body >= 0.80 ATR14, volume >= 1.15 prior 20-bar median, gap 0.05 to 1.25 ATR.",
+    "decision_tree": "Closed 15m defense or close-through, retest and IFVG rejection; later break within three bars; next-5m-open entry.",
+    "macro": "Long only in S101 UP, short only in S101 DOWN, plus aligned closed-bar 4h EMA50 trend.",
+    "micro": "At least two of OI expansion, directional taker flow and relative-volume confirmation.",
+    "target_and_time": "2.5R from actual fill; maximum holding time 720 minutes.",
+    "portfolio": "One global position; $0.50 risk cap; 0.2% equity risk; 75% notional cap; leverage <= 5."
+  },
+  "single_tested_change": {
+    "liquidity_reference": "Highest high / lowest low of the 20 fully closed preceding 15m candles, excluding the current candle.",
+    "long_sweep": "Reaction low must penetrate the prior liquidity low by at least 0.02 ATR15 and the candle must close back above that level.",
+    "short_sweep": "Reaction high must penetrate the prior liquidity high by at least 0.02 ATR15 and the candle must close back below that level.",
+    "defense": "The touch-to-reclaim sequence must contain a sweep in the intended trade direction.",
+    "ifvg": "The first retest/rejection candle must itself sweep liquidity in the intended inverted direction.",
+    "stop": "Exactly beyond the sweep extreme by 0.15 ATR15. Never substitute the FVG edge, generic touch extreme or an artificially widened minimum stop.",
+    "admission": "Skip the trade when the exact structural stop is closer than 0.50 ATR15 or farther than 4.0 ATR15 at the decision close."
+  },
+  "data": {
+    "daily_regime_warmup_start": "2024-01-01T00:00:00Z",
+    "intraday_warmup_start": "2025-01-01T00:00:00Z",
+    "execution_start": "2025-05-01T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z",
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "validation": ["2025-10-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-01-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "source": "The checksum-verified Binance archive frozen for S103; no new symbols or dates.",
+    "contamination": "All history is contaminated by the prior S103 result. It may falsify S104 but cannot validate live profitability."
+  },
+  "costs_bps_per_side": {
+    "base": {"fee": 5.0, "slippage": 2.0},
+    "stress": {"fee": 8.0, "slippage": 5.0},
+    "severe": {"fee": 10.0, "slippage": 10.0}
+  },
+  "predeclared_checks": {
+    "sweep_lookback_neighbors": [12, 32],
+    "stop_buffer_atr_neighbors": [0.10, 0.20],
+    "leave_one_symbol_out": true,
+    "route_and_direction_attribution": true,
+    "bootstrap": "5000 deterministic circular 28-day blocks"
+  },
+  "historical_gate": {
+    "full_stress": "At least 20 fills, positive PnL, PF > 1.05 and max drawdown <= 10%.",
+    "validation": "At least 6 fills and positive stress PnL.",
+    "breadth": "Both routes trade at least three times, both directions trade, neither direction loses under stress, and at least two symbols trade.",
+    "robustness": "Severe PnL positive; at least two of three leave-one-out runs positive; bootstrap p10 positive."
+  },
+  "decision_policy": {
+    "historical": "Failure rejects the hypothesis. A pass only authorizes a new paper-forward clock.",
+    "live": "Disabled."
+  }
+}

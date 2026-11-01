@@ -1,0 +1,1719 @@
+{
+  "protocol_sha256": "8a54998c1e75db1fb2856cf29b41a3953dce99bb60bf547e2758bf2feaf849dd",
+  "atlas_config": {
+    "previous_day_weight": 2,
+    "previous_week_weight": 3,
+    "asia_session_weight": 1,
+    "asia_end_hour_utc": 8,
+    "alignment_tolerance_atr": 0.25,
+    "repeated_touch_bonus_cap": 2,
+    "minimum_strength_score": 2,
+    "touch_lookback_bars": 96,
+    "confirmation_window_bars": 6
+  },
+  "strategy_config": {
+    "decision_minutes": 15,
+    "atr_period": 14,
+    "volume_lookback": 20,
+    "liquidity_lookback_bars": 96,
+    "level_touch_tolerance_atr": 0.25,
+    "minimum_level_touches": 2,
+    "sweep_buffer_atr": 0.02,
+    "confirmation_buffer_atr": 0.03,
+    "confirmation_window_bars": 6,
+    "ema4h_span": 50,
+    "oi_lookback_minutes": 60,
+    "minimum_sweep_oi_change_pct": 0.05,
+    "minimum_sweep_relative_volume": 1.1,
+    "sweep_sell_taker_ratio": 0.48,
+    "sweep_buy_taker_ratio": 0.52,
+    "confirmation_buy_taker_ratio": 0.52,
+    "confirmation_sell_taker_ratio": 0.48,
+    "funding_lookback_days": 7,
+    "maximum_long_mean_funding": 5e-05,
+    "minimum_short_mean_funding": -5e-05,
+    "maximum_metrics_age_minutes": 15.0,
+    "stop_buffer_atr": 0.2,
+    "minimum_stop_atr": 1.25,
+    "maximum_stop_atr": 3.5,
+    "minimum_target_r": 1.8,
+    "maximum_target_r": 3.0,
+    "target_front_run_fraction": 0.9,
+    "max_hold_minutes": 1440,
+    "risk_scale": 0.5
+  },
+  "regime_config": {
+    "btc_symbol": "BTCUSDT",
+    "long_sma_days": 200,
+    "long_momentum_days": 84,
+    "down_ema_days": 50,
+    "down_fast_momentum_days": 28,
+    "down_slow_momentum_days": 84,
+    "up_breadth_threshold": 0.5,
+    "down_breadth_threshold": 0.3333333333333333,
+    "confirmation_days": 2
+  },
+  "universes": {
+    "combined": {
+      "symbols": [
+        "BTCUSDT",
+        "ETHUSDT",
+        "SOLUSDT",
+        "BNBUSDT",
+        "XRPUSDT",
+        "DOGEUSDT"
+      ],
+      "signal_counts": {
+        "BTCUSDT": 3,
+        "ETHUSDT": 2,
+        "SOLUSDT": 2,
+        "BNBUSDT": 2,
+        "XRPUSDT": 4,
+        "DOGEUSDT": 2
+      },
+      "signal_diagnostics": {
+        "BTCUSDT": {
+          "armed": 17,
+          "short_armed": 16,
+          "signals": 3,
+          "short_signals": 3,
+          "armed_expired_or_regime_flip": 13,
+          "blocked_stop_width": 1,
+          "confirmation_without_flow_flip": 1,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "ETHUSDT": {
+          "armed": 22,
+          "long_armed": 2,
+          "confirmation_without_flow_flip": 6,
+          "armed_expired_or_regime_flip": 18,
+          "short_armed": 20,
+          "signals": 2,
+          "short_signals": 2,
+          "blocked_target_space": 2,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "SOLUSDT": {
+          "armed": 10,
+          "long_armed": 5,
+          "armed_expired_or_regime_flip": 5,
+          "signals": 2,
+          "long_signals": 1,
+          "confirmation_without_flow_flip": 2,
+          "blocked_target_space": 3,
+          "short_armed": 5,
+          "short_signals": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "BNBUSDT": {
+          "armed": 14,
+          "long_armed": 3,
+          "blocked_target_space": 3,
+          "armed_expired_or_regime_flip": 9,
+          "short_armed": 11,
+          "signals": 2,
+          "short_signals": 2,
+          "confirmation_without_flow_flip": 6,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "XRPUSDT": {
+          "armed": 11,
+          "short_armed": 10,
+          "armed_expired_or_regime_flip": 7,
+          "signals": 4,
+          "short_signals": 4,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "DOGEUSDT": {
+          "armed": 17,
+          "short_armed": 17,
+          "armed_expired_or_regime_flip": 14,
+          "signals": 2,
+          "short_signals": 2,
+          "blocked_target_space": 1,
+          "confirmation_without_flow_flip": 3,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        }
+      },
+      "replays": {
+        "base": {
+          "trades": 13,
+          "wins": 6,
+          "win_rate_pct": 46.15384615384615,
+          "profit_factor": 1.8096290669453714,
+          "net_pnl": 1.4191524421223676,
+          "return_pct": 0.28383048842446357,
+          "max_drawdown_pct": 0.1928392547407065,
+          "mean_net_r": 0.4366622898838054,
+          "fees": 0.4524588059268313,
+          "funding_pnl": 0.011649645704278296,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 3,
+              "net_pnl": 0.0782771961725075,
+              "gross_profit": 0.5782771961725075
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": -0.2505009335559407,
+              "gross_profit": 0.0
+            },
+            "SOLUSDT": {
+              "trades": 2,
+              "net_pnl": 0.38479004696677066,
+              "gross_profit": 0.6348439091897262
+            },
+            "BNBUSDT": {
+              "trades": 2,
+              "net_pnl": 0.3301522430498949,
+              "gross_profit": 0.5801522430498949
+            },
+            "XRPUSDT": {
+              "trades": 3,
+              "net_pnl": 0.6240318486333649,
+              "gross_profit": 0.8766255236493521
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.25240204085577034,
+              "gross_profit": 0.502096322454463
+            }
+          },
+          "represented_symbols": 6,
+          "diagnostics": {
+            "signals": 15,
+            "entries": 13,
+            "entries_SOLUSDT": 2,
+            "entries_BTCUSDT": 3,
+            "blocked_open_position": 2,
+            "entries_DOGEUSDT": 2,
+            "entries_BNBUSDT": 2,
+            "entries_XRPUSDT": 3,
+            "entries_ETHUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "stress": {
+          "trades": 13,
+          "wins": 6,
+          "win_rate_pct": 46.15384615384615,
+          "profit_factor": 1.4141781461813274,
+          "net_pnl": 0.7258744806222808,
+          "return_pct": 0.145174896124467,
+          "max_drawdown_pct": 0.19011514475866242,
+          "mean_net_r": 0.22334599403762484,
+          "fees": 0.6035222868076352,
+          "funding_pnl": 0.00903282625706509,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 3,
+              "net_pnl": -0.02373697157361221,
+              "gross_profit": 0.4762630284263878
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25045557207977254,
+              "gross_profit": 0.0
+            },
+            "SOLUSDT": {
+              "trades": 2,
+              "net_pnl": 0.30859007780458114,
+              "gross_profit": 0.558639943631988
+            },
+            "BNBUSDT": {
+              "trades": 2,
+              "net_pnl": 0.22403080102185413,
+              "gross_profit": 0.47403080102185413
+            },
+            "XRPUSDT": {
+              "trades": 3,
+              "net_pnl": 0.3467394300303681,
+              "gross_profit": 0.5990740119157181
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.12070671541886213,
+              "gross_profit": 0.37043255965068056
+            }
+          },
+          "represented_symbols": 6,
+          "diagnostics": {
+            "signals": 15,
+            "entries": 13,
+            "entries_SOLUSDT": 2,
+            "entries_BTCUSDT": 3,
+            "blocked_open_position": 2,
+            "entries_DOGEUSDT": 2,
+            "entries_BNBUSDT": 2,
+            "entries_XRPUSDT": 3,
+            "entries_ETHUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "severe": {
+          "trades": 12,
+          "wins": 6,
+          "win_rate_pct": 50.0,
+          "profit_factor": 1.2690852441939322,
+          "net_pnl": 0.4042478794731892,
+          "return_pct": 0.08084957589464814,
+          "max_drawdown_pct": 0.18731304080192857,
+          "mean_net_r": 0.13474929315772974,
+          "fees": 0.5528892453452213,
+          "funding_pnl": 0.007143520873688155,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 3,
+              "net_pnl": -0.11488043602486187,
+              "gross_profit": 0.38511956397513813
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25041204139319007,
+              "gross_profit": 0.0
+            },
+            "SOLUSDT": {
+              "trades": 2,
+              "net_pnl": 0.23485124117053147,
+              "gross_profit": 0.4848971343491826
+            },
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": 0.3801697665109032,
+              "gross_profit": 0.3801697665109032
+            },
+            "XRPUSDT": {
+              "trades": 3,
+              "net_pnl": 0.13895417459201553,
+              "gross_profit": 0.3910450756593491
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.015565174617790944,
+              "gross_profit": 0.2653204905278699
+            }
+          },
+          "represented_symbols": 6,
+          "diagnostics": {
+            "signals": 15,
+            "entries": 12,
+            "entries_SOLUSDT": 2,
+            "entries_BTCUSDT": 3,
+            "blocked_open_position": 2,
+            "entries_DOGEUSDT": 2,
+            "entries_BNBUSDT": 1,
+            "entries_XRPUSDT": 3,
+            "blocked_target_space_after_fill": 1,
+            "entries_ETHUSDT": 1
+          },
+          "drawdown_halted": false
+        }
+      },
+      "slices": {
+        "development": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": -0.25005386222295556,
+            "return_on_start_nav_pct": -0.05001077244459111,
+            "usd_per_calendar_day": -0.0016343389687774872,
+            "max_continuous_drawdown_pct": 0.050010772444586404,
+            "annualized_sharpe": -1.544545536730037,
+            "positive_month_share": 0.0,
+            "trades": 1
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": -0.25004986582740685,
+            "return_on_start_nav_pct": -0.05000997316548137,
+            "usd_per_calendar_day": -0.0016343128485451427,
+            "max_continuous_drawdown_pct": 0.05000997316547684,
+            "annualized_sharpe": -1.5445455367300367,
+            "positive_month_share": 0.0,
+            "trades": 1
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": -0.2500458931786511,
+            "return_on_start_nav_pct": -0.05000917863573022,
+            "usd_per_calendar_day": -0.0016342868835205954,
+            "max_continuous_drawdown_pct": 0.05000917863573484,
+            "annualized_sharpe": -1.544545536730037,
+            "positive_month_share": 0.0,
+            "trades": 1
+          }
+        },
+        "former_validation_now_diagnostic": {
+          "base": {
+            "start_nav": 499.74994613777704,
+            "net_pnl": 1.6505900422876607,
+            "return_on_start_nav_pct": 0.33028318562992026,
+            "usd_per_calendar_day": 0.017941196111822398,
+            "max_continuous_drawdown_pct": 0.1500107724445865,
+            "annualized_sharpe": 2.8943849063087628,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 6
+          },
+          "stress": {
+            "start_nav": 499.7499501341726,
+            "net_pnl": 1.182397912439967,
+            "return_on_start_nav_pct": 0.2365979050368124,
+            "usd_per_calendar_day": 0.012852151222173555,
+            "max_continuous_drawdown_pct": 0.15000997316547693,
+            "annualized_sharpe": 2.5219986702771715,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 6
+          },
+          "severe": {
+            "start_nav": 499.74995410682135,
+            "net_pnl": 0.7995066016712826,
+            "return_on_start_nav_pct": 0.15998132568120024,
+            "usd_per_calendar_day": 0.008690289148600898,
+            "max_continuous_drawdown_pct": 0.15000917863573493,
+            "annualized_sharpe": 2.0496813184744274,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 6
+          }
+        },
+        "retrospective": {
+          "base": {
+            "start_nav": 501.4005361800647,
+            "net_pnl": 0.018616262057662425,
+            "return_on_start_nav_pct": 0.0037128524431766638,
+            "usd_per_calendar_day": 7.661013192453672e-05,
+            "max_continuous_drawdown_pct": 0.14961994673360346,
+            "annualized_sharpe": 0.02679029712206041,
+            "positive_month_share": 0.125,
+            "trades": 6
+          },
+          "stress": {
+            "start_nav": 500.93234804661256,
+            "net_pnl": -0.20647356599027944,
+            "return_on_start_nav_pct": -0.04121785442593672,
+            "usd_per_calendar_day": -0.0008496854567501211,
+            "max_continuous_drawdown_pct": 0.14975703190998058,
+            "annualized_sharpe": -0.32320331221625953,
+            "positive_month_share": 0.125,
+            "trades": 6
+          },
+          "severe": {
+            "start_nav": 500.54946070849263,
+            "net_pnl": -0.14521282901944232,
+            "return_on_start_nav_pct": -0.029010685340446426,
+            "usd_per_calendar_day": -0.0005975836585162236,
+            "max_continuous_drawdown_pct": 0.12166724980240406,
+            "annualized_sharpe": -0.2705013972712678,
+            "positive_month_share": 0.0,
+            "trades": 5
+          }
+        },
+        "opened_design_month": {
+          "base": {
+            "start_nav": 501.41915244212237,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 500.7258744806223,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.04121785442593451,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 500.4042478794732,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.02901068534044704,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        }
+      },
+      "stress_direction": {
+        "LONG": {
+          "trades": 1,
+          "wins": 0,
+          "net_pnl": -0.25004986582740685,
+          "mean_r": -1.0001994633096276
+        },
+        "SHORT": {
+          "trades": 12,
+          "wins": 6,
+          "net_pnl": 0.9759243464496876,
+          "mean_r": 0.3253081154832292
+        }
+      },
+      "stress_bootstrap": {
+        "method": "circular_28d_blocks",
+        "samples": 5000,
+        "p10_terminal_pnl": -0.7819480080876302,
+        "p50_terminal_pnl": 0.6826501546592851,
+        "p90_terminal_pnl": 2.310219619783192,
+        "observed_terminal_pnl": 0.7258744806222808
+      },
+      "stress_monthly_dispersion": {
+        "months": 17,
+        "positive_months": 3,
+        "positive_month_share": 0.17647058823529413,
+        "largest_positive_month_share_of_positive_pnl": 0.5383043035425145,
+        "best_month_pnl": 0.9290725032826685,
+        "worst_month_pnl": -0.5,
+        "monthly_pnl": {
+          "2025-05-31 00:00:00+00:00": 0.0,
+          "2025-06-30 00:00:00+00:00": 0.0,
+          "2025-07-31 00:00:00+00:00": 0.0,
+          "2025-08-31 00:00:00+00:00": -0.25004986582740685,
+          "2025-09-30 00:00:00+00:00": 0.0,
+          "2025-10-31 00:00:00+00:00": -0.5,
+          "2025-11-30 00:00:00+00:00": 0.9290725032826685,
+          "2025-12-31 00:00:00+00:00": 0.7533254091572985,
+          "2026-01-31 00:00:00+00:00": 0.0,
+          "2026-02-28 00:00:00+00:00": 0.0,
+          "2026-03-31 00:00:00+00:00": 0.0,
+          "2026-04-30 00:00:00+00:00": -0.25,
+          "2026-05-31 00:00:00+00:00": 0.0,
+          "2026-06-30 00:00:00+00:00": 0.04352643400972056,
+          "2026-07-31 00:00:00+00:00": 0.0,
+          "2026-08-31 00:00:00+00:00": 0.0,
+          "2026-09-30 00:00:00+00:00": 0.0
+        }
+      }
+    },
+    "primary": {
+      "symbols": [
+        "BTCUSDT",
+        "ETHUSDT",
+        "SOLUSDT"
+      ],
+      "signal_counts": {
+        "BTCUSDT": 3,
+        "ETHUSDT": 2,
+        "SOLUSDT": 2
+      },
+      "signal_diagnostics": {
+        "BTCUSDT": {
+          "armed": 17,
+          "short_armed": 16,
+          "signals": 3,
+          "short_signals": 3,
+          "armed_expired_or_regime_flip": 13,
+          "blocked_stop_width": 1,
+          "confirmation_without_flow_flip": 1,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "ETHUSDT": {
+          "armed": 22,
+          "long_armed": 2,
+          "confirmation_without_flow_flip": 6,
+          "armed_expired_or_regime_flip": 18,
+          "short_armed": 20,
+          "signals": 2,
+          "short_signals": 2,
+          "blocked_target_space": 2,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "SOLUSDT": {
+          "armed": 10,
+          "long_armed": 5,
+          "armed_expired_or_regime_flip": 5,
+          "signals": 2,
+          "long_signals": 1,
+          "confirmation_without_flow_flip": 2,
+          "blocked_target_space": 3,
+          "short_armed": 5,
+          "short_signals": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        }
+      },
+      "replays": {
+        "base": {
+          "trades": 6,
+          "wins": 2,
+          "win_rate_pct": 33.33333333333333,
+          "profit_factor": 1.212448444083327,
+          "net_pnl": 0.21256630958333744,
+          "return_pct": 0.04251326191666571,
+          "max_drawdown_pct": 0.1928392547407065,
+          "mean_net_r": 0.1417108730555583,
+          "fees": 0.15132194812895644,
+          "funding_pnl": 0.0034216433213131005,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 3,
+              "net_pnl": 0.0782771961725075,
+              "gross_profit": 0.5782771961725075
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": -0.2505009335559407,
+              "gross_profit": 0.0
+            },
+            "SOLUSDT": {
+              "trades": 2,
+              "net_pnl": 0.38479004696677066,
+              "gross_profit": 0.6348439091897262
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 7,
+            "entries": 6,
+            "entries_SOLUSDT": 2,
+            "entries_BTCUSDT": 3,
+            "blocked_open_position": 1,
+            "entries_ETHUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "stress": {
+          "trades": 6,
+          "wins": 2,
+          "win_rate_pct": 33.33333333333333,
+          "profit_factor": 1.034380157116535,
+          "net_pnl": 0.034397534151196396,
+          "return_pct": 0.006879506830248516,
+          "max_drawdown_pct": 0.19011514475866242,
+          "mean_net_r": 0.022931689434130893,
+          "fees": 0.21393620953751347,
+          "funding_pnl": 0.0029700009417169193,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 3,
+              "net_pnl": -0.02373697157361221,
+              "gross_profit": 0.4762630284263878
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25045557207977254,
+              "gross_profit": 0.0
+            },
+            "SOLUSDT": {
+              "trades": 2,
+              "net_pnl": 0.30859007780458114,
+              "gross_profit": 0.558639943631988
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 7,
+            "entries": 6,
+            "entries_SOLUSDT": 2,
+            "entries_BTCUSDT": 3,
+            "blocked_open_position": 1,
+            "entries_ETHUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "severe": {
+          "trades": 6,
+          "wins": 2,
+          "win_rate_pct": 33.33333333333333,
+          "profit_factor": 0.8696184699626132,
+          "net_pnl": -0.13044123624752046,
+          "return_pct": -0.02608824724950054,
+          "max_drawdown_pct": 0.18731304080192857,
+          "mean_net_r": -0.08696082416501365,
+          "fees": 0.23593835204570407,
+          "funding_pnl": 0.0025714838144349447,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 3,
+              "net_pnl": -0.11488043602486187,
+              "gross_profit": 0.38511956397513813
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25041204139319007,
+              "gross_profit": 0.0
+            },
+            "SOLUSDT": {
+              "trades": 2,
+              "net_pnl": 0.23485124117053147,
+              "gross_profit": 0.4848971343491826
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 7,
+            "entries": 6,
+            "entries_SOLUSDT": 2,
+            "entries_BTCUSDT": 3,
+            "blocked_open_position": 1,
+            "entries_ETHUSDT": 1
+          },
+          "drawdown_halted": false
+        }
+      },
+      "slices": {
+        "development": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": -0.25005386222295556,
+            "return_on_start_nav_pct": -0.05001077244459111,
+            "usd_per_calendar_day": -0.0016343389687774872,
+            "max_continuous_drawdown_pct": 0.050010772444586404,
+            "annualized_sharpe": -1.544545536730037,
+            "positive_month_share": 0.0,
+            "trades": 1
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": -0.25004986582740685,
+            "return_on_start_nav_pct": -0.05000997316548137,
+            "usd_per_calendar_day": -0.0016343128485451427,
+            "max_continuous_drawdown_pct": 0.05000997316547684,
+            "annualized_sharpe": -1.5445455367300367,
+            "positive_month_share": 0.0,
+            "trades": 1
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": -0.2500458931786511,
+            "return_on_start_nav_pct": -0.05000917863573022,
+            "usd_per_calendar_day": -0.0016342868835205954,
+            "max_continuous_drawdown_pct": 0.05000917863573484,
+            "annualized_sharpe": -1.544545536730037,
+            "positive_month_share": 0.0,
+            "trades": 1
+          }
+        },
+        "former_validation_now_diagnostic": {
+          "base": {
+            "start_nav": 499.74994613777704,
+            "net_pnl": 0.13484390918972622,
+            "return_on_start_nav_pct": 0.02698227588253723,
+            "usd_per_calendar_day": 0.0014656946651057199,
+            "max_continuous_drawdown_pct": 0.1500107724445865,
+            "annualized_sharpe": 0.368763960845674,
+            "positive_month_share": 0.3333333333333333,
+            "trades": 3
+          },
+          "stress": {
+            "start_nav": 499.7499501341726,
+            "net_pnl": 0.05863994363198799,
+            "return_on_start_nav_pct": 0.01173385682504708,
+            "usd_per_calendar_day": 0.0006373906916520434,
+            "max_continuous_drawdown_pct": 0.15000997316547693,
+            "annualized_sharpe": 0.1768786385403391,
+            "positive_month_share": 0.3333333333333333,
+            "trades": 3
+          },
+          "severe": {
+            "start_nav": 499.74995410682135,
+            "net_pnl": -0.01510286565081742,
+            "return_on_start_nav_pct": -0.0030220844497744945,
+            "usd_per_calendar_day": -0.00016416158316105893,
+            "max_continuous_drawdown_pct": 0.15000917863573493,
+            "annualized_sharpe": -0.04862946589570419,
+            "positive_month_share": 0.3333333333333333,
+            "trades": 3
+          }
+        },
+        "retrospective": {
+          "base": {
+            "start_nav": 499.88479004696677,
+            "net_pnl": 0.3277762626165668,
+            "return_on_start_nav_pct": 0.06557036123979097,
+            "usd_per_calendar_day": 0.0013488735087101515,
+            "max_continuous_drawdown_pct": 0.07845584180338205,
+            "annualized_sharpe": 0.6124809363085935,
+            "positive_month_share": 0.125,
+            "trades": 2
+          },
+          "stress": {
+            "start_nav": 499.8085900778046,
+            "net_pnl": 0.22580745634661525,
+            "return_on_start_nav_pct": 0.04517878660538109,
+            "usd_per_calendar_day": 0.000929248791549857,
+            "max_continuous_drawdown_pct": 0.09919040405682589,
+            "annualized_sharpe": 0.4694111918619897,
+            "positive_month_share": 0.125,
+            "trades": 2
+          },
+          "severe": {
+            "start_nav": 499.73485124117053,
+            "net_pnl": 0.13470752258194807,
+            "return_on_start_nav_pct": 0.026955799109744025,
+            "usd_per_calendar_day": 0.0005543519447816793,
+            "max_continuous_drawdown_pct": 0.11884663399457374,
+            "annualized_sharpe": 0.3096526380298291,
+            "positive_month_share": 0.125,
+            "trades": 2
+          }
+        },
+        "opened_design_month": {
+          "base": {
+            "start_nav": 500.21256630958334,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 500.0343975341512,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 499.8695587637525,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.02608824724950054,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        }
+      },
+      "stress_direction": {
+        "LONG": {
+          "trades": 1,
+          "wins": 0,
+          "net_pnl": -0.25004986582740685,
+          "mean_r": -1.0001994633096276
+        },
+        "SHORT": {
+          "trades": 5,
+          "wins": 2,
+          "net_pnl": 0.28444739997860324,
+          "mean_r": 0.22755791998288255
+        }
+      },
+      "stress_bootstrap": {
+        "method": "circular_28d_blocks",
+        "samples": 5000,
+        "p10_terminal_pnl": -0.9421298969852557,
+        "p50_terminal_pnl": 0.03389562630383125,
+        "p90_terminal_pnl": 0.9882861865036261,
+        "observed_terminal_pnl": 0.034397534151196396
+      },
+      "stress_monthly_dispersion": {
+        "months": 17,
+        "positive_months": 2,
+        "positive_month_share": 0.11764705882352941,
+        "largest_positive_month_share_of_positive_pnl": 0.7121445537931869,
+        "best_month_pnl": 0.558639943631988,
+        "worst_month_pnl": -0.5,
+        "monthly_pnl": {
+          "2025-05-31 00:00:00+00:00": 0.0,
+          "2025-06-30 00:00:00+00:00": 0.0,
+          "2025-07-31 00:00:00+00:00": 0.0,
+          "2025-08-31 00:00:00+00:00": -0.25004986582740685,
+          "2025-09-30 00:00:00+00:00": 0.0,
+          "2025-10-31 00:00:00+00:00": -0.5,
+          "2025-11-30 00:00:00+00:00": 0.558639943631988,
+          "2025-12-31 00:00:00+00:00": 0.0,
+          "2026-01-31 00:00:00+00:00": 0.0,
+          "2026-02-28 00:00:00+00:00": 0.0,
+          "2026-03-31 00:00:00+00:00": 0.0,
+          "2026-04-30 00:00:00+00:00": 0.0,
+          "2026-05-31 00:00:00+00:00": 0.0,
+          "2026-06-30 00:00:00+00:00": 0.22580745634661525,
+          "2026-07-31 00:00:00+00:00": 0.0,
+          "2026-08-31 00:00:00+00:00": 0.0,
+          "2026-09-30 00:00:00+00:00": 0.0
+        }
+      }
+    },
+    "portability": {
+      "symbols": [
+        "BNBUSDT",
+        "XRPUSDT",
+        "DOGEUSDT"
+      ],
+      "signal_counts": {
+        "BNBUSDT": 2,
+        "XRPUSDT": 4,
+        "DOGEUSDT": 2
+      },
+      "signal_diagnostics": {
+        "BNBUSDT": {
+          "armed": 14,
+          "long_armed": 3,
+          "blocked_target_space": 3,
+          "armed_expired_or_regime_flip": 9,
+          "short_armed": 11,
+          "signals": 2,
+          "short_signals": 2,
+          "confirmation_without_flow_flip": 6,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "XRPUSDT": {
+          "armed": 11,
+          "short_armed": 10,
+          "armed_expired_or_regime_flip": 7,
+          "signals": 4,
+          "short_signals": 4,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        },
+        "DOGEUSDT": {
+          "armed": 17,
+          "short_armed": 17,
+          "armed_expired_or_regime_flip": 14,
+          "signals": 2,
+          "short_signals": 2,
+          "blocked_target_space": 1,
+          "confirmation_without_flow_flip": 3,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 6,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          },
+          "atlas_config": {
+            "previous_day_weight": 2,
+            "previous_week_weight": 3,
+            "asia_session_weight": 1,
+            "asia_end_hour_utc": 8,
+            "alignment_tolerance_atr": 0.25,
+            "repeated_touch_bonus_cap": 2,
+            "minimum_strength_score": 2,
+            "touch_lookback_bars": 96,
+            "confirmation_window_bars": 6
+          }
+        }
+      },
+      "replays": {
+        "base": {
+          "trades": 7,
+          "wins": 4,
+          "win_rate_pct": 57.14285714285714,
+          "profit_factor": 2.603888673120206,
+          "net_pnl": 1.2065861325390301,
+          "return_pct": 0.24131722650779786,
+          "max_drawdown_pct": 0.14848078403155718,
+          "mean_net_r": 0.6894777900223029,
+          "fees": 0.30113685779787486,
+          "funding_pnl": 0.008228002382965194,
+          "per_symbol": {
+            "BNBUSDT": {
+              "trades": 2,
+              "net_pnl": 0.3301522430498949,
+              "gross_profit": 0.5801522430498949
+            },
+            "XRPUSDT": {
+              "trades": 3,
+              "net_pnl": 0.6240318486333649,
+              "gross_profit": 0.8766255236493521
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.25240204085577034,
+              "gross_profit": 0.502096322454463
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 8,
+            "entries": 7,
+            "entries_DOGEUSDT": 2,
+            "entries_BNBUSDT": 2,
+            "entries_XRPUSDT": 3,
+            "blocked_open_position": 1
+          },
+          "drawdown_halted": false
+        },
+        "stress": {
+          "trades": 7,
+          "wins": 4,
+          "win_rate_pct": 57.14285714285714,
+          "profit_factor": 1.9194433352132727,
+          "net_pnl": 0.6914769464710844,
+          "return_pct": 0.13829538929421847,
+          "max_drawdown_pct": 0.13980174725937156,
+          "mean_net_r": 0.3951296836977625,
+          "fees": 0.3895860772701217,
+          "funding_pnl": 0.006062825315348172,
+          "per_symbol": {
+            "BNBUSDT": {
+              "trades": 2,
+              "net_pnl": 0.22403080102185413,
+              "gross_profit": 0.47403080102185413
+            },
+            "XRPUSDT": {
+              "trades": 3,
+              "net_pnl": 0.3467394300303681,
+              "gross_profit": 0.5990740119157181
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.12070671541886213,
+              "gross_profit": 0.37043255965068056
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 8,
+            "entries": 7,
+            "entries_DOGEUSDT": 2,
+            "entries_BNBUSDT": 2,
+            "entries_XRPUSDT": 3,
+            "blocked_open_position": 1
+          },
+          "drawdown_halted": false
+        },
+        "severe": {
+          "trades": 6,
+          "wins": 4,
+          "win_rate_pct": 66.66666666666666,
+          "profit_factor": 2.06544414928762,
+          "net_pnl": 0.5346891157207097,
+          "return_pct": 0.10693782314414868,
+          "max_drawdown_pct": 0.1311621612916869,
+          "mean_net_r": 0.3564594104804731,
+          "fees": 0.3169508932995172,
+          "funding_pnl": 0.00457203705925321,
+          "per_symbol": {
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": 0.3801697665109032,
+              "gross_profit": 0.3801697665109032
+            },
+            "XRPUSDT": {
+              "trades": 3,
+              "net_pnl": 0.13895417459201553,
+              "gross_profit": 0.3910450756593491
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.015565174617790944,
+              "gross_profit": 0.2653204905278699
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 8,
+            "entries": 6,
+            "entries_DOGEUSDT": 2,
+            "entries_BNBUSDT": 1,
+            "entries_XRPUSDT": 3,
+            "blocked_target_space_after_fill": 1,
+            "blocked_open_position": 1
+          },
+          "drawdown_halted": false
+        }
+      },
+      "slices": {
+        "development": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        },
+        "former_validation_now_diagnostic": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": 1.5157461330979345,
+            "return_on_start_nav_pct": 0.3031492266195869,
+            "usd_per_calendar_day": 0.016475501446716678,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 3.4632607603699084,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 3
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": 1.123757968807979,
+            "return_on_start_nav_pct": 0.2247515937615958,
+            "usd_per_calendar_day": 0.012214760530521512,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 3.409719495957351,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 3
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": 0.8146094673221,
+            "return_on_start_nav_pct": 0.16292189346442001,
+            "usd_per_calendar_day": 0.008854450731761956,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 3.31943007731215,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 3
+          }
+        },
+        "retrospective": {
+          "base": {
+            "start_nav": 501.51574613309793,
+            "net_pnl": -0.30916000055890436,
+            "return_on_start_nav_pct": -0.06164512339695431,
+            "usd_per_calendar_day": -0.0012722633767856147,
+            "max_continuous_drawdown_pct": 0.09963680810654019,
+            "annualized_sharpe": -0.6356029262748616,
+            "positive_month_share": 0.0,
+            "trades": 4
+          },
+          "stress": {
+            "start_nav": 501.123757968808,
+            "net_pnl": -0.4322810223368947,
+            "return_on_start_nav_pct": -0.08626232850923857,
+            "usd_per_calendar_day": -0.0017789342482999783,
+            "max_continuous_drawdown_pct": 0.09972104421018813,
+            "annualized_sharpe": -1.039628452780788,
+            "positive_month_share": 0.0,
+            "trades": 4
+          },
+          "severe": {
+            "start_nav": 500.8146094673221,
+            "net_pnl": -0.2799203516013904,
+            "return_on_start_nav_pct": -0.05589300837272301,
+            "usd_per_calendar_day": -0.001151935603297903,
+            "max_continuous_drawdown_pct": 0.05589300837272049,
+            "annualized_sharpe": -0.9027421876341515,
+            "positive_month_share": 0.0,
+            "trades": 3
+          }
+        },
+        "opened_design_month": {
+          "base": {
+            "start_nav": 501.20658613253903,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.06164512339695838,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 500.6914769464711,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.08626232850923454,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 500.5346891157207,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.05589300837272049,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        }
+      },
+      "stress_direction": {
+        "LONG": {
+          "trades": 0,
+          "wins": 0,
+          "net_pnl": 0.0,
+          "mean_r": 0.0
+        },
+        "SHORT": {
+          "trades": 7,
+          "wins": 4,
+          "net_pnl": 0.6914769464710844,
+          "mean_r": 0.3951296836977625
+        }
+      },
+      "stress_bootstrap": {
+        "method": "circular_28d_blocks",
+        "samples": 5000,
+        "p10_terminal_pnl": -0.34870911873656496,
+        "p50_terminal_pnl": 0.6310933091156983,
+        "p90_terminal_pnl": 1.805139984566324,
+        "observed_terminal_pnl": 0.6914769464710844
+      },
+      "stress_monthly_dispersion": {
+        "months": 17,
+        "positive_months": 2,
+        "positive_month_share": 0.11764705882352941,
+        "largest_positive_month_share_of_positive_pnl": 0.6703626849083748,
+        "best_month_pnl": 0.7533254091572985,
+        "worst_month_pnl": -0.25,
+        "monthly_pnl": {
+          "2025-05-31 00:00:00+00:00": 0.0,
+          "2025-06-30 00:00:00+00:00": 0.0,
+          "2025-07-31 00:00:00+00:00": 0.0,
+          "2025-08-31 00:00:00+00:00": 0.0,
+          "2025-09-30 00:00:00+00:00": 0.0,
+          "2025-10-31 00:00:00+00:00": 0.0,
+          "2025-11-30 00:00:00+00:00": 0.37043255965068056,
+          "2025-12-31 00:00:00+00:00": 0.7533254091572985,
+          "2026-01-31 00:00:00+00:00": 0.0,
+          "2026-02-28 00:00:00+00:00": 0.0,
+          "2026-03-31 00:00:00+00:00": 0.0,
+          "2026-04-30 00:00:00+00:00": -0.25,
+          "2026-05-31 00:00:00+00:00": 0.0,
+          "2026-06-30 00:00:00+00:00": -0.1822810223368947,
+          "2026-07-31 00:00:00+00:00": 0.0,
+          "2026-08-31 00:00:00+00:00": 0.0,
+          "2026-09-30 00:00:00+00:00": 0.0
+        }
+      }
+    }
+  },
+  "leave_one_out_stress_pnl": {
+    "BTCUSDT": 0.749611452195893,
+    "ETHUSDT": 0.9763300527020533,
+    "SOLUSDT": 0.6271781558810972,
+    "BNBUSDT": 0.5018436796004266,
+    "XRPUSDT": 0.37913505059191266,
+    "DOGEUSDT": 1.0283318241856705
+  },
+  "live_enabled": false,
+  "historical_gate": {
+    "checks": {
+      "combined_minimum_18_stress_fills": false,
+      "stress_pnl_beats_s108": false,
+      "stress_pf_above_1_15": true,
+      "stress_dd_at_most_5pct": true,
+      "severe_pnl_beats_s108": false,
+      "at_least_five_longs_and_shorts": false,
+      "long_and_short_non_negative": false,
+      "at_least_three_symbols": true,
+      "four_of_six_leave_one_out_positive": true,
+      "primary_and_portability_minimum_six_stress_fills": true,
+      "primary_and_portability_stress_non_negative": true,
+      "primary_and_portability_severe_non_negative": false,
+      "three_of_four_positive_stress_slices": false,
+      "no_stress_slice_below_minus_1usd": true,
+      "positive_month_share_at_least_35pct": false,
+      "bootstrap_p10_positive": false
+    },
+    "passed": false,
+    "stress_slice_pnl": {
+      "development": -0.25004986582740685,
+      "former_validation_now_diagnostic": 1.182397912439967,
+      "retrospective": -0.20647356599027944,
+      "opened_design_month": 0.0
+    }
+  },
+  "decision": "REJECTED_AT_HISTORICAL_GATE",
+  "paper_forward": {
+    "minimum_calendar_days": 180,
+    "minimum_fills": 24,
+    "requires_both_directions": true,
+    "live_enabled": false
+  }
+}

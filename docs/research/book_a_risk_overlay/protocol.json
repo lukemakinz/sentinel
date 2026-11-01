@@ -1,0 +1,22 @@
+{
+  "strategy_id": "BOOK_A_RISK_RESEARCH",
+  "base": "BOOK_A_S73_BTC",
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "overlays": [
+    "RM_breadth_only",
+    "RM_vol_only",
+    "RM_drawdown_only",
+    "RM_composite_v1",
+    "RM_composite_tight"
+  ],
+  "daily_goal_usd": 5.0
+}

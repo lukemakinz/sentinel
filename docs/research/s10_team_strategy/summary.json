@@ -1,0 +1,697 @@
+{
+  "base": {
+    "trades": 9,
+    "wins": 4,
+    "win_rate_pct": 44.44444444444444,
+    "profit_factor": 0.5490418774991627,
+    "net_pnl": -1.6465007949212236,
+    "return_pct": -0.6586003179684895,
+    "max_drawdown_pct": 0.8042138307934543,
+    "per_symbol": {
+      "ETHUSDT": {
+        "trades": 3,
+        "days": 396.0,
+        "trades_per_day": 0.007575757575757576,
+        "days_at_least_3_pct": 0.0,
+        "days_at_least_4_pct": 0.0,
+        "zero_trade_days": 393,
+        "win_rate_pct": 33.33333333333333,
+        "profit_factor": 0.6229028986059196,
+        "net_pnl": -0.5656456520911206,
+        "return_pct": -0.22625826083644274,
+        "max_drawdown_pct": 0.5088643583461172,
+        "mean_net_r": -0.1554677105851364,
+        "fees": 0.3179153510077666,
+        "funding_pnl": 0.0,
+        "gross_pnl_after_slippage": -0.24773030108334737,
+        "profitable_days_pct": 0.25252525252525254,
+        "losing_days_pct": 0.5050505050505051,
+        "mean_daily_return_pct": -0.0005679611101503435,
+        "worst_day_pct": -0.3,
+        "diagnostics": {
+          "signals": 6,
+          "expired_limit": 3,
+          "entries": 3
+        }
+      },
+      "SOLUSDT": {
+        "trades": 3,
+        "days": 396.0,
+        "trades_per_day": 0.007575757575757576,
+        "days_at_least_3_pct": 0.0,
+        "days_at_least_4_pct": 0.0,
+        "zero_trade_days": 393,
+        "win_rate_pct": 66.66666666666666,
+        "profit_factor": 1.302934886042408,
+        "net_pnl": 0.22720116453180594,
+        "return_pct": 0.09088046581271492,
+        "max_drawdown_pct": 0.47627435180124245,
+        "mean_net_r": 0.2200597826407195,
+        "fees": 0.3728814541319028,
+        "funding_pnl": 0.00646441743467817,
+        "gross_pnl_after_slippage": 0.5936182012290327,
+        "profitable_days_pct": 0.5050505050505051,
+        "losing_days_pct": 0.25252525252525254,
+        "mean_daily_return_pct": 0.00023196963470341586,
+        "worst_day_pct": -0.2988319243819786,
+        "diagnostics": {
+          "signals": 8,
+          "expired_limit": 5,
+          "entries": 3
+        }
+      },
+      "BNBUSDT": {
+        "trades": 3,
+        "days": 396.0,
+        "trades_per_day": 0.007575757575757576,
+        "days_at_least_3_pct": 0.0,
+        "days_at_least_4_pct": 0.0,
+        "zero_trade_days": 393,
+        "win_rate_pct": 33.33333333333333,
+        "profit_factor": 0.06641882347652928,
+        "net_pnl": -1.308056307361909,
+        "return_pct": -0.5232225229447662,
+        "max_drawdown_pct": 0.7929871816825695,
+        "mean_net_r": -0.623633892124943,
+        "fees": 0.3823114460507526,
+        "funding_pnl": 0.0,
+        "gross_pnl_after_slippage": -0.9257448613111422,
+        "profitable_days_pct": 0.25252525252525254,
+        "losing_days_pct": 0.5050505050505051,
+        "mean_daily_return_pct": -0.0013227182235756617,
+        "worst_day_pct": -0.3000000000000021,
+        "diagnostics": {
+          "signals": 4,
+          "entries": 3,
+          "expired_limit": 1
+        }
+      }
+    },
+    "per_month": {
+      "2025-09": {
+        "trades": 4,
+        "pnl": 0.3669851272124163
+      },
+      "2025-10": {
+        "trades": 1,
+        "pnl": -0.7480407717972355
+      },
+      "2025-11": {
+        "trades": 3,
+        "pnl": -0.5154451503364044
+      },
+      "2025-12": {
+        "trades": 1,
+        "pnl": -0.75
+      }
+    },
+    "trades_detail": [
+      {
+        "opened_at": "2025-09-18 14:00:00+00:00",
+        "closed_at": "2025-09-18 14:13:00+00:00",
+        "side": "SHORT",
+        "entry": 4587.535,
+        "initial_stop": 4604.554276783073,
+        "quantity": 0.03544351040509352,
+        "pnl": -0.75,
+        "leverage": 20.0,
+        "initial_margin": 8.129917225311534,
+        "margin_return_pct": -9.22518617612691,
+        "gross_pnl": -0.6358632272320225,
+        "fees": 0.11413677276797751,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.0,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-09-18 14:13:00+00:00",
+            "price": 4605.47518763843,
+            "quantity": 0.03544351040509352,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "ETHUSDT"
+      },
+      {
+        "opened_at": "2025-09-25 07:57:00+00:00",
+        "closed_at": "2025-09-25 08:05:00+00:00",
+        "side": "LONG",
+        "entry": 203.99,
+        "initial_stop": 203.5553989675421,
+        "quantity": 0.9191627040541203,
+        "pnl": 0.8357068468934585,
+        "leverage": 20.0,
+        "initial_margin": 9.375,
+        "margin_return_pct": 8.914206366863556,
+        "gross_pnl": 0.9609729159167524,
+        "fees": 0.13173048645795837,
+        "funding_pnl": 0.00646441743467817,
+        "r_multiple": 1.4715202577376953,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "TARGET",
+        "exits": [
+          {
+            "timestamp": "2025-09-25 08:05:00+00:00",
+            "price": 205.0354872806286,
+            "quantity": 0.9191627040541203,
+            "reason": "TARGET"
+          }
+        ],
+        "symbol": "SOLUSDT"
+      },
+      {
+        "opened_at": "2025-09-25 12:29:00+00:00",
+        "closed_at": "2025-09-25 12:30:00+00:00",
+        "side": "LONG",
+        "entry": 986.3399999999999,
+        "initial_stop": 983.7903292594132,
+        "quantity": 0.19009672121175256,
+        "pnl": -0.6530760675899216,
+        "leverage": 20.0,
+        "initial_margin": 9.375,
+        "margin_return_pct": -6.966144720959163,
+        "gross_pnl": -0.5220871111454932,
+        "fees": 0.13098895644442726,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.0000000000000018,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-09-25 12:30:00+00:00",
+            "price": 983.5935711935613,
+            "quantity": 0.19009672121175256,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "BNBUSDT"
+      },
+      {
+        "opened_at": "2025-09-26 12:10:00+00:00",
+        "closed_at": "2025-09-26 12:30:00+00:00",
+        "side": "LONG",
+        "entry": 3881.955,
+        "initial_stop": 3872.7900942629567,
+        "quantity": 0.04815550412099059,
+        "pnl": 0.9343543479088794,
+        "leverage": 20.0,
+        "initial_margin": 9.346875,
+        "margin_return_pct": 9.99643568474896,
+        "gross_pnl": 1.0657434696437078,
+        "fees": 0.13138912173482187,
+        "funding_pnl": 0.0,
+        "r_multiple": 1.533596868244591,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "TARGET",
+        "exits": [
+          {
+            "timestamp": "2025-09-26 12:30:00+00:00",
+            "price": 3904.0862908897398,
+            "quantity": 0.04815550412099059,
+            "reason": "TARGET"
+          }
+        ],
+        "symbol": "ETHUSDT"
+      },
+      {
+        "opened_at": "2025-10-15 12:29:00+00:00",
+        "closed_at": "2025-10-15 12:30:00+00:00",
+        "side": "LONG",
+        "entry": 1185.11,
+        "initial_stop": 1181.0454817997124,
+        "quantity": 0.14586940672425394,
+        "pnl": -0.7480407717972355,
+        "leverage": 20.0,
+        "initial_margin": 8.643564630149028,
+        "margin_return_pct": -8.654308769648642,
+        "gross_pnl": -0.6273445392447662,
+        "fees": 0.12069623255246403,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.000000000000007,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-10-15 12:30:00+00:00",
+            "price": 1180.8092727033525,
+            "quantity": 0.14586940672425394,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "BNBUSDT"
+      },
+      {
+        "opened_at": "2025-11-03 14:39:00+00:00",
+        "closed_at": "2025-11-03 14:48:00+00:00",
+        "side": "SHORT",
+        "entry": 175.815,
+        "initial_stop": 176.45511468729205,
+        "quantity": 0.9388920094091356,
+        "pnl": 0.1414943176383474,
+        "leverage": 20.0,
+        "initial_margin": 8.25356493171336,
+        "margin_return_pct": 1.714341848752798,
+        "gross_pnl": 0.256915768797924,
+        "fees": 0.11542145115958807,
+        "funding_pnl": 0.0,
+        "r_multiple": 0.18865909018446322,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-11-03 14:48:00+00:00",
+            "price": 175.5413628125245,
+            "quantity": 0.9388920094091356,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "SOLUSDT"
+      },
+      {
+        "opened_at": "2025-11-04 14:02:00+00:00",
+        "closed_at": "2025-11-04 14:10:00+00:00",
+        "side": "LONG",
+        "entry": 943.835,
+        "initial_stop": 941.0333398866146,
+        "quantity": 0.19754423428931925,
+        "pnl": 0.09306053202524822,
+        "leverage": 20.0,
+        "initial_margin": 9.322458118522983,
+        "margin_return_pct": 0.9982402800002325,
+        "gross_pnl": 0.22368678907911718,
+        "fees": 0.13062625705386133,
+        "funding_pnl": 0.0,
+        "r_multiple": 0.12909832362517992,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-11-04 14:10:00+00:00",
+            "price": 944.9673377262002,
+            "quantity": 0.19754423428931925,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "BNBUSDT"
+      },
+      {
+        "opened_at": "2025-11-13 08:19:00+00:00",
+        "closed_at": "2025-11-13 08:33:00+00:00",
+        "side": "SHORT",
+        "entry": 155.88,
+        "initial_stop": 156.3918512772051,
+        "quantity": 1.1493949674897683,
+        "pnl": -0.75,
+        "leverage": 20.0,
+        "initial_margin": 8.958384376615253,
+        "margin_return_pct": -8.372045320557818,
+        "gross_pnl": -0.6242704834856436,
+        "fees": 0.12572951651435638,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.0,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-11-13 08:33:00+00:00",
+            "price": 156.42312964746054,
+            "quantity": 1.1493949674897683,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "SOLUSDT"
+      },
+      {
+        "opened_at": "2025-12-08 14:56:00+00:00",
+        "closed_at": "2025-12-08 15:03:00+00:00",
+        "side": "LONG",
+        "entry": 3141.4750000000004,
+        "initial_stop": 3121.61089620719,
+        "quantity": 0.033072845342992756,
+        "pnl": -0.75,
+        "leverage": 20.0,
+        "initial_margin": 5.194875841193909,
+        "margin_return_pct": -14.437303660901964,
+        "gross_pnl": -0.6776105434950327,
+        "fees": 0.07238945650496721,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.0000000000000002,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-12-08 15:03:00+00:00",
+            "price": 3120.9865740279483,
+            "quantity": 0.033072845342992756,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "ETHUSDT"
+      }
+    ]
+  },
+  "stress": {
+    "trades": 8,
+    "wins": 3,
+    "win_rate_pct": 37.5,
+    "profit_factor": 0.09653904923474597,
+    "net_pnl": -3.3842553647059788,
+    "return_pct": -1.3537021458823915,
+    "max_drawdown_pct": 1.3537021458823961,
+    "per_symbol": {
+      "ETHUSDT": {
+        "trades": 3,
+        "days": 396.0,
+        "trades_per_day": 0.007575757575757576,
+        "days_at_least_3_pct": 0.0,
+        "days_at_least_4_pct": 0.0,
+        "zero_trade_days": 393,
+        "win_rate_pct": 33.33333333333333,
+        "profit_factor": 0.08431802945043912,
+        "net_pnl": -1.371809676256646,
+        "return_pct": -0.5487238705026543,
+        "max_drawdown_pct": 0.565600986731396,
+        "mean_net_r": -0.6103558312323111,
+        "fees": 0.5307011318356574,
+        "funding_pnl": 0.0,
+        "gross_pnl_after_slippage": -0.8411085444210076,
+        "profitable_days_pct": 0.25252525252525254,
+        "losing_days_pct": 0.5050505050505051,
+        "mean_daily_return_pct": -0.0013871723437097981,
+        "worst_day_pct": -0.3,
+        "diagnostics": {
+          "signals": 6,
+          "expired_limit": 3,
+          "entries": 3
+        }
+      },
+      "SOLUSDT": {
+        "trades": 2,
+        "days": 396.0,
+        "trades_per_day": 0.005050505050505051,
+        "days_at_least_3_pct": 0.0,
+        "days_at_least_4_pct": 0.0,
+        "zero_trade_days": 394,
+        "win_rate_pct": 50.0,
+        "profit_factor": 0.14744481354474223,
+        "net_pnl": -0.6394163898414433,
+        "return_pct": -0.25576655593657627,
+        "max_drawdown_pct": 0.4022738628867706,
+        "mean_net_r": -0.42627759322762887,
+        "fees": 0.3708623787130314,
+        "funding_pnl": 0.0,
+        "gross_pnl_after_slippage": -0.26855401112840477,
+        "profitable_days_pct": 0.25252525252525254,
+        "losing_days_pct": 0.25252525252525254,
+        "mean_daily_return_pct": -0.0006455401875665698,
+        "worst_day_pct": -0.2998673583397843,
+        "diagnostics": {
+          "signals": 8,
+          "expired_limit": 5,
+          "blocked_reward_cost_or_target": 1,
+          "entries": 2
+        }
+      },
+      "BNBUSDT": {
+        "trades": 3,
+        "days": 396.0,
+        "trades_per_day": 0.007575757575757576,
+        "days_at_least_3_pct": 0.0,
+        "days_at_least_4_pct": 0.0,
+        "zero_trade_days": 393,
+        "win_rate_pct": 33.33333333333333,
+        "profit_factor": 0.08327204232489221,
+        "net_pnl": -1.3730292986078894,
+        "return_pct": -0.5492117194431545,
+        "max_drawdown_pct": 0.8504991845930232,
+        "mean_net_r": -0.6109011526311418,
+        "fees": 0.611410264679199,
+        "funding_pnl": 0.0,
+        "gross_pnl_after_slippage": -0.7616190339286899,
+        "profitable_days_pct": 0.25252525252525254,
+        "losing_days_pct": 0.5050505050505051,
+        "mean_daily_return_pct": -0.0013884117105253224,
+        "worst_day_pct": -0.3,
+        "diagnostics": {
+          "signals": 4,
+          "entries": 3,
+          "expired_limit": 1
+        }
+      }
+    },
+    "per_month": {
+      "2025-09": {
+        "trades": 3,
+        "pnl": -1.3736807184118902
+      },
+      "2025-10": {
+        "trades": 1,
+        "pnl": -0.7477499999999964
+      },
+      "2025-11": {
+        "trades": 3,
+        "pnl": -0.5146956884493363
+      },
+      "2025-12": {
+        "trades": 1,
+        "pnl": -0.7481289578447559
+      }
+    },
+    "trades_detail": [
+      {
+        "opened_at": "2025-09-18 14:00:00+00:00",
+        "closed_at": "2025-09-18 14:13:00+00:00",
+        "side": "SHORT",
+        "entry": 4587.535,
+        "initial_stop": 4604.554276783073,
+        "quantity": 0.029643323627674256,
+        "pnl": -0.75,
+        "leverage": 20.0,
+        "initial_margin": 6.799489232914131,
+        "margin_return_pct": -11.030240277012165,
+        "gross_pnl": -0.5727550758835257,
+        "fees": 0.17724492411647425,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.0,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-09-18 14:13:00+00:00",
+            "price": 4606.856553921464,
+            "quantity": 0.029643323627674256,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "ETHUSDT"
+      },
+      {
+        "opened_at": "2025-09-25 12:29:00+00:00",
+        "closed_at": "2025-09-25 12:30:00+00:00",
+        "side": "LONG",
+        "entry": 986.3399999999999,
+        "initial_stop": 983.7903292594132,
+        "quantity": 0.17355588448399265,
+        "pnl": -0.75,
+        "leverage": 20.0,
+        "initial_margin": 8.559255555097064,
+        "margin_return_pct": -8.762444294041117,
+        "gross_pnl": -0.5278816608961933,
+        "fees": 0.22211833910380674,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.0,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-09-25 12:30:00+00:00",
+            "price": 983.2984340947835,
+            "quantity": 0.17355588448399265,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "BNBUSDT"
+      },
+      {
+        "opened_at": "2025-09-26 12:10:00+00:00",
+        "closed_at": "2025-09-26 12:29:00+00:00",
+        "side": "LONG",
+        "entry": 3881.955,
+        "initial_stop": 3872.7900942629567,
+        "quantity": 0.04633197816860617,
+        "pnl": 0.1263192815881098,
+        "leverage": 20.0,
+        "initial_margin": 8.992932715575577,
+        "margin_return_pct": 1.4046505804422105,
+        "gross_pnl": 0.3604238712900965,
+        "fees": 0.2341045897019971,
+        "funding_pnl": 0.0,
+        "r_multiple": 0.16893250630305554,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-09-26 12:29:00+00:00",
+            "price": 3889.73416,
+            "quantity": 0.04633197816860617,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "ETHUSDT"
+      },
+      {
+        "opened_at": "2025-10-15 12:29:00+00:00",
+        "closed_at": "2025-10-15 12:30:00+00:00",
+        "side": "LONG",
+        "entry": 1185.11,
+        "initial_stop": 1181.0454817997124,
+        "quantity": 0.12076144081318389,
+        "pnl": -0.7477499999999964,
+        "leverage": 20.0,
+        "initial_margin": 7.155779556105618,
+        "margin_return_pct": -10.449595241681028,
+        "gross_pnl": -0.5621494511021357,
+        "fees": 0.18560054889786437,
+        "funding_pnl": 0.0,
+        "r_multiple": -0.9999999999999951,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-10-15 12:30:00+00:00",
+            "price": 1180.4549590588126,
+            "quantity": 0.12076144081318389,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "BNBUSDT"
+      },
+      {
+        "opened_at": "2025-11-03 14:39:00+00:00",
+        "closed_at": "2025-11-03 14:45:00+00:00",
+        "side": "SHORT",
+        "entry": 175.815,
+        "initial_stop": 176.45511468729205,
+        "quantity": 0.783302564054979,
+        "pnl": 0.11058361015855667,
+        "leverage": 20.0,
+        "initial_margin": 6.885817014966307,
+        "margin_return_pct": 1.605962080000143,
+        "gross_pnl": 0.28938334587099107,
+        "fees": 0.1787997357124272,
+        "funding_pnl": 0.0,
+        "r_multiple": 0.14744481354474223,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-11-03 14:45:00+00:00",
+            "price": 175.44555994049998,
+            "quantity": 0.783302564054979,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "SOLUSDT"
+      },
+      {
+        "opened_at": "2025-11-04 14:02:00+00:00",
+        "closed_at": "2025-11-04 14:09:00+00:00",
+        "side": "LONG",
+        "entry": 943.835,
+        "initial_stop": 941.0333398866146,
+        "quantity": 0.16579547762795252,
+        "pnl": 0.124720701392107,
+        "leverage": 20.0,
+        "initial_margin": 7.824178731348928,
+        "margin_return_pct": 1.594042079999935,
+        "gross_pnl": 0.32841207806963907,
+        "fees": 0.20369137667752785,
+        "funding_pnl": 0.0,
+        "r_multiple": 0.1672965421065698,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-11-04 14:09:00+00:00",
+            "price": 945.8158265145,
+            "quantity": 0.16579547762795252,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "BNBUSDT"
+      },
+      {
+        "opened_at": "2025-11-13 08:19:00+00:00",
+        "closed_at": "2025-11-13 08:33:00+00:00",
+        "side": "SHORT",
+        "entry": 155.88,
+        "initial_stop": 156.3918512772051,
+        "quantity": 0.9455808862586836,
+        "pnl": -0.75,
+        "leverage": 20.0,
+        "initial_margin": 7.369857427500181,
+        "margin_return_pct": -10.17658763928621,
+        "gross_pnl": -0.5579373569993958,
+        "fees": 0.19206264300060422,
+        "funding_pnl": 0.0,
+        "r_multiple": -1.0,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-11-13 08:33:00+00:00",
+            "price": 156.4700472028437,
+            "quantity": 0.9455808862586836,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "SOLUSDT"
+      },
+      {
+        "opened_at": "2025-12-08 14:56:00+00:00",
+        "closed_at": "2025-12-08 15:03:00+00:00",
+        "side": "LONG",
+        "entry": 3141.4750000000004,
+        "initial_stop": 3121.61089620719,
+        "quantity": 0.02934795815269237,
+        "pnl": -0.7481289578447559,
+        "leverage": 20.0,
+        "initial_margin": 4.6097938418864635,
+        "margin_return_pct": -16.22911964190137,
+        "gross_pnl": -0.6287773398275783,
+        "fees": 0.119351618017186,
+        "funding_pnl": 0.0,
+        "r_multiple": -0.9999999999999887,
+        "setup": "btc_smt_raid_first_ob_mitigation",
+        "score": 5,
+        "reason": "STOP",
+        "exits": [
+          {
+            "timestamp": "2025-12-08 15:03:00+00:00",
+            "price": 3120.0500907590863,
+            "quantity": 0.02934795815269237,
+            "reason": "STOP"
+          }
+        ],
+        "symbol": "ETHUSDT"
+      }
+    ]
+  }
+}

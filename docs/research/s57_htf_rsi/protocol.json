@@ -1,0 +1,24 @@
+{
+  "strategy_id": "S57_HTF_RSI",
+  "traded": [
+    "BTCUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "rsi_2p5_time",
+    "rsi_patient_runner"
+  ],
+  "signal": "S40 rsi_extreme 20/80 4h",
+  "disclosure": "S40-informed characterization on cached BTC/SOL/XRP; not independent discovery; not live approval"
+}

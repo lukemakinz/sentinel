@@ -1,5 +1,13 @@
 from django.contrib import admin
-from .models import Position, Trade, AccountState, ExchangeOpenOrder, ExchangeFill, ExchangeClosedOrder
+from .models import (
+    AccountState,
+    ExchangeClosedOrder,
+    ExchangeExecutionIntent,
+    ExchangeFill,
+    ExchangeOpenOrder,
+    Position,
+    Trade,
+)
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
@@ -17,6 +25,14 @@ class TradeAdmin(admin.ModelAdmin):
 class AccountStateAdmin(admin.ModelAdmin):
     list_display = ['balance', 'equity', 'unrealized_pnl', 'total_trades', 'winning_trades', 'max_drawdown', 'updated_at']
     ordering = ['-updated_at']
+
+
+@admin.register(ExchangeExecutionIntent)
+class ExchangeExecutionIntentAdmin(admin.ModelAdmin):
+    list_display = ['client_oid', 'symbol', 'side', 'submitted_quantity', 'status', 'updated_at']
+    list_filter = ['status', 'symbol', 'side']
+    search_fields = ['client_oid', 'order_id', 'signal_ref']
+    ordering = ['-created_at']
 
 
 @admin.register(ExchangeOpenOrder)

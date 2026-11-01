@@ -1,0 +1,35 @@
+{
+  "benchmark_id": "BENCH_AB_R2",
+  "status": "FROZEN_BEFORE_CORRECTED_REPLAY",
+  "reason_for_rebuild": "All prior A+B reports predate the Book A cash-preservation fix. The old simulator renormalized surviving weights to 100% gross and thereby cancelled volatility targeting and the risk overlay.",
+  "capital_usd": 500,
+  "allocation": {
+    "BOOK_A_ALT_RM_plus_BOOK_A_RISK_DEFAULT": 250,
+    "S84_quiet_router_exact": 250
+  },
+  "book_a": {
+    "simulator": "backtest.book_a_portfolio_sim.simulate_book_a",
+    "preserve_unallocated_weight_as_cash": true,
+    "manual_variant_switching": false,
+    "experimental_fuse": false
+  },
+  "book_b": {
+    "router": "l1_filter.book_b_quiet_router.BookBQuietRouterConfig",
+    "symbol": "BTCUSDT",
+    "fixed_risk_usd": 6.0,
+    "manual_variant_switching": false
+  },
+  "data": {
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "development": ["2025-05-01T00:00:00Z", "2025-10-01T00:00:00Z"],
+    "validation": ["2025-10-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "source": "Binance public USD-M checksumed 1m kline and funding archives"
+  },
+  "cost_scenarios_bps": {
+    "base": {"book_a_one_way_turnover": 7, "book_b_taker": 7, "book_b_slippage_each_side": 2},
+    "stress": {"book_a_one_way_turnover": 12, "book_b_taker": 8, "book_b_slippage_each_side": 5},
+    "severe": {"book_a_one_way_turnover": 20, "book_b_taker": 10, "book_b_slippage_each_side": 10}
+  },
+  "disclosure": "Retrospective benchmark rebuild. The historical +$0.415/day validation and +$0.362/day forward-style figures remain provisional hurdles, not verified post-fix performance."
+}

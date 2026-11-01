@@ -1,0 +1,51 @@
+{
+  "strategy_id": "S89_broad_strong_level_retest",
+  "status": "FROZEN_BEFORE_RESULTS",
+  "relationship_to_prior_tests": "S87 was too sparse on 4h. S88 produced 12 development setups, but its single global pending order allowed one untouched symbol to block other markets. S89 keeps S88 signal thresholds unchanged and corrects portfolio order concurrency while broadening only the liquid universe.",
+  "hypothesis": "One causal hourly OB plus repeated S/R strategy can be evaluated without weakening level quality when independent resting orders are allowed across liquid symbols and only the first touched order may become the single live position.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "data": {
+    "source": "Binance public USD-M checksumed 1m kline and funding archives",
+    "warmup_start": "2025-03-01T00:00:00Z",
+    "development": ["2025-07-01T00:00:00Z", "2026-01-01T00:00:00Z"],
+    "validation": ["2026-01-01T00:00:00Z", "2026-04-01T00:00:00Z"],
+    "retrospective_evaluation": ["2026-04-01T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "signal": {
+    "timeframe": "1h closed bars",
+    "swing_confirmation_bars": 2,
+    "structure_lookback_bars": 240,
+    "order_block_search_bars": 3,
+    "minimum_prior_sr_touches": 2,
+    "sr_cluster_tolerance_atr": 0.45,
+    "minimum_displacement_atr": 1.5,
+    "minimum_impulse_volume_multiple": 1.25,
+    "minimum_strength_score": 70,
+    "entry": "independent resting midpoint limit armed at confirmation close; first touch only",
+    "validity_hours": 168,
+    "stop": "distal zone edge plus 0.20 ATR",
+    "target": "nearest causal opposing swing between 2R and 3R, otherwise 3R"
+  },
+  "portfolio": {
+    "initial_capital_usd": 250,
+    "risk_fraction": 0.002,
+    "maximum_notional_equity": 1.0,
+    "maximum_open_positions": 1,
+    "independent_pending_orders": true,
+    "leverage_cap": 5,
+    "daily_loss_fraction": 0.01,
+    "weekly_loss_fraction": 0.018,
+    "drawdown_scale_fraction": 0.04,
+    "drawdown_halt_fraction": 0.06
+  },
+  "cost_scenarios_bps": {
+    "base": {"maker": 2, "taker": 5, "slippage_each_side": 2, "limit_penetration": 2},
+    "stress": {"maker": 5, "taker": 8, "slippage_each_side": 5, "limit_penetration": 5},
+    "severe": {"maker": 10, "taker": 10, "slippage_each_side": 10, "limit_penetration": 10}
+  },
+  "gates": {
+    "development": {"minimum_fills": 20, "minimum_profit_factor_base": 1.10, "minimum_profit_factor_stress": 0.95, "net_pnl_base_positive": true},
+    "validation": {"minimum_fills": 10, "minimum_profit_factor_base": 1.15, "minimum_profit_factor_stress": 1.00, "minimum_positive_symbols": 3, "maximum_largest_symbol_gross_profit_share_pct": 50}
+  },
+  "disclosure": "Retrospective research only; one frozen strategy, no parameter grid, no live orders and no claim of profitability."
+}

@@ -1,0 +1,659 @@
+{
+  "protocol_sha256": "b28cb2986842c68268a4771eb3be106d5e51d519486ec4e76197ca338f5b8680",
+  "disclosure": "cached-window historical characterization; not live approval",
+  "results": {
+    "S60_flow_reset_15m": {
+      "config": {
+        "name": "S60_flow_reset_15m",
+        "route": "flow_reset_15m",
+        "pivot_width": 2,
+        "lookback_bars": 8,
+        "flush_long_ratio": 0.38,
+        "recover_long_ratio": 0.55,
+        "flush_short_ratio": 0.62,
+        "recover_short_ratio": 0.45,
+        "confirmation_expiry_bars": 4,
+        "stop_buffer_atr_mult": 0.25,
+        "target_r": 2.5
+      },
+      "raw_candidates_by_window": {
+        "development": 83,
+        "validation": 29
+      },
+      "windows": {
+        "development": {
+          "base": {
+            "trades": 73,
+            "wins": 32,
+            "win_rate_pct": 43.83561643835616,
+            "profit_factor": 1.1815080285135238,
+            "net_pnl": 3.3632930969905033,
+            "return_pct": 1.3453172387962065,
+            "max_drawdown_pct": 2.0531455120849085,
+            "mean_net_r": 0.08663932419832374,
+            "fees": 5.050181463442325,
+            "funding_pnl": -0.04261100534703941,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 52,
+                "net_pnl": -2.4017753379146427,
+                "gross_profit": 12.91163278756548
+              },
+              "XRPUSDT": {
+                "trades": 21,
+                "net_pnl": 5.765068434905146,
+                "gross_profit": 8.981381140698943
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 58.97604062132461,
+            "per_month": {
+              "2025-05": {
+                "trades": 20,
+                "pnl": 0.11183265295625233
+              },
+              "2025-06": {
+                "trades": 10,
+                "pnl": -1.346142582409243
+              },
+              "2025-07": {
+                "trades": 10,
+                "pnl": -0.9159350601055962
+              },
+              "2025-08": {
+                "trades": 18,
+                "pnl": 3.956539141181338
+              },
+              "2025-09": {
+                "trades": 15,
+                "pnl": 1.5569989453677522
+              }
+            },
+            "diagnostics": {
+              "signals": 83,
+              "entries": 73,
+              "entries_SOLUSDT": 52,
+              "entries_XRPUSDT": 21,
+              "blocked_open_position": 7,
+              "blocked_risk_halt_or_capital": 1
+            },
+            "drawdown_halted": false
+          },
+          "stress": {
+            "trades": 74,
+            "wins": 29,
+            "win_rate_pct": 39.189189189189186,
+            "profit_factor": 0.8650549378063163,
+            "net_pnl": -2.6197651425924846,
+            "return_pct": -1.0479060570369958,
+            "max_drawdown_pct": 3.2127028328583607,
+            "mean_net_r": -0.07001239115424754,
+            "fees": 6.866990121257884,
+            "funding_pnl": -0.03920393931650165,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 53,
+                "net_pnl": -6.375419391978539,
+                "gross_profit": 9.701776404385413
+              },
+              "XRPUSDT": {
+                "trades": 21,
+                "net_pnl": 3.7556542493860547,
+                "gross_profit": 7.092026463627718
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 57.76997908475049,
+            "per_month": {
+              "2025-05": {
+                "trades": 20,
+                "pnl": -0.9787392485808937
+              },
+              "2025-06": {
+                "trades": 10,
+                "pnl": -2.9150403390287067
+              },
+              "2025-07": {
+                "trades": 10,
+                "pnl": -1.3446395263613908
+              },
+              "2025-08": {
+                "trades": 19,
+                "pnl": 2.2912408410431624
+              },
+              "2025-09": {
+                "trades": 15,
+                "pnl": 0.32741313033534425
+              }
+            },
+            "diagnostics": {
+              "signals": 83,
+              "entries": 74,
+              "entries_SOLUSDT": 53,
+              "entries_XRPUSDT": 21,
+              "blocked_open_position": 7
+            },
+            "drawdown_halted": false
+          },
+          "severe": {
+            "trades": 72,
+            "wins": 26,
+            "win_rate_pct": 36.11111111111111,
+            "profit_factor": 0.5991778635747391,
+            "net_pnl": -7.79897284363517,
+            "return_pct": -3.1195891374540707,
+            "max_drawdown_pct": 4.1016437622155895,
+            "mean_net_r": -0.21916819653421937,
+            "fees": 6.866366158881459,
+            "funding_pnl": -0.033664362681277864,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 52,
+                "net_pnl": -10.647306569997454,
+                "gross_profit": 5.9227019913406025
+              },
+              "XRPUSDT": {
+                "trades": 20,
+                "net_pnl": 2.8483337263622843,
+                "gross_profit": 5.735765597806818
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 50.801719403104904,
+            "per_month": {
+              "2025-05": {
+                "trades": 19,
+                "pnl": -1.638114106625892
+              },
+              "2025-06": {
+                "trades": 10,
+                "pnl": -3.197829587333757
+              },
+              "2025-07": {
+                "trades": 10,
+                "pnl": -1.709141788817817
+              },
+              "2025-08": {
+                "trades": 19,
+                "pnl": -0.17014176335251818
+              },
+              "2025-09": {
+                "trades": 14,
+                "pnl": -1.0837455975051853
+              }
+            },
+            "diagnostics": {
+              "signals": 83,
+              "entries": 72,
+              "entries_SOLUSDT": 52,
+              "blocked_reward_cost_or_target": 2,
+              "entries_XRPUSDT": 20,
+              "blocked_open_position": 7
+            },
+            "drawdown_halted": false
+          }
+        },
+        "validation": {
+          "base": {
+            "trades": 27,
+            "wins": 9,
+            "win_rate_pct": 33.33333333333333,
+            "profit_factor": 0.7908536154036285,
+            "net_pnl": -1.5365177497736227,
+            "return_pct": -0.6146070999094477,
+            "max_drawdown_pct": 1.5101322926293514,
+            "mean_net_r": -0.10736512673713276,
+            "fees": 2.0877856297817297,
+            "funding_pnl": -0.010832324380768059,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 14,
+                "net_pnl": 0.8815505670558537,
+                "gross_profit": 4.031230913166354
+              },
+              "XRPUSDT": {
+                "trades": 13,
+                "net_pnl": -2.4180683168294763,
+                "gross_profit": 1.778865301910173
+              }
+            },
+            "positive_symbols": 1,
+            "largest_symbol_gross_profit_share_pct": 69.38320406305452,
+            "per_month": {
+              "2025-10": {
+                "trades": 7,
+                "pnl": -1.4797081219828385
+              },
+              "2025-11": {
+                "trades": 7,
+                "pnl": 0.24448687897466925
+              },
+              "2025-12": {
+                "trades": 13,
+                "pnl": -0.3012965067654534
+              }
+            },
+            "diagnostics": {
+              "signals": 29,
+              "entries": 27,
+              "entries_SOLUSDT": 14,
+              "entries_XRPUSDT": 13,
+              "blocked_open_position": 1
+            },
+            "drawdown_halted": false
+          },
+          "stress": {
+            "trades": 27,
+            "wins": 9,
+            "win_rate_pct": 33.33333333333333,
+            "profit_factor": 0.6120657183696542,
+            "net_pnl": -2.914466459463,
+            "return_pct": -1.1657865837852,
+            "max_drawdown_pct": 1.7751323098840865,
+            "mean_net_r": -0.21617163577710283,
+            "fees": 2.781113783645163,
+            "funding_pnl": -0.01278118213043313,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 14,
+                "net_pnl": -0.02324465378345053,
+                "gross_profit": 3.2101912455945865
+              },
+              "XRPUSDT": {
+                "trades": 13,
+                "net_pnl": -2.8912218056795496,
+                "gross_profit": 1.388126283030715
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 69.8123003818376,
+            "per_month": {
+              "2025-10": {
+                "trades": 7,
+                "pnl": -1.725424314407718
+              },
+              "2025-11": {
+                "trades": 7,
+                "pnl": -0.15270331962241812
+              },
+              "2025-12": {
+                "trades": 13,
+                "pnl": -1.036338825432864
+              }
+            },
+            "diagnostics": {
+              "signals": 29,
+              "entries": 27,
+              "entries_SOLUSDT": 14,
+              "entries_XRPUSDT": 13,
+              "blocked_open_position": 1
+            },
+            "drawdown_halted": false
+          },
+          "severe": {
+            "trades": 27,
+            "wins": 7,
+            "win_rate_pct": 25.925925925925924,
+            "profit_factor": 0.38902529050081824,
+            "net_pnl": -4.711496513656101,
+            "return_pct": -1.8845986054624397,
+            "max_drawdown_pct": 2.27063358788947,
+            "mean_net_r": -0.351591181850958,
+            "fees": 2.899758634116522,
+            "funding_pnl": -0.010274428721701308,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 14,
+                "net_pnl": -0.9879862489912341,
+                "gross_profit": 2.3602633034302585
+              },
+              "XRPUSDT": {
+                "trades": 13,
+                "net_pnl": -3.723510264664867,
+                "gross_profit": 0.6396829650840061
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 78.67685258906948,
+            "per_month": {
+              "2025-10": {
+                "trades": 7,
+                "pnl": -1.9435071700375204
+              },
+              "2025-11": {
+                "trades": 7,
+                "pnl": -0.7588130658072032
+              },
+              "2025-12": {
+                "trades": 13,
+                "pnl": -2.0091762778113775
+              }
+            },
+            "diagnostics": {
+              "signals": 29,
+              "entries": 27,
+              "entries_SOLUSDT": 14,
+              "entries_XRPUSDT": 13,
+              "blocked_open_position": 1
+            },
+            "drawdown_halted": false
+          }
+        }
+      },
+      "decision": "REJECTED_AT_VALIDATION_GATE"
+    },
+    "S60_flow_reset_5m": {
+      "config": {
+        "name": "S60_flow_reset_5m",
+        "route": "flow_reset_5m",
+        "pivot_width": 2,
+        "lookback_bars": 8,
+        "flush_long_ratio": 0.38,
+        "recover_long_ratio": 0.55,
+        "flush_short_ratio": 0.62,
+        "recover_short_ratio": 0.45,
+        "confirmation_expiry_bars": 4,
+        "stop_buffer_atr_mult": 0.25,
+        "target_r": 2.5
+      },
+      "raw_candidates_by_window": {
+        "development": 452,
+        "validation": 221
+      },
+      "windows": {
+        "development": {
+          "base": {
+            "trades": 258,
+            "wins": 95,
+            "win_rate_pct": 36.82170542635659,
+            "profit_factor": 0.7197281761699664,
+            "net_pnl": -14.772069826909672,
+            "return_pct": -5.908827930763872,
+            "max_drawdown_pct": 6.033783658556358,
+            "mean_net_r": -0.16783624125430208,
+            "fees": 19.343182453037823,
+            "funding_pnl": -0.05015602554437929,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 144,
+                "net_pnl": -9.280100046045845,
+                "gross_profit": 20.976420538462634
+              },
+              "XRPUSDT": {
+                "trades": 114,
+                "net_pnl": -5.491969780863826,
+                "gross_profit": 16.957734702289002
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 55.296922800400814,
+            "per_month": {
+              "2025-05": {
+                "trades": 93,
+                "pnl": -6.8514460146113265
+              },
+              "2025-06": {
+                "trades": 92,
+                "pnl": -4.933540193204578
+              },
+              "2025-07": {
+                "trades": 69,
+                "pnl": -2.0438149062949265
+              },
+              "2025-08": {
+                "trades": 4,
+                "pnl": -0.9432687127988402
+              }
+            },
+            "diagnostics": {
+              "signals": 452,
+              "entries": 258,
+              "entries_SOLUSDT": 144,
+              "entries_XRPUSDT": 114,
+              "blocked_open_position": 18,
+              "blocked_risk_halt_or_capital": 169,
+              "blocked_reward_cost_or_target": 3
+            },
+            "drawdown_halted": true
+          },
+          "stress": {
+            "trades": 134,
+            "wins": 40,
+            "win_rate_pct": 29.850746268656714,
+            "profit_factor": 0.4942044280074459,
+            "net_pnl": -14.897134517042474,
+            "return_pct": -5.958853806816988,
+            "max_drawdown_pct": 6.007148009111695,
+            "mean_net_r": -0.30113357932153667,
+            "fees": 12.883526313896466,
+            "funding_pnl": -0.0021621458850599714,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 74,
+                "net_pnl": -8.85970877652224,
+                "gross_profit": 7.54895205998335
+              },
+              "XRPUSDT": {
+                "trades": 60,
+                "net_pnl": -6.037425740520234,
+                "gross_profit": 7.006789924751416
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 51.86236516077477,
+            "per_month": {
+              "2025-05": {
+                "trades": 88,
+                "pnl": -10.854663962405908
+              },
+              "2025-06": {
+                "trades": 46,
+                "pnl": -4.042470554636566
+              }
+            },
+            "diagnostics": {
+              "signals": 452,
+              "entries": 134,
+              "entries_SOLUSDT": 74,
+              "entries_XRPUSDT": 60,
+              "blocked_open_position": 11,
+              "blocked_reward_cost_or_target": 13,
+              "blocked_risk_halt_or_capital": 292
+            },
+            "drawdown_halted": true
+          },
+          "severe": {
+            "trades": 111,
+            "wins": 30,
+            "win_rate_pct": 27.027027027027028,
+            "profit_factor": 0.37551252495304466,
+            "net_pnl": -15.094914285281817,
+            "return_pct": -6.037965714112725,
+            "max_drawdown_pct": 6.043797976910337,
+            "mean_net_r": -0.365339235111343,
+            "fees": 9.887904202458744,
+            "funding_pnl": -0.008100407024428675,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 63,
+                "net_pnl": -8.444089010004404,
+                "gross_profit": 5.410892443373712
+              },
+              "XRPUSDT": {
+                "trades": 48,
+                "net_pnl": -6.650825275277413,
+                "gross_profit": 3.665877874221138
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 59.612530162683264,
+            "per_month": {
+              "2025-05": {
+                "trades": 77,
+                "pnl": -12.041418584714023
+              },
+              "2025-06": {
+                "trades": 34,
+                "pnl": -3.053495700567794
+              }
+            },
+            "diagnostics": {
+              "signals": 452,
+              "entries": 111,
+              "entries_SOLUSDT": 63,
+              "entries_XRPUSDT": 48,
+              "blocked_reward_cost_or_target": 22,
+              "blocked_open_position": 10,
+              "blocked_risk_halt_or_capital": 307
+            },
+            "drawdown_halted": true
+          }
+        },
+        "validation": {
+          "base": {
+            "trades": 135,
+            "wins": 36,
+            "win_rate_pct": 26.666666666666668,
+            "profit_factor": 0.519811540507015,
+            "net_pnl": -14.986471027517126,
+            "return_pct": -5.994588411006852,
+            "max_drawdown_pct": 6.049585748298158,
+            "mean_net_r": -0.31600691427681604,
+            "fees": 9.607333743455138,
+            "funding_pnl": -0.00011558953217708322,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 76,
+                "net_pnl": -7.772604863165753,
+                "gross_profit": 9.026559954637719
+              },
+              "XRPUSDT": {
+                "trades": 59,
+                "net_pnl": -7.213866164351373,
+                "gross_profit": 7.196530037576537
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 55.640201459584596,
+            "per_month": {
+              "2025-10": {
+                "trades": 67,
+                "pnl": -10.274792287772527
+              },
+              "2025-11": {
+                "trades": 56,
+                "pnl": -3.2450027480527126
+              },
+              "2025-12": {
+                "trades": 12,
+                "pnl": -1.4666759916918863
+              }
+            },
+            "diagnostics": {
+              "signals": 221,
+              "entries": 135,
+              "entries_SOLUSDT": 76,
+              "entries_XRPUSDT": 59,
+              "blocked_risk_halt_or_capital": 79,
+              "blocked_open_position": 7
+            },
+            "drawdown_halted": true
+          },
+          "stress": {
+            "trades": 100,
+            "wins": 27,
+            "win_rate_pct": 27.0,
+            "profit_factor": 0.3554864460496664,
+            "net_pnl": -15.231922198837111,
+            "return_pct": -6.092768879534849,
+            "max_drawdown_pct": 6.092768879534849,
+            "mean_net_r": -0.4125874474828908,
+            "fees": 9.032038418722573,
+            "funding_pnl": -0.0015741241670193236,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 58,
+                "net_pnl": -9.540927283119117,
+                "gross_profit": 4.4349631029897125
+              },
+              "XRPUSDT": {
+                "trades": 42,
+                "net_pnl": -5.690994915717994,
+                "gross_profit": 3.9663216423531082
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 52.78910592154605,
+            "per_month": {
+              "2025-10": {
+                "trades": 63,
+                "pnl": -12.072247693006062
+              },
+              "2025-11": {
+                "trades": 37,
+                "pnl": -3.159674505831049
+              }
+            },
+            "diagnostics": {
+              "signals": 221,
+              "entries": 100,
+              "entries_SOLUSDT": 58,
+              "entries_XRPUSDT": 42,
+              "blocked_risk_halt_or_capital": 110,
+              "blocked_reward_cost_or_target": 6,
+              "blocked_open_position": 5
+            },
+            "drawdown_halted": true
+          },
+          "severe": {
+            "trades": 77,
+            "wins": 19,
+            "win_rate_pct": 24.675324675324674,
+            "profit_factor": 0.176510883373126,
+            "net_pnl": -14.67444196818002,
+            "return_pct": -5.8697767872720075,
+            "max_drawdown_pct": 6.014380588142842,
+            "mean_net_r": -0.5105188490449639,
+            "fees": 6.742407303314795,
+            "funding_pnl": -0.005135264545303462,
+            "per_symbol": {
+              "SOLUSDT": {
+                "trades": 45,
+                "net_pnl": -10.175157491162366,
+                "gross_profit": 1.1608312363053983
+              },
+              "XRPUSDT": {
+                "trades": 32,
+                "net_pnl": -4.499284477017653,
+                "gross_profit": 1.9845639638411967
+              }
+            },
+            "positive_symbols": 0,
+            "largest_symbol_gross_profit_share_pct": 63.09426439477951,
+            "per_month": {
+              "2025-10": {
+                "trades": 62,
+                "pnl": -13.259920382159095
+              },
+              "2025-11": {
+                "trades": 15,
+                "pnl": -1.4145215860209248
+              }
+            },
+            "diagnostics": {
+              "signals": 221,
+              "entries": 77,
+              "entries_SOLUSDT": 45,
+              "entries_XRPUSDT": 32,
+              "blocked_risk_halt_or_capital": 127,
+              "blocked_reward_cost_or_target": 12,
+              "blocked_open_position": 4
+            },
+            "drawdown_halted": true
+          }
+        }
+      },
+      "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+    }
+  }
+}

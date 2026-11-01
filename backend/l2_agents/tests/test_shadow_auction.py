@@ -6,7 +6,8 @@ from django.utils import timezone
 from ingester.models import Candle
 from l2_agents.auction_service import analysis_cycle_key, analyze_symbol
 from l2_agents.models import AuctionAnalysis, AuctionShadowPlan
-from l2_agents.shadow_auction import create_shadow_plan, resolve_plan
+from l2_agents.auction_learning import build_postmortem, ensure_postmortem
+from l2_agents.shadow_auction import create_shadow_plan, resolve_open_plans, resolve_plan
 
 
 def snapshot():
@@ -111,6 +112,95 @@ class AuctionShadowPlanTest(TestCase):
         self.assertEqual(plan.state, 'INVALID')
         self.assertEqual(plan.exit_reason, 'PRE_INVALIDATION')
         self.assertIsNone(plan.net_r)
+
+    @override_settings(AUCTION_SHADOW_MAX_HOLD_MINUTES=60)
+    def test_late_trigger_keeps_full_post_entry_holding_window(self):
+        plan = create_shadow_plan(analysis_record())
+        trigger_ts = plan.armed_at + timedelta(minutes=14)
+        candle(trigger_ts, 99.5, 101.0, 99.0, 100.5)
+        resolve_plan(plan, now=trigger_ts + timedelta(seconds=50))
+        plan.refresh_from_db()
+
+        self.assertEqual(plan.state, 'TRIGGERED')
+        self.assertEqual(
+            plan.position_expires_at,
+            trigger_ts + timedelta(minutes=60),
+        )
+        target_ts = plan.armed_at + timedelta(minutes=16)
+        candle(target_ts, 101.0, plan.target_price + 1, 100.8, plan.target_price)
+        resolve_plan(plan, now=target_ts + timedelta(seconds=50))
+        plan.refresh_from_db()
+
+        self.assertEqual(plan.exit_reason, 'TARGET')
+
+    @override_settings(AUCTION_SHADOW_MAX_HOLD_MINUTES=5)
+    def test_closed_plan_gets_versioned_postmortem_and_frozen_counterfactuals(self):
+        plan = create_shadow_plan(analysis_record())
+        trigger_ts = plan.armed_at + timedelta(minutes=1)
+        candle(trigger_ts, 99.5, 101.0, 99.0, 100.5)
+        resolve_plan(plan, now=trigger_ts + timedelta(seconds=50))
+        plan.refresh_from_db()
+
+        target_ts = trigger_ts + timedelta(minutes=1)
+        candle(target_ts, 101.0, plan.target_price + 1, 100.4, plan.target_price)
+        resolve_plan(plan, now=target_ts + timedelta(seconds=50))
+        plan.refresh_from_db()
+        self.assertEqual(plan.exit_reason, 'TARGET')
+
+        # Counterfactuals wait for the entire original five-minute holding
+        # window, even though the canonical 1.5R trade closed earlier.
+        for minute in (2, 3, 4):
+            candle(
+                trigger_ts + timedelta(minutes=minute),
+                plan.target_price, plan.target_price + 0.2,
+                plan.target_price - 0.2, plan.target_price,
+            )
+        payload = build_postmortem(
+            plan, now=plan.position_expires_at + timedelta(seconds=1),
+        )
+
+        self.assertEqual(payload['primary_diagnosis'], 'SUCCESS')
+        self.assertFalse(payload['execution_authorized'])
+        self.assertEqual(
+            set(payload['counterfactuals']),
+            {
+                'market_target_1.0r', 'market_target_1.5r',
+                'market_target_2.0r', 'post_confirmation_limit_5m',
+                'intraday_p1_structural', 'intraday_p2_hybrid',
+            },
+        )
+        self.assertTrue(
+            payload['counterfactuals']['post_confirmation_limit_5m']['filled'],
+        )
+        self.assertEqual(
+            ensure_postmortem(
+                plan, now=plan.position_expires_at + timedelta(seconds=1),
+            ),
+            'CREATED',
+        )
+        plan.refresh_from_db()
+        self.assertEqual(
+            plan.postmortem_version,
+            'auction-postmortem-v3-intraday-management',
+        )
+        self.assertEqual(ensure_postmortem(plan), 'EXISTS')
+
+    def test_expired_candidate_is_learned_as_no_trigger_without_fake_pnl(self):
+        plan = create_shadow_plan(analysis_record())
+        last_ts = plan.expires_at - timedelta(minutes=1)
+        candle(last_ts, 100.3, 100.4, 99.5, 100.2)
+        resolve_plan(plan, now=plan.expires_at + timedelta(seconds=1))
+        plan.refresh_from_db()
+
+        outcome = resolve_open_plans(now=plan.expires_at + timedelta(seconds=1))
+        plan.refresh_from_db()
+        payload = plan.postmortem
+
+        self.assertEqual(plan.state, 'EXPIRED')
+        self.assertEqual(outcome['POSTMORTEM_CREATED'], 1)
+        self.assertEqual(payload['primary_diagnosis'], 'NO_TRIGGER')
+        self.assertEqual(payload['actual']['net_r'], 0.0)
+        self.assertEqual(payload['counterfactuals'], {})
 
 
 class AuctionCycleIdempotencyTest(TestCase):

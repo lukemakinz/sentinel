@@ -1,0 +1,61 @@
+{
+  "strategy_id": "S95_WYCKOFF_PHASE_D_LPS_V1",
+  "status": "FROZEN_BEFORE_REPLAY",
+  "frozen_at_utc": "2026-10-13T13:00:00Z",
+  "hypothesis": "The failed S94 entered before demand/supply dominance was proven. S95 trades only after a high-effort, high-result SOS/SOW leaves a mature range and a later low-volume LPS/LPSY holds the broken boundary.",
+  "not_a_retune_of_s94": "S95 changes the event sequence and economic hypothesis; no S94 threshold or losing-trade subgroup is reused to select symbols, sides or parameters.",
+  "universe": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "AVAXUSDT"],
+  "data": {
+    "signal": "complete 1h Binance USD-M bars",
+    "execution": "first true 1m open after confirmation",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "historical_development": ["2025-05-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "prospective_t0": "2026-10-14T00:00:00Z"
+  },
+  "range": {
+    "hours": 120,
+    "boundaries": "10th-percentile low / 90th-percentile high frozen before SOS/SOW",
+    "width_atr": [4.0, 14.0],
+    "maximum_efficiency_ratio": 0.35,
+    "minimum_separated_touches_each_side": 2
+  },
+  "sos_sow": {
+    "close_beyond_boundary_atr": [0.20, 2.00],
+    "minimum_spread_atr": 0.80,
+    "minimum_relative_volume": 1.25,
+    "directional_taker_fraction": "long >= 0.52; short <= 0.48",
+    "minimum_close_location": 0.70
+  },
+  "lps_lpsy": {
+    "delay_hours": [2, 48],
+    "distance_from_broken_boundary_atr": 0.35,
+    "maximum_boundary_failure_atr": 0.15,
+    "maximum_test_to_breakout_volume": 0.75,
+    "maximum_test_relative_volume": 0.90,
+    "confirmation_deadline_hours": 8
+  },
+  "risk": {
+    "capital_usd": 500,
+    "fixed_risk_usd": 2.0,
+    "maximum_global_positions": 1,
+    "stop": "LPS/LPSY extreme plus 0.15 ATR",
+    "target": "one frozen range width measured from broken boundary",
+    "minimum_reward_risk": 2.50,
+    "maximum_hold_days": 7,
+    "drawdown_halt_pct": 6.0
+  },
+  "cost_scenarios_bps_each_side": {
+    "base": {"fee": 5, "slippage": 2},
+    "stress": {"fee": 8, "slippage": 5},
+    "severe": {"fee": 10, "slippage": 10}
+  },
+  "historical_gate": {
+    "minimum_stress_trades": 30,
+    "minimum_stress_profit_factor": 1.15,
+    "minimum_stress_mean_net_r": 0.08,
+    "stress_pnl_positive": true,
+    "severe_pnl_nonnegative": true,
+    "maximum_drawdown_pct": 6.0
+  },
+  "claim_policy": "Historical data are development-only. Pass allows paper-forward only; failure is terminal for v1."
+}

@@ -1,0 +1,69 @@
+{
+  "protocol_version": "S17-OB-CONTINUATION-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "hypotheses": [
+    {
+      "id": "H1_BASE",
+      "bars": "closed 15m; execution no earlier than next 1m open",
+      "regime": "4h close above rising EMA200 (slope over prior 8 4h-bars > 0) for LONG, mirrored for SHORT; confirmed by 1h ADX(14) >= 20, both reindexed from fully-closed higher-timeframe bars only",
+      "structure": "order block = the last opposing-color 15m candle before a displacement that (a) reaches >=1.5x that candle's ATR within 3 bars and (b) coincides with 3-bar peak volume >= 1.2x the trailing-20-bar average volume ending before the candle. Confirmed 3 bars after formation. Zone [open,close] of that candle tracked as active for up to 32 bars (8h); consumed ('first mitigation') on its first touch regardless of outcome.",
+      "trigger": "first touch of an active zone (price re-enters the range and closes back inside it) while regime holds, PLUS OBV must still be on the trend side of its own EMA(9) at the touch bar",
+      "entry": "market at next minute open",
+      "risk": "stop = zone boundary opposite the trend direction, minus/plus 0.15 ATR buffer; actual-fill stop width clamped 0.50-3.00 ATR (wider cap than S16: OB body width scales with displacement magnitude)",
+      "exit": "identical to S16: breakeven-then-chandelier trailing activated at +1.0R, trail at best-price minus 1.5x ATR (ATR frozen at entry); 5.0R hard cap; 240 minute time stop",
+      "one_trade_per_zone": true
+    },
+    {
+      "id": "H2_DIVERGENCE",
+      "bars": "same as H1",
+      "regime": "identical to H1",
+      "structure": "identical to H1",
+      "trigger": "identical to H1, PLUS: a bullish (long) / bearish (short) RSI-price divergence pivot (backend/l1_filter/scalp_strategy.py::divergence_events, already used and tested by S7) must have fired within the touch bar or either of the previous two bars",
+      "entry": "identical to H1",
+      "risk": "identical to H1",
+      "exit": "identical to H1",
+      "one_trade_per_zone": true
+    }
+  ],
+  "structure_and_flow_are_orthogonal_evidence_families": true,
+  "divergence_is_an_additional_family_only_in_H2": true,
+  "execution_intentionally_identical_to_s16": "so any performance delta is attributable to entry quality (order block vs raw RSI/CRSI extreme), not to a different risk model",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "No BTC reference series is used; regime, structure and flow are computed entirely from each traded symbol's own price."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "trailing_mechanics": "same cluster_scalp_simulator.execute_cluster breakeven+chandelier trailing added for S16, unchanged here",
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2 central configurations. No parameter grid over displacement multiple, volume multiple, zone TTL, or ADX threshold. A failing gate stops that route; choose no least-bad winner. Simultaneous candidates use fixed liquidity priority ETH, then SOL, then BNB.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink. A smaller severe loss is not evidence of robustness.",
+  "known_limitations": [
+    "Order block detection is a simplified, purely displacement+volume-based causal approximation; it does not require the displacement to break a confirmed prior swing (unlike analysts.structure.detect_order_blocks_v2), to keep the whole pipeline vectorizable without a live order-book/DB dependency.",
+    "ATR used for the chandelier trail is frozen at entry, same simplification as S16.",
+    "This is a retrospective diagnostic over previously-unseen (for this specific strategy) but historically-public data; it is not a live paper-forward result."
+  ]
+}

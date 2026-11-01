@@ -1,0 +1,64 @@
+{
+  "status": "post_s104_hypotheses_frozen_before_first_s105_replay",
+  "strategy_id": "S105_LIQUIDITY_AUCTION_ABLATION",
+  "capital_usd": 500.0,
+  "lineage": "S104 showed that sweep-anchored stops cut stress loss by 81%, but remained negative. Its frozen excursion audit found +$1.21/PF 1.33 for exact sweep stops >=2 ATR, -$4.17 for shallower stops, four losses from four zones older than 24h, and worsening performance from static three-of-three confluence. S105 predeclares independent geometry, reset-flow, target-space and combined variants.",
+  "common_rules": {
+    "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+    "formation": "S103/S104 displaced 1h FVG definition.",
+    "execution": "Closed 15m state machine; next 5m open; one global position.",
+    "direction": "S101 global UP/DOWN plus aligned closed 4h EMA50.",
+    "sweep": "Penetrate the previous 20 closed 15m high/low by 0.02 ATR and close back through it.",
+    "stop": "Exact sweep extreme plus 0.15 ATR; never artificially widen.",
+    "costs": {
+      "base": {"fee_bps": 5.0, "slippage_bps": 2.0},
+      "stress": {"fee_bps": 8.0, "slippage_bps": 5.0},
+      "severe": {"fee_bps": 10.0, "slippage_bps": 10.0}
+    },
+    "risk": "0.2% equity capped at $0.50; 75% notional; leverage <=5; no risk increase in S105.",
+    "history": "2025-05-01 inclusive to 2026-09-01 exclusive; same verified Binance cache as S103/S104."
+  },
+  "variants": {
+    "geometry": {
+      "change": "Require zone age <=24h and exact structural stop distance between 2.0 and 4.0 ATR15.",
+      "confluence": "Unchanged S104 static two-of-three micro score.",
+      "target": "Unchanged fixed 2.5R."
+    },
+    "geometry_reset": {
+      "base": "geometry",
+      "change": "At the sweep require 15m OI change <=0 and taker aggression against the intended direction; at confirmation require directional taker reversal and improving 15m OI. Static confluence minimum becomes one because the causal sequence replaces the static OI point.",
+      "target": "Fixed 2.5R."
+    },
+    "geometry_target": {
+      "base": "geometry",
+      "change": "Target 90% of the distance to the opposite prior-20-bar liquidity extreme. Require at least 2.5R both at decision close and actual next-open fill.",
+      "flow": "Unchanged static S104 confluence."
+    },
+    "full": {
+      "base": "geometry",
+      "change": "Combine reset-flow sequence and opposing-liquidity target; static confluence minimum one.",
+      "selection": "No variant may be altered after seeing S105 output."
+    }
+  },
+  "predeclared_checks": {
+    "geometry_stop_distance_neighbors_atr": [1.75, 2.25],
+    "geometry_zone_age_neighbors_hours": [12, 36],
+    "all_cost_tiers": true,
+    "development_validation_retrospective_slices": true,
+    "route_direction_symbol_attribution": true,
+    "leave_one_symbol_out": true,
+    "bootstrap": "5000 deterministic circular 28-day blocks"
+  },
+  "historical_gate": {
+    "per_variant": "Stress >=12 fills, PnL >0, PF >1.05, DD <=10%; validation >=4 fills and PnL >0; severe PnL >0.",
+    "breadth": "At least two symbols represented and neither long nor short sleeve negative under stress.",
+    "robustness": "At least two leave-one-out runs positive and bootstrap p10 positive.",
+    "promotion": "A pass can authorize prospective paper-forward only."
+  },
+  "disclosures": [
+    "All S105 history is selection-contaminated by S103/S104 diagnostics.",
+    "The 2 ATR and 24h hypotheses are explicitly post-hoc and require prospective confirmation.",
+    "Risk overlays can reduce drawdown but cannot manufacture positive expectancy.",
+    "Live trading remains disabled."
+  ]
+}

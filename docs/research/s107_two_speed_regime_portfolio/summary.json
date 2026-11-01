@@ -1,0 +1,774 @@
+{
+  "protocol_sha256": "150d83fec934ce3b6494e9003ef741575ba42154f4b0ff12800e159ff833f2f8",
+  "parent_protocol_sha256": {
+    "book_a": "2c284c1ba019d03483e2c42fb326d51c4662c15e11ca49434ce1c86e61798622",
+    "s102": "e97a9e5b495f52097215414c55ba0e0fd67c407f61f2ba026213e1e2e8e23094"
+  },
+  "regime_config": {
+    "btc_symbol": "BTCUSDT",
+    "long_sma_days": 200,
+    "long_momentum_days": 84,
+    "down_ema_days": 50,
+    "down_fast_momentum_days": 28,
+    "down_slow_momentum_days": 84,
+    "up_breadth_threshold": 0.5,
+    "down_breadth_threshold": 0.3333333333333333,
+    "confirmation_days": 2
+  },
+  "s102_execution_config": {
+    "long_momentum_days": 84,
+    "long_sma_days": 200,
+    "short_fast_momentum_days": 28,
+    "short_slow_momentum_days": 84,
+    "short_ema_days": 50,
+    "vol_days": 42,
+    "covariance_days": 60,
+    "funding_days": 28,
+    "max_long_mean_funding": 0.0001,
+    "min_short_mean_funding": -0.0001,
+    "minimum_short_oi_oscillator_pct": 0.05,
+    "max_long_positions": 3,
+    "max_short_positions": 2,
+    "max_asset_weight": 0.45,
+    "long_vol_target_annual": 0.15,
+    "short_vol_target_annual": 0.075,
+    "long_low_attention_scale": 0.75,
+    "oi_attention_fraction": 0.6666666666666666
+  },
+  "target_counts": {
+    "full": {
+      "decisions": 70,
+      "invested_decisions": 30,
+      "long_decisions": 17,
+      "short_decisions": 13,
+      "cash_decisions": 40,
+      "sideways_decisions": 30
+    },
+    "short_only": {
+      "decisions": 70,
+      "invested_decisions": 13,
+      "long_decisions": 0,
+      "short_decisions": 13,
+      "cash_decisions": 57,
+      "sideways_decisions": 30
+    }
+  },
+  "regime_occupancy": {
+    "SIDEWAYS": 0.4692622950819672,
+    "DOWN": 0.3012295081967213,
+    "UP": 0.22950819672131148
+  },
+  "full": {
+    "base": {
+      "book_a_cash": {
+        "start_nav": 500.0,
+        "end_nav": 623.4400521363721,
+        "net_pnl": 123.44005213637206,
+        "return_on_slice_start_pct": 24.688010427274413,
+        "usd_per_calendar_day": 0.2529509265089591,
+        "max_continuous_drawdown_pct": 4.009489184413861,
+        "expected_shortfall_95_daily_return_pct": -0.9454033260695833,
+        "positive_month_share": 0.3125,
+        "daily_profit_factor": 1.6850783841016768,
+        "usd_per_month": 7.699193825616443,
+        "book_a_pnl": 123.44005213637206,
+        "reserve_pnl": 0.0
+      },
+      "book_a_s102_full": {
+        "start_nav": 500.0,
+        "end_nav": 640.0288559044241,
+        "net_pnl": 140.02885590442412,
+        "return_on_slice_start_pct": 28.005771180884825,
+        "usd_per_calendar_day": 0.28694437685332813,
+        "max_continuous_drawdown_pct": 4.753235170359538,
+        "expected_shortfall_95_daily_return_pct": -1.0240296990387152,
+        "positive_month_share": 0.5,
+        "daily_profit_factor": 1.5884912529667856,
+        "usd_per_month": 8.733869470473175,
+        "book_a_pnl": 123.44005213637206,
+        "s102_pnl": 16.58880376805206
+      },
+      "book_a_s102_short_only": {
+        "start_nav": 500.0,
+        "end_nav": 623.1684137667958,
+        "net_pnl": 123.16841376679571,
+        "return_on_slice_start_pct": 24.633682753359142,
+        "usd_per_calendar_day": 0.2523942905057289,
+        "max_continuous_drawdown_pct": 4.009489184413861,
+        "expected_shortfall_95_daily_return_pct": -0.9454254346610951,
+        "positive_month_share": 0.5,
+        "daily_profit_factor": 1.5807743339092482,
+        "usd_per_month": 7.682251217268124,
+        "book_a_pnl": 123.44005213637206,
+        "s102_pnl": -0.2716383695763511
+      }
+    },
+    "stress": {
+      "book_a_cash": {
+        "start_nav": 500.0,
+        "end_nav": 622.1464877622861,
+        "net_pnl": 122.1464877622862,
+        "return_on_slice_start_pct": 24.429297552457243,
+        "usd_per_calendar_day": 0.2503001798407504,
+        "max_continuous_drawdown_pct": 4.009656989017907,
+        "expected_shortfall_95_daily_return_pct": -0.9453704736271431,
+        "positive_month_share": 0.3125,
+        "daily_profit_factor": 1.6772805624111367,
+        "usd_per_month": 7.6185117239028415,
+        "book_a_pnl": 122.1464877622862,
+        "reserve_pnl": 0.0
+      },
+      "book_a_s102_full": {
+        "start_nav": 500.0,
+        "end_nav": 637.8739962383822,
+        "net_pnl": 137.8739962383823,
+        "return_on_slice_start_pct": 27.574799247676456,
+        "usd_per_calendar_day": 0.2825286808163571,
+        "max_continuous_drawdown_pct": 4.760340373685157,
+        "expected_shortfall_95_daily_return_pct": -1.0258116534337018,
+        "positive_month_share": 0.5,
+        "daily_profit_factor": 1.5782300300436296,
+        "usd_per_month": 8.59946672234787,
+        "book_a_pnl": 122.1464877622862,
+        "s102_pnl": 15.72750847609609
+      },
+      "book_a_s102_short_only": {
+        "start_nav": 500.0,
+        "end_nav": 621.6926239277936,
+        "net_pnl": 121.6926239277937,
+        "return_on_slice_start_pct": 24.33852478555874,
+        "usd_per_calendar_day": 0.24937013099957725,
+        "max_continuous_drawdown_pct": 4.009656989017907,
+        "expected_shortfall_95_daily_return_pct": -0.9454076834953858,
+        "positive_month_share": 0.5,
+        "daily_profit_factor": 1.5731127693329194,
+        "usd_per_month": 7.590203362299633,
+        "book_a_pnl": 122.1464877622862,
+        "s102_pnl": -0.4538638344924948
+      }
+    },
+    "severe": {
+      "book_a_cash": {
+        "start_nav": 500.0,
+        "end_nav": 622.2110492256234,
+        "net_pnl": 122.21104922562341,
+        "return_on_slice_start_pct": 24.442209845124683,
+        "usd_per_calendar_day": 0.2504324779213595,
+        "max_continuous_drawdown_pct": 4.019497567649322,
+        "expected_shortfall_95_daily_return_pct": -0.935307896983957,
+        "positive_month_share": 0.3125,
+        "daily_profit_factor": 1.6816491116589785,
+        "usd_per_month": 7.622538546731379,
+        "book_a_pnl": 122.21104922562341,
+        "reserve_pnl": 0.0
+      },
+      "book_a_s102_full": {
+        "start_nav": 500.0,
+        "end_nav": 636.9369053004563,
+        "net_pnl": 136.93690530045626,
+        "return_on_slice_start_pct": 27.387381060091254,
+        "usd_per_calendar_day": 0.28060841250093493,
+        "max_continuous_drawdown_pct": 4.775759464686658,
+        "expected_shortfall_95_daily_return_pct": -1.017452399000365,
+        "positive_month_share": 0.5,
+        "daily_profit_factor": 1.5760407518435098,
+        "usd_per_month": 8.541018555497207,
+        "book_a_pnl": 122.21104922562341,
+        "s102_pnl": 14.725856074832848
+      },
+      "book_a_s102_short_only": {
+        "start_nav": 500.0,
+        "end_nav": 621.5447242852491,
+        "net_pnl": 121.54472428524915,
+        "return_on_slice_start_pct": 24.30894485704983,
+        "usd_per_calendar_day": 0.2490670579615761,
+        "max_continuous_drawdown_pct": 4.019497567649322,
+        "expected_shortfall_95_daily_return_pct": -0.9353630897318154,
+        "positive_month_share": 0.5,
+        "daily_profit_factor": 1.5749622777986658,
+        "usd_per_month": 7.580978576705473,
+        "book_a_pnl": 122.21104922562341,
+        "s102_pnl": -0.6663249403742668
+      }
+    }
+  },
+  "comparisons": {
+    "base": {
+      "book_a_s102_full": {
+        "excess_pnl": 16.58880376805206,
+        "positive_excess_month_share": 0.4375
+      },
+      "book_a_s102_short_only": {
+        "excess_pnl": -0.2716383695763511,
+        "positive_excess_month_share": 0.1875
+      }
+    },
+    "stress": {
+      "book_a_s102_full": {
+        "excess_pnl": 15.72750847609609,
+        "positive_excess_month_share": 0.4375,
+        "paired_28d_bootstrap_95_lower_excess_pnl": -16.581009310039484
+      },
+      "book_a_s102_short_only": {
+        "excess_pnl": -0.4538638344924948,
+        "positive_excess_month_share": 0.1875,
+        "paired_28d_bootstrap_95_lower_excess_pnl": -15.4218083939118
+      }
+    },
+    "severe": {
+      "book_a_s102_full": {
+        "excess_pnl": 14.725856074832848,
+        "positive_excess_month_share": 0.4375
+      },
+      "book_a_s102_short_only": {
+        "excess_pnl": -0.6663249403742668,
+        "positive_excess_month_share": 0.1875
+      }
+    }
+  },
+  "slices": {
+    "development": {
+      "base": {
+        "book_a_cash": {
+          "start_nav": 500.0,
+          "end_nav": 591.9632072172778,
+          "net_pnl": 91.9632072172779,
+          "return_on_slice_start_pct": 18.392641443455577,
+          "usd_per_calendar_day": 0.6010667138384176,
+          "max_continuous_drawdown_pct": 4.009489184413861,
+          "expected_shortfall_95_daily_return_pct": -1.35577318771598,
+          "positive_month_share": 0.8
+        },
+        "book_a_s102_full": {
+          "start_nav": 500.0,
+          "end_nav": 606.9505379869913,
+          "net_pnl": 106.95053798699126,
+          "return_on_slice_start_pct": 21.390107597398252,
+          "usd_per_calendar_day": 0.6990231240979822,
+          "max_continuous_drawdown_pct": 4.753235170359538,
+          "expected_shortfall_95_daily_return_pct": -1.3968481449099128,
+          "positive_month_share": 0.8
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 500.0,
+          "end_nav": 591.9632072172778,
+          "net_pnl": 91.9632072172779,
+          "return_on_slice_start_pct": 18.392641443455577,
+          "usd_per_calendar_day": 0.6010667138384176,
+          "max_continuous_drawdown_pct": 4.009489184413861,
+          "expected_shortfall_95_daily_return_pct": -1.35577318771598,
+          "positive_month_share": 0.8
+        }
+      },
+      "stress": {
+        "book_a_cash": {
+          "start_nav": 500.0,
+          "end_nav": 590.9637313551748,
+          "net_pnl": 90.96373135517479,
+          "return_on_slice_start_pct": 18.192746271034956,
+          "usd_per_calendar_day": 0.5945341918638875,
+          "max_continuous_drawdown_pct": 4.009656989017907,
+          "expected_shortfall_95_daily_return_pct": -1.3560365786380886,
+          "positive_month_share": 0.8
+        },
+        "book_a_s102_full": {
+          "start_nav": 500.0,
+          "end_nav": 605.4217477913014,
+          "net_pnl": 105.42174779130147,
+          "return_on_slice_start_pct": 21.084349558260293,
+          "usd_per_calendar_day": 0.6890310313156959,
+          "max_continuous_drawdown_pct": 4.760340373685157,
+          "expected_shortfall_95_daily_return_pct": -1.3990536549191845,
+          "positive_month_share": 0.8
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 500.0,
+          "end_nav": 590.9637313551748,
+          "net_pnl": 90.96373135517479,
+          "return_on_slice_start_pct": 18.192746271034956,
+          "usd_per_calendar_day": 0.5945341918638875,
+          "max_continuous_drawdown_pct": 4.009656989017907,
+          "expected_shortfall_95_daily_return_pct": -1.3560365786380886,
+          "positive_month_share": 0.8
+        }
+      },
+      "severe": {
+        "book_a_cash": {
+          "start_nav": 500.0,
+          "end_nav": 591.3194576779766,
+          "net_pnl": 91.31945767797663,
+          "return_on_slice_start_pct": 18.263891535595324,
+          "usd_per_calendar_day": 0.5968592005096511,
+          "max_continuous_drawdown_pct": 4.019497567649322,
+          "expected_shortfall_95_daily_return_pct": -1.3218896421119595,
+          "positive_month_share": 0.8
+        },
+        "book_a_s102_full": {
+          "start_nav": 500.0,
+          "end_nav": 605.1610365030019,
+          "net_pnl": 105.16103650300192,
+          "return_on_slice_start_pct": 21.032207300600383,
+          "usd_per_calendar_day": 0.6873270359673328,
+          "max_continuous_drawdown_pct": 4.775759464686658,
+          "expected_shortfall_95_daily_return_pct": -1.3668339052966292,
+          "positive_month_share": 0.8
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 500.0,
+          "end_nav": 591.3194576779766,
+          "net_pnl": 91.31945767797663,
+          "return_on_slice_start_pct": 18.263891535595324,
+          "usd_per_calendar_day": 0.5968592005096511,
+          "max_continuous_drawdown_pct": 4.019497567649322,
+          "expected_shortfall_95_daily_return_pct": -1.3218896421119595,
+          "positive_month_share": 0.8
+        }
+      }
+    },
+    "former_validation_now_diagnostic": {
+      "base": {
+        "book_a_cash": {
+          "start_nav": 591.9632072172778,
+          "end_nav": 627.6201121361034,
+          "net_pnl": 35.656904918825546,
+          "return_on_slice_start_pct": 6.02350019124378,
+          "usd_per_calendar_day": 0.19591705999354694,
+          "max_continuous_drawdown_pct": 3.4909304090583015,
+          "expected_shortfall_95_daily_return_pct": -0.505713506664337,
+          "positive_month_share": 0.16666666666666666
+        },
+        "book_a_s102_full": {
+          "start_nav": 606.9505379869913,
+          "end_nav": 643.0754910268627,
+          "net_pnl": 36.1249530398714,
+          "return_on_slice_start_pct": 5.951877587864608,
+          "usd_per_calendar_day": 0.19848875296632637,
+          "max_continuous_drawdown_pct": 4.662684242024328,
+          "expected_shortfall_95_daily_return_pct": -0.7215164268676015,
+          "positive_month_share": 0.5
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 591.9632072172778,
+          "end_nav": 625.9412477776497,
+          "net_pnl": 33.97804056037185,
+          "return_on_slice_start_pct": 5.739890612475235,
+          "usd_per_calendar_day": 0.18669253055149368,
+          "max_continuous_drawdown_pct": 3.4909304090583015,
+          "expected_shortfall_95_daily_return_pct": -0.6480608488451919,
+          "positive_month_share": 0.5
+        }
+      },
+      "stress": {
+        "book_a_cash": {
+          "start_nav": 590.9637313551748,
+          "end_nav": 626.4268409613651,
+          "net_pnl": 35.4631096061903,
+          "return_on_slice_start_pct": 6.000894424581301,
+          "usd_per_calendar_day": 0.1948522505834632,
+          "max_continuous_drawdown_pct": 3.4870448379193286,
+          "expected_shortfall_95_daily_return_pct": -0.5051872626444193,
+          "positive_month_share": 0.16666666666666666
+        },
+        "book_a_s102_full": {
+          "start_nav": 605.4217477913014,
+          "end_nav": 641.160715907504,
+          "net_pnl": 35.738968116202614,
+          "return_on_slice_start_pct": 5.903152347365363,
+          "usd_per_calendar_day": 0.19636795668243195,
+          "max_continuous_drawdown_pct": 4.663490431842476,
+          "expected_shortfall_95_daily_return_pct": -0.7216536133536745,
+          "positive_month_share": 0.5
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 590.9637313551748,
+          "end_nav": 624.6180171444569,
+          "net_pnl": 33.65428578928211,
+          "return_on_slice_start_pct": 5.694814081417049,
+          "usd_per_calendar_day": 0.18491365818286876,
+          "max_continuous_drawdown_pct": 3.4870448379193286,
+          "expected_shortfall_95_daily_return_pct": -0.6477999454884501,
+          "positive_month_share": 0.5
+        }
+      },
+      "severe": {
+        "book_a_cash": {
+          "start_nav": 591.3194576779766,
+          "end_nav": 626.6759685171854,
+          "net_pnl": 35.356510839208795,
+          "return_on_slice_start_pct": 5.979257130832214,
+          "usd_per_calendar_day": 0.1942665430725758,
+          "max_continuous_drawdown_pct": 3.4887873535873304,
+          "expected_shortfall_95_daily_return_pct": -0.5055156776220595,
+          "positive_month_share": 0.16666666666666666
+        },
+        "book_a_s102_full": {
+          "start_nav": 605.1610365030019,
+          "end_nav": 640.5702879093222,
+          "net_pnl": 35.40925140632032,
+          "return_on_slice_start_pct": 5.851211375229488,
+          "usd_per_calendar_day": 0.1945563264083534,
+          "max_continuous_drawdown_pct": 4.667354511672405,
+          "expected_shortfall_95_daily_return_pct": -0.7221657845930025,
+          "positive_month_share": 0.5
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 591.3194576779766,
+          "end_nav": 624.7155904282054,
+          "net_pnl": 33.39613275022879,
+          "return_on_slice_start_pct": 5.647731072704833,
+          "usd_per_calendar_day": 0.18349523489136696,
+          "max_continuous_drawdown_pct": 3.4887873535873304,
+          "expected_shortfall_95_daily_return_pct": -0.6480665250450289,
+          "positive_month_share": 0.5
+        }
+      }
+    },
+    "former_evaluation_now_diagnostic": {
+      "base": {
+        "book_a_cash": {
+          "start_nav": 627.6201121361034,
+          "end_nav": 623.4400521363721,
+          "net_pnl": -4.180059999731384,
+          "return_on_slice_start_pct": -0.6660175349551117,
+          "usd_per_calendar_day": -0.02732065359301558,
+          "max_continuous_drawdown_pct": 1.1591347387604034,
+          "expected_shortfall_95_daily_return_pct": -0.22423702074418003,
+          "positive_month_share": 0.0
+        },
+        "book_a_s102_full": {
+          "start_nav": 643.0754910268627,
+          "end_nav": 640.0288559044241,
+          "net_pnl": -3.046635122438545,
+          "return_on_slice_start_pct": -0.473760105143127,
+          "usd_per_calendar_day": -0.019912647859075455,
+          "max_continuous_drawdown_pct": 1.7498458990498733,
+          "expected_shortfall_95_daily_return_pct": -0.3707043253330803,
+          "positive_month_share": 0.2
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 625.9412477776498,
+          "end_nav": 623.1684137667958,
+          "net_pnl": -2.772834010854041,
+          "return_on_slice_start_pct": -0.4429863059350615,
+          "usd_per_calendar_day": -0.01812309811015713,
+          "max_continuous_drawdown_pct": 1.5407444867840514,
+          "expected_shortfall_95_daily_return_pct": -0.3980139305670442,
+          "positive_month_share": 0.2
+        }
+      },
+      "stress": {
+        "book_a_cash": {
+          "start_nav": 626.4268409613651,
+          "end_nav": 622.1464877622861,
+          "net_pnl": -4.280353199078888,
+          "return_on_slice_start_pct": -0.6832965829672805,
+          "usd_per_calendar_day": -0.027976164699862017,
+          "max_continuous_drawdown_pct": 1.1655849999059331,
+          "expected_shortfall_95_daily_return_pct": -0.2262441138085819,
+          "positive_month_share": 0.0
+        },
+        "book_a_s102_full": {
+          "start_nav": 641.160715907504,
+          "end_nav": 637.8739962383822,
+          "net_pnl": -3.286719669121794,
+          "return_on_slice_start_pct": -0.5126202506761108,
+          "usd_per_calendar_day": -0.021481827902756826,
+          "max_continuous_drawdown_pct": 1.8258601188265278,
+          "expected_shortfall_95_daily_return_pct": -0.3725169431862495,
+          "positive_month_share": 0.2
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 624.6180171444569,
+          "end_nav": 621.6926239277936,
+          "net_pnl": -2.9253932166631955,
+          "return_on_slice_start_pct": -0.4683491568234147,
+          "usd_per_calendar_day": -0.019120217102373827,
+          "max_continuous_drawdown_pct": 1.5855890665611772,
+          "expected_shortfall_95_daily_return_pct": -0.39908831322812527,
+          "positive_month_share": 0.2
+        }
+      },
+      "severe": {
+        "book_a_cash": {
+          "start_nav": 626.6759685171854,
+          "end_nav": 622.2110492256234,
+          "net_pnl": -4.464919291562012,
+          "return_on_slice_start_pct": -0.7124765454349108,
+          "usd_per_calendar_day": -0.029182479029817073,
+          "max_continuous_drawdown_pct": 1.1785472310926304,
+          "expected_shortfall_95_daily_return_pct": -0.22996839752724238,
+          "positive_month_share": 0.0
+        },
+        "book_a_s102_full": {
+          "start_nav": 640.5702879093222,
+          "end_nav": 636.9369053004563,
+          "net_pnl": -3.633382608865986,
+          "return_on_slice_start_pct": -0.5672106055253565,
+          "usd_per_calendar_day": -0.02374759875075808,
+          "max_continuous_drawdown_pct": 1.925140709428519,
+          "expected_shortfall_95_daily_return_pct": -0.3750553216507289,
+          "positive_month_share": 0.2
+        },
+        "book_a_s102_short_only": {
+          "start_nav": 624.7155904282054,
+          "end_nav": 621.5447242852491,
+          "net_pnl": -3.170866142956271,
+          "return_on_slice_start_pct": -0.507569555096717,
+          "usd_per_calendar_day": -0.02072461531343968,
+          "max_continuous_drawdown_pct": 1.6445397617786517,
+          "expected_shortfall_95_daily_return_pct": -0.4007058280724515,
+          "positive_month_share": 0.2
+        }
+      }
+    }
+  },
+  "slice_comparisons": {
+    "development": {
+      "base": {
+        "book_a_s102_full": {
+          "excess_pnl": 14.987330769713367,
+          "positive_excess_month_share": 0.6
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": 0.0,
+          "positive_excess_month_share": 0.0
+        }
+      },
+      "stress": {
+        "book_a_s102_full": {
+          "excess_pnl": 14.458016436126684,
+          "positive_excess_month_share": 0.6
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": 0.0,
+          "positive_excess_month_share": 0.0
+        }
+      },
+      "severe": {
+        "book_a_s102_full": {
+          "excess_pnl": 13.841578825025294,
+          "positive_excess_month_share": 0.6
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": 0.0,
+          "positive_excess_month_share": 0.0
+        }
+      }
+    },
+    "former_validation_now_diagnostic": {
+      "base": {
+        "book_a_s102_full": {
+          "excess_pnl": 0.4680481210458538,
+          "positive_excess_month_share": 0.5
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": -1.6788643584536942,
+          "positive_excess_month_share": 0.3333333333333333
+        }
+      },
+      "stress": {
+        "book_a_s102_full": {
+          "excess_pnl": 0.27585851001231276,
+          "positive_excess_month_share": 0.5
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": -1.8088238169081876,
+          "positive_excess_month_share": 0.3333333333333333
+        }
+      },
+      "severe": {
+        "book_a_s102_full": {
+          "excess_pnl": 0.052740567111527525,
+          "positive_excess_month_share": 0.5
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": -1.9603780889800078,
+          "positive_excess_month_share": 0.3333333333333333
+        }
+      }
+    },
+    "former_evaluation_now_diagnostic": {
+      "base": {
+        "book_a_s102_full": {
+          "excess_pnl": 1.133424877292839,
+          "positive_excess_month_share": 0.2
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": 1.407225988877343,
+          "positive_excess_month_share": 0.2
+        }
+      },
+      "stress": {
+        "book_a_s102_full": {
+          "excess_pnl": 0.9936335299570942,
+          "positive_excess_month_share": 0.2
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": 1.3549599824156928,
+          "positive_excess_month_share": 0.2
+        }
+      },
+      "severe": {
+        "book_a_s102_full": {
+          "excess_pnl": 0.8315366826960258,
+          "positive_excess_month_share": 0.2
+        },
+        "book_a_s102_short_only": {
+          "excess_pnl": 1.294053148605741,
+          "positive_excess_month_share": 0.2
+        }
+      }
+    }
+  },
+  "stress_full_s102_direction_pnl": {
+    "long_up_regime": 16.471844114463977,
+    "short_down_regime": -0.3725475687440962,
+    "sideways_or_unclassified": -0.37178806962378985
+  },
+  "stress_short_evidence": {
+    "net_pnl": -0.4538638344924948,
+    "funding_pnl": 0.21538089439487584,
+    "rebalances": 70
+  },
+  "stress_sleeve_correlations": {
+    "book_a_vs_s102_full": 0.029432620386394603,
+    "book_a_vs_s102_short_only": 0.00022008753422473102
+  },
+  "stress_monthly_dispersion": {
+    "book_a_cash": {
+      "months": 16,
+      "positive_months": 5,
+      "positive_month_share": 0.3125,
+      "largest_positive_month_share_of_positive_pnl": 0.3165088302311934,
+      "best_month_pnl": 40.94737861125816,
+      "worst_month_pnl": -4.280353199078888,
+      "monthly_pnl": {
+        "2025-05-31 00:00:00+00:00": 23.702278263962114,
+        "2025-06-30 00:00:00+00:00": -2.9451534355944204,
+        "2025-07-31 00:00:00+00:00": 40.94737861125816,
+        "2025-08-31 00:00:00+00:00": 17.778876697877365,
+        "2025-09-30 00:00:00+00:00": 11.480351217671569,
+        "2025-10-31 00:00:00+00:00": 35.4631096061903,
+        "2025-11-30 00:00:00+00:00": 0.0,
+        "2025-12-31 00:00:00+00:00": 0.0,
+        "2026-01-31 00:00:00+00:00": 0.0,
+        "2026-02-28 00:00:00+00:00": 0.0,
+        "2026-03-31 00:00:00+00:00": 0.0,
+        "2026-04-30 00:00:00+00:00": 0.0,
+        "2026-05-31 00:00:00+00:00": 0.0,
+        "2026-06-30 00:00:00+00:00": 0.0,
+        "2026-07-31 00:00:00+00:00": 0.0,
+        "2026-08-31 00:00:00+00:00": -4.280353199078888
+      }
+    },
+    "book_a_s102_full": {
+      "months": 16,
+      "positive_months": 8,
+      "positive_month_share": 0.5,
+      "largest_positive_month_share_of_positive_pnl": 0.3282644358133696,
+      "best_month_pnl": 52.75027331288618,
+      "worst_month_pnl": -7.559542970886696,
+      "monthly_pnl": {
+        "2025-05-31 00:00:00+00:00": 22.89160512032197,
+        "2025-06-30 00:00:00+00:00": -7.559542970886696,
+        "2025-07-31 00:00:00+00:00": 52.75027331288618,
+        "2025-08-31 00:00:00+00:00": 20.53083564623671,
+        "2025-09-30 00:00:00+00:00": 16.808576682743308,
+        "2025-10-31 00:00:00+00:00": 37.668355556599465,
+        "2025-11-30 00:00:00+00:00": 3.614220304043215,
+        "2025-12-31 00:00:00+00:00": -4.184193249472855,
+        "2026-01-31 00:00:00+00:00": -2.09563094744351,
+        "2026-02-28 00:00:00+00:00": 0.0,
+        "2026-03-31 00:00:00+00:00": 0.7362164524762989,
+        "2026-04-30 00:00:00+00:00": 0.0,
+        "2026-05-31 00:00:00+00:00": 0.0,
+        "2026-06-30 00:00:00+00:00": 5.694367976577894,
+        "2026-07-31 00:00:00+00:00": -4.249095779321294,
+        "2026-08-31 00:00:00+00:00": -4.731991866378394
+      }
+    },
+    "book_a_s102_short_only": {
+      "months": 16,
+      "positive_months": 8,
+      "positive_month_share": 0.5,
+      "largest_positive_month_share_of_positive_pnl": 0.2950330608799881,
+      "best_month_pnl": 40.94737861125816,
+      "worst_month_pnl": -4.280353199078888,
+      "monthly_pnl": {
+        "2025-05-31 00:00:00+00:00": 23.702278263962114,
+        "2025-06-30 00:00:00+00:00": -2.9451534355944204,
+        "2025-07-31 00:00:00+00:00": 40.94737861125816,
+        "2025-08-31 00:00:00+00:00": 17.778876697877365,
+        "2025-09-30 00:00:00+00:00": 11.480351217671569,
+        "2025-10-31 00:00:00+00:00": 35.4631096061903,
+        "2025-11-30 00:00:00+00:00": 3.3883747912040576,
+        "2025-12-31 00:00:00+00:00": -3.922731249165736,
+        "2026-01-31 00:00:00+00:00": -1.9646790944208874,
+        "2026-02-28 00:00:00+00:00": 0.0,
+        "2026-03-31 00:00:00+00:00": 0.690211735474378,
+        "2026-04-30 00:00:00+00:00": 0.0,
+        "2026-05-31 00:00:00+00:00": 0.0,
+        "2026-06-30 00:00:00+00:00": 5.338538130089063,
+        "2026-07-31 00:00:00+00:00": -3.98357814767337,
+        "2026-08-31 00:00:00+00:00": -4.280353199078888
+      }
+    }
+  },
+  "historical_gate": {
+    "book_a_s102_full": {
+      "passed": false,
+      "checks": {
+        "beats_control_base_stress_severe": true,
+        "stress_and_severe_pnl_positive": true,
+        "stress_drawdown_within_1pp": true,
+        "stress_es95_within_0_10pp": true,
+        "stress_positive_excess_month_share_at_least_50pct": false,
+        "paired_bootstrap_lower_above_zero": false,
+        "no_stress_slice_below_minus_2usd": true,
+        "short_contribution_positive": false,
+        "at_least_five_short_decisions": true
+      },
+      "scenario_beats_control": {
+        "base": true,
+        "stress": true,
+        "severe": true
+      },
+      "stress_slice_excess_pnl": {
+        "development": 14.458016436126684,
+        "former_validation_now_diagnostic": 0.27585851001231276,
+        "former_evaluation_now_diagnostic": 0.9936335299570942
+      }
+    },
+    "book_a_s102_short_only": {
+      "passed": false,
+      "checks": {
+        "beats_control_base_stress_severe": false,
+        "stress_and_severe_pnl_positive": true,
+        "stress_drawdown_within_1pp": true,
+        "stress_es95_within_0_10pp": true,
+        "stress_positive_excess_month_share_at_least_50pct": false,
+        "paired_bootstrap_lower_above_zero": false,
+        "no_stress_slice_below_minus_2usd": true,
+        "short_contribution_positive": false,
+        "at_least_five_short_decisions": true
+      },
+      "scenario_beats_control": {
+        "base": false,
+        "stress": false,
+        "severe": false
+      },
+      "stress_slice_excess_pnl": {
+        "development": 0.0,
+        "former_validation_now_diagnostic": -1.8088238169081876,
+        "former_evaluation_now_diagnostic": 1.3549599824156928
+      }
+    }
+  },
+  "decision": "BOTH_CANDIDATES_REJECTED_AT_HISTORICAL_GATE",
+  "selected_candidate": null,
+  "paper_forward": {
+    "minimum_calendar_days": 180,
+    "minimum_s102_weekly_decisions": 26,
+    "live_enabled": false
+  }
+}

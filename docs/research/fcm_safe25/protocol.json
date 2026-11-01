@@ -1,0 +1,77 @@
+{
+  "protocol_version": "FCM_SAFE25-v1.2-lot-size-amendment-frozen-2026-10-08",
+  "status": "single_execution_and_collateral_safety mutation; all periods previously seen; v1.2 applies prospective exchange lot constraints without changing signals or gates",
+  "hypothesis": "The historically positive monthly filtered funding-carry mechanism can retain positive stress PnL while a smaller exact-quantity hedge, larger isolated buffer, monthly basis reset and causal emergency unwind remove the predecessor's collateral failure.",
+  "supersedes_strategy": "S31-FCM-SAFE-MONTHLY-RESET",
+  "mutation_policy": "One variant only; no threshold grid and no post-result parameter adjustment.",
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+  "capital_usd": 250,
+  "allocation": {
+    "spot_long_notional_cap_usd": 25,
+    "perpetual_short_quantity": "exactly equal base-asset quantity to the spot leg",
+    "isolated_futures_margin_usd": 200,
+    "initial_operational_reserve_usd": 25,
+    "minimum_pathwise_free_cash_after_entry_usd": 20,
+    "initial_futures_mark_leverage_cap": 0.15,
+    "top_up": "forbidden",
+    "dynamic_rehedge": "forbidden"
+  },
+  "execution_filters": {
+    "source": "Official Binance spot and USD-M exchangeInfo retrieved 2026-10-08 after the v1.1 replay",
+    "policy": "Round base quantity down to the coarser current spot/futures executable step and use exactly that same quantity on both legs; never round exposure up. Reject an entry below the current futures minimum notional.",
+    "ETHUSDT": {"common_quantity_step": 0.001, "futures_min_notional_usd": 20},
+    "SOLUSDT": {"common_quantity_step": 0.01, "futures_min_notional_usd": 5},
+    "BNBUSDT": {"common_quantity_step": 0.01, "futures_min_notional_usd": 5}
+  },
+  "monthly_rule": {
+    "decision": "First UTC day 00:00 using completed prior-month funding and completed prior daily spot closes only",
+    "execution": "Planned at 01:00; both legs use the first common real spot/perpetual hourly open within 168 hours",
+    "qualification": [
+      "prior calendar-month funding sum >= 50 bps",
+      "30-calendar-day spot return > 0",
+      "last completed spot daily close > EMA50"
+    ],
+    "selection": "highest prior-month funding among qualified assets, deterministic symbol tie-break",
+    "forced_reset": "Close and reopen both legs at every monthly requalification, even for the same selected asset; no synthetic price may fill an order."
+  },
+  "emergency_unwind": {
+    "monitor": "Every available real mark-price 1m bar while a position is active. If a timestamp is absent from both checksum-verified monthly and daily 1m archives, the containing checksum-verified official mark 1h high is applied only at hour close; no spot/perpetual proxy or forward fill is permitted.",
+    "safety_equity": "200 USD minus futures entry fee plus short unrealized PnL plus adverse funding payments only; positive funding receipts are excluded from the safety buffer; estimated exit fee is reserved",
+    "trigger": "first completed available 1m mark high for which exit-ready futures equity < 125 USD or high-mark leverage > 0.75x; for an official 1m data gap use the containing 1h high only after that hour completes",
+    "execution": "Buy back the short and sell spot at the next common real perpetual/spot 1m open with scenario slippage; an hourly gap-envelope trigger cannot execute before the next hour; never fill at the trigger price",
+    "after_trigger": "Remain in cash until the next monthly decision; never top up isolated margin",
+    "historical_acceptance": "Any triggered or unfilled emergency close rejects the strategy"
+  },
+  "costs_bps_per_leg_per_side": {
+    "base": {"spot_fee": 10, "futures_fee": 2, "spot_slippage": 1, "futures_slippage": 1, "round_trip_total": 28},
+    "stress": {"spot_fee": 10, "futures_fee": 5, "spot_slippage": 5, "futures_slippage": 5, "round_trip_total": 50},
+    "severe": {"spot_fee": 10, "futures_fee": 10, "spot_slippage": 10, "futures_slippage": 10, "round_trip_total": 80}
+  },
+  "data": "Checksum-verified public anonymous Binance spot/perpetual/mark 1h and funding archives for selection, monthly fills and accounting. Checksum-verified monthly plus exact daily 1m spot/perpetual/mark archives are required for every active episode and boundary month. Missing spot/perpetual minutes remain unavailable and delay a possible emergency fill. A mark 1m gap is acceptable only when its containing official mark 1h high exists and is injected causally at hour close as a conservative safety envelope.",
+  "windows": {
+    "development": ["2021-01-01", "2023-01-01"],
+    "validation": ["2023-01-01", "2024-07-01"],
+    "retrospective_evaluation": ["2024-07-01", "2026-09-01"],
+    "all_available": ["2021-01-01", "2026-09-01"]
+  },
+  "historical_gate": [
+    "Stress 50 bps net PnL > 0 in development, validation, retrospective and all-available windows",
+    "At least 6 closed episodes in each non-overlapping window and at least 20 overall",
+    "No emergency close, unfilled emergency close or modelled collateral exhaustion",
+    "Minimum exit-ready isolated futures equity >= 125 USD and maximum 1m-high mark leverage <= 0.75x",
+    "Maximum hourly marked-to-market portfolio drawdown <= 2%",
+    "Minimum pathwise free cash after every entry >= 20 USD and ledger reconciled",
+    "Severe 80 bps all-available PnL > 0",
+    "Stress all-available PnL > 0 after excluding each one symbol and rerunning selection",
+    "No symbol contributes > 65% of gross positive episode PnL and no episode contributes > 50%"
+  ],
+  "promotion_gate": "A historical pass authorizes only frozen paper-forward observation starting at the next possible monthly decision after protocol freeze. Live capital remains disabled for at least 18 months and until at least 12 prospectively closed episodes exist, with positive realized net PnL after measured fees/slippage and no safety breach.",
+  "limitations": [
+    "All historical periods were previously viewed in related research; none is an untouched holdout.",
+    "The data amendment from v1 to v1.1 was forced by two SOL mark minutes absent from both official monthly and daily 1m archives; it was frozen before an economic replay completed and changes no selection, allocation, cost or risk threshold.",
+    "The v1.2 amendment applies current lot-size and minimum-notional filters to the whole replay after execution audit found that fractional theoretical quantities were too precise. It was not selected from a grid and changes no signal, cost or acceptance threshold; current filters may differ from historical filters.",
+    "The newest historical window has a very small estimated edge and may be negative under severe costs.",
+    "Maintenance tiers, exchange default/outage, taxes and scalable capacity are not fully modelled.",
+    "No historical result is a promise of future profit."
+  ]
+}

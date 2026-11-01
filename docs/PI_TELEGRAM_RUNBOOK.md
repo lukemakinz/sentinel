@@ -4,12 +4,32 @@ Sentinel na Pi zbiera dane, prowadzi shadow (mechaniczny baseline + AI z limitem
 $/dzień), skanuje altcoiny (setup search), rozlicza dziennik i raportuje na
 Telegram. **Nie składa zleceń.** Handlu na żywo nie da się włączyć z telefonu.
 
+Adapter KuCoin ma już kod atomowego wejścia ze stopem i zamknięcia `reduceOnly`,
+ale globalna bramka `EXCHANGE_SIDE_STOPS_IMPLEMENTED=False` pozostaje zamknięta
+do testu na osobnym subkoncie. Nie zmieniaj jej na Pi przed przejściem checklisty
+walidacyjnej i testu restartu.
+
+Pierwszy krok walidacji jest wyłącznie odczytowy:
+
+```bash
+cd backend
+../env/bin/python manage.py kucoin_preflight
+```
+
+Komenda nie ma ścieżki składania zleceń. Sprawdza konto futures, pozycje,
+zwykłe zlecenia i stop orders, a następnie porównuje je z trwałymi lokalnymi
+intencjami egzekucji. Zwraca błąd, gdy intencja jest `PREPARED`/`UNCERTAIN`,
+pozycja jest nieznana lokalnie, lokalnej pozycji brakuje na giełdzie albo otwarta
+pozycja nie ma aktywnego stopa `reduceOnly`/`closeOrder` po właściwej stronie.
+Oczekujące zlecenie wejścia jest uznawane tylko po zgodnym `clientOid`.
+
 ## Co działa na Pi
 
 | Usługa | Rola |
 |---|---|
 | `ingester` | WebSockety Binance, OI co 5 min, shadow co 5 min, setup search co 15 min, próg wieloryba co 1 h, czyszczenie 02:00 UTC |
-| `telegram_bot` | komendy z telefonu, watchdog feedu (osobny proces), podsumowanie dnia 07:00 UTC |
+| `risk_watchdog` | niezależny bezpiecznik feedu i drawdownu; przy włączonym live co cykl wykonuje też sync/rekoncyliację KuCoin; działa bez Telegrama i Celery |
+| `telegram_bot` | komendy z telefonu, alerty i podsumowanie dnia 07:00 UTC |
 | `backend`, `frontend`, `nginx` | dashboard (przez Tailscale) |
 | `redis` | cache |
 | `celery_*` | **wyłączone** (profil `celery`); Beat uruchamiałby stary pipeline L1→L2, którego agenci wołają AI poza limitem budżetu |
@@ -37,7 +57,7 @@ Tokena nie wklejaj w rozmowie ani do repo (`.env` jest w `.gitignore`).
 git clone <repo> sentinel && cd sentinel
 cp .env.example .env      # uzupełnij: DJANGO_SECRET_KEY, OPENAI_API_KEY, TELEGRAM_*
 ./deploy-pi.sh            # buduje obrazy (TA-Lib jako gotowe koło aarch64) i startuje
-docker compose -f docker-compose.pi.yml logs -f ingester telegram_bot
+docker compose -f docker-compose.pi.yml logs -f ingester risk_watchdog telegram_bot
 ```
 
 Przy pierwszym starcie baza jest pusta: ingester sam dociąga świece; order book,
@@ -66,9 +86,15 @@ python manage.py trading_state                       # podgląd
 python manage.py trading_state --release NORMAL --reason "sprawdzone: ..."
 ```
 
-Alerty automatyczne: nowy `WAIT_RETEST` i `WAIT_MSS` (zmienna
+Bezpieczniki wykonuje osobna usługa `risk_watchdog`; Telegram jest tylko kanałem
+powiadomień. Alerty automatyczne: nowy `WAIT_RETEST` i `WAIT_MSS` (zmienna
 `TELEGRAM_ALERT_STATUSES`), wynik zaalertowanego setupu, feed nieaktualny > 5 min
 i powrót feedu.
+
+Przy `LIVE_TRADING_ENABLED=True` watchdog co 60 s sprawdza konto, pozycje,
+zlecenia i ochronę. Utrata widoczności któregokolwiek krytycznego odczytu ustawia
+ręcznie odblokowywany `CLOSE_ONLY`; najpierw uruchom `kucoin_preflight`, dopiero
+potem zwolnij stan poleceniem `trading_state --release NORMAL --reason "..."`.
 
 ## 5. Kopie zapasowe
 

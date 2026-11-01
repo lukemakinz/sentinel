@@ -1,0 +1,18 @@
+{
+  "strategy_id": "S84_quiet_router",
+  "breadth_v2_threshold": 0.45,
+  "windows": {
+    "full_2025": [
+      "2025-01-01",
+      "2026-01-01"
+    ],
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  }
+}

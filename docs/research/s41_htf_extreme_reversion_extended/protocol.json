@@ -1,0 +1,55 @@
+{
+  "protocol_version": "S41-HTF-EXTREME-REVERSION-EXTENDED-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "S40 (docs/research/s40_htf_extreme_reversion, run immediately before this protocol in the same session) tested the identical mechanism -- 4H RSI/Bollinger extreme mean reversion with S20 H1's patient exit, on the same 8-symbol universe -- over a 6-month development window (2025-08-01 to 2026-02-01) and found H1 (RSI route) REJECTED_AT_DEVELOPMENT_GATE purely on sample size (14 fills vs the 40 minimum), despite an unusually strong and cost-robust profit factor: 4.56 base, 2.78 stress, 2.20 severe. That is the first route in this project's 42 prior tests to show PF this strong under ALL THREE cost scenarios simultaneously. This protocol is explicitly and disclosedly motivated by that pilot: it extends the development window backward to gather more genuine historical occurrences of the same signal, to see whether the pilot's PF holds up with statistical power or was a small-sample fluke. A one-month data-quality gap was found during this extension (XRPUSDT and SUIUSDT archives for 2023-11 fail OHLCV/taker-volume validation, all other months from 2023-12 onward for all 8 symbols verified clean) -- development start was set to 2024-01-01 (with a one-month indicator warmup from 2023-12-01) specifically to clear that gap, before any signal or PnL was computed on the extended data.",
+  "development_window_change_disclosure": "This is the one and only difference from S40: the development window is extended from 6 months (2025-08-01 to 2026-02-01) to just over 2 years (2024-01-01 to 2026-02-01), a superset that re-examines S40's original 14 pilot trades alongside roughly 20 months of previously-unexamined history. Validation (2026-02-01 to 2026-04-01) and retrospective_evaluation (2026-04-01 to 2026-09-01) are BYTE-IDENTICAL to S40's windows and remain genuinely untouched holdout -- neither has been looked at in S40 or here. No entry/exit parameter differs from S40's frozen defaults.",
+  "hypotheses": [
+    {
+      "id": "H1_RSI_EXTREME",
+      "entry_exit": "Identical to S40 H1: 4H RSI(14) <= 20 (long) or >= 80 (short). Stop beyond the trailing 6-bar (24h) 4H swing low/high plus 0.25x ATR buffer. S20 H1's patient breakeven+chandelier exit: partial 1.5R, breakeven, chandelier trail 2.5x (4H) ATR, cap 8R, max hold 3 days."
+    },
+    {
+      "id": "H2_BOLLINGER_EXTREME",
+      "entry_exit": "Identical to S40 H2: 20-period Bollinger z-score beyond +-2.5 sigma on the 4H close, same stop/target/trail as H1."
+    }
+  ],
+  "single_variable_isolated": "Identical entry/exit logic to S40 for both hypotheses; the only variable changed is the amount of historical development-window data examined.",
+  "symbols": {
+    "traded": ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT", "ADAUSDT", "SUIUSDT", "DOGEUSDT"],
+    "note": "Identical to S40. All 8 verified to have clean archives from 2023-12-01 onward (one shared bad month, 2023-11, excluded for XRP/SUI)."
+  },
+  "windows": {
+    "warmup": ["2023-12-01", "2024-01-01"],
+    "development": ["2024-01-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 (of contributing) symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated 8-symbol cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2, unchanged from S40. No parameter grid. A failing gate stops that route; choose no least-bad winner. If H1 still fails on sample size even with 2+ years of history, that closes this specific mechanism -- it will not be re-run with a third, even longer window.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "This protocol is explicitly informed by S40's promising pilot result -- disclosed rather than presented as an independent a priori test, since a strong small-sample PF is exactly the pattern this project has already seen regress to the mean twice before (S24->S28, S30 dev->validation). A materially higher fill count with PF still intact is the honest bar for taking this seriously; a fill count still short of 40, or a PF that decays toward 1.0 as the sample grows, both count as this mechanism not working, not as reasons to extend the window again.",
+    "The 2024-01 to 2026-02 development period includes both the 2024 accumulation/breakout regime and the 2025 corrective regime for most of this universe -- more regime variety than S40's 6-month window, which is a feature (tests robustness across conditions) but also means a route that worked in S40's narrower window could fail here for legitimate regime reasons, not just sample noise.",
+    "No trend/regime filter, no order-book reconstruction -- unchanged from S40.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation."
+  ]
+}

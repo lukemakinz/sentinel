@@ -1,0 +1,287 @@
+{
+  "protocol_sha256": "cd76066cde5a46fe9ef0a42fa0ff935395011bd4b34fa8a451e25ad748ed1475",
+  "book_a": {
+    "development": {
+      "V0_frozen": {
+        "capital": 250.0,
+        "net_pnl": 90.96373135517479,
+        "return_pct": 36.38549254206991,
+        "usd_per_day": 0.5945341918638875,
+        "usd_per_day_per_250": 0.5945341918638875,
+        "funding_paid": 0.0,
+        "fees_paid": 2.122249917375085,
+        "max_drawdown_pct": 6.87955839701858
+      },
+      "V1_binance_funding": {
+        "capital": 250.0,
+        "net_pnl": 91.08269520273916,
+        "return_pct": 36.433078081095665,
+        "usd_per_day": 0.5953117333512363,
+        "usd_per_day_per_250": 0.5953117333512363,
+        "funding_paid": 1.7278632209497606,
+        "fees_paid": 2.125248990632432,
+        "max_drawdown_pct": 6.910543261745089
+      },
+      "V2_kucoin_funding": {
+        "capital": 250.0,
+        "net_pnl": 89.9828335290104,
+        "return_pct": 35.99313341160416,
+        "usd_per_day": 0.5881230949608524,
+        "usd_per_day_per_250": 0.5881230949608524,
+        "funding_paid": 2.7604085150486917,
+        "fees_paid": 2.122667159742619,
+        "max_drawdown_pct": 6.929135220575187
+      },
+      "V3_kucoin_250": {
+        "capital": 250.0,
+        "net_pnl": 86.80218544315369,
+        "return_pct": 34.72087417726147,
+        "usd_per_day": 0.5673345453800894,
+        "usd_per_day_per_250": 0.5673345453800894,
+        "funding_paid": 2.6917178768463996,
+        "fees_paid": 2.0548966799999997,
+        "max_drawdown_pct": 7.034240154477106
+      },
+      "V4_kucoin_500": {
+        "capital": 500.0,
+        "net_pnl": 177.18432041207984,
+        "return_pct": 35.43686408241597,
+        "usd_per_day": 1.1580674536737245,
+        "usd_per_day_per_250": 0.5790337268368623,
+        "funding_paid": 6.1335003479199965,
+        "fees_paid": 4.232979240000001,
+        "max_drawdown_pct": 7.49454427728703
+      },
+      "V5_kucoin_1000": {
+        "capital": 1000.0,
+        "net_pnl": 326.52323844327566,
+        "return_pct": 32.65232384432756,
+        "usd_per_day": 2.1341388133547428,
+        "usd_per_day_per_250": 0.5335347033386857,
+        "funding_paid": 11.477311356724801,
+        "fees_paid": 8.2277502,
+        "max_drawdown_pct": 6.7528944779878515
+      }
+    },
+    "validation": {
+      "V0_frozen": {
+        "capital": 250.0,
+        "net_pnl": 9.763657489247464,
+        "return_pct": 3.9054629956989855,
+        "usd_per_day": 0.053646469721139914,
+        "usd_per_day_per_250": 0.053646469721139914,
+        "funding_paid": 0.0,
+        "fees_paid": 0.21936005377550383,
+        "max_drawdown_pct": 5.800613140661478
+      },
+      "V1_binance_funding": {
+        "capital": 250.0,
+        "net_pnl": 9.752822788651144,
+        "return_pct": 3.9011291154604577,
+        "usd_per_day": 0.05358693839918211,
+        "usd_per_day_per_250": 0.05358693839918211,
+        "funding_paid": 0.01083470059631267,
+        "fees_paid": 0.21936005377550383,
+        "max_drawdown_pct": 5.8010508350583665
+      },
+      "V2_kucoin_funding": {
+        "capital": 250.0,
+        "net_pnl": 9.74632196829333,
+        "return_pct": 3.898528787317332,
+        "usd_per_day": 0.05355121960600731,
+        "usd_per_day_per_250": 0.05355121960600731,
+        "funding_paid": 0.017335520954100278,
+        "fees_paid": 0.21936005377550383,
+        "max_drawdown_pct": 5.801313477133012
+      },
+      "V3_kucoin_250": {
+        "capital": 250.0,
+        "net_pnl": 9.221841757900847,
+        "return_pct": 3.6887367031603393,
+        "usd_per_day": 0.05066946020824641,
+        "usd_per_day_per_250": 0.05066946020824641,
+        "funding_paid": 0.0164026420992,
+        "fees_paid": 0.2075556,
+        "max_drawdown_pct": 5.500669203694563
+      },
+      "V4_kucoin_500": {
+        "capital": 500.0,
+        "net_pnl": 19.761089481216004,
+        "return_pct": 3.9522178962432006,
+        "usd_per_day": 0.10857741473195606,
+        "usd_per_day_per_250": 0.05428870736597803,
+        "funding_paid": 0.03514851878400001,
+        "fees_paid": 0.444762,
+        "max_drawdown_pct": 5.878050437288715
+      },
+      "V5_kucoin_1000": {
+        "capital": 1000.0,
+        "net_pnl": 39.52217896243201,
+        "return_pct": 3.9522178962432006,
+        "usd_per_day": 0.21715482946391212,
+        "usd_per_day_per_250": 0.05428870736597803,
+        "funding_paid": 0.07029703756800001,
+        "fees_paid": 0.889524,
+        "max_drawdown_pct": 5.878050437288715
+      }
+    },
+    "retrospective_evaluation": {
+      "V0_frozen": {
+        "capital": 250.0,
+        "net_pnl": 0.318133155849182,
+        "return_pct": 0.1272532623396728,
+        "usd_per_day": 0.002079301672216876,
+        "usd_per_day_per_250": 0.002079301672216876,
+        "funding_paid": 0.0,
+        "fees_paid": 0.0962950806518321,
+        "max_drawdown_pct": 1.042527955053384
+      },
+      "V1_binance_funding": {
+        "capital": 250.0,
+        "net_pnl": 0.2950040975929369,
+        "return_pct": 0.11800163903717475,
+        "usd_per_day": 0.0019281313568165809,
+        "usd_per_day_per_250": 0.0019281313568165809,
+        "funding_paid": 0.023127049040971497,
+        "fees_paid": 0.09629708986706867,
+        "max_drawdown_pct": 1.0413964503753552
+      },
+      "V2_kucoin_funding": {
+        "capital": 250.0,
+        "net_pnl": 0.28112666263925234,
+        "return_pct": 0.11245066505570095,
+        "usd_per_day": 0.0018374291675768127,
+        "usd_per_day_per_250": 0.0018374291675768127,
+        "funding_paid": 0.0370032784655544,
+        "fees_paid": 0.09629829539621061,
+        "max_drawdown_pct": 1.0407174347631505
+      },
+      "V3_kucoin_250": {
+        "capital": 250.0,
+        "net_pnl": 0.40771910273281264,
+        "return_pct": 0.16308764109312504,
+        "usd_per_day": 0.002664830736815769,
+        "usd_per_day_per_250": 0.002664830736815769,
+        "funding_paid": 0.036608817267200014,
+        "fees_paid": 0.08927207999999999,
+        "max_drawdown_pct": 1.02364926790997
+      },
+      "V4_kucoin_500": {
+        "capital": 500.0,
+        "net_pnl": -5.143139106577564,
+        "return_pct": -1.028627821315513,
+        "usd_per_day": -0.033615288278284736,
+        "usd_per_day_per_250": -0.016807644139142368,
+        "funding_paid": 0.20538234657760002,
+        "fees_paid": 0.28655676,
+        "max_drawdown_pct": 1.8903476787768845
+      },
+      "V5_kucoin_1000": {
+        "capital": 1000.0,
+        "net_pnl": -11.773603248470408,
+        "return_pct": -1.1773603248470408,
+        "usd_per_day": -0.07695165521876084,
+        "usd_per_day_per_250": -0.01923791380469021,
+        "funding_paid": 0.42889772847040003,
+        "fees_paid": 0.5874055199999999,
+        "max_drawdown_pct": 1.9606434367853434
+      }
+    },
+    "oos_2026_09_10": {
+      "V0_frozen": {
+        "capital": 250.0,
+        "net_pnl": 11.056249876739344,
+        "return_pct": 4.422499950695737,
+        "usd_per_day": 0.19743303351320257,
+        "usd_per_day_per_250": 0.19743303351320257,
+        "funding_paid": 0.0,
+        "fees_paid": 0.5090241112835718,
+        "max_drawdown_pct": 3.5836716147989347
+      },
+      "V1_binance_funding": {
+        "capital": 250.0,
+        "net_pnl": 10.695803663120955,
+        "return_pct": 4.278321465248382,
+        "usd_per_day": 0.19099649398430277,
+        "usd_per_day_per_250": 0.19099649398430277,
+        "funding_paid": 0.3643866504555047,
+        "fees_paid": 0.5087846832864595,
+        "max_drawdown_pct": 3.6440690609967263
+      },
+      "V2_kucoin_funding": {
+        "capital": 250.0,
+        "net_pnl": 10.479694641520382,
+        "return_pct": 4.191877856608152,
+        "usd_per_day": 0.18713740431286396,
+        "usd_per_day_per_250": 0.18713740431286396,
+        "funding_paid": 0.5828569340777803,
+        "fees_paid": 0.5086411106214457,
+        "max_drawdown_pct": 3.680301145796791
+      },
+      "V3_kucoin_250": {
+        "capital": 250.0,
+        "net_pnl": 10.61651897059835,
+        "return_pct": 4.24660758823934,
+        "usd_per_day": 0.18958069590354196,
+        "usd_per_day_per_250": 0.18958069590354196,
+        "funding_paid": 0.5628187494016003,
+        "fees_paid": 0.5013622799999999,
+        "max_drawdown_pct": 3.415401095348776
+      },
+      "V4_kucoin_500": {
+        "capital": 500.0,
+        "net_pnl": 15.94417139703512,
+        "return_pct": 3.188834279407024,
+        "usd_per_day": 0.2847173463756271,
+        "usd_per_day_per_250": 0.14235867318781356,
+        "funding_paid": 1.3107012029648002,
+        "fees_paid": 0.9284273999999998,
+        "max_drawdown_pct": 4.507760546162965
+      },
+      "V5_kucoin_1000": {
+        "capital": 1000.0,
+        "net_pnl": 28.747341209220167,
+        "return_pct": 2.874734120922017,
+        "usd_per_day": 0.5133453787360744,
+        "usd_per_day_per_250": 0.1283363446840186,
+        "funding_paid": 2.6787927507792,
+        "fees_paid": 2.0183660399999996,
+        "max_drawdown_pct": 4.415950997259825
+      }
+    }
+  },
+  "book_b_lots": {
+    "development": {
+      "trades": 58,
+      "median_contracts": 2.3323658508997402,
+      "min_contracts": 2.08206791550786,
+      "median_size_error_pct": 12.0434204862804,
+      "max_size_error_pct": 19.91504158351368,
+      "median_notional_usd": 270.0773704257573
+    },
+    "validation": {
+      "trades": 8,
+      "median_contracts": 2.5350048880969123,
+      "min_contracts": 2.466319259135214,
+      "median_size_error_pct": 17.721402381904518,
+      "max_size_error_pct": 19.861606333667854,
+      "median_notional_usd": 310.98737449545786
+    },
+    "retrospective_evaluation": {
+      "trades": 1,
+      "median_contracts": 4.364751896450654,
+      "min_contracts": 4.364751896450654,
+      "median_size_error_pct": 8.356761280000006,
+      "max_size_error_pct": 8.356761280000006,
+      "median_notional_usd": 312.5
+    },
+    "oos_2026_09_10": {
+      "trades": 5,
+      "median_contracts": 3.9333689998074752,
+      "min_contracts": 3.9065860946804456,
+      "median_size_error_pct": 2.0834147839999893,
+      "max_size_error_pct": 3.559832046746767,
+      "median_notional_usd": 312.5
+    }
+  }
+}

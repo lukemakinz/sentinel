@@ -1,0 +1,265 @@
+{
+  "protocol_sha256": "e97a9e5b495f52097215414c55ba0e0fd67c407f61f2ba026213e1e2e8e23094",
+  "regime_config": {
+    "btc_symbol": "BTCUSDT",
+    "long_sma_days": 200,
+    "long_momentum_days": 84,
+    "down_ema_days": 50,
+    "down_fast_momentum_days": 28,
+    "down_slow_momentum_days": 84,
+    "up_breadth_threshold": 0.5,
+    "down_breadth_threshold": 0.3333333333333333,
+    "confirmation_days": 2
+  },
+  "execution_config": {
+    "long_momentum_days": 84,
+    "long_sma_days": 200,
+    "short_fast_momentum_days": 28,
+    "short_slow_momentum_days": 84,
+    "short_ema_days": 50,
+    "vol_days": 42,
+    "covariance_days": 60,
+    "funding_days": 28,
+    "max_long_mean_funding": 0.0001,
+    "min_short_mean_funding": -0.0001,
+    "minimum_short_oi_oscillator_pct": 0.05,
+    "max_long_positions": 3,
+    "max_short_positions": 2,
+    "max_asset_weight": 0.45,
+    "long_vol_target_annual": 0.15,
+    "short_vol_target_annual": 0.075,
+    "long_low_attention_scale": 0.75,
+    "oi_attention_fraction": 0.6666666666666666
+  },
+  "short_symbols": [
+    "ETHUSDT"
+  ],
+  "target_counts": {
+    "decisions": 109,
+    "invested_decisions": 48,
+    "long_decisions": 29,
+    "short_decisions": 19,
+    "cash_decisions": 61,
+    "sideways_decisions": 41
+  },
+  "regime_forward_diagnostic": {
+    "UP": {
+      "samples": 33,
+      "mean_forward_return_pct": 1.109203318903956,
+      "median_forward_return_pct": -0.23857876984476611,
+      "directional_hit_rate": 0.45454545454545453
+    },
+    "DOWN": {
+      "samples": 33,
+      "mean_forward_return_pct": -0.46716912029351854,
+      "median_forward_return_pct": -1.8316440739355233,
+      "directional_hit_rate": 0.5454545454545454
+    },
+    "SIDEWAYS": {
+      "samples": 40,
+      "mean_forward_return_pct": 0.8017522286245009,
+      "median_forward_return_pct": 1.5977843041941941,
+      "directional_hit_rate": null
+    }
+  },
+  "continuous_replays": {
+    "base": {
+      "initial_capital": 500.0,
+      "final_equity": 603.3680765042644,
+      "net_pnl": 103.36807650426442,
+      "return_pct": 20.673615300852877,
+      "max_drawdown_pct": 8.197271401134575,
+      "annualized_sharpe": 1.011205865303974,
+      "rebalances": 109,
+      "turnover_usd": 5414.910409421773,
+      "fees": 2.707455204710886,
+      "slippage": 1.0829820818843545,
+      "funding_pnl": -5.001032247413038,
+      "daily_profit_factor": 1.2391536199245496
+    },
+    "stress": {
+      "initial_capital": 500.0,
+      "final_equity": 599.9879020431625,
+      "net_pnl": 99.98790204316253,
+      "return_pct": 19.99758040863251,
+      "max_drawdown_pct": 8.339538859774443,
+      "annualized_sharpe": 0.9824481932100982,
+      "rebalances": 109,
+      "turnover_usd": 5400.204416523198,
+      "fees": 4.320163533218557,
+      "slippage": 2.7001022082615984,
+      "funding_pnl": -4.99154547687887,
+      "daily_profit_factor": 1.2310681236895715
+    },
+    "severe": {
+      "initial_capital": 500.0,
+      "final_equity": 596.0671471549657,
+      "net_pnl": 96.06714715496571,
+      "return_pct": 19.213429430993134,
+      "max_drawdown_pct": 8.505287909999504,
+      "annualized_sharpe": 0.9488260100726209,
+      "rebalances": 109,
+      "turnover_usd": 5383.11075495025,
+      "fees": 5.383110754950251,
+      "slippage": 5.383110754950251,
+      "funding_pnl": -4.980508963144013,
+      "daily_profit_factor": 1.22161884775002
+    }
+  },
+  "slices": {
+    "development": {
+      "base": {
+        "start_nav": 500.0,
+        "net_pnl": 65.82278398048379,
+        "return_on_start_nav_pct": 13.164556796096758,
+        "usd_per_calendar_day": 0.24110909882961096,
+        "max_continuous_drawdown_pct": 7.993243742597023,
+        "annualized_sharpe": 1.5585172949624786,
+        "positive_month_share": 0.4444444444444444
+      },
+      "stress": {
+        "start_nav": 500.0,
+        "net_pnl": 64.47665644779806,
+        "return_on_start_nav_pct": 12.895331289559614,
+        "usd_per_calendar_day": 0.23617822874651306,
+        "max_continuous_drawdown_pct": 8.040213241352422,
+        "annualized_sharpe": 1.5292528338392588,
+        "positive_month_share": 0.4444444444444444
+      },
+      "severe": {
+        "start_nav": 500.0,
+        "net_pnl": 62.90983056304901,
+        "return_on_start_nav_pct": 12.581966112609802,
+        "usd_per_calendar_day": 0.23043893979138833,
+        "max_continuous_drawdown_pct": 8.094987813371757,
+        "annualized_sharpe": 1.495026451288342,
+        "positive_month_share": 0.4444444444444444
+      }
+    },
+    "validation": {
+      "base": {
+        "start_nav": 565.8227839804838,
+        "net_pnl": 37.91635762636304,
+        "return_on_start_nav_pct": 6.7011012458047,
+        "usd_per_calendar_day": 0.15476064337291034,
+        "max_continuous_drawdown_pct": 8.197271401134575,
+        "annualized_sharpe": 0.9336879808402485,
+        "positive_month_share": 0.625
+      },
+      "stress": {
+        "start_nav": 564.4766564477981,
+        "net_pnl": 36.33714485984933,
+        "return_on_start_nav_pct": 6.437315776442517,
+        "usd_per_calendar_day": 0.14831487697897686,
+        "max_continuous_drawdown_pct": 8.339538859774443,
+        "annualized_sharpe": 0.9002699053148515,
+        "positive_month_share": 0.625
+      },
+      "severe": {
+        "start_nav": 562.909830563049,
+        "net_pnl": 34.50796068530303,
+        "return_on_start_nav_pct": 6.130282118325512,
+        "usd_per_calendar_day": 0.14084881912368585,
+        "max_continuous_drawdown_pct": 8.505287909999504,
+        "annualized_sharpe": 0.8612122341931763,
+        "positive_month_share": 0.625
+      }
+    },
+    "retrospective_evaluation": {
+      "base": {
+        "start_nav": 603.7391416068468,
+        "net_pnl": -0.3710651025824063,
+        "return_on_start_nav_pct": -0.06146116377262199,
+        "usd_per_calendar_day": -0.00152701688305517,
+        "max_continuous_drawdown_pct": 3.6852560794061073,
+        "annualized_sharpe": -0.003235381003486006,
+        "positive_month_share": 0.25
+      },
+      "stress": {
+        "start_nav": 600.8138013076474,
+        "net_pnl": -0.8258992644848604,
+        "return_on_start_nav_pct": -0.13746343088113544,
+        "usd_per_calendar_day": -0.0033987624052874916,
+        "max_continuous_drawdown_pct": 3.730858145277405,
+        "annualized_sharpe": -0.03195811598516041,
+        "positive_month_share": 0.25
+      },
+      "severe": {
+        "start_nav": 597.417791248352,
+        "net_pnl": -1.350644093386336,
+        "return_on_start_nav_pct": -0.22608032656075702,
+        "usd_per_calendar_day": -0.005558206145622782,
+        "max_continuous_drawdown_pct": 3.784041046666864,
+        "annualized_sharpe": -0.065599737970438,
+        "positive_month_share": 0.25
+      }
+    }
+  },
+  "risk_neighbor_stress_pnl": {
+    "0.125_0.0625": 82.8669985349186,
+    "0.175_0.0875": 117.27103459811804
+  },
+  "oi_threshold_neighbor_stress_pnl": {
+    "0.0": 99.98790204316253,
+    "0.1": 99.98790204316253
+  },
+  "phase_stress_pnl": {
+    "2": 88.79560690354378,
+    "4": 126.21079349042373
+  },
+  "stress_direction_pnl": {
+    "long_up_regime": 97.2759979570099,
+    "short_down_regime": 3.8540240815572133,
+    "sideways_or_unclassified": -1.1421199954045846
+  },
+  "stress_monthly_dispersion": {
+    "months": 25,
+    "positive_months": 11,
+    "positive_month_share": 0.44,
+    "largest_positive_month_share_of_positive_pnl": 0.43480150329976935,
+    "best_month_pnl": 74.46185067493593,
+    "worst_month_pnl": -30.44056123480709,
+    "monthly_pnl": {
+      "2024-08-31 00:00:00+00:00": 0.0,
+      "2024-09-30 00:00:00+00:00": -0.8638799924927412,
+      "2024-10-31 00:00:00+00:00": 8.78913826642082,
+      "2024-11-30 00:00:00+00:00": 74.46185067493593,
+      "2024-12-31 00:00:00+00:00": 0.0,
+      "2025-01-31 00:00:00+00:00": 9.567627151915872,
+      "2025-02-28 00:00:00+00:00": -30.44056123480709,
+      "2025-03-31 00:00:00+00:00": -2.9201098762538322,
+      "2025-04-30 00:00:00+00:00": 5.882591458079105,
+      "2025-05-31 00:00:00+00:00": -1.8304242623759137,
+      "2025-06-30 00:00:00+00:00": -10.418860705717748,
+      "2025-07-31 00:00:00+00:00": 26.649834150321567,
+      "2025-08-31 00:00:00+00:00": 6.213666343405748,
+      "2025-09-30 00:00:00+00:00": 12.030635581294973,
+      "2025-10-31 00:00:00+00:00": 4.97923944292836,
+      "2025-11-30 00:00:00+00:00": 8.16057197156772,
+      "2025-12-31 00:00:00+00:00": -9.447517661575375,
+      "2026-01-31 00:00:00+00:00": -4.731739001445931,
+      "2026-02-28 00:00:00+00:00": 0.0,
+      "2026-03-31 00:00:00+00:00": 1.6623080060628581,
+      "2026-04-30 00:00:00+00:00": 0.0,
+      "2026-05-31 00:00:00+00:00": 0.0,
+      "2026-06-30 00:00:00+00:00": 12.857351184008166,
+      "2026-07-31 00:00:00+00:00": -9.59406151375083,
+      "2026-08-31 00:00:00+00:00": -1.019757939359124
+    }
+  },
+  "stress_block_bootstrap": {
+    "method": "circular_28d_blocks",
+    "samples": 5000,
+    "p10_terminal_pnl": -2.520599191676415,
+    "p50_terminal_pnl": 90.17481873532,
+    "p90_terminal_pnl": 240.3803467655047,
+    "observed_terminal_pnl": 99.98790204316253
+  },
+  "decision": "HISTORICAL_POSITIVE_SELECTED_PAPER_CHALLENGER",
+  "paper_forward": {
+    "t0": "2026-10-19",
+    "minimum_days": 180,
+    "minimum_weekly_decisions": 26,
+    "live_enabled": false
+  }
+}

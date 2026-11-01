@@ -1,0 +1,67 @@
+{
+  "status": "frozen_before_s98_replay",
+  "strategy_id": "S98_INDEPENDENT_DUAL_MOMENTUM",
+  "capital_usd": 500.0,
+  "research_lineage": "Defined after S97 exposed short-squeeze and horizon-instability risk. S98 is a separate, contaminated-development strategy and cannot be used to rehabilitate S97.",
+  "hypothesis": "An asset's own long-term trend is a better eligibility gate than applying BTC's regime to every coin. Combining absolute momentum, relative ranking, volatility scaling and cash should retain upside trends without unlimited short-squeeze risk.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+  "data": {
+    "source": "checksum-verified public Binance USD-M monthly archives",
+    "candles": "1d",
+    "funding": "historical fundingRate settlements",
+    "warmup_start": "2022-04-04T00:00:00Z",
+    "execution_start": "2023-01-02T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z"
+  },
+  "diagnostic_slices": {
+    "development": ["2023-01-02T00:00:00Z", "2024-01-01T00:00:00Z"],
+    "validation": ["2024-01-01T00:00:00Z", "2025-01-06T00:00:00Z"],
+    "retrospective_evaluation": ["2025-01-06T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "signal": {
+    "decision": "Monday 00:00 UTC using only candles with close_time strictly before the decision",
+    "absolute_gate": "asset close above its own 200-day simple moving average and its 84-day return above zero",
+    "relative_rank": "84-day return divided by 42-day daily volatility times sqrt(84)",
+    "funding_veto": "skip a long when mean realized funding over the prior 28 days exceeds +0.0001 per settlement",
+    "selection": "hold up to the three highest ranked eligible assets; emit an explicit all-cash target when none qualify"
+  },
+  "portfolio": {
+    "weights": "inverse 42-day annualized volatility",
+    "single_asset_cap": 0.45,
+    "covariance": "60 completed daily returns, annualized by 365",
+    "volatility_target_annual": 0.20,
+    "gross_cap": 1.0,
+    "shorts": false,
+    "cash": "all unused weight remains cash",
+    "rebalance": "weekly; signed quantity delta only"
+  },
+  "execution": {
+    "primary_rebalance": "Monday daily open",
+    "base_bps_per_traded_notional": {"fee": 5.0, "slippage": 2.0},
+    "stress_bps_per_traded_notional": {"fee": 8.0, "slippage": 5.0},
+    "severe_bps_per_traded_notional": {"fee": 10.0, "slippage": 10.0},
+    "funding_mark_proxy": "same UTC day's close",
+    "end_of_study": "liquidate at final close with scenario costs"
+  },
+  "robustness": {
+    "momentum_neighbors_days": [63, 126],
+    "rebalance_phase_checks": ["Wednesday", "Friday"],
+    "leave_one_symbol_out": "rerun stress after excluding each asset",
+    "uncertainty_diagnostic": "5000 deterministic circular 28-day block bootstraps of full-period stress daily returns",
+    "continuous_ledger": "run once through all three diagnostic slices without resets"
+  },
+  "historical_gate": {
+    "full_stress": "net PnL > 0, Sharpe >= 0.50, max drawdown <= 15%, positive-month share >= 45%",
+    "time_dispersion": "all three stress slices non-negative and at least two strictly positive; largest positive month <= 60% of total positive monthly PnL",
+    "cost_survival": "full severe net PnL > 0",
+    "parameter_robustness": "both 63d and 126d momentum neighbors have positive full stress PnL",
+    "timing_robustness": "Wednesday and Friday rebalance phases have positive full stress PnL",
+    "symbol_robustness": "at least five of six leave-one-symbol-out stress replays are profitable",
+    "promotion": "historical pass means paper-forward challenger only for at least 26 decisions and 180 days; live remains disabled"
+  },
+  "disclosures": [
+    "S98 was designed after inspecting S97 and earlier Book A results; no historical interval is true OOS.",
+    "Daily bars use the same-day close as a funding mark proxy and do not model intraday liquidation, exchange outages, latency or taxes.",
+    "No post-result parameter adjustment is permitted for S98."
+  ]
+}

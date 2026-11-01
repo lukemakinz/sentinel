@@ -8,8 +8,12 @@ logger = logging.getLogger(__name__)
 
 @shared_task(name='executor.process_signal')
 def process_signal(consensus_signal_id):
-    """Process a consensus signal through risk manager and potentially execute."""
-    from consensus.models import ConsensusSignal
+    """Legacy consensus entrypoint; fail closed while that app is disabled."""
+    try:
+        from consensus.models import ConsensusSignal
+    except (ImportError, RuntimeError) as exc:
+        logger.error('Legacy consensus execution path is disabled: %s', exc)
+        return {'ok': False, 'reason': 'legacy_consensus_disabled'}
     from risk.manager import RiskManager
     from .paper_engine import PaperTradingEngine
     from ingester.models import Candle, WatchedPair
@@ -69,10 +73,25 @@ def process_signal(consensus_signal_id):
             logger.error("Live order refused: exchange-side stop orders are not implemented")
         else:
             from .exchange_adapters import get_exchange_adapter
+            from .live_execution import submit_protected_entry
             adapter = get_exchange_adapter()
             # Deterministic id: a retried submit cannot open the position twice.
-            exchange_result = adapter.place_order({**result, 'client_oid': f'sentinel-{signal.id}'})
+            exchange_result = submit_protected_entry(adapter, {
+                **result,
+                'client_oid': f'sentinel-{signal.id}',
+            }, signal_ref=f'consensus:{signal.id}')
             logger.info(f"Live order submit {signal.symbol}: ok={exchange_result.ok} payload={exchange_result.payload}")
+            if (not exchange_result.ok
+                    and exchange_result.payload.get('manual_reconciliation_required')):
+                from risk.trading_state import escalate
+                escalate(
+                    'HALT',
+                    (
+                        f'Order {exchange_result.payload.get("client_oid")} has an uncertain '
+                        'exchange outcome; manual reconciliation is required.'
+                    ),
+                    by='executor', manual_unlock=True,
+                )
     else:
         logger.info(f"Mode '{mode}' — no auto execution")
 
@@ -82,10 +101,19 @@ def process_signal(consensus_signal_id):
 
 @shared_task(name='executor.monitor_positions')
 def monitor_positions():
-    """Check open positions for SL/TP hits — runs every 30 seconds."""
+    """Check paper SL/TP only; exchange positions need exchange-side orders."""
     from .paper_engine import PaperTradingEngine
+    from .models import Position
     engine = PaperTradingEngine()
     engine.check_positions()
+    return {
+        'paper_open': Position.objects.filter(
+            status='OPEN', source__in=('paper', 'auto'),
+        ).count(),
+        'exchange_open_untouched': Position.objects.filter(
+            status='OPEN', source='exchange',
+        ).count(),
+    }
 
 
 @shared_task(name='executor.daily_reset')
@@ -106,14 +134,27 @@ def weekly_reset():
 
 @shared_task(name='executor.force_close_all')
 def force_close_all():
-    """Force close ALL open positions at 22:00 UTC — no overnight positions."""
+    """Close paper positions and submit reduce-only closes for KuCoin mirrors.
+
+    Exchange mirrors remain OPEN locally until the next exchange sync proves
+    that the position is gone.  A failed close escalates to a manual HALT.
+    """
+    from django.conf import settings
     from .models import Position
     from .paper_engine import PaperTradingEngine
-    from django.utils import timezone
 
-    open_positions = Position.objects.filter(status='OPEN')
-    if not open_positions.exists():
-        return {'closed': 0}
+    open_positions = Position.objects.filter(
+        status='OPEN', source__in=('paper', 'auto'),
+    )
+    exchange_positions = list(Position.objects.filter(status='OPEN', source='exchange'))
+    exchange_open = len(exchange_positions)
+    if not open_positions.exists() and not exchange_open:
+        return {
+            'closed': 0,
+            'exchange_close_submitted': 0,
+            'exchange_close_failed': 0,
+            'exchange_open_untouched': 0,
+        }
 
     engine = PaperTradingEngine()
     closed = 0
@@ -126,7 +167,66 @@ def force_close_all():
             logger.error(f"Force close failed for {position.id}: {e}")
 
     logger.info(f"EOD force close: {closed} position(s) closed")
-    return {'closed': closed}
+    submitted = 0
+    failed = 0
+    untouched = 0
+    if exchange_open and settings.LIVE_TRADING_ENABLED:
+        from .exchange_adapters import get_exchange_adapter
+
+        adapter = get_exchange_adapter()
+        for position in exchange_positions:
+            result = adapter.close_position({
+                'symbol': position.symbol,
+                'side': position.side,
+                'quantity': position.remaining_quantity or position.quantity,
+                'leverage': position.leverage,
+                'margin_mode': 'isolated',
+                'client_oid': f'sentinel-eod-{position.id}',
+            })
+            if result.ok:
+                from .live_execution import ACTIVE_INTENT_STATUSES
+                from .models import ExchangeExecutionIntent
+
+                ExchangeExecutionIntent.objects.filter(
+                    symbol=position.symbol,
+                    side=position.side,
+                    status__in=ACTIVE_INTENT_STATUSES,
+                ).update(status='CLOSING')
+                submitted += 1
+                logger.warning(
+                    'EOD reduce-only close submitted for exchange position %s; awaiting sync',
+                    position.id,
+                )
+            else:
+                failed += 1
+                logger.critical(
+                    'EOD reduce-only close failed for exchange position %s: %s',
+                    position.id,
+                    result.payload,
+                )
+    elif exchange_open:
+        untouched = exchange_open
+
+    if failed or untouched:
+        from risk.trading_state import escalate
+        escalate(
+            'HALT',
+            (
+                f'EOD could not close {failed + untouched} of {exchange_open} '
+                'exchange position(s).'
+            ),
+            by='eod_watchdog', manual_unlock=True,
+        )
+        logger.critical(
+            'EOD left %s exchange position(s) without an accepted close and halted new trading',
+            failed + untouched,
+        )
+    return {
+        'closed': closed,
+        'exchange_close_submitted': submitted,
+        'exchange_close_failed': failed,
+        'exchange_open_untouched': untouched,
+    }
 
 
 @shared_task(name='executor.block_new_entries_eod')
@@ -140,25 +240,46 @@ def block_new_entries_eod():
 
 @shared_task(name='executor.transfer_profit_reserve_to_spot')
 def transfer_profit_reserve_to_spot(amount_usd: float | None = None):
-    """Attempt to move a reserve slice of profits to spot on the live exchange."""
+    """Move only the configured share of profit above the capital baseline."""
     from django.conf import settings
+    from django.db import transaction
     from .exchange_adapters import get_exchange_adapter
     from .models import AccountState
 
     if not settings.LIVE_TRADING_ENABLED:
         return {'ok': False, 'reason': 'live_trading_disabled'}
 
-    state = AccountState.objects.first()
-    if not state:
-        return {'ok': False, 'reason': 'missing_account_state'}
+    with transaction.atomic():
+        state = AccountState.objects.select_for_update().order_by('-updated_at').first()
+        if not state:
+            return {'ok': False, 'reason': 'missing_account_state'}
 
-    reserve_ratio = float(getattr(settings, 'PROFIT_TO_SPOT_RATIO', 0.10))
-    transfer_amount = float(amount_usd) if amount_usd is not None else max(state.balance * reserve_ratio, 0.0)
-    if transfer_amount <= 0:
-        return {'ok': False, 'reason': 'non_positive_transfer_amount'}
+        reserve_ratio = min(max(float(getattr(settings, 'PROFIT_TO_SPOT_RATIO', 0.10)), 0.0), 1.0)
+        capital_baseline = float(getattr(
+            settings, 'LIVE_CAPITAL_BASELINE_USD', settings.INITIAL_BALANCE,
+        ))
+        already_reserved = max(float(state.spot_reserve_balance or 0.0), 0.0)
+        profit_before_reserve = max(float(state.balance) + already_reserved - capital_baseline, 0.0)
+        reserve_target = profit_before_reserve * reserve_ratio
+        available = max(reserve_target - already_reserved, 0.0)
+        requested = float(amount_usd) if amount_usd is not None else available
+        if requested > available + 1e-9:
+            return {
+                'ok': False,
+                'reason': 'amount_exceeds_unreserved_profit',
+                'available_usd': round(available, 2),
+            }
+        transfer_amount = min(requested, available)
+        if transfer_amount <= 0:
+            return {'ok': False, 'reason': 'no_unreserved_profit'}
 
-    adapter = get_exchange_adapter()
-    result = adapter.transfer_profit_to_spot(transfer_amount)
+        adapter = get_exchange_adapter()
+        result = adapter.transfer_profit_to_spot(transfer_amount)
+        if result.ok:
+            # Keep the local high-water accounting correct before the next sync.
+            state.balance = max(float(state.balance) - transfer_amount, 0.0)
+            state.spot_reserve_balance = already_reserved + transfer_amount
+            state.save(update_fields=['balance', 'spot_reserve_balance', 'updated_at'])
     logger.info(f"Spot reserve transfer attempt: ok={result.ok} payload={result.payload}")
     return {'ok': result.ok, 'payload': result.payload, 'amount_usd': round(transfer_amount, 2)}
 
@@ -177,29 +298,65 @@ def sync_live_exchange_state():
     overview = adapter.get_account_overview('USDT')
     positions = adapter.get_positions()
     open_orders = adapter.get_open_orders()
+    stop_orders = adapter.get_stop_orders()
     fills = adapter.get_recent_fills()
     closed_orders = adapter.get_recent_closed_orders()
+    normalized_regular_orders = adapter.normalize_open_orders(open_orders.payload) if open_orders.ok else []
+    normalized_stop_orders = adapter.normalize_stop_orders(stop_orders.payload) if stop_orders.ok else []
     payload = {
         'overview_ok': overview.ok,
         'positions_ok': positions.ok,
-        'orders_ok': open_orders.ok,
+        'orders_ok': open_orders.ok and stop_orders.ok,
+        'regular_orders_ok': open_orders.ok,
+        'stop_orders_ok': stop_orders.ok,
         'fills_ok': fills.ok,
         'closed_orders_ok': closed_orders.ok,
         'overview': overview.payload,
         'positions': positions.payload,
         'open_orders': open_orders.payload,
+        'stop_orders': stop_orders.payload,
         'fills': fills.payload,
         'closed_orders': closed_orders.payload,
         'normalized_positions': adapter.normalize_positions(positions.payload) if positions.ok else [],
-        'normalized_open_orders': adapter.normalize_open_orders(open_orders.payload) if open_orders.ok else [],
+        'normalized_regular_orders': normalized_regular_orders,
+        'normalized_stop_orders': normalized_stop_orders,
+        'normalized_open_orders': normalized_regular_orders + normalized_stop_orders,
         'normalized_fills': adapter.normalize_recent_fills(fills.payload) if fills.ok else [],
         'normalized_closed_orders': adapter.normalize_recent_closed_orders(closed_orders.payload) if closed_orders.ok else [],
     }
     normalized_positions = payload['normalized_positions']
     if positions.ok:
         # Compare before mirroring: an unexplained difference halts trading.
-        from .reconcile import halt_on_mismatch, local_intended_positions, reconcile
-        mismatches = reconcile(local_intended_positions(), normalized_positions)
+        from .reconcile import (
+            halt_on_mismatch,
+            local_intended_positions,
+            protective_stop_mismatches,
+            reconcile,
+        )
+        from .live_execution import UNRESOLVED_INTENT_STATUSES
+        from .models import ExchangeExecutionIntent
+        pending_client_oids = {
+            str(order.get('client_oid') or '')
+            for order in normalized_regular_orders
+            if order.get('client_oid')
+        }
+        mismatches = reconcile(
+            local_intended_positions(), normalized_positions,
+            pending_client_oids=pending_client_oids,
+        )
+        mismatches.extend(protective_stop_mismatches(
+            normalized_positions,
+            normalized_stop_orders,
+            stop_orders_ok=stop_orders.ok,
+        ))
+        mismatches.extend({
+            'symbol': intent.symbol,
+            'issue': 'UNRESOLVED_EXECUTION_INTENT',
+            'client_oid': intent.client_oid,
+            'status': intent.status,
+        } for intent in ExchangeExecutionIntent.objects.filter(
+            status__in=UNRESOLVED_INTENT_STATUSES,
+        ))
         payload['reconciliation'] = {'mismatches': mismatches,
                                      'halted': halt_on_mismatch(mismatches)}
     normalized_open_orders = payload['normalized_open_orders']
@@ -227,10 +384,31 @@ def sync_live_exchange_state():
             state.save(update_fields=['balance', 'equity', 'unrealized_pnl', 'peak_equity', 'updated_at'])
 
     if positions.ok:
+        from .models import ExchangeExecutionIntent
+
+        active_intents = list(ExchangeExecutionIntent.objects.filter(
+            status__in=('PREPARED', 'ACCEPTED', 'UNCERTAIN', 'OPEN', 'CLOSING'),
+        ))
+        intents_by_key = {(intent.symbol, intent.side): intent for intent in active_intents}
+        exchange_keys = {
+            (pos['symbol'], pos['side'])
+            for pos in normalized_positions
+            if abs(float(pos.get('quantity_base') or 0.0)) > 0
+        }
+        for intent in active_intents:
+            key = (intent.symbol, intent.side)
+            if key in exchange_keys and intent.status == 'ACCEPTED':
+                intent.status = 'OPEN'
+                intent.save(update_fields=['status', 'updated_at'])
+            elif intent.status == 'CLOSING' and key not in exchange_keys:
+                intent.status = 'CLOSED'
+                intent.save(update_fields=['status', 'updated_at'])
+
         active_keys = set()
         for pos in normalized_positions:
             key = (pos['symbol'], pos['side'])
             active_keys.add(key)
+            intent = intents_by_key.get(key)
             entry_price = float(pos['entry_price'] or 0.0)
             mark_price = float(pos['mark_price'] or entry_price)
             placeholder_stop = entry_price if entry_price > 0 else mark_price
@@ -249,7 +427,14 @@ def sync_live_exchange_state():
                 'margin_usd': 0.0,
                 'unrealized_pnl': pos['unrealized_pnl'],
                 'source': 'exchange',
-                'strategy': 'LIVE',
+                'strategy': intent.strategy if intent else 'LIVE',
+                'consensus_signal_id': (
+                    int(intent.signal_ref.split(':', 1)[1])
+                    if intent and intent.signal_ref.startswith('consensus:')
+                    and intent.signal_ref.split(':', 1)[1].isdigit()
+                    else None
+                ),
+                'analyst_snapshot': ({'execution_intent': intent.client_oid} if intent else {}),
             }
             Position.objects.update_or_create(
                 symbol=pos['symbol'],
@@ -266,7 +451,7 @@ def sync_live_exchange_state():
                 local_pos.close_reason = 'EXCHANGE_SYNC_STALE'
                 local_pos.save(update_fields=['status', 'close_reason'])
 
-    if open_orders.ok:
+    if open_orders.ok and stop_orders.ok:
         active_order_ids = set()
         for order in normalized_open_orders:
             order_id = str(order.get('order_id') or '')
@@ -332,11 +517,37 @@ def sync_live_exchange_state():
                 },
             )
     logger.info(
-        "Live exchange sync: overview_ok=%s positions_ok=%s orders_ok=%s fills_ok=%s closed_orders_ok=%s",
+        "Live exchange sync: overview_ok=%s positions_ok=%s orders_ok=%s stop_orders_ok=%s fills_ok=%s closed_orders_ok=%s",
         overview.ok,
         positions.ok,
         open_orders.ok,
+        stop_orders.ok,
         fills.ok,
         closed_orders.ok,
     )
-    return {'ok': overview.ok and positions.ok and open_orders.ok and fills.ok and closed_orders.ok, 'payload': payload}
+    critical_reads = {
+        'account': overview.ok,
+        'positions': positions.ok,
+        'orders': open_orders.ok,
+        'stop_orders': stop_orders.ok,
+    }
+    critical_failures = [name for name, ok in critical_reads.items() if not ok]
+    payload['critical_read_failures'] = critical_failures
+    if critical_failures:
+        # No new exposure is allowed when the supervisor cannot prove the
+        # current account, position and protection state. Recovery is manual:
+        # run the read-only preflight first, then release through the CLI.
+        from risk.trading_state import escalate
+        escalate(
+            'CLOSE_ONLY',
+            'Exchange visibility lost: ' + ', '.join(critical_failures),
+            by='executor',
+            manual_unlock=True,
+        )
+    return {
+        'ok': (
+            overview.ok and positions.ok and open_orders.ok and stop_orders.ok
+            and fills.ok and closed_orders.ok
+        ),
+        'payload': payload,
+    }

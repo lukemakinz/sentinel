@@ -1,0 +1,110 @@
+{
+  "protocol_sha256": "09ab58db864683c26d05141d7e63f925fa0342e1d5880c10a0337272311eb7cb",
+  "windows": {
+    "development": {
+      "base": {
+        "net_pnl": 41.220875757777634,
+        "return_pct": 8.244175151555527,
+        "usd_per_calendar_day": 0.2694174886129257,
+        "max_drawdown_pct": 9.049568175782262,
+        "expected_shortfall_95_usd": -8.466678925677861,
+        "positive_month_share": 0.4,
+        "book_a_net_pnl": 91.96106038861996,
+        "book_b_net_pnl": -50.74018463084232,
+        "book_b_trades": 59
+      },
+      "stress": {
+        "net_pnl": 27.17979132462787,
+        "return_pct": 5.435958264925574,
+        "usd_per_calendar_day": 0.1776456949322083,
+        "max_drawdown_pct": 9.691940553166734,
+        "expected_shortfall_95_usd": -8.51241491024987,
+        "positive_month_share": 0.4,
+        "book_a_net_pnl": 90.96939083129467,
+        "book_b_net_pnl": -63.789599506666804,
+        "book_b_trades": 58
+      },
+      "severe": {
+        "net_pnl": 25.10332941953368,
+        "return_pct": 5.0206658839067355,
+        "usd_per_calendar_day": 0.16407404849368418,
+        "max_drawdown_pct": 10.784279406137042,
+        "expected_shortfall_95_usd": -8.394168788362236,
+        "positive_month_share": 0.6,
+        "book_a_net_pnl": 89.38823027522756,
+        "book_b_net_pnl": -64.28490085569388,
+        "book_b_trades": 49
+      }
+    },
+    "validation": {
+      "base": {
+        "net_pnl": 20.49908732157661,
+        "return_pct": 4.099817464315322,
+        "usd_per_calendar_day": 0.11263234792075061,
+        "max_drawdown_pct": 2.0963324427259344,
+        "expected_shortfall_95_usd": -2.3064215141014586,
+        "positive_month_share": 0.16666666666666666,
+        "book_a_net_pnl": 10.819708318784933,
+        "book_b_net_pnl": 9.679379002791677,
+        "book_b_trades": 8
+      },
+      "stress": {
+        "net_pnl": 19.169475862698505,
+        "return_pct": 3.833895172539701,
+        "usd_per_calendar_day": 0.10532679045438739,
+        "max_drawdown_pct": 2.1011956006899646,
+        "expected_shortfall_95_usd": -2.405969888382836,
+        "positive_month_share": 0.16666666666666666,
+        "book_a_net_pnl": 10.72954612276186,
+        "book_b_net_pnl": 8.439929739936645,
+        "book_b_trades": 8
+      },
+      "severe": {
+        "net_pnl": 16.79834266812759,
+        "return_pct": 3.3596685336255177,
+        "usd_per_calendar_day": 0.09229858608861312,
+        "max_drawdown_pct": 2.1700346082628608,
+        "expected_shortfall_95_usd": -2.578420858432625,
+        "positive_month_share": 0.16666666666666666,
+        "book_a_net_pnl": 10.585319029420532,
+        "book_b_net_pnl": 6.213023638707057,
+        "book_b_trades": 8
+      }
+    },
+    "retrospective_evaluation": {
+      "base": {
+        "net_pnl": 24.02089757814099,
+        "return_pct": 4.8041795156281974,
+        "usd_per_calendar_day": 0.1569993305760849,
+        "max_drawdown_pct": 0.46942031670402784,
+        "expected_shortfall_95_usd": -0.46073179877558346,
+        "positive_month_share": 0.2,
+        "book_a_net_pnl": 0.43644592378433344,
+        "book_b_net_pnl": 23.584451654356656,
+        "book_b_trades": 1
+      },
+      "stress": {
+        "net_pnl": 24.556497310688286,
+        "return_pct": 4.911299462137658,
+        "usd_per_calendar_day": 0.16049998242279925,
+        "max_drawdown_pct": 0.47181830127250857,
+        "expected_shortfall_95_usd": -0.4656815039938422,
+        "positive_month_share": 0.2,
+        "book_a_net_pnl": 0.3964444199019965,
+        "book_b_net_pnl": 24.16005289078629,
+        "book_b_trades": 1
+      },
+      "severe": {
+        "net_pnl": 25.42788219566367,
+        "return_pct": 5.085576439132734,
+        "usd_per_calendar_day": 0.16619530846839,
+        "max_drawdown_pct": 0.4756304834379832,
+        "expected_shortfall_95_usd": -0.473600244347697,
+        "positive_month_share": 0.2,
+        "book_a_net_pnl": 0.3324483176531601,
+        "book_b_net_pnl": 25.09543387801051,
+        "book_b_trades": 1
+      }
+    }
+  }
+}

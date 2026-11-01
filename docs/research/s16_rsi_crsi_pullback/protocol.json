@@ -1,0 +1,67 @@
+{
+  "protocol_version": "S16-RSI-CRSI-PULLBACK-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "hypotheses": [
+    {
+      "id": "H1_BASE",
+      "bars": "closed 15m; execution no earlier than next 1m open",
+      "regime": "4h close above rising EMA200 (slope over prior 8 4h-bars > 0) for LONG, mirrored for SHORT; confirmed by 1h ADX(14) >= 20, both reindexed from fully-closed higher-timeframe bars only",
+      "trigger": "RSI(2) <= 10 AND Connors RSI(3,2,100) <= 15 both true on the same closed 15m bar, evaluated as 'fired within this bar or either of the previous two' (a 3-bar recency window) for LONG; mirrored (>=90 / >=85) for SHORT. The climax bar and the eventual reaction bar are not required to be identical.",
+      "entry": "market at next minute open",
+      "risk": "stop = rolling 5-bar low (long) / high (short) including the trigger bar, minus/plus 0.15 ATR buffer; actual-fill stop width clamped 0.50-2.00 ATR",
+      "exit": "breakeven-then-chandelier trailing: stop moves to breakeven+round-trip cost once price reaches +1.0R, then trails at best-price minus 1.5x ATR (ATR frozen at entry); 5.0R hard cap; 240 minute time stop",
+      "one_trade_per_bar_timestamp": true
+    },
+    {
+      "id": "H2_CONFLUENCE",
+      "bars": "same as H1",
+      "regime": "identical to H1",
+      "trigger": "identical to H1, PLUS: within the same 3-bar recency window, the low (long) / high (short) must have swept below/above the rolling extreme of the PRIOR 20 closed bars (excluding the trigger bar itself), and the CURRENT bar must close back on the correct side of that level with a directional body (SMC stop-hunt-then-reclaim, causally approximated with no live order-book/DB dependency). The sweep and the reclaim are not required to be the identical bar; the reclaim confirmation itself must be on the current (signal) bar.",
+      "entry": "identical to H1",
+      "risk": "identical to H1",
+      "exit": "identical to H1",
+      "one_trade_per_bar_timestamp": true
+    }
+  ],
+  "rsi_crsi_is_one_evidence_family": true,
+  "structure_is_a_separate_evidence_family_only_in_H2": true,
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "No BTC reference series is used by this strategy; regime and trigger are computed entirely from each traded symbol's own price."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward",
+    "warmup_rationale": "4h EMA200 needs ~33 days of 4h bars just to produce its first value; 4 months of warmup lets it converge before development starts, instead of trading on a freshly-initialized average."
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "trailing_mechanics": "breakeven+chandelier trailing added to backend/backtest/cluster_scalp_simulator.py (config.trailing), gated to require partial_fraction=0 since the cluster engine does not reduce position size on partial exits, only gates trailing activation",
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2 central configurations. No parameter grid over RSI/CRSI thresholds, ADX threshold, or sweep lookback. A failing gate stops that route; choose no least-bad winner. Simultaneous candidates use fixed liquidity priority ETH, then SOL, then BNB.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink. A smaller severe loss is not evidence of robustness.",
+  "known_limitations": [
+    "ATR used for the chandelier trail is frozen at entry (the shared cluster simulator carries no per-symbol ATR series to refresh it bar-by-bar); this is a conservative simplification, not a bug fix pending.",
+    "The liquidity-sweep proxy in H2 is a rolling OHLC extreme, not a reconstruction of real resting order-book liquidity, PDH/PDL, or equal-highs/lows clustering.",
+    "This is a retrospective diagnostic over previously-unseen (for this specific strategy) but historically-public data; it is not a live paper-forward result."
+  ]
+}

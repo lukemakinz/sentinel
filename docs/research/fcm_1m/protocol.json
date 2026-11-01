@@ -1,0 +1,66 @@
+{
+  "status": "frozen_before_price_data_load_research_only",
+  "strategy": "FCM-1M",
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+  "capital_usd": 250,
+  "allocation": "$100 spot long + equal base-asset quantity USD-M perpetual short backed by $100 isolated margin + $50 reserve",
+  "decision_rule": {
+    "frequency": "First UTC day of each month at 00:00; planned execution at the 01:00 hourly open",
+    "information_cutoff": "Completed prior calendar-month funding and daily spot closes through the prior UTC day only",
+    "qualification": [
+      "Prior calendar-month funding sum >= 50 bps, the complete stress round-trip cost",
+      "30-calendar-day spot close return > 0",
+      "Last completed daily spot close > EMA50 of completed daily spot closes"
+    ],
+    "selection": "Among qualified assets select the highest prior-month funding sum; deterministic symbol tie-break",
+    "requalification": "Every month retain only if still selected; otherwise switch or exit to cash",
+    "missing_execution_bar": "If either required spot/perpetual leg lacks a real exact-time bar, execute both legs atomically at their first common real hourly open within 168 hours; otherwise retain the current state and report the skipped action"
+  },
+  "position": {
+    "spot_notional_usd": 100,
+    "futures_margin_usd": 100,
+    "quantity_hedge": "Exact equal base-asset quantity, not equal dollar notional when basis is non-zero",
+    "initial_futures_leverage_cap": 1.05,
+    "intramonth_exit": "None in this frozen diagnostic; monthly requalification only"
+  },
+  "costs_bps_per_leg_per_side": {
+    "base": {"spot_fee": 10, "futures_fee": 2, "spot_slippage": 1, "futures_slippage": 1, "round_trip_total": 28},
+    "stress": {"spot_fee": 10, "futures_fee": 5, "spot_slippage": 5, "futures_slippage": 5, "round_trip_total": 50}
+  },
+  "data": {
+    "source": "Public anonymous Binance Data Vision monthly archives",
+    "spot": "Spot 1h OHLC",
+    "perpetual_execution": "USD-M perpetual 1h OHLC",
+    "perpetual_mark": "USD-M mark-price 1h OHLC; if a verified 1h archive omits an hour, use the exact same timestamp open from the verified public 1m mark archive; where both mark resolutions are absent, use only the exact same-hour perpetual open as a disclosed mark proxy",
+    "funding": "USD-M historical funding-rate settlements",
+    "spot_ema_warmup_start": "2020-08-01 archive request; SOLUSDT begins at its first archived trade on 2020-08-11 06:00 UTC, leaving 143 completed daily closes before the first decision",
+    "funding_and_perpetual_start": "2020-12-01",
+    "replay_end_exclusive": "2026-09-01",
+    "integrity": "Every archive and .CHECKSUM must exist and match before parsing; absent 1h observations first use exact same-timestamp verified 1m observations",
+    "pre_result_gap_policy": "Frozen after archive-quality inspection but before any target, episode or PnL was computed: exact lower-timeframe observations repair sparse 1h omissions. A monthly action waits at most 168 hours for the first common real spot/perpetual open and is otherwise skipped. Remaining no-trade/outage gaps may carry the last causal close only for continuous MTM/basis diagnostics, never for a fill. Missing mark uses exact same-hour perpetual, then spot, then prior causal mark in that order. Every source count is reported in data_quality.json."
+  },
+  "windows": {
+    "development": ["2021-01-01", "2023-01-01"],
+    "validation": ["2023-01-01", "2024-07-01"],
+    "retrospective_evaluation": ["2024-07-01", "2026-09-01"],
+    "all_available": ["2021-01-01", "2026-09-01"]
+  },
+  "accounting": [
+    "Separate adverse execution fills and fees for spot and perpetual on entry and exit",
+    "Spot directional PnL plus perpetual short directional PnL expose realised basis convergence/divergence",
+    "Funding is quantity times true archived mark-price open at each settlement times the archived rate",
+    "Full ledger books spot purchase/sale, futures margin lock/release, futures variation PnL, funding and all four fees",
+    "Hourly marked-to-market equity uses spot and mark price; ledger and episode PnL must reconcile"
+  ],
+  "promotion_gate": "Research cannot be live-approved from this retrospective replay. Paper-forward for at least 12 months and 12 independent closed episodes; require positive stress net PnL, positive stress result in each frozen historical window, zero modelled collateral exhaustion and live basis/cost tracking within stress assumptions.",
+  "known_limitations": [
+    "Hourly opens approximate execution; funding uses the exact settlement-hour mark open, with verified 1m mark fallback where a 1h archive omits that hour",
+    "Sparse 1h spot/perpetual omissions first use exact same-hour public 1m observations; any remaining hours carry prior close only for MTM/basis diagnostics, while entries and exits require a real observation",
+    "Order-book impact, transfer latency, exchange outage/default, borrow constraints and taxes are absent",
+    "Maintenance-margin tiers and liquidation-engine mechanics are not modelled; collateral exhaustion is only a conservative diagnostic",
+    "The retrospective evaluation is protocol-frozen but is not prospective live evidence",
+    "At hours with no published 1h or 1m mark candle, exact same-hour perpetual/spot or prior causal mark proxies the mark in that order; counts are reported in data_quality.json"
+  ],
+  "supersedes_protocol_sha256": "e1dc2b6991531dd495fab0cec2707ff148676ee3955437b92c2632cbbaab4a6e",
+  "supersession_reason": "Final pre-result execution-quality amendment: one planned monthly SOL action hour lacks both 1h and 1m perpetual observations. Atomic execution may wait up to seven days for a real common open; no strategy target, episode or PnL had been computed."
+}

@@ -1,0 +1,24 @@
+{
+  "study_id": "PAPER_FORWARD_BENCH_AB_R2",
+  "status": "FROZEN_BEFORE_FIRST_FORWARD_DAY",
+  "subject": "BENCH_AB_R2 exactly as frozen (protocol sha256 09ab58db864683c26d05141d7e63f925fa0342e1d5880c10a0337272311eb7cb), $500 = Book A $250 + Book B $250. Same code path as OOS_2026_09_10 (sha256 773772ccb98106d874bffd4ddf22f296a9e1a225db5ddfccce69c5d586ab0aba).",
+  "forward_start": "2026-10-27T00:00:00Z",
+  "method": "Each run recomputes the full forward window from the frozen warmup (2024-08-01) on checksumed Binance archives (monthly where published, daily otherwise) and public REST funding; only complete UTC days are scored. A previously scored day that changes is reported as a data revision.",
+  "primary_cost_scenario": "stress",
+  "expectation": {
+    "historical_stress_usd_per_day": [0.105, 0.178],
+    "oos_2026_09_10_stress_usd_per_day": 0.275,
+    "reference_midpoint_usd_per_day": 0.14
+  },
+  "monitoring_policy_amendment": "v2 adopted 2026-10-28 after one forward day and before any eligibility decision; strategy, costs and data are unchanged. The amendment only prevents a trivially positive result from being labelled ON_TRACK.",
+  "status_rules": {
+    "BREACH_STOP": "stress max drawdown > 10% of $500: stop paper-forward, no capital; review required",
+    "DATA_REVISED": "a previously scored day changed; investigate before interpreting the run",
+    "BELOW_EXPECTATION": "after >= 30 forward days: stress PnL <= 0, realized dollars/day below 50% of the $0.14 reference, or after 90 days fewer than half of calendar months positive",
+    "OBSERVE": "30-89 days, positive and at least 50% of reference; still ineligible for promotion",
+    "ON_TRACK": ">= 90 days, positive, at least 50% of reference, at least half of calendar months positive, no revisions and no drawdown breach",
+    "INSUFFICIENT": "fewer than 30 forward days; status is informational only"
+  },
+  "promotion": "Composite Book A+B promotion is blocked while Book B violates the 0.5% portfolio open-risk limit. Any future Book A-only canary requires a separately frozen protocol, >= 90 forward days ON_TRACK, DSR >= 0.5 and the execution-readiness checklist.",
+  "disclosure": "Paper-forward replay on archived market data; no orders are placed."
+}

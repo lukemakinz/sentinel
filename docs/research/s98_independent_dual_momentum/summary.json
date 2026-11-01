@@ -1,0 +1,232 @@
+{
+  "protocol_sha256": "fa1a9933a09ed58045a9c60218be2d9ba038a4cd73299ec290db4e50286f8af1",
+  "config": {
+    "name": "S98_independent_dual_momentum",
+    "momentum_days": 84,
+    "sma_days": 200,
+    "vol_days": 42,
+    "covariance_days": 60,
+    "funding_days": 28,
+    "max_mean_funding": 0.0001,
+    "max_positions": 3,
+    "max_asset_weight": 0.45,
+    "portfolio_vol_target_annual": 0.2
+  },
+  "weekly_decisions": 192,
+  "invested_decisions": 116,
+  "continuous_replays": {
+    "base": {
+      "initial_capital": 500.0,
+      "final_equity": 935.4654315874191,
+      "net_pnl": 435.46543158741906,
+      "return_pct": 87.09308631748381,
+      "max_drawdown_pct": 15.071104198916352,
+      "annualized_sharpe": 1.1053041340510967,
+      "rebalances": 192,
+      "turnover_usd": 20951.85618413442,
+      "fees": 10.47592809206721,
+      "slippage": 4.190371236826883,
+      "funding_pnl": -15.277719953346773
+    },
+    "stress": {
+      "initial_capital": 500.0,
+      "final_equity": 920.191559628033,
+      "net_pnl": 420.191559628033,
+      "return_pct": 84.0383119256066,
+      "max_drawdown_pct": 15.24876651078364,
+      "annualized_sharpe": 1.0784105436902225,
+      "rebalances": 192,
+      "turnover_usd": 20763.26523106685,
+      "fees": 16.610612184853476,
+      "slippage": 10.381632615533423,
+      "funding_pnl": -15.112889668971214
+    },
+    "severe": {
+      "initial_capital": 500.0,
+      "final_equity": 902.679760212283,
+      "net_pnl": 402.679760212283,
+      "return_pct": 80.5359520424566,
+      "max_drawdown_pct": 15.455628856039173,
+      "annualized_sharpe": 1.0469827747600888,
+      "rebalances": 192,
+      "turnover_usd": 20545.97730663603,
+      "fees": 20.545977306636033,
+      "slippage": 20.545977306636033,
+      "funding_pnl": -14.92312307714223
+    }
+  },
+  "slices": {
+    "development": {
+      "base": {
+        "start_nav": 500.0,
+        "net_pnl": 128.25635068889915,
+        "return_on_start_nav_pct": 25.65127013777983,
+        "usd_per_calendar_day": 0.35235261178268995,
+        "max_continuous_drawdown_pct": 15.071104198916352,
+        "annualized_sharpe": 1.3399565260351063,
+        "positive_month_share": 0.5
+      },
+      "stress": {
+        "start_nav": 500.0,
+        "net_pnl": 125.24715259103039,
+        "return_on_start_nav_pct": 25.04943051820608,
+        "usd_per_calendar_day": 0.34408558404129225,
+        "max_continuous_drawdown_pct": 15.24876651078364,
+        "annualized_sharpe": 1.313560484314283,
+        "positive_month_share": 0.5
+      },
+      "severe": {
+        "start_nav": 500.0,
+        "net_pnl": 121.75302377447963,
+        "return_on_start_nav_pct": 24.350604754895926,
+        "usd_per_calendar_day": 0.3344863290507682,
+        "max_continuous_drawdown_pct": 15.455628856039173,
+        "annualized_sharpe": 1.2827087377880626,
+        "positive_month_share": 0.5
+      }
+    },
+    "validation": {
+      "base": {
+        "start_nav": 628.2563506888991,
+        "net_pnl": 297.90552268909937,
+        "return_on_start_nav_pct": 47.417829101518564,
+        "usd_per_calendar_day": 0.8029798455231789,
+        "max_continuous_drawdown_pct": 14.23234996227578,
+        "annualized_sharpe": 2.141381035513318,
+        "positive_month_share": 0.6923076923076923
+      },
+      "stress": {
+        "start_nav": 625.2471525910304,
+        "net_pnl": 290.6383988826617,
+        "return_on_start_nav_pct": 46.483762089639804,
+        "usd_per_calendar_day": 0.7833919107349372,
+        "max_continuous_drawdown_pct": 14.482769183718712,
+        "annualized_sharpe": 2.107903560111442,
+        "positive_month_share": 0.6923076923076923
+      },
+      "severe": {
+        "start_nav": 621.7530237744796,
+        "net_pnl": 282.28216898923336,
+        "return_on_start_nav_pct": 45.401012652191284,
+        "usd_per_calendar_day": 0.7608683800248878,
+        "max_continuous_drawdown_pct": 14.774156755596513,
+        "annualized_sharpe": 2.0687296201364287,
+        "positive_month_share": 0.6153846153846154
+      }
+    },
+    "retrospective_evaluation": {
+      "base": {
+        "start_nav": 926.1618733779985,
+        "net_pnl": 9.303558209420544,
+        "return_on_start_nav_pct": 1.0045283094506572,
+        "usd_per_calendar_day": 0.015428786416949492,
+        "max_continuous_drawdown_pct": 13.16019725067996,
+        "annualized_sharpe": 0.11343710766995005,
+        "positive_month_share": 0.4
+      },
+      "stress": {
+        "start_nav": 915.8855514736921,
+        "net_pnl": 4.30600815434093,
+        "return_on_start_nav_pct": 0.47014696840805176,
+        "usd_per_calendar_day": 0.007140975380333216,
+        "max_continuous_drawdown_pct": 13.276409636930186,
+        "annualized_sharpe": 0.09090230755729403,
+        "positive_month_share": 0.4
+      },
+      "severe": {
+        "start_nav": 904.035192763713,
+        "net_pnl": -1.355432551429999,
+        "return_on_start_nav_pct": -0.14993139230413427,
+        "usd_per_calendar_day": -0.0022478151765008276,
+        "max_continuous_drawdown_pct": 13.411775608168174,
+        "annualized_sharpe": 0.06461139433854513,
+        "positive_month_share": 0.4
+      }
+    }
+  },
+  "neighbor_stress_pnl": {
+    "63": 402.65530137307235,
+    "126": 529.720047768114
+  },
+  "phase_stress_pnl": {
+    "wednesday": 387.8160107356101,
+    "friday": 292.9257623400848
+  },
+  "leave_one_symbol_out_stress_pnl": {
+    "BTCUSDT": 342.01503039026045,
+    "ETHUSDT": 326.6381621639473,
+    "SOLUSDT": 365.92837272651786,
+    "BNBUSDT": 190.52215723873394,
+    "XRPUSDT": 347.6337841334572,
+    "DOGEUSDT": 364.9447175438579
+  },
+  "stress_monthly_dispersion": {
+    "months": 44,
+    "positive_months": 22,
+    "positive_month_share": 0.5,
+    "largest_positive_month_share_of_positive_pnl": 0.19520666199762754,
+    "best_month_pnl": 141.49421787191682,
+    "worst_month_pnl": -74.19959898028549,
+    "monthly_pnl": {
+      "2023-01-31 00:00:00+00:00": 15.605091863464509,
+      "2023-02-28 00:00:00+00:00": -9.990642783671603,
+      "2023-03-31 00:00:00+00:00": 28.614723172480183,
+      "2023-04-30 00:00:00+00:00": -1.942090450918272,
+      "2023-05-31 00:00:00+00:00": 5.2179834978345525,
+      "2023-06-30 00:00:00+00:00": -21.21592290840067,
+      "2023-07-31 00:00:00+00:00": -19.569363299269526,
+      "2023-08-31 00:00:00+00:00": -24.686768123074387,
+      "2023-09-30 00:00:00+00:00": 0.0,
+      "2023-10-31 00:00:00+00:00": 39.60183260001344,
+      "2023-11-30 00:00:00+00:00": 42.18572062530893,
+      "2023-12-31 00:00:00+00:00": 71.42658839726323,
+      "2024-01-31 00:00:00+00:00": -4.389381539141709,
+      "2024-02-29 00:00:00+00:00": 84.17943786785531,
+      "2024-03-31 00:00:00+00:00": 116.80133054978864,
+      "2024-04-30 00:00:00+00:00": 0.9798093071536869,
+      "2024-05-31 00:00:00+00:00": 15.392798408530666,
+      "2024-06-30 00:00:00+00:00": -30.530158130891436,
+      "2024-07-31 00:00:00+00:00": 11.58915766866437,
+      "2024-08-31 00:00:00+00:00": -43.62276418577824,
+      "2024-09-30 00:00:00+00:00": 0.25684881830159156,
+      "2024-10-31 00:00:00+00:00": -7.603602282305587,
+      "2024-11-30 00:00:00+00:00": 141.49421787191682,
+      "2024-12-31 00:00:00+00:00": 2.9475496330470605,
+      "2025-01-31 00:00:00+00:00": 13.106550661633605,
+      "2025-02-28 00:00:00+00:00": -74.19959898028549,
+      "2025-03-31 00:00:00+00:00": 1.1972731231542184,
+      "2025-04-30 00:00:00+00:00": 0.0,
+      "2025-05-31 00:00:00+00:00": 2.442355923596665,
+      "2025-06-30 00:00:00+00:00": -2.625277979644352,
+      "2025-07-31 00:00:00+00:00": 83.4144823182462,
+      "2025-08-31 00:00:00+00:00": 32.3066284864758,
+      "2025-09-30 00:00:00+00:00": 14.078399604465062,
+      "2025-10-31 00:00:00+00:00": 0.9460546602126669,
+      "2025-11-30 00:00:00+00:00": -64.2760508989719,
+      "2025-12-31 00:00:00+00:00": 0.0,
+      "2026-01-31 00:00:00+00:00": 0.0,
+      "2026-02-28 00:00:00+00:00": 0.0,
+      "2026-03-31 00:00:00+00:00": 0.0,
+      "2026-04-30 00:00:00+00:00": 0.0,
+      "2026-05-31 00:00:00+00:00": 0.0,
+      "2026-06-30 00:00:00+00:00": 0.0,
+      "2026-07-31 00:00:00+00:00": 0.0,
+      "2026-08-31 00:00:00+00:00": 1.0583461309789755
+    }
+  },
+  "stress_block_bootstrap": {
+    "method": "circular_28d_blocks",
+    "samples": 5000,
+    "p10_terminal_pnl": 87.12942770548774,
+    "p50_terminal_pnl": 407.20239245128164,
+    "p90_terminal_pnl": 968.782115683469,
+    "observed_terminal_pnl": 420.191559628033
+  },
+  "gate_components": {
+    "core_pass": false,
+    "neighbor_pass": true,
+    "phase_pass": true,
+    "leave_one_symbol_out_pass": true
+  },
+  "decision": "REJECTED_AT_HISTORICAL_GATE"
+}

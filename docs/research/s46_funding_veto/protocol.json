@@ -1,0 +1,49 @@
+{
+  "protocol_version": "S46-FUNDING-VETO-v1.0",
+  "status": "REJECTED_AS_TRADING_STRATEGY (2026-09-15, post-characterization) -- see amendment below. Forward paper test in FORWARD_PROTOCOL.md is cancelled, not launched.",
+  "rejection_amendment": "The full pre-execution veto (candidates removed before execute_cluster, so removing one candidate can free the single global position slot for a different one) produced a materially weaker result than S45c's per-trade diagnostic coefficient (-0.593R, p=0.002) implied: combined across all three historical windows, 231 trades, net +$1.79 at base costs (+$0.0045/day on $250, ~5500x short of the $25/day target) and -$20.15 at stress costs (net losing). This gap between the diagnostic effect and the full-system result is itself informative: filtering 'bad' realized trades out of a fixed historical list does not account for how removing a candidate changes which OTHER candidate wins the shared position slot, equity path, and daily-stop state -- exactly the mechanism this protocol's own execution section warned about, now empirically confirmed to matter. A naive 5x->30x leverage multiplier (6x) on the base result would still only reach ~$0.027/day, nowhere near $25/day, and would scale the stress-cost loss by the same factor -- leverage cannot bridge a ~5500x gap. Verdict: funding remains an interesting research signal (the diagnostic coefficient was real and well-controlled) but did not translate into a working trading system at this capital/frequency. S46 is closed. No S47 in this same order-block+OI lineage is planned; the next research direction changes the underlying edge source instead of further filtering this one.",
+  "motivating_context": "S45/S45b/S45c diagnosed S20 H1's already-realized trades (no new entry logic tested there) for a stable, symbol-and-side-controlled negative-funding effect. S45c's frozen decision rule (agreed BEFORE reading its output): P(beta<0)>=95% in a bootstrap of the negative_funding coefficient from r_multiple ~ negative_funding + C(symbol) + C(window) + C(side) (HC3 robust OLS), AND leave-one-symbol-out not causing the effect to vanish, => S46 GO. Result: HC3 coefficient -0.593R (p=0.002, 95% CI [-0.961,-0.225]); bootstrap median -0.592R, 95% CI [-0.978,-0.241], P(beta<0)=99.97%; leave-one-out without SOLUSDT still shows the effect in validation and retrospective_evaluation (only development flips sign), judged 'does not vanish' per the frozen rule. GO was called. S46 is the resulting single-rule strategy.",
+  "critical_status_disclosure": "S46 is a FROZEN FORWARD CANDIDATE, not a validated or promotable strategy. The funding<0 veto was discovered by examining these exact development/validation/retrospective_evaluation windows -- any backtest of S46 on those same windows is IN-SAMPLE / DISCOVERY-AFFECTED and must never be reported or referred to as 'validation'. The historical backtest below exists purely for characterization (trade count, drawdown shape, symbol/side mix, monthly PnL, losing-streak length) -- it is not a gate and does not by itself justify any promotion. The only legitimate gate for this rule is genuinely new data collected strictly after this protocol was frozen (forward paper trading).",
+  "rule": "Exactly one addition to S20 H1, evaluated at each candidate's own signal timestamp, strictly before execution: look up the most recently known funding rate for that symbol using timestamps STRICTLY BEFORE the signal timestamp (never at or after); if no such rate exists, or it is negative, reject the candidate. All other S20 H1 logic (order block, 4h/1h regime, OBV, OI confirmation using S20's original unfixed sign convention, breakeven+chandelier exit: partial 1.5R, trail 2.5x ATR, cap 8R) is unchanged.",
+  "no_tuning_disclosure": "No magnitude threshold on the funding rate (e.g. -0.001%, -0.003%) was or will be swept -- the binary funding<0 veto is frozen exactly as discovered. No funding moving average, momentum, symbol-specific threshold, combination with S44A's OI fix, S44C's liquidity filter, or the S45 BTC regime filter, and no leverage/sizing change. Tuning any of these now would destroy the property that made this candidate different from every other rejected route in this project: it was frozen before being seen on new data, not iterated until it looked good.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Identical to S20 -- reuses the exact same cached klines/funding/metrics archives, no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after this protocol's freeze timestamp -- the only legitimate gate for this specific rule; frozen 2026-09-15"
+  },
+  "characterization_only_metrics": [
+    "trades, wins, PF base, PF stress",
+    "expectancy in R (mean_net_r)",
+    "max drawdown %",
+    "long vs short split",
+    "per-symbol split",
+    "monthly PnL",
+    "longest consecutive losing streak"
+  ],
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster -- the funding veto is applied to candidates BEFORE they enter this arbitration, not filtered from an already-realized trade list, since removing a candidate can free a slot for a different one",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10}
+  },
+  "sensitivity_audit_deferred": "The S45c bootstrap resampled individual trades as independent draws; crypto trades can be time-correlated, and a block/cluster bootstrap by week or month would likely widen the CI. This is deferred to a later sensitivity audit and explicitly does NOT reopen the GO decision -- the decision rule was frozen before the result was seen, and the bar is not moved after the fact because a stricter check might narrow the margin.",
+  "known_limitations": [
+    "IN-SAMPLE / DISCOVERY-AFFECTED historical backtest -- see critical_status_disclosure. Do not treat as validation under any framing.",
+    "The funding veto meaningfully reduces the candidate pool (removing ~25-35% of prior S20 H1 candidates per window); this is expected and was disclosed before this protocol was written.",
+    "If forward paper trading shows the effect does not hold, this rule is abandoned outright -- it does not get a magnitude threshold added post-hoc to 'save' it.",
+    "No leverage or position-sizing change is bundled with this protocol; that is explicitly deferred until (and only if) forward data confirms the edge."
+  ]
+}

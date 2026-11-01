@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class L2Decision(models.Model):
@@ -54,6 +55,53 @@ class AuctionAnalysis(models.Model):
         return f"{self.symbol} {self.action} {self.direction} [{self.strategy_id}]"
 
 
+class AuctionCandidate(models.Model):
+    """One prospective candidate episode shared by baseline and AI.
+
+    ``active_fingerprint`` is unique while an episode is live.  Once its
+    adjudication window expires it is cleared before a new episode with the
+    same geometry is created.  This prevents repeated 15m scans from inflating
+    the research sample while still allowing the setup to recur later.
+    """
+
+    fingerprint = models.CharField(max_length=255, db_index=True)
+    active_fingerprint = models.CharField(
+        max_length=255, null=True, blank=True, unique=True,
+        help_text='Set only for the currently active episode of this geometry.',
+    )
+    symbol = models.CharField(max_length=20, db_index=True)
+    direction = models.CharField(max_length=5)
+    strategy_id = models.CharField(max_length=64)
+    entry_zone = models.JSONField(default=list)
+    first_seen_at = models.DateTimeField(default=timezone.now, db_index=True)
+    adjudication_expires_at = models.DateTimeField(db_index=True)
+    baseline_analysis = models.OneToOneField(
+        AuctionAnalysis, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name='baseline_candidate',
+    )
+    ai_analysis = models.OneToOneField(
+        AuctionAnalysis, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name='ai_candidate',
+    )
+    trend_filter_analysis = models.OneToOneField(
+        AuctionAnalysis, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name='trend_filter_candidate',
+        help_text='Prospective M1 decision: M0 mechanical baseline plus trend filter.',
+    )
+    global_context_analysis = models.OneToOneField(
+        AuctionAnalysis, null=True, blank=True, on_delete=models.SET_NULL,
+        related_name='global_context_candidate',
+        help_text='Prospective M3 decision: M0 geometry plus global context filter.',
+    )
+
+    class Meta:
+        ordering = ['-first_seen_at']
+        indexes = [models.Index(fields=['symbol', '-first_seen_at'])]
+
+    def __str__(self):
+        return f"{self.symbol} {self.direction} {self.strategy_id} @ {self.first_seen_at}"
+
+
 class AuctionShadowPlan(models.Model):
     """Replayable, non-executable geometry created from an AI ``ARM`` decision."""
 
@@ -86,7 +134,10 @@ class AuctionShadowPlan(models.Model):
     target_r = models.FloatField(default=1.5)
     management_policy = models.CharField(max_length=32)
     armed_at = models.DateTimeField(db_index=True)
+    # Entry-trigger deadline.  It deliberately does not limit holding time
+    # after a trigger; ``position_expires_at`` does that.
     expires_at = models.DateTimeField(db_index=True)
+    position_expires_at = models.DateTimeField(null=True, blank=True, db_index=True)
     state = models.CharField(
         max_length=12, choices=STATE_CHOICES, default='ARMED', db_index=True,
     )
@@ -102,6 +153,9 @@ class AuctionShadowPlan(models.Model):
     mae_r = models.FloatField(null=True, blank=True)
     cost_assumptions = models.JSONField(default=dict)
     trigger_evidence = models.JSONField(default=dict, blank=True)
+    postmortem_version = models.CharField(max_length=64, blank=True, db_index=True)
+    postmortem = models.JSONField(default=dict, blank=True)
+    postmortem_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['-armed_at']

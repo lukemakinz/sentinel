@@ -1,0 +1,69 @@
+{
+  "strategy_id": "S108_FAILED_AUCTION_LIQUIDITY_SWEEP",
+  "status": "FROZEN_BEFORE_FIRST_S108_REPLAY",
+  "capital_usd": 500.0,
+  "research_question": "Can a pure strong-level failed-auction setup replace the weak S102 weekly short and the sparse FVG dependency while trading both long and short in the direction of the global regime?",
+  "selection_disclosure": "S108 was designed after S103-S107 results were inspected. Every historical period and symbol is therefore diagnostic, not independent out-of-sample evidence.",
+  "data": {
+    "daily_regime_warmup_start": "2024-01-01T00:00:00Z",
+    "intraday_and_metrics_warmup_start": "2025-01-01T00:00:00Z",
+    "execution_start_inclusive": "2025-05-01T00:00:00Z",
+    "execution_end_exclusive": "2026-10-01T00:00:00Z",
+    "source": "checksum-verified public Binance USD-M daily, 5m kline, funding and 5m metrics archives",
+    "universes": {
+      "combined": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+      "primary_diagnostic": ["BTCUSDT", "ETHUSDT", "SOLUSDT"],
+      "portability_diagnostic": ["BNBUSDT", "XRPUSDT", "DOGEUSDT"]
+    }
+  },
+  "direction": {
+    "global": "Frozen S101 asymmetric daily UP/DOWN/SIDEWAYS classifier. Longs only in UP, shorts only in DOWN, no new entries in SIDEWAYS.",
+    "local": "Last completed 4h close must be on the same side of EMA50 as the trade."
+  },
+  "strong_level": {
+    "decision_bars": "Closed 15-minute candles.",
+    "lookback": "Previous 96 closed 15m candles, excluding the current candle.",
+    "strength": "At least two prior highs/lows within 0.25 ATR of the liquidity extreme."
+  },
+  "setup": {
+    "long_sweep": "In UP/4h-up, price trades below the strong prior low by 0.02 ATR and closes back above it while candle taker-buy share <=0.48 and archived taker buy/sell ratio <1.",
+    "short_sweep": "In DOWN/4h-down, price trades above the strong prior high by 0.02 ATR and closes back below it while candle taker-buy share >=0.52 and archived taker buy/sell ratio >1.",
+    "attention": "Sweep requires 60-minute OI expansion >=0.05%, relative volume >=1.10 and metrics age <=15 minutes.",
+    "funding": "Prior seven-day mean funding must be <=0.00005 for longs and >=-0.00005 for shorts, rejecting the most one-sided carry against the reversal.",
+    "confirmation": "Within the next three closed 15m candles, close must break the sweep candle high for a long or low for a short by 0.03 ATR, have the matching candle direction, and show matching candle and archive taker flow. Fill is at the next 5m open."
+  },
+  "risk_and_exit": {
+    "account": "One global position across all six symbols; highest evidence score wins simultaneous entries.",
+    "risk": "Base risk is 0.2% equity capped at $0.50, multiplied by a frozen 0.50 signal scale. Leverage <=5, notional <=75% NAV, margin <=15% NAV.",
+    "stop": "Beyond the actual sweep extreme plus 0.20 ATR; widen only to the frozen 1.25 ATR minimum, reject if wider than 3.50 ATR. Initial stop is never widened or moved.",
+    "target": "Front-run 90% of the distance to opposite 96-bar liquidity. Require at least 1.80R at decision and fill; cap take-profit at 3.00R.",
+    "maximum_hold": "24 hours.",
+    "costs_bps_per_traded_notional": {
+      "base": {"fee": 5.0, "slippage": 2.0},
+      "stress": {"fee": 8.0, "slippage": 5.0},
+      "severe": {"fee": 10.0, "slippage": 10.0}
+    }
+  },
+  "predeclared_slices": {
+    "development": ["2025-05-01", "2025-10-01"],
+    "former_validation_now_diagnostic": ["2025-10-01", "2026-01-01"],
+    "retrospective": ["2026-01-01", "2026-09-01"],
+    "opened_design_month": ["2026-09-01", "2026-10-01"]
+  },
+  "predeclared_historical_gate": {
+    "combined_sample": "Stress: at least 18 fills, positive PnL, PF >1.15, DD <=5%; severe PnL positive.",
+    "direction": "Stress: at least five executed longs and five executed shorts; both directions have non-negative PnL.",
+    "breadth": "Stress: at least three represented symbols; at least four of six leave-one-symbol-out PnLs positive.",
+    "cluster_portability": "Primary and portability three-symbol diagnostic portfolios must each have at least six stress fills and non-negative stress and severe PnL.",
+    "time": "At least three of four predeclared stress slices have positive PnL and no stress slice is below -$1.00.",
+    "uncertainty": "Deterministic circular 28-day block bootstrap p10 terminal PnL must be positive.",
+    "promotion": "Passing every check can start paper-forward observation only; failure rejects S108. Live remains disabled."
+  },
+  "paper_forward": {
+    "minimum_calendar_days": 180,
+    "minimum_fills": 24,
+    "requires_both_directions": true,
+    "live_enabled": false
+  },
+  "claim_policy": "No historical result guarantees profit. No parameter may change after this protocol is hashed and before the frozen replay completes."
+}

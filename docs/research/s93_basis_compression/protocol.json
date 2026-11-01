@@ -1,0 +1,56 @@
+{
+  "strategy_id": "S93_DELTA_NEUTRAL_BASIS_COMPRESSION_V1",
+  "status": "FROZEN_BEFORE_REPLAY",
+  "frozen_at_utc": "2026-10-13T15:00:00Z",
+  "hypothesis": "When a positive perpetual/spot basis is both extreme relative to its own trailing distribution and at least twice conservative round-trip costs, long spot plus short perpetual profits from spread compression without requiring a directional crypto forecast.",
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+  "data": {
+    "spot_and_usdm_perpetual": "Binance public checksumed 1m archives",
+    "funding": "actual realized settlements only",
+    "signal": "complete 1h bars",
+    "execution": "first common actual 1m open after signal",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "historical_development": ["2025-05-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "prospective_t0": "2026-10-14T00:00:00Z"
+  },
+  "entry": {
+    "rolling_hours": 2160,
+    "minimum_history_fraction": 0.95,
+    "basis_above_prior_q95": true,
+    "minimum_basis_minus_prior_median_bps": 132,
+    "realized_funding_72h_positive": true,
+    "last_realized_funding_positive_and_younger_than_hours": 12,
+    "selection": "largest (basis-median)/max(MAD,1bp), deterministic symbol tie-break",
+    "future_or_predicted_funding_used": false
+  },
+  "position": {
+    "spot": "long, maximum $60",
+    "perpetual": "short same base quantity, maximum $60",
+    "futures_collateral_usd": 100,
+    "maximum_open_pairs": 1,
+    "cooldown_hours": 24
+  },
+  "exit": {
+    "compression_of_initial_deviation_pct": 75,
+    "additional_basis_extension_bps": 75,
+    "two_new_funding_settlements_sum_nonpositive": true,
+    "maximum_hold_hours": 168,
+    "minimum_futures_equity_usd": 75,
+    "maximum_mark_leverage": 1.25,
+    "reference_median_frozen_at_entry": true
+  },
+  "costs_total_round_trip_bps": {
+    "base": {"spot": 24, "perpetual": 14, "leg_risk": 4, "total": 42},
+    "stress": {"spot": 30, "perpetual": 26, "leg_risk": 10, "total": 66},
+    "severe": {"spot": 40, "perpetual": 40, "leg_risk": 20, "total": 100}
+  },
+  "historical_gate": {
+    "minimum_episodes": 20,
+    "stress_pnl_positive": true,
+    "stress_profit_factor_minimum": 1.20,
+    "severe_pnl_nonnegative": true,
+    "maximum_drawdown_pct": 2.0,
+    "leave_one_symbol_out_positive": true
+  },
+  "claim_policy": "All history is development-only. Passing permits paper-forward only; no strategy can guarantee profit."
+}

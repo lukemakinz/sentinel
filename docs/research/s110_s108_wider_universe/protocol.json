@@ -1,0 +1,55 @@
+{
+  "strategy_id": "S110_S108_WIDER_UNIVERSE",
+  "status": "FROZEN_BEFORE_FIRST_S110_REPLAY",
+  "capital_usd": 500.0,
+  "research_question": "Does the frozen S108 failed-auction edge scale to six additional established USD-M perpetual markets without changing a single signal, risk, execution or regime parameter?",
+  "selection_disclosure": "S110 was designed after S108 and S109 results were inspected. The extension symbols were predeclared for market longevity and liquidity before their S110 archives were loaded. All historical results remain diagnostic rather than independent out-of-sample evidence.",
+  "data": {
+    "daily_regime_warmup_start": "2024-01-01T00:00:00Z",
+    "intraday_and_metrics_warmup_start": "2025-01-01T00:00:00Z",
+    "execution_start_inclusive": "2025-05-01T00:00:00Z",
+    "execution_end_exclusive": "2026-10-01T00:00:00Z",
+    "source": "checksum-verified public Binance USD-M daily, 5m kline, funding and 5m metrics archives",
+    "original_control": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+    "extension": ["ADAUSDT", "AVAXUSDT", "LINKUSDT", "LTCUSDT", "BCHUSDT", "DOTUSDT"],
+    "combined": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT", "LINKUSDT", "LTCUSDT", "BCHUSDT", "DOTUSDT"]
+  },
+  "frozen_strategy": {
+    "implementation": "FailedAuctionConfig() and generate_failed_auction_signals from S108 without overrides",
+    "global_regime": "The exact S101 global regime is recomputed from the original six-symbol basket only, so adding markets cannot alter old signals.",
+    "execution": "The exact S108 one-global-position portfolio simulator, costs, risk cap, leverage, priority order and next-5m-open fill model are reused.",
+    "control_regression": {
+      "stress_trades": 8,
+      "stress_net_pnl_usd": 1.5964011161114513,
+      "severe_net_pnl_usd": 1.142401644881943,
+      "absolute_tolerance": 1e-9
+    }
+  },
+  "costs_bps_per_traded_notional": {
+    "base": {"fee": 5.0, "slippage": 2.0},
+    "stress": {"fee": 8.0, "slippage": 5.0},
+    "severe": {"fee": 10.0, "slippage": 10.0}
+  },
+  "predeclared_slices": {
+    "development": ["2025-05-01", "2025-10-01"],
+    "former_validation_now_diagnostic": ["2025-10-01", "2026-01-01"],
+    "retrospective": ["2026-01-01", "2026-09-01"],
+    "opened_design_month": ["2026-09-01", "2026-10-01"]
+  },
+  "predeclared_historical_gate": {
+    "control": "Original six-symbol control must exactly reproduce 8 stress fills, $1.5964011161114513 stress PnL and $1.142401644881943 severe PnL within 1e-9.",
+    "extension": "Stress: at least 10 fills, PnL positive, PF >1.15; severe PnL positive; at least three longs and three shorts and both direction PnLs non-negative; at least three represented symbols; bootstrap p10 terminal PnL positive.",
+    "combined": "Stress: at least 18 fills, PnL strictly above the frozen S108 control, PF >1.15 and DD <=5%; severe PnL strictly above the frozen S108 control; at least five longs and five shorts and both direction PnLs non-negative; at least six represented symbols.",
+    "breadth": "At least eight of twelve leave-one-symbol-out combined stress PnLs must be positive.",
+    "time": "At least three of four combined stress slices have positive PnL, no stress slice is below -$1.00 and at least 35% of active calendar months are positive.",
+    "uncertainty": "Combined deterministic circular 28-day block bootstrap p10 terminal PnL must be positive.",
+    "promotion": "Passing every check can start paper-forward observation only. Any control mismatch invalidates S110. Live remains disabled."
+  },
+  "paper_forward": {
+    "minimum_calendar_days": 180,
+    "minimum_fills": 30,
+    "requires_both_directions": true,
+    "live_enabled": false
+  },
+  "claim_policy": "No historical result guarantees profit. No parameter or extension symbol may change after this protocol is hashed and before the frozen replay completes."
+}

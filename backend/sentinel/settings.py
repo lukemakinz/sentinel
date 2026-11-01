@@ -89,14 +89,47 @@ WSGI_APPLICATION = 'sentinel.wsgi.application'
 
 # --- Database ---
 # SQLite by default. On Pi: DB_PATH=/app/db/db.sqlite3 persists in Docker volume.
+# Postgres is opt-in via DB_ENGINE=postgres, read from the process environment
+# or the gitignored backend/.env.local.  The Docker-oriented repository .env
+# (POSTGRES_HOST=db) is deliberately NOT consulted here.
+def _local_db_setting(name: str, default: str = '') -> str:
+    if name in os.environ:
+        return os.environ[name]
+    local_env_path = BASE_DIR / '.env.local'
+    if local_env_path.exists():
+        return Config(RepositoryEnv(str(local_env_path)))(name, default=default)
+    return default
+
+
 _db_path = os.environ.get('DB_PATH', str(BASE_DIR / 'db.sqlite3'))
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': _db_path,
-        'OPTIONS': {'timeout': 30},
-    }
+_sqlite_database = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': _db_path,
+    'OPTIONS': {'timeout': 30},
 }
+DB_ENGINE = _local_db_setting('DB_ENGINE', 'sqlite').strip().lower()
+if DB_ENGINE in ('postgres', 'postgresql'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': _local_db_setting('POSTGRES_DB', 'sentinel'),
+            'USER': _local_db_setting('POSTGRES_USER', 'sentinel'),
+            'PASSWORD': _local_db_setting('POSTGRES_PASSWORD', ''),
+            'HOST': _local_db_setting('POSTGRES_HOST', 'localhost'),
+            'PORT': _local_db_setting('POSTGRES_PORT', '5432'),
+            'CONN_MAX_AGE': 60,
+            'CONN_HEALTH_CHECKS': True,
+        }
+    }
+else:
+    DATABASES = {'default': _sqlite_database}
+
+# One-off migration source: SQLITE_SOURCE_PATH=/path/db.sqlite3 exposes the old
+# file as the read-only-by-convention 'sqlite_source' alias.
+if os.environ.get('SQLITE_SOURCE_PATH'):
+    DATABASES['sqlite_source'] = {
+        **_sqlite_database, 'NAME': os.environ['SQLITE_SOURCE_PATH'],
+    }
 
 # --- Cache ---
 CACHES = {
@@ -162,6 +195,21 @@ CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 # --- Sentinel Config ---
 TRADING_PAIRS = os.environ.get('TRADING_PAIRS', 'BTCUSDT,ETHUSDT,SOLUSDT,BNBUSDT').split(',')
 GLOBAL_CONTEXT_PAIRS = os.environ.get('GLOBAL_CONTEXT_PAIRS', 'BTCUSDT,ETHUSDT').split(',')
+# Frozen alt-breadth universe for global_context (M3) only.  Rule: Binance USDT
+# perpetuals listed >= 730 days, no 'Alpha' tag, no stablecoins/BTC/ETH, top 20
+# by 30-day median daily quote volume as of 2026-11-01.  Changing the list
+# requires a new version.  Collected as closed 15m/1h/4h candles only: no
+# aggTrade/depth, never traded, never part of the frozen M0 global_regime.
+BREADTH_UNIVERSE_VERSION = os.environ.get(
+    'BREADTH_UNIVERSE_VERSION', 'breadth-universe-v1-2026-11-01',
+)
+BREADTH_PAIRS = [s for s in os.environ.get(
+    'BREADTH_PAIRS',
+    'ZECUSDT,SOLUSDT,NEARUSDT,XRPUSDT,DOGEUSDT,BNBUSDT,ENAUSDT,WLDUSDT,'
+    '1000PEPEUSDT,SUIUSDT,UNIUSDT,ADAUSDT,FILUSDT,AVAXUSDT,TAOUSDT,LINKUSDT,'
+    'QNTUSDT,AAVEUSDT,STRKUSDT,INJUSDT',
+).split(',') if s]
+BREADTH_INTERVALS = ['15m', '1h', '4h']
 TRADING_MODE = os.environ.get('TRADING_MODE', 'paper')  # paper, signal_only, semi_auto, full_auto
 BINANCE_TESTNET = os.environ.get('BINANCE_TESTNET', 'True').lower() in ('true', '1')
 BINANCE_API_KEY = os.environ.get('BINANCE_API_KEY', '')
@@ -197,6 +245,9 @@ MAX_MARGIN_PER_TRADE_PCT = float(os.environ.get('MAX_MARGIN_PER_TRADE_PCT', '0.1
 MIN_LIQUIDATION_BUFFER_R = float(os.environ.get('MIN_LIQUIDATION_BUFFER_R', '3.0'))
 MAINTENANCE_MARGIN_RATE = float(os.environ.get('MAINTENANCE_MARGIN_RATE', '0.005'))
 INITIAL_BALANCE = float(os.environ.get('INITIAL_BALANCE', '10000'))
+LIVE_CAPITAL_BASELINE_USD = float(os.environ.get(
+    'LIVE_CAPITAL_BASELINE_USD', str(INITIAL_BALANCE),
+))
 
 # Paper execution assumptions (basis points).  Stop management is deliberately
 # frozen to the initial invalidation by default; alternatives must be promoted
@@ -222,6 +273,12 @@ OPEN_INTEREST_POLL_SECONDS = int(os.environ.get('OPEN_INTEREST_POLL_SECONDS', '3
 AGGTRADE_FLUSH_SECONDS = float(os.environ.get('AGGTRADE_FLUSH_SECONDS', '1'))
 AUCTION_SHADOW_ENABLED = os.environ.get(
     'AUCTION_SHADOW_ENABLED', 'True').lower() in ('true', '1')
+AUCTION_ENABLED_STRATEGIES = tuple(
+    item.strip() for item in os.environ.get(
+        'AUCTION_ENABLED_STRATEGIES',
+        'SAI1_FAILED_AUCTION,SAI1_IFVG_FLIP,SAI1_TREND_RETEST',
+    ).split(',') if item.strip()
+)
 AUCTION_AI_PROVIDER = os.environ.get('AUCTION_AI_PROVIDER', 'openai').strip().lower()
 AUCTION_OPENAI_MODEL = os.environ.get('AUCTION_OPENAI_MODEL', 'gpt-6.1-sol').strip()
 AUCTION_OPENAI_REASONING_EFFORT = os.environ.get(
@@ -248,12 +305,14 @@ AUCTION_SHADOW_AI_ENABLED = os.environ.get(
     os.environ.get('AI_ADJUDICATOR_SHADOW_ENABLED', _auction_ai_default),
 ).lower() in ('true', '1')
 AUCTION_SHADOW_TARGET_R = float(os.environ.get('AUCTION_SHADOW_TARGET_R', '1.5'))
+AUCTION_SHADOW_MAX_HOLD_MINUTES = int(os.environ.get('AUCTION_SHADOW_MAX_HOLD_MINUTES', '240'))
 AUCTION_SHADOW_CYCLE_SECONDS = int(os.environ.get('AUCTION_SHADOW_CYCLE_SECONDS', '300'))
 AUCTION_SHADOW_RESOLVE_SECONDS = int(os.environ.get('AUCTION_SHADOW_RESOLVE_SECONDS', '60'))
 EXCHANGE_NAME = os.environ.get('EXCHANGE_NAME', 'kucoin').lower()
 LIVE_TRADING_ENABLED = os.environ.get('LIVE_TRADING_ENABLED', 'False').lower() in ('true', '1')
-# Not an operator switch: becomes True in code only once the adapter places a
-# resting stop on the exchange for every entry. Live submits are refused until then.
+# Not an operator switch. The adapter now builds atomic entry+stop orders, but
+# this remains False until the payloads and stop-order reconciliation have been
+# verified against a KuCoin test subaccount. Live entries stay hard-blocked.
 EXCHANGE_SIDE_STOPS_IMPLEMENTED = False
 PORTFOLIO_MAX_OPEN_RISK_PCT = float(os.environ.get('PORTFOLIO_MAX_OPEN_RISK_PCT', '0.5'))
 PORTFOLIO_MAX_NET_BETA_X = float(os.environ.get('PORTFOLIO_MAX_NET_BETA_X', '1.5'))
@@ -264,6 +323,7 @@ KUCOIN_API_SECRET = os.environ.get('KUCOIN_API_SECRET', '')
 KUCOIN_API_PASSPHRASE = os.environ.get('KUCOIN_API_PASSPHRASE', '')
 KUCOIN_FUTURES_REST_URL = os.environ.get('KUCOIN_FUTURES_REST_URL', 'https://api-futures.kucoin.com')
 KUCOIN_FUTURES_WS_URL = os.environ.get('KUCOIN_FUTURES_WS_URL', 'wss://wsapi-futures.kucoin.com')
+KUCOIN_STOP_PRICE_TYPE = os.environ.get('KUCOIN_STOP_PRICE_TYPE', 'TP').upper()
 
 # Consensus weights
 CONSENSUS_WEIGHTS = {
@@ -294,6 +354,10 @@ CELERY_BEAT_SCHEDULE = {
     'monitor-positions': {
         'task': 'executor.monitor_positions',
         'schedule': 30.0,  # every 30 sec
+    },
+    'evaluate-risk-guards': {
+        'task': 'risk.evaluate_guards',
+        'schedule': 60.0,
     },
     # Data collection (REST)
     'fetch-open-interest': {

@@ -1,0 +1,30 @@
+{
+  "strategy_id": "S52_NY_ASIA_SWEEP",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "ny_sweep_fade",
+    "ny_sweep_sideline"
+  ],
+  "asia_end_hour": 12,
+  "sweep_window_utc": [
+    13,
+    16
+  ],
+  "target_r": 1.0,
+  "max_hold_minutes": 90,
+  "trailing": false,
+  "disclosure": "cached-window historical characterization; not live approval"
+}

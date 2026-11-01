@@ -1,0 +1,54 @@
+{
+  "protocol_version": "S22-OB-OI-SCALED-SIZE-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_context": "S20 H1 is the first strategy in this project to show positive PF in both development (1.066) and validation (1.117) under base costs, though it fails validation stress (0.857). This protocol changes ONLY position sizing versus S20 H1 — same entry, same exit shape, same stop placement — to show, honestly, what larger size does and does not buy: PF/expectancy-per-R is unchanged by sizing (sizing cannot create edge that is not there), only the dollar magnitude and the margin/liquidation math change. This is reported explicitly so a larger dollar outcome is never mistaken for a stronger edge.",
+  "audit_amendment": "A first cut of this protocol raised only fixed_risk_usd/fixed_margin_usd/max_margin_fraction and left risk_fraction at S20's 0.0020. Actual position size is min(cash * risk_fraction, fixed_risk_usd); at $250 capital that is min($0.50, fixed_risk_usd) — raising fixed_risk_usd alone did nothing, since $0.50 stayed the binding term for both H1 and H2, and the first run produced numerically identical development results for both. Caught before any result was reported. Fixed by also raising risk_fraction to 0.05 (cash-term ceases to bind, fixed_risk_usd/fixed_margin_usd now genuinely set the size) before any number from this protocol was used.",
+  "hypotheses": [
+    {
+      "id": "H1_DOUBLE_SIZE",
+      "entry_exit": "byte-for-byte identical to S20 H1 (order_block_oi_confirmation_scalp, route='oi', partial_r=1.5, trail_atr=2.5, target_r=8.0)",
+      "sizing": "fixed_risk_usd 1.00 (was 0.50), fixed_margin_usd 50.00 (was 25.00), max_margin_fraction 0.20 (was 0.10), risk_fraction 0.05 (was 0.0020, raised so it no longer binds ahead of fixed_risk_usd) — exactly double S20 H1's position size, leverage cap and margin-safety check unchanged"
+    },
+    {
+      "id": "H2_QUADRUPLE_SIZE",
+      "entry_exit": "identical to H1",
+      "sizing": "fixed_risk_usd 2.00, fixed_margin_usd 100.00, max_margin_fraction 0.40, risk_fraction 0.05 — four times S20 H1's position size, same leverage cap and margin-safety check"
+    }
+  ],
+  "single_variable_isolated": "Only fixed_risk_usd, fixed_margin_usd and max_margin_fraction change versus S20 H1. Entry signal generation, regime, structure, flow, OI confirmation, stop placement, exit management and leverage cap are otherwise byte-for-byte identical.",
+  "explicit_disclosure": "PF, win rate and R-multiples are expected to be statistically identical to S20 H1 (same trades, same R outcomes) up to margin-cap-driven differences in which candidates are blocked by blocked_margin_stop_buffer or blocked_dollar_profit_target diagnostics. Net PnL and return_pct scale roughly with size. This protocol does not claim scaling creates a stronger edge — it measures the honest dollar and drawdown consequence of sizing up an edge that is itself unchanged and still fails the stress-cost validation leg.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Reuses the exact same cached klines/funding/metrics archives already downloaded for S18/S20 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "leverage_cap": 5,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute",
+    "note": "daily_stop_usd and weekly_stop_usd are NOT scaled up with position size in this protocol — a deliberate choice: the risk-halt ceiling stays fixed in dollars even as position size grows, so H2 (4x size) will hit the daily/weekly halt in fewer adverse trades than S20 H1 did. This is disclosed, not hidden, and is exactly the kind of consequence sizing up is supposed to make visible."
+  },
+  "selection": "Exactly H1 and H2 central configurations (2x and 4x). No parameter grid beyond these two named multiples. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18/S20.",
+    "This is a retrospective diagnostic; not a live paper-forward result. Scaling size in a live account changes nothing about whether the underlying edge is real — S20's own stress-cost failure still applies at any size."
+  ]
+}

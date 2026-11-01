@@ -1,0 +1,17 @@
+{
+  "train_rows":51456.0,
+  "test_rows":16003.0,
+  "train_auc":0.6422522626,
+  "test_auc":0.5050834924,
+  "base_rate_train":0.3865244092,
+  "base_rate_test":0.3802412048,
+  "base_expectancy_r_train":-0.033688977,
+  "base_expectancy_r_test":-0.0493969881,
+  "decision_threshold":0.55,
+  "selected_train_rows":550.0,
+  "selected_train_win_rate":0.8418181818,
+  "selected_train_expectancy_r":1.1045454545,
+  "selected_test_rows":96.0,
+  "selected_test_win_rate":0.4270833333,
+  "selected_test_expectancy_r":0.0677083333
+}

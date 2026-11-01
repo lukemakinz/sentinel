@@ -1,0 +1,16 @@
+{
+  "candidates_reviewed": 62,
+  "api_errors": 0,
+  "total_estimated_cost_usd": 0.0097,
+  "verdict_counts": {
+    "agree_with_regime": 8,
+    "disagree_with_regime": 0,
+    "pass": 54
+  },
+  "baseline_win_rate": 0.4194,
+  "baseline_expectancy_r": 0.0484,
+  "agree_win_rate": 0.25,
+  "agree_expectancy_r": -0.375,
+  "disagree_win_rate": null,
+  "note": "disagree cohort has no valid stop/target from the original signal (opposite side) \u2014 win_rate shown uses the ORIGINAL side's label for reference only, not a tradeable outcome"
+}

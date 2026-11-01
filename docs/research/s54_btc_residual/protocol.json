@@ -1,0 +1,27 @@
+{
+  "strategy_id": "S54_BTC_RESIDUAL",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "lead": "BTCUSDT",
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "residual_fade",
+    "residual_fade_sideline"
+  ],
+  "z_threshold": 2.0,
+  "target_r": 1.0,
+  "max_hold_minutes": 90,
+  "trailing": false,
+  "disclosure": "cached-window historical characterization; not live approval"
+}

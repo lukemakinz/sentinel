@@ -1,0 +1,339 @@
+{
+  "protocol_sha256": "e20fc802004f4d473d77616104ff8df1231ff512e2d11cdf7b0dc56ddea5d42f",
+  "config": {
+    "name": "S91_intraday_level_reclaim",
+    "level_minutes": 15,
+    "htf_minutes": 60,
+    "swing_width": 2,
+    "structure_lookback": 480,
+    "order_block_search_bars": 3,
+    "displacement_atr": 1.2,
+    "volume_multiple": 1.25,
+    "max_zone_atr": 0.9,
+    "htf_distance_atr": 0.5,
+    "min_score": 75.0,
+    "validity_hours": 48,
+    "departure_atr": 0.1,
+    "merge_midpoint_atr": 0.25,
+    "min_sweep_atr": 0.05,
+    "max_sweep_atr": 0.5,
+    "reclaim_minutes": 30,
+    "max_entry_chase_atr": 0.2,
+    "stop_buffer_atr": 0.1,
+    "min_stop_atr": 0.35,
+    "max_stop_atr": 1.5,
+    "target_net_r": 2.0,
+    "require_distal_sweep": false
+  },
+  "regime_levels": {
+    "BTCUSDT": 239,
+    "ETHUSDT": 207,
+    "BNBUSDT": 207,
+    "SOLUSDT": 188,
+    "XRPUSDT": 190,
+    "ADAUSDT": 166,
+    "DOGEUSDT": 202,
+    "AVAXUSDT": 187
+  },
+  "triggers": {
+    "BTCUSDT": 60,
+    "ETHUSDT": 56,
+    "BNBUSDT": 60,
+    "SOLUSDT": 52,
+    "XRPUSDT": 41,
+    "ADAUSDT": 29,
+    "DOGEUSDT": 56,
+    "AVAXUSDT": 42
+  },
+  "windows": {
+    "development": {
+      "base": {
+        "trades": 107,
+        "wins": 20,
+        "win_rate_pct": 18.69158878504673,
+        "profit_factor": 0.6466432158425337,
+        "net_pnl": -4.801045869965378,
+        "return_pct": -4.801045869965382,
+        "max_drawdown_pct": 5.68935767833757,
+        "mean_net_r": -0.2888966807381796,
+        "fees": 3.4142091490073407,
+        "funding_pnl": -0.06813646582632438,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 14,
+            "net_pnl": -0.48141465003332795,
+            "gross_profit": 1.213249181337753
+          },
+          "ETHUSDT": {
+            "trades": 13,
+            "net_pnl": -0.9610833807352072,
+            "gross_profit": 1.0254813156604152
+          },
+          "BNBUSDT": {
+            "trades": 13,
+            "net_pnl": -0.07866738249470234,
+            "gross_profit": 1.413209721590273
+          },
+          "SOLUSDT": {
+            "trades": 24,
+            "net_pnl": -0.3537285431934247,
+            "gross_profit": 2.3443515679004183
+          },
+          "XRPUSDT": {
+            "trades": 9,
+            "net_pnl": -0.42315728303530437,
+            "gross_profit": 0.7816272644517221
+          },
+          "ADAUSDT": {
+            "trades": 12,
+            "net_pnl": 0.16372431064117088,
+            "gross_profit": 1.2282830695536895
+          },
+          "DOGEUSDT": {
+            "trades": 11,
+            "net_pnl": -1.4263511768892259,
+            "gross_profit": 0.25590998495748235
+          },
+          "AVAXUSDT": {
+            "trades": 11,
+            "net_pnl": -1.2403677642253899,
+            "gross_profit": 0.5238059240106857
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 26.683057593286648,
+        "per_month": {
+          "2025-05": {
+            "trades": 20,
+            "pnl": -1.1316742524646641
+          },
+          "2025-06": {
+            "trades": 26,
+            "pnl": -0.5964949294649382
+          },
+          "2025-07": {
+            "trades": 22,
+            "pnl": -1.1796928827954605
+          },
+          "2025-08": {
+            "trades": 16,
+            "pnl": -1.1295991548487494
+          },
+          "2025-09": {
+            "trades": 23,
+            "pnl": -0.7635846503915993
+          }
+        },
+        "diagnostics": {
+          "signals": 115,
+          "entries": 107,
+          "entries_BNBUSDT": 13,
+          "entries_ETHUSDT": 13,
+          "entries_AVAXUSDT": 11,
+          "entries_XRPUSDT": 9,
+          "entries_BTCUSDT": 14,
+          "entries_SOLUSDT": 24,
+          "entries_DOGEUSDT": 11,
+          "held_same_side": 1,
+          "blocked_open_position": 6,
+          "entries_ADAUSDT": 12
+        },
+        "drawdown_halted": false,
+        "independent_4h_clusters": 97
+      },
+      "stress": {
+        "trades": 89,
+        "wins": 16,
+        "win_rate_pct": 17.97752808988764,
+        "profit_factor": 0.4548927855925369,
+        "net_pnl": -6.006493881158434,
+        "return_pct": -6.006493881158437,
+        "max_drawdown_pct": 6.0869578661584605,
+        "mean_net_r": -0.4639906321633509,
+        "fees": 3.5082853889912045,
+        "funding_pnl": -0.044241317089053094,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 13,
+            "net_pnl": -0.8270220427421432,
+            "gross_profit": 0.7310882778138208
+          },
+          "ETHUSDT": {
+            "trades": 12,
+            "net_pnl": -1.1020123067702272,
+            "gross_profit": 0.7742949539920694
+          },
+          "BNBUSDT": {
+            "trades": 12,
+            "net_pnl": -0.6710543117519787,
+            "gross_profit": 0.79020807509207
+          },
+          "SOLUSDT": {
+            "trades": 18,
+            "net_pnl": -0.7639562744626177,
+            "gross_profit": 1.1673053991931934
+          },
+          "XRPUSDT": {
+            "trades": 7,
+            "net_pnl": -0.48292324642427176,
+            "gross_profit": 0.39492580225859536
+          },
+          "ADAUSDT": {
+            "trades": 8,
+            "net_pnl": -0.0881867431810413,
+            "gross_profit": 0.582110166192856
+          },
+          "DOGEUSDT": {
+            "trades": 9,
+            "net_pnl": -1.1886123856011241,
+            "gross_profit": 0.18805118403200846
+          },
+          "AVAXUSDT": {
+            "trades": 10,
+            "net_pnl": -0.8827265702249403,
+            "gross_profit": 0.3844442675412633
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": 23.288222191382058,
+        "per_month": {
+          "2025-05": {
+            "trades": 20,
+            "pnl": -1.6503780285806002
+          },
+          "2025-06": {
+            "trades": 26,
+            "pnl": -1.5706517115502334
+          },
+          "2025-07": {
+            "trades": 22,
+            "pnl": -1.3570278078942115
+          },
+          "2025-08": {
+            "trades": 16,
+            "pnl": -0.9559892542673777
+          },
+          "2025-09": {
+            "trades": 5,
+            "pnl": -0.47244707886592074
+          }
+        },
+        "diagnostics": {
+          "signals": 115,
+          "entries": 89,
+          "entries_BNBUSDT": 12,
+          "entries_ETHUSDT": 12,
+          "entries_AVAXUSDT": 10,
+          "entries_XRPUSDT": 7,
+          "entries_BTCUSDT": 13,
+          "entries_SOLUSDT": 18,
+          "entries_DOGEUSDT": 9,
+          "held_same_side": 1,
+          "blocked_open_position": 6,
+          "entries_ADAUSDT": 8,
+          "blocked_risk_halt_or_capital": 18
+        },
+        "drawdown_halted": true,
+        "independent_4h_clusters": 82
+      },
+      "severe": {
+        "trades": 73,
+        "wins": 13,
+        "win_rate_pct": 17.80821917808219,
+        "profit_factor": 0.33947073037659076,
+        "net_pnl": -6.0545114035099346,
+        "return_pct": -6.054511403509933,
+        "max_drawdown_pct": 6.062203117169163,
+        "mean_net_r": -0.5657294075536453,
+        "fees": 2.8443152680450448,
+        "funding_pnl": -0.032160098436946116,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 8,
+            "net_pnl": -1.0538502743244726,
+            "gross_profit": 0.22894038661842797
+          },
+          "ETHUSDT": {
+            "trades": 11,
+            "net_pnl": -1.0937573971601726,
+            "gross_profit": 0.5812510136053368
+          },
+          "BNBUSDT": {
+            "trades": 6,
+            "net_pnl": -0.3061113259484074,
+            "gross_profit": 0.2719797253391223
+          },
+          "SOLUSDT": {
+            "trades": 16,
+            "net_pnl": -0.8830741226338734,
+            "gross_profit": 0.8549047233634259
+          },
+          "XRPUSDT": {
+            "trades": 6,
+            "net_pnl": -0.47810371317648265,
+            "gross_profit": 0.301818442453556
+          },
+          "ADAUSDT": {
+            "trades": 8,
+            "net_pnl": -0.21471760432952222,
+            "gross_profit": 0.4552973900888592
+          },
+          "DOGEUSDT": {
+            "trades": 8,
+            "net_pnl": -1.0389315091981586,
+            "gross_profit": 0.13760331867422843
+          },
+          "AVAXUSDT": {
+            "trades": 10,
+            "net_pnl": -0.9859654567388335,
+            "gross_profit": 0.2798451689516344
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": 27.474408251137266,
+        "per_month": {
+          "2025-05": {
+            "trades": 18,
+            "pnl": -1.664007487550482
+          },
+          "2025-06": {
+            "trades": 21,
+            "pnl": -1.6922902974647958
+          },
+          "2025-07": {
+            "trades": 16,
+            "pnl": -1.2233881873817363
+          },
+          "2025-08": {
+            "trades": 15,
+            "pnl": -1.1914960907806686
+          },
+          "2025-09": {
+            "trades": 3,
+            "pnl": -0.2833293403322408
+          }
+        },
+        "diagnostics": {
+          "signals": 115,
+          "blocked_stop_width_or_gap": 14,
+          "entries": 73,
+          "entries_ETHUSDT": 11,
+          "entries_AVAXUSDT": 10,
+          "entries_XRPUSDT": 6,
+          "entries_BNBUSDT": 6,
+          "entries_BTCUSDT": 8,
+          "entries_SOLUSDT": 16,
+          "entries_DOGEUSDT": 8,
+          "held_same_side": 1,
+          "blocked_open_position": 6,
+          "entries_ADAUSDT": 8,
+          "blocked_risk_halt_or_capital": 20
+        },
+        "drawdown_halted": true,
+        "independent_4h_clusters": 67
+      }
+    }
+  },
+  "disclosure": "retrospective research only",
+  "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+}

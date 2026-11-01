@@ -6,7 +6,7 @@ import asyncio
 import json
 import logging
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 import websockets
@@ -45,6 +45,7 @@ class BinanceWebSocketClient:
             ]
             self.trade_pairs = [s.lower() for s in dict.fromkeys(active_symbols)]
             self.pairs = [s.lower() for s in dict.fromkeys(symbols)]
+            self._init_breadth_pairs()
         except Exception:
             self.trade_pairs = [p.lower() for p in dict.fromkeys(settings.TRADING_PAIRS)]
             symbols = [
@@ -52,6 +53,16 @@ class BinanceWebSocketClient:
                 *settings.TRADING_PAIRS,
             ]
             self.pairs = [p.lower() for p in dict.fromkeys(symbols)]
+            self._init_breadth_pairs()
+
+    def _init_breadth_pairs(self):
+        """Breadth-only alts: closed context candles, nothing else."""
+        existing = set(self.pairs)
+        self.breadth_pairs = [
+            s.lower() for s in dict.fromkeys(getattr(settings, 'BREADTH_PAIRS', []))
+            if s.lower() not in existing
+        ]
+        self._breadth_symbols = {s.upper() for s in self.breadth_pairs}
 
     def _build_stream_urls(self):
         """Build routed URLs required by Binance's split market-data service.
@@ -83,6 +94,12 @@ class BinanceWebSocketClient:
                 # persistence is downsampled separately to keep storage bounded.
                 if getattr(settings, 'ORDER_BOOK_STREAM_ENABLED', True):
                     public_streams.append(f"{pair}@depth20@500ms")
+
+        # Breadth-only alts: three context intervals, no mark price, trades
+        # or depth.  Persisted on close only (see _handle_kline).
+        for pair in getattr(self, 'breadth_pairs', []):
+            for interval in getattr(settings, 'BREADTH_INTERVALS', ['15m', '1h', '4h']):
+                market_streams.append(f"{pair}@kline_{interval}")
 
         base_url = self.base_url.rstrip('/')
         urls = {
@@ -120,6 +137,11 @@ class BinanceWebSocketClient:
         """Process kline/candlestick data."""
         kline = data.get('k', {})
         if not kline:
+            return
+
+        # Breadth-only symbols store closed bars only: ~4 upserts/s per stream
+        # would otherwise dwarf the instruments we actually evaluate.
+        if not kline.get('x') and kline.get('s') in getattr(self, '_breadth_symbols', ()):
             return
 
         ts = datetime.fromtimestamp(kline['t'] / 1000, tz=timezone.utc)
@@ -469,15 +491,17 @@ class BinanceWebSocketClient:
                     await asyncio.to_thread(prune_order_book_snapshots.run)
                     await asyncio.to_thread(prune_agg_trades.run)
                     last_prune_day = now.date()
-                # Daily archives for yesterday are usually published by 03:00 UTC.
+                # Retry hourly after 03:00 UTC until yesterday's complete archive
+                # is available. Unchanged windows return the saved ledger without
+                # repeating the two-year replay.
                 if (now.hour >= 3 and last_paper_day != now.date()
                         and getattr(settings, 'PAPER_FORWARD_ENABLED', True)):
-                    from backtest.paper_forward_ab import run_paper_forward
-                    report = await asyncio.to_thread(
-                        run_paper_forward, settings.PAPER_FORWARD_CACHE)
+                    report = await self._paper_forward_subprocess()
                     logger.info('Paper-forward: %s %s days', report['status'],
                                 report.get('forward_days'))
-                    last_paper_day = now.date()
+                    yesterday = (now - timedelta(days=1)).date().isoformat()
+                    if report.get('data_through', '') >= yesterday:
+                        last_paper_day = now.date()
             except Exception as exc:
                 logger.error('Maintenance loop error: %s', exc, exc_info=True)
             try:
@@ -485,6 +509,43 @@ class BinanceWebSocketClient:
                 return
             except asyncio.TimeoutError:
                 continue
+
+    async def _paper_forward_subprocess(self) -> dict:
+        """Run the CPU-heavy multi-year replay in its own process.
+
+        In a thread it holds the GIL long enough to starve the event loop,
+        which made Binance drop both sockets (keepalive ping timeout) and lose
+        candle-close events.
+        """
+        import sys
+        from pathlib import Path
+
+        manage = Path(settings.BASE_DIR) / 'manage.py'
+        proc = await asyncio.create_subprocess_exec(
+            sys.executable, str(manage), 'paper_forward', '--json',
+            stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
+        )
+        stdout, stderr = await proc.communicate()
+        if proc.returncode != 0:
+            tail = stderr.decode(errors='replace').strip().splitlines()[-1:] or ['']
+            raise RuntimeError(f'paper_forward exited {proc.returncode}: {tail[0]}')
+        return json.loads(stdout.decode())
+
+    async def _run_candle_repair_loop(self):
+        """Every 5 minutes (+40 s), REST-repair candle closes lost on reconnect."""
+        from .tasks import repair_missed_candle_closes
+
+        while self.running:
+            wait = 300 - (time.time() % 300) + 40
+            try:
+                await asyncio.wait_for(self._stop_event.wait(), timeout=wait)
+                return
+            except asyncio.TimeoutError:
+                pass
+            try:
+                await asyncio.to_thread(repair_missed_candle_closes)
+            except Exception as exc:
+                logger.error('Candle repair loop error: %s', exc, exc_info=True)
 
     async def connect(self):
         """Connect routed market/public streams and process them concurrently."""
@@ -498,6 +559,7 @@ class BinanceWebSocketClient:
         consumers.append(self._run_shadow_pipeline())
         consumers.append(self._run_setup_search_loop())
         consumers.append(self._run_maintenance_loop())
+        consumers.append(self._run_candle_repair_loop())
         consumers.append(self._flush_aggtrade_loop())
         await asyncio.gather(*consumers)
 

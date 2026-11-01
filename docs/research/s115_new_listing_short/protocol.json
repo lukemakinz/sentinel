@@ -1,0 +1,44 @@
+{
+  "id": "S115_NEW_LISTING_SHORT",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-01",
+  "frozen_before_results": true,
+  "family": "STRUCTURAL_FLOW (post-listing supply / attention decay)",
+  "rationale": "New Binance USD-M perpetuals list at peak attention with a small float, airdrop/early-investor supply and upcoming unlocks. Hypothesis: prices drift down over the following weeks by more than costs and funding paid by shorts.",
+  "previously_tested_in_project": false,
+  "universe": {
+    "source": "every USDT-margined symbol with a Binance USD-M monthly kline archive (bucket listing), including later-delisted symbols",
+    "exclusions": "BTCUSDT, ETHUSDT, stablecoin/commodity bases, index symbols",
+    "listing_date": "timestamp of the first daily bar in the archives",
+    "listing_window": "first daily bar in [2023-01-01, 2026-08-01)",
+    "known_contamination": "ticker migrations/re-denominations (e.g. MATIC->POL, 1000x re-lists) appear as listings; kept, reported as a limitation"
+  },
+  "hypotheses": {
+    "S115_A": {
+      "entry": "short at the open of the 2nd daily bar (first bar may be partial)",
+      "hold_days": 14,
+      "exit": "close of the 14th daily bar after entry (entry bar = day 1)",
+      "stop": "+35% above entry, checked on daily highs; fill at max(stop, bar open) plus slippage"
+    },
+    "S115_B": {
+      "entry": "short at the open of the 4th daily bar (skips the first three days)",
+      "hold_days": 30,
+      "exit": "close of the 30th daily bar after entry",
+      "stop": "+50% above entry, same fill rule"
+    }
+  },
+  "delisting": "if data ends before the planned exit, exit at the last available close",
+  "costs": {
+    "taker_fee_bps_per_side": 5,
+    "slippage_bps_per_side": {"base": 10, "stress": 30},
+    "funding": "actual settled funding over [entry, exit); short receives positive rates and pays negative rates"
+  },
+  "sizing_for_usd": "fixed $25 notional per listing (10% of $250, 1x); concurrency reported",
+  "gates_all_required": [
+    "stress mean net return per trade > 0 with month-block bootstrap 97.5% lower bound > 0 (Bonferroni for 2 hypotheses)",
+    "stress mean net return > 0 in every calendar year 2023, 2024, 2025, 2026",
+    "BTC-hedged stress mean net return > 0 (excludes a pure alt-beta bear-market effect)"
+  ],
+  "diagnostics_not_gates": ["base costs", "median", "stop rate", "max concurrent positions", "funding contribution", "by listing month"],
+  "no_parameter_search": "exactly two pre-registered variants; any change requires a new protocol id"
+}

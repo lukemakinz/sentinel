@@ -14,7 +14,7 @@ from .market_intelligence import deterministic_preflight
 
 logger = logging.getLogger(__name__)
 
-AUCTION_PROMPT_VERSION = 'sentinel-auction-adjudicator-v2-candidate'
+AUCTION_PROMPT_VERSION = 'sentinel-auction-adjudicator-v4-global-context'
 OPENAI_PRICING_REFERENCE = 'https://developers.openai.com/api/docs/pricing'
 
 
@@ -156,6 +156,8 @@ Hard rules:
 13. For ARM, entry_zone must exactly copy the low/high of one supplied snapshot zone. Do not round or create a nearby zone. IFVG_FLIP must select an FVG zone. A long failed-auction or trend-retest setup must use support/FVG; a short setup must use resistance/FVG.
 
 14. When a mechanical candidate is supplied, judge only that candidate: either ARM it unchanged (same strategy_id, direction and entry_zone) or return WAIT/PASS. Never propose a different setup. PASS is the right answer when the evidence is mixed.
+15. trend_state is deterministic descriptive context, not a standalone signal. Use its timeframe conflicts and strength as evidence, but never let a trend label override missing data, the candidate geometry, trigger, or invalidation.
+16. global_context is a versioned top-down research layer. In v1 its TOTAL, TOTAL2, TOTAL3, TOTAL3ES and BTC.D slots are explicitly unavailable and must not be inferred. Do not double-count BTC/ETH trend, relative performance and breadth as independent confirmations, and never claim global context caused an outcome.
 
 Return a single structured decision through the required tool. Keep evidence concise and tied to named snapshot fields."""
 
@@ -163,9 +165,12 @@ Return a single structured decision through the required tool. Keep evidence con
 class AuctionDecision(BaseModel):
     action: Literal['PASS', 'WAIT', 'ARM']
     direction: Literal['LONG', 'SHORT', 'NONE']
-    strategy_id: Literal[
-        'SAI1_FAILED_AUCTION', 'SAI1_IFVG_FLIP', 'SAI1_TREND_RETEST', 'NONE',
-    ]
+    # Extensible strings are constrained by the immutable snapshot registry.
+    # A Literal here would make every strategy addition a core-engine change.
+    strategy_id: str = Field(
+        min_length=1, max_length=64,
+        pattern=r'^(NONE|[A-Z][A-Z0-9_]{2,63})$',
+    )
     confidence: float = Field(ge=0.0, le=1.0)
     data_quality: float = Field(ge=0.0, le=1.0)
     thesis: list[str]
@@ -173,9 +178,10 @@ class AuctionDecision(BaseModel):
     entry_zone: list[float] | None
     trigger_conditions: list[str]
     invalidation_conditions: list[str]
-    management_policy: Literal[
-        'P0_INITIAL_STOP', 'P1_STRUCTURAL', 'P2_HYBRID', 'NONE',
-    ]
+    management_policy: str = Field(
+        min_length=1, max_length=32,
+        pattern=r'^(NONE|[A-Z][A-Z0-9_]{2,31})$',
+    )
     ttl_minutes: int = Field(ge=0, le=240)
     recheck_condition: str
     risk_notes: list[str]
@@ -358,6 +364,8 @@ class AuctionAdjudicator:
     @staticmethod
     def _validate_against_snapshot(decision: AuctionDecision, snapshot: dict) -> None:
         """Reject hallucinated authority even when schema validation succeeded."""
+        from .strategies import strategy_registry
+
         registry = snapshot.get('strategy_registry') or {}
         if decision.strategy_id != 'NONE' and registry.get(decision.strategy_id) != 'SHADOW_ONLY':
             raise ValueError(f'Strategy is not in the shadow registry: {decision.strategy_id}')
@@ -389,11 +397,20 @@ class AuctionAdjudicator:
             if matched_zone is None:
                 raise ValueError('ARM entry zone must exactly match a supplied snapshot zone')
             zone_kind = matched_zone.get('kind')
-            if decision.strategy_id == 'SAI1_IFVG_FLIP' and zone_kind != 'FVG':
-                raise ValueError('IFVG flip requires a supplied FVG zone')
-            if decision.direction == 'LONG' and zone_kind not in {'RECENT_SUPPORT', 'FVG'}:
-                raise ValueError('LONG ARM requires support or FVG zone')
-            if decision.direction == 'SHORT' and zone_kind not in {'RECENT_RESISTANCE', 'FVG'}:
-                raise ValueError('SHORT ARM requires resistance or FVG zone')
+            plugin = strategy_registry.get(decision.strategy_id)
+            plugin.validate_arm_zone(
+                direction=decision.direction,
+                zone_kind=zone_kind,
+            )
+            if decision.management_policy not in plugin.spec.compatible_management_policies:
+                raise ValueError(
+                    f'{decision.strategy_id} is not compatible with '
+                    f'{decision.management_policy}',
+                )
+            if decision.ttl_minutes > plugin.spec.max_ttl_minutes:
+                raise ValueError(
+                    f'{decision.strategy_id} TTL exceeds plugin maximum '
+                    f'({plugin.spec.max_ttl_minutes} minutes)',
+                )
         if snapshot.get('execution_authorized') is not False:
             raise ValueError('Auction adjudicator accepts shadow snapshots only')

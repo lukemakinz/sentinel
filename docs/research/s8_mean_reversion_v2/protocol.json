@@ -1,0 +1,109 @@
+{
+  "created_at": "2026-09-08T11:31:46.707956+00:00",
+  "coarse_variants_fixed_before_run": [
+    {
+      "name": "S8v2_mr_5m_tp100",
+      "minutes": 5,
+      "target_atr_mult": 1.0,
+      "max_hold_minutes": 90,
+      "stop_buffer_atr_mult": 0.12,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8v2_mr_5m_tp125",
+      "minutes": 5,
+      "target_atr_mult": 1.25,
+      "max_hold_minutes": 90,
+      "stop_buffer_atr_mult": 0.12,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8v2_mr_5m_tp150",
+      "minutes": 5,
+      "target_atr_mult": 1.5,
+      "max_hold_minutes": 90,
+      "stop_buffer_atr_mult": 0.12,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8v2_mr_15m_tp100",
+      "minutes": 15,
+      "target_atr_mult": 1.0,
+      "max_hold_minutes": 90,
+      "stop_buffer_atr_mult": 0.12,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8v2_mr_15m_tp125",
+      "minutes": 15,
+      "target_atr_mult": 1.25,
+      "max_hold_minutes": 90,
+      "stop_buffer_atr_mult": 0.12,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    },
+    {
+      "name": "S8v2_mr_15m_tp150",
+      "minutes": 15,
+      "target_atr_mult": 1.5,
+      "max_hold_minutes": 90,
+      "stop_buffer_atr_mult": 0.12,
+      "vwap_window_hours": 6,
+      "vwap_sigma_mult": 1.0,
+      "adx_threshold": 20.0,
+      "containment_lookback": 24,
+      "limit_ttl_minutes": 120,
+      "leverage": 20,
+      "event_cooldown_bars": 5
+    }
+  ],
+  "capital_per_pair": 1000,
+  "fix_over_v1": "v1 lost because stop (0.6*ATR, at the level) was far tighter than target (0.6-0.8x value-area width, to POC): range-edge noise hit the stop long before price traveled that far. v2: (a) entry requires a rejection candle at the level (wick through it, close back inside, body in the reversal direction) before a retest limit is armed; (b) stop sits behind the rejection wick + 0.12*ATR buffer; (c) target is 1.0-1.5x ATR (same unit as the stop), not a large fraction of value-area width.",
+  "regime_filter": "Unchanged from v1: htf_adx (1h ADX14) <= 20 AND 1h range contained within the prior 24 1h bars.",
+  "risk_per_trade": "0.3% of current capital, sized from stop distance; independent of leverage (20x default; leverage only scales required margin).",
+  "entry": "Resting limit order at VAL/VAH (profile_edge) or a rolling VWAP +/-1 sigma band (vwap_band), 6h window, armed only after a rejection candle. Maker fee 2bps, no entry slippage, 120min TTL.",
+  "exit": "Single fixed target = level + side * target_atr_mult * ATR, no trailing, no partial. Stop = rejection wick -/+ 0.12*ATR buffer. Time-kill per max_hold_minutes.",
+  "development": [
+    "2025-08-01/2026-02-01",
+    "2026-02-01/2026-04-01"
+  ],
+  "holdout_window": "2026-08-01/2026-09-01 (unused by S7 or S8v1 in this engine)",
+  "selection": "Stage 1: rank the 6 coarse (timeframe x target_atr_mult) variants at max_hold_minutes=90, >= 20 validation trades on the combined 4-pair portfolio. Stage 2: for the winning (timeframe, target_atr_mult), also test max_hold_minutes=60 and re-rank all 7 variants together. Freeze one global configuration before holdout.",
+  "scenarios": "20x development; frozen holdout at 20x and 30x, with 2 and 5 bps slippage.",
+  "fees_bps": {
+    "taker": 5,
+    "maker_entry": 2
+  },
+  "limit_model": "Fills only if the bar actually trades through the level (2bps penetration), expires after 120 minutes. No queue model.",
+  "liquidation": "Conservative deposit-vs-stop buffer only; no historical mark-price liquidation simulation.",
+  "stopping_rule": "If no variant reaches profit_factor > 1 after costs on holdout for at least 3 of 4 pairs, this is a SECOND consecutive negative result for the S8 mean-reversion concept. Close it definitively; no third iteration without asking the user first."
+}

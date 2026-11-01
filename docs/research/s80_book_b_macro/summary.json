@@ -1,0 +1,354 @@
+{
+  "windows": {
+    "development": {
+      "base": {
+        "trades": 13,
+        "wins": 2,
+        "win_rate_pct": 15.384615384615385,
+        "profit_factor": 0.3737730155892154,
+        "net_pnl": -16.089715786942577,
+        "return_pct": -6.435886314777028,
+        "max_drawdown_pct": 9.150334310940744,
+        "mean_net_r": -0.5205324502397163,
+        "fees": 5.072472490974707,
+        "funding_pnl": -0.02454464114634833,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 10,
+            "net_pnl": -21.98126008054588,
+            "gross_profit": 0.3152766334112147
+          },
+          "ETHUSDT": {
+            "trades": 3,
+            "net_pnl": 5.8915442936032445,
+            "gross_profit": 9.288112775490449
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 96.71702749948913,
+        "per_month": {
+          "2025-05": {
+            "trades": 3,
+            "pnl": -8.267755248706404
+          },
+          "2025-06": {
+            "trades": 4,
+            "pnl": -4.667492809665853
+          },
+          "2025-07": {
+            "trades": 3,
+            "pnl": -6.925747986178514
+          },
+          "2025-08": {
+            "trades": 2,
+            "pnl": 6.2732730426893255
+          },
+          "2025-09": {
+            "trades": 1,
+            "pnl": -2.5019927850811885
+          }
+        },
+        "diagnostics": {
+          "signals": 28,
+          "entries": 13,
+          "entries_BTCUSDT": 10,
+          "blocked_open_position": 5,
+          "entries_ETHUSDT": 3,
+          "blocked_stop_width_or_gap": 6
+        },
+        "drawdown_halted": false,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": -0.10516154109112795,
+        "hits_5_usd_day": false,
+        "gap_to_5_usd_day": 5.105161541091128,
+        "signal_count": 28
+      },
+      "stress": {
+        "trades": 13,
+        "wins": 2,
+        "win_rate_pct": 15.384615384615385,
+        "profit_factor": 0.333710398369502,
+        "net_pnl": -20.90872798703944,
+        "return_pct": -8.363491194815776,
+        "max_drawdown_pct": 10.482314184782215,
+        "mean_net_r": -0.49570924833773194,
+        "fees": 13.9419432170625,
+        "funding_pnl": -0.04650991559835885,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 9,
+            "net_pnl": -26.7874828215389,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 4,
+            "net_pnl": 5.8787548344994,
+            "gross_profit": 10.472112920387396
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-05": {
+            "trades": 3,
+            "pnl": -11.080690982563592
+          },
+          "2025-06": {
+            "trades": 4,
+            "pnl": -8.171520183550095
+          },
+          "2025-07": {
+            "trades": 3,
+            "pnl": -2.986846534038757
+          },
+          "2025-08": {
+            "trades": 2,
+            "pnl": 4.678528532511965
+          },
+          "2025-09": {
+            "trades": 1,
+            "pnl": -3.34819881939902
+          }
+        },
+        "diagnostics": {
+          "signals": 28,
+          "entries": 13,
+          "entries_BTCUSDT": 9,
+          "blocked_open_position": 5,
+          "entries_ETHUSDT": 4,
+          "blocked_stop_width_or_gap": 7
+        },
+        "drawdown_halted": false,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": -0.13665835285646694,
+        "hits_5_usd_day": false,
+        "gap_to_5_usd_day": 5.136658352856467,
+        "signal_count": 28
+      },
+      "severe": {
+        "trades": 12,
+        "wins": 1,
+        "win_rate_pct": 8.333333333333332,
+        "profit_factor": 0.17632082090324835,
+        "net_pnl": -31.623353030218823,
+        "return_pct": -12.649341212087528,
+        "max_drawdown_pct": 13.77916806142403,
+        "mean_net_r": -0.6257992289699118,
+        "fees": 18.545008572571742,
+        "funding_pnl": -0.022803280223278502,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 9,
+            "net_pnl": -33.109632977848655,
+            "gross_profit": 0.0
+          },
+          "ETHUSDT": {
+            "trades": 3,
+            "net_pnl": 1.4862799476299084,
+            "gross_profit": 6.769450664172295
+          }
+        },
+        "positive_symbols": 1,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-05": {
+            "trades": 3,
+            "pnl": -13.525334086249746
+          },
+          "2025-06": {
+            "trades": 4,
+            "pnl": -10.734722944038447
+          },
+          "2025-07": {
+            "trades": 2,
+            "pnl": -5.788841085589336
+          },
+          "2025-08": {
+            "trades": 2,
+            "pnl": 2.370428626489847
+          },
+          "2025-09": {
+            "trades": 1,
+            "pnl": -3.944883540831067
+          }
+        },
+        "diagnostics": {
+          "signals": 28,
+          "entries": 12,
+          "entries_BTCUSDT": 9,
+          "blocked_open_position": 5,
+          "entries_ETHUSDT": 3,
+          "blocked_stop_width_or_gap": 8
+        },
+        "drawdown_halted": false,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": -0.20668858189685504,
+        "hits_5_usd_day": false,
+        "gap_to_5_usd_day": 5.206688581896855,
+        "signal_count": 28
+      }
+    },
+    "validation": {
+      "base": {
+        "trades": 7,
+        "wins": 2,
+        "win_rate_pct": 28.57142857142857,
+        "profit_factor": 0.42974005214918815,
+        "net_pnl": -7.17589081585362,
+        "return_pct": -2.87035632634145,
+        "max_drawdown_pct": 5.1406975407043305,
+        "mean_net_r": -0.48179180448775627,
+        "fees": 2.9430565467389163,
+        "funding_pnl": -0.01553610550170569,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 7,
+            "net_pnl": -7.175890815853597,
+            "gross_profit": 5.407652606576822
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-10": {
+            "trades": 2,
+            "pnl": -0.9171471982443288
+          },
+          "2025-11": {
+            "trades": 2,
+            "pnl": 1.8289719147707704
+          },
+          "2025-12": {
+            "trades": 3,
+            "pnl": -8.087715532380038
+          }
+        },
+        "diagnostics": {
+          "signals": 16,
+          "entries": 7,
+          "entries_BTCUSDT": 7,
+          "blocked_open_position": 3,
+          "blocked_stop_width_or_gap": 2
+        },
+        "drawdown_halted": false,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.07799881321580023,
+        "hits_5_usd_day": false,
+        "gap_to_5_usd_day": 5.0779988132158005,
+        "signal_count": 16
+      },
+      "stress": {
+        "trades": 7,
+        "wins": 1,
+        "win_rate_pct": 14.285714285714285,
+        "profit_factor": 0.22546758878088477,
+        "net_pnl": -12.665025680745913,
+        "return_pct": -5.06601027229836,
+        "max_drawdown_pct": 5.7860555982061745,
+        "mean_net_r": -0.5680794216742644,
+        "fees": 7.97836809037145,
+        "funding_pnl": -0.015513484082336415,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 7,
+            "net_pnl": -12.665025680745856,
+            "gross_profit": 3.686808661229692
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-10": {
+            "trades": 2,
+            "pnl": -2.8309402229787057
+          },
+          "2025-11": {
+            "trades": 2,
+            "pnl": -0.1009431507024483
+          },
+          "2025-12": {
+            "trades": 3,
+            "pnl": -9.733142307064702
+          }
+        },
+        "diagnostics": {
+          "signals": 16,
+          "entries": 7,
+          "entries_BTCUSDT": 7,
+          "blocked_open_position": 3,
+          "blocked_stop_width_or_gap": 2
+        },
+        "drawdown_halted": false,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.1376633226168034,
+        "hits_5_usd_day": false,
+        "gap_to_5_usd_day": 5.137663322616803,
+        "signal_count": 16
+      },
+      "severe": {
+        "trades": 7,
+        "wins": 1,
+        "win_rate_pct": 14.285714285714285,
+        "profit_factor": 0.1377561151118295,
+        "net_pnl": -17.70772843645463,
+        "return_pct": -7.083091374581851,
+        "max_drawdown_pct": 7.230486594656282,
+        "mean_net_r": -0.6225979289733227,
+        "fees": 11.725764205569225,
+        "funding_pnl": -0.015487315829940524,
+        "per_symbol": {
+          "BTCUSDT": {
+            "trades": 7,
+            "net_pnl": -17.707728436454612,
+            "gross_profit": 2.829069500652512
+          },
+          "ETHUSDT": {
+            "trades": 0,
+            "net_pnl": 0.0,
+            "gross_profit": 0.0
+          }
+        },
+        "positive_symbols": 0,
+        "largest_symbol_gross_profit_share_pct": 100.0,
+        "per_month": {
+          "2025-10": {
+            "trades": 2,
+            "pnl": -4.501009962638481
+          },
+          "2025-11": {
+            "trades": 2,
+            "pnl": -1.7603088727484568
+          },
+          "2025-12": {
+            "trades": 3,
+            "pnl": -11.446409601067675
+          }
+        },
+        "diagnostics": {
+          "signals": 16,
+          "entries": 7,
+          "entries_BTCUSDT": 7,
+          "blocked_open_position": 3,
+          "blocked_stop_width_or_gap": 2
+        },
+        "drawdown_halted": false,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.19247530909189817,
+        "hits_5_usd_day": false,
+        "gap_to_5_usd_day": 5.192475309091898,
+        "signal_count": 16
+      }
+    }
+  },
+  "decision": "REJECTED_AT_DEVELOPMENT_GATE"
+}

@@ -1,0 +1,616 @@
+{
+  "protocol": "S116_REGIME_ATLAS v1.1.0",
+  "cell_days": {
+    "development": {
+      "UP_LOW": 245,
+      "UP_HIGH": 244,
+      "SIDEWAYS_LOW": 79,
+      "DOWN_LOW": 76,
+      "DOWN_HIGH": 60,
+      "SIDEWAYS_HIGH": 27
+    },
+    "diagnostic_2025_2026": {
+      "DOWN_HIGH": 182,
+      "UP_LOW": 176,
+      "DOWN_LOW": 103,
+      "SIDEWAYS_LOW": 77,
+      "SIDEWAYS_HIGH": 66,
+      "UP_HIGH": 4
+    }
+  },
+  "router_map": {
+    "BTC_SMA200_LONG": [],
+    "BOOK_A": [],
+    "BOOK_B": [],
+    "S115_A": []
+  },
+  "atlas_development": {
+    "BTC_SMA200_LONG": {
+      "DOWN_HIGH": {
+        "n": 60,
+        "mean": 0.4038,
+        "total": 24.23,
+        "t": 0.87,
+        "year_means": {
+          "2023": -0.3096,
+          "2024": 0.6208
+        },
+        "top_month_share": 1.0
+      },
+      "DOWN_LOW": {
+        "n": 76,
+        "mean": -0.2655,
+        "total": -20.18,
+        "t": -0.82,
+        "year_means": {
+          "2023": 0.0,
+          "2024": -0.8073
+        },
+        "top_month_share": 1.0
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 27,
+        "mean": 1.9921,
+        "total": 53.79,
+        "t": 1.58,
+        "year_means": {
+          "2023": 1.7769,
+          "2024": 2.1401
+        },
+        "top_month_share": 0.704
+      },
+      "SIDEWAYS_LOW": {
+        "n": 79,
+        "mean": 0.7979,
+        "total": 63.03,
+        "t": 1.16,
+        "year_means": {
+          "2023": 2.7602,
+          "2024": -1.1153
+        },
+        "top_month_share": 0.356
+      },
+      "UP_HIGH": {
+        "n": 244,
+        "mean": 0.5305,
+        "total": 129.45,
+        "t": 1.55,
+        "year_means": {
+          "2023": 0.9842,
+          "2024": 0.2155
+        },
+        "top_month_share": 0.269
+      },
+      "UP_LOW": {
+        "n": 245,
+        "mean": 0.2711,
+        "total": 66.43,
+        "t": 0.65,
+        "year_means": {
+          "2023": -0.3493,
+          "2024": 1.2509
+        },
+        "top_month_share": 0.514
+      }
+    },
+    "BOOK_A": {
+      "DOWN_HIGH": {
+        "n": 60,
+        "mean": -0.1363,
+        "total": -8.18,
+        "t": -1.0,
+        "year_means": {
+          "2023": 0.0,
+          "2024": -0.1778
+        },
+        "top_month_share": null
+      },
+      "DOWN_LOW": {
+        "n": 76,
+        "mean": -0.0193,
+        "total": -1.47,
+        "t": -1.0,
+        "year_means": {
+          "2023": 0.0,
+          "2024": -0.0587
+        },
+        "top_month_share": null
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 27,
+        "mean": -0.0368,
+        "total": -0.99,
+        "t": -0.44,
+        "year_means": {
+          "2023": 0.1013,
+          "2024": -0.1318
+        },
+        "top_month_share": 0.525
+      },
+      "SIDEWAYS_LOW": {
+        "n": 79,
+        "mean": -0.1186,
+        "total": -9.37,
+        "t": -0.59,
+        "year_means": {
+          "2023": 0.1677,
+          "2024": -0.3977
+        },
+        "top_month_share": 0.521
+      },
+      "UP_HIGH": {
+        "n": 244,
+        "mean": 0.2739,
+        "total": 66.82,
+        "t": 2.18,
+        "year_means": {
+          "2023": 0.0657,
+          "2024": 0.4184
+        },
+        "top_month_share": 0.377
+      },
+      "UP_LOW": {
+        "n": 245,
+        "mean": -0.1295,
+        "total": -31.73,
+        "t": -0.85,
+        "year_means": {
+          "2023": -0.2692,
+          "2024": 0.091
+        },
+        "top_month_share": 0.761
+      }
+    },
+    "BOOK_B": {
+      "DOWN_HIGH": {
+        "n": 60,
+        "mean": 0.0699,
+        "total": 4.2,
+        "t": 1.0,
+        "year_means": {
+          "2023": 0.0,
+          "2024": 0.0912
+        },
+        "top_month_share": 1.0
+      },
+      "DOWN_LOW": {
+        "n": 76,
+        "mean": 0.0,
+        "total": 0.0,
+        "t": 0.0,
+        "year_means": {
+          "2023": 0.0,
+          "2024": 0.0
+        },
+        "top_month_share": null
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 27,
+        "mean": 0.0,
+        "total": 0.0,
+        "t": 0.0,
+        "year_means": {
+          "2023": 0.0,
+          "2024": 0.0
+        },
+        "top_month_share": null
+      },
+      "SIDEWAYS_LOW": {
+        "n": 79,
+        "mean": -0.0943,
+        "total": -7.45,
+        "t": -0.64,
+        "year_means": {
+          "2023": -0.1886,
+          "2024": -0.0024
+        },
+        "top_month_share": 0.836
+      },
+      "UP_HIGH": {
+        "n": 244,
+        "mean": -0.0297,
+        "total": -7.25,
+        "t": -2.06,
+        "year_means": {
+          "2023": -0.0358,
+          "2024": -0.0255
+        },
+        "top_month_share": null
+      },
+      "UP_LOW": {
+        "n": 245,
+        "mean": -0.0954,
+        "total": -23.37,
+        "t": -0.47,
+        "year_means": {
+          "2023": -0.1687,
+          "2024": 0.0203
+        },
+        "top_month_share": 0.359
+      }
+    },
+    "S115_A": {
+      "DOWN_HIGH": {
+        "n": 21,
+        "mean": -1.0517,
+        "total": -22.09,
+        "t": -0.63,
+        "year_means": {
+          "2023": 14.3225,
+          "2024": -1.8204
+        }
+      },
+      "DOWN_LOW": {
+        "n": 14,
+        "mean": -2.2854,
+        "total": -32.0,
+        "t": -1.16,
+        "year_means": {
+          "2023": -0.0608,
+          "2024": -5.2514
+        }
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 4,
+        "mean": -6.8225,
+        "total": -27.29,
+        "t": -3.29,
+        "year_means": {
+          "2023": -6.1376,
+          "2024": -8.8772
+        }
+      },
+      "SIDEWAYS_LOW": {
+        "n": 25,
+        "mean": 1.8474,
+        "total": 46.18,
+        "t": 1.56,
+        "year_means": {
+          "2023": -2.526,
+          "2024": 5.2836
+        }
+      },
+      "UP_HIGH": {
+        "n": 84,
+        "mean": -0.2035,
+        "total": -17.1,
+        "t": -0.24,
+        "year_means": {
+          "2023": -0.0842,
+          "2024": -0.2974
+        }
+      },
+      "UP_LOW": {
+        "n": 81,
+        "mean": -0.0257,
+        "total": -2.08,
+        "t": -0.03,
+        "year_means": {
+          "2023": 1.1167,
+          "2024": -1.0351
+        }
+      }
+    }
+  },
+  "atlas_diagnostic_2025_2026": {
+    "BTC_SMA200_LONG": {
+      "DOWN_HIGH": {
+        "n": 182,
+        "mean": -0.312,
+        "total": -56.79,
+        "t": -2.24,
+        "year_means": {
+          "2025": -0.6454,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "DOWN_LOW": {
+        "n": 103,
+        "mean": -0.0765,
+        "total": -7.88,
+        "t": -0.83,
+        "year_means": {
+          "2025": -0.3426,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 66,
+        "mean": -0.3852,
+        "total": -25.42,
+        "t": -0.84,
+        "year_means": {
+          "2025": -0.8595,
+          "2026": 0.01
+        },
+        "top_month_share": 0.597
+      },
+      "SIDEWAYS_LOW": {
+        "n": 77,
+        "mean": 1.2386,
+        "total": 95.38,
+        "t": 2.5,
+        "year_means": {
+          "2025": 1.1692,
+          "2026": 1.4121
+        },
+        "top_month_share": 0.279
+      },
+      "UP_HIGH": {
+        "n": 4,
+        "mean": -0.7121,
+        "total": -2.85,
+        "t": 0.0,
+        "year_means": {
+          "2025": -0.7121
+        },
+        "top_month_share": null
+      },
+      "UP_LOW": {
+        "n": 176,
+        "mean": -0.0812,
+        "total": -14.29,
+        "t": -0.24,
+        "year_means": {
+          "2025": -0.0866,
+          "2026": 0.0
+        },
+        "top_month_share": 0.508
+      }
+    },
+    "BOOK_A": {
+      "DOWN_HIGH": {
+        "n": 182,
+        "mean": -0.0194,
+        "total": -3.53,
+        "t": -1.02,
+        "year_means": {
+          "2025": -0.0401,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "DOWN_LOW": {
+        "n": 103,
+        "mean": 0.0,
+        "total": 0.0,
+        "t": 0.0,
+        "year_means": {
+          "2025": 0.0,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 65,
+        "mean": 0.2346,
+        "total": 15.25,
+        "t": 0.75,
+        "year_means": {
+          "2025": 0.6468,
+          "2026": -0.1186
+        },
+        "top_month_share": 1.0
+      },
+      "SIDEWAYS_LOW": {
+        "n": 77,
+        "mean": 0.2399,
+        "total": 18.47,
+        "t": 1.94,
+        "year_means": {
+          "2025": 0.3358,
+          "2026": 0.0
+        },
+        "top_month_share": 0.487
+      },
+      "UP_HIGH": {
+        "n": 4,
+        "mean": -0.9776,
+        "total": -3.91,
+        "t": 0.0,
+        "year_means": {
+          "2025": -0.9776
+        },
+        "top_month_share": null
+      },
+      "UP_LOW": {
+        "n": 176,
+        "mean": 0.2869,
+        "total": 50.49,
+        "t": 1.21,
+        "year_means": {
+          "2025": 0.306,
+          "2026": 0.0
+        },
+        "top_month_share": 0.482
+      }
+    },
+    "BOOK_B": {
+      "DOWN_HIGH": {
+        "n": 182,
+        "mean": 0.0,
+        "total": 0.0,
+        "t": 0.0,
+        "year_means": {
+          "2025": 0.0,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "DOWN_LOW": {
+        "n": 103,
+        "mean": 0.0,
+        "total": 0.0,
+        "t": 0.0,
+        "year_means": {
+          "2025": 0.0,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 66,
+        "mean": 0.0,
+        "total": 0.0,
+        "t": 0.0,
+        "year_means": {
+          "2025": 0.0,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "SIDEWAYS_LOW": {
+        "n": 77,
+        "mean": -0.1,
+        "total": -7.7,
+        "t": -1.09,
+        "year_means": {
+          "2025": -0.14,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      },
+      "UP_HIGH": {
+        "n": 4,
+        "mean": 0.0,
+        "total": 0.0,
+        "t": 0.0,
+        "year_means": {
+          "2025": 0.0
+        },
+        "top_month_share": null
+      },
+      "UP_LOW": {
+        "n": 176,
+        "mean": -0.1341,
+        "total": -23.6,
+        "t": -2.04,
+        "year_means": {
+          "2025": -0.1431,
+          "2026": 0.0
+        },
+        "top_month_share": null
+      }
+    },
+    "S115_A": {
+      "DOWN_HIGH": {
+        "n": 109,
+        "mean": 0.5919,
+        "total": 64.51,
+        "t": 0.76,
+        "year_means": {
+          "2025": 0.7763,
+          "2026": 0.4173
+        }
+      },
+      "DOWN_LOW": {
+        "n": 66,
+        "mean": 1.2363,
+        "total": 81.6,
+        "t": 1.53,
+        "year_means": {
+          "2025": 2.9657,
+          "2026": 0.9275
+        }
+      },
+      "SIDEWAYS_HIGH": {
+        "n": 68,
+        "mean": -0.2183,
+        "total": -14.84,
+        "t": -0.26,
+        "year_means": {
+          "2025": -0.3513,
+          "2026": -0.1457
+        }
+      },
+      "SIDEWAYS_LOW": {
+        "n": 70,
+        "mean": -0.3687,
+        "total": -25.81,
+        "t": -0.43,
+        "year_means": {
+          "2025": -0.6458,
+          "2026": 0.0008
+        }
+      },
+      "UP_HIGH": {
+        "n": 4,
+        "mean": 0.0096,
+        "total": 0.04,
+        "t": 0.0,
+        "year_means": {
+          "2025": 0.0096
+        }
+      },
+      "UP_LOW": {
+        "n": 117,
+        "mean": 1.7386,
+        "total": 203.42,
+        "t": 2.05,
+        "year_means": {
+          "2025": 1.6164,
+          "2026": 3.205
+        }
+      }
+    }
+  },
+  "diagnostic_2025_2026": {
+    "router": {
+      "total_usd": 0.0,
+      "usd_per_day": 0.0,
+      "sharpe": 0.0,
+      "max_dd_usd": 0.0,
+      "month_block_lower95_usd_per_day": 0.0
+    },
+    "always_on": {
+      "total_usd": 216.63,
+      "usd_per_day": 0.356,
+      "sharpe": 1.36,
+      "max_dd_usd": -83.35,
+      "month_block_lower95_usd_per_day": 0.0042
+    }
+  },
+  "development_in_sample": {
+    "router": {
+      "total_usd": 0.0,
+      "usd_per_day": 0.0,
+      "sharpe": 0.0,
+      "max_dd_usd": 0.0,
+      "month_block_lower95_usd_per_day": 0.0
+    },
+    "always_on": {
+      "total_usd": 115.06,
+      "usd_per_day": 0.157,
+      "sharpe": 0.8,
+      "max_dd_usd": -74.87,
+      "month_block_lower95_usd_per_day": -0.059
+    }
+  },
+  "gates": {
+    "router_diagnostic_positive": false,
+    "router_beats_always_on": false,
+    "router_bootstrap_lower_above_zero": false
+  },
+  "decision": "REJECTED",
+  "capital": {
+    "portfolio_usd": 500.0,
+    "sleeve_usd": 125.0
+  },
+  "data_repairs": [
+    {
+      "symbol": "XRPUSDT",
+      "time": "2023-11-30 12:35:00+00:00",
+      "volume": 91695.7,
+      "taker_buy_volume": 132462.5,
+      "repaired_volume": 331840.2811133201
+    }
+  ],
+  "streams_included": [
+    "BOOK_A",
+    "BOOK_B",
+    "BTC_SMA200_LONG",
+    "S115_A"
+  ]
+}

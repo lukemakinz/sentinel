@@ -1,0 +1,69 @@
+{
+  "protocol_version": "S34-COIN-M-DATED-CARRY-v1.0-frozen-2026-09-14",
+  "status": "retrospective_research_only_frozen_before_downloading_coin_m_prices",
+  "hypothesis": "Buying the base asset and shorting a fixed-expiry inverse COIN-M future converts the same coin inventory into long exposure and futures collateral. A nearly quantity-matched inverse short should lock a positive delivery premium while avoiding the isolated USDT-margin drain that invalidated earlier carry tests.",
+  "venue": "Binance",
+  "symbols": {
+    "BTCUSDT": {"coin_m_pair": "BTCUSD", "contract_size_usd": 100},
+    "ETHUSDT": {"coin_m_pair": "ETHUSD", "contract_size_usd": 10}
+  },
+  "capital": {
+    "total_usd": 250,
+    "coin_purchase_usd": 225,
+    "outside_reserve_usd": 25,
+    "maximum_positions": 1,
+    "short_contract_rule": "floor(coin_quantity * inverse_futures_entry_price / contract_size); never round up",
+    "maximum_unhedged_coin_fraction": 0.12
+  },
+  "schedule": {
+    "expiry_definition": "Last Friday of March, June, September and December at 08:00 UTC",
+    "decision": "Exactly 30 days before expiry at 08:00 UTC using only the H1 spot and COIN-M CURRENT_QUARTER bar completed at 08:00",
+    "entry": "At the 09:00 UTC H1 open on the decision day",
+    "planned_exit": "At the 07:00 UTC H1 open one hour before expiry; never cross a continuous-contract roll",
+    "selection": "Choose the qualifying BTC or ETH candidate with the larger known premium; deterministic BTC tie-break",
+    "qualification": "COIN-M future premium over spot >=1.00%, simple annualized premium >=12.00%, at least one whole contract and unhedged coin value <=12% of purchased coin value",
+    "duplicate_control": "At most one trade per quarterly expiry"
+  },
+  "inverse_accounting": {
+    "short_pnl_coin": "contract_notional_usd * (1 / current_futures_price - 1 / entry_futures_price)",
+    "futures_fees": "Charged in base coin at contract_notional_usd * fee_rate / futures_fill_price on each side",
+    "collateral": "Purchased base coin minus entry fee plus inverse short PnL; no external top-up",
+    "portfolio_value": "Outside USD reserve plus marked USD value of remaining coin collateral"
+  },
+  "risk": {
+    "minimum_coin_collateral_equity_usd": 150,
+    "maximum_futures_mark_leverage": 1.10,
+    "risk_exit": "At the first subsequent common tradable H1 open after a completed futures bar breaches either limit",
+    "no_rescue": "No transfer, leverage increase, averaging or martingale",
+    "daily_loss_stop_for_future_live_use": "1% of account equity; historical pass would still authorize paper-forward only"
+  },
+  "execution_costs_bps_per_leg_per_side": {
+    "base": {"spot_fee": 10, "futures_fee": 2, "spot_slippage": 1, "futures_slippage": 1, "headline_four_fill_rate_sum": 28},
+    "stress": {"spot_fee": 10, "futures_fee": 5, "spot_slippage": 5, "futures_slippage": 5, "headline_four_fill_rate_sum": 50}
+  },
+  "data": {
+    "source": "Anonymous public Binance Data Vision spot H1 archives with published checksums and public COIN-M CURRENT_QUARTER continuous H1 klines; no account or API key",
+    "missing_policy": "No interpolation, forward-fill, proxy price or synthetic execution. Exact checksum-verified 1m spot fallback is allowed. A verified venue-halt spot gap is omitted from portfolio-MTM sampling while complete COIN-M collateral marks continue hourly. Missing feature, entry or exit data cancels that expiry; any COIN-M futures gap rejects the replay.",
+    "continuous_contract_limit": "Every episode exits one hour before the standard delivery boundary and may not cross the roll. The historical contract-size assumptions are stated explicitly and contract rounding is adverse."
+  },
+  "windows": {
+    "development": ["2023-01-01", "2024-01-01"],
+    "validation": ["2024-01-01", "2025-01-01"],
+    "retrospective_evaluation": ["2025-01-01", "2026-09-01"],
+    "genuine_oos": "quarterly opportunities after 2026-09-01 under the unchanged protocol"
+  },
+  "historical_gate": [
+    "stress net PnL >0 in every window",
+    "at least 2 executed expiries in development, validation and retrospective evaluation",
+    "zero collateral exhaustion, minimum marked coin collateral equity >=$150 and maximum mark leverage <=1.10x",
+    "maximum portfolio drawdown <=3%",
+    "both BTC and ETH must each have at least one positive stress episode; otherwise concentration-rejected"
+  ],
+  "paper_gate": "Historical pass permits paper-forward only. Live requires at least 8 prospective quarterly observations, positive stress PnL and observed fills/costs inside assumptions.",
+  "limitations": [
+    "Continuous COIN-M klines do not expose historical maintenance-margin tiers or contract identity inside every bar.",
+    "H1 data cannot model order-book depth, outages within the bar or delivery-system failure.",
+    "Contract granularity leaves a small residual long coin exposure, explicitly capped at 12%.",
+    "Even a valid carry return is structurally too small to promise $25/day from $250."
+  ]
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "strategy": "S1C",
+    "phase": "develop_05",
+    "trades": 9,
+    "trades_per_day_all_pairs": 0.2903225806451613,
+    "wins": 3,
+    "win_rate_pct": 33.333333333333336,
+    "profit_factor": 0.32880844645550533,
+    "net_pnl": -8.899999999999999,
+    "return_pct_on_4x_capital": -0.22249999999999998,
+    "positive_pairs": 1
+  },
+  {
+    "strategy": "S1C",
+    "phase": "develop_06",
+    "trades": 30,
+    "trades_per_day_all_pairs": 1.0,
+    "wins": 14,
+    "win_rate_pct": 46.666666666666664,
+    "profit_factor": 1.243089430894309,
+    "net_pnl": 11.959999999999999,
+    "return_pct_on_4x_capital": 0.299,
+    "positive_pairs": 3
+  },
+  {
+    "strategy": "S1C",
+    "phase": "validation_07",
+    "trades": 11,
+    "trades_per_day_all_pairs": 0.3548387096774194,
+    "wins": 3,
+    "win_rate_pct": 27.272727272727273,
+    "profit_factor": 0.11412688031393066,
+    "net_pnl": -27.090000000000003,
+    "return_pct_on_4x_capital": -0.6772500000000001,
+    "positive_pairs": 1
+  },
+  {
+    "strategy": "S1CF",
+    "phase": "develop_05",
+    "trades": 14,
+    "trades_per_day_all_pairs": 0.45161290322580644,
+    "wins": 5,
+    "win_rate_pct": 35.714285714285715,
+    "profit_factor": 0.3590712742980562,
+    "net_pnl": -11.87,
+    "return_pct_on_4x_capital": -0.29675,
+    "positive_pairs": 1
+  },
+  {
+    "strategy": "S1CF",
+    "phase": "develop_06",
+    "trades": 54,
+    "trades_per_day_all_pairs": 1.8,
+    "wins": 24,
+    "win_rate_pct": 44.44444444444444,
+    "profit_factor": 0.9762125424776027,
+    "net_pnl": -2.3099999999999996,
+    "return_pct_on_4x_capital": -0.057749999999999996,
+    "positive_pairs": 2
+  },
+  {
+    "strategy": "S1CF",
+    "phase": "validation_07",
+    "trades": 17,
+    "trades_per_day_all_pairs": 0.5483870967741935,
+    "wins": 5,
+    "win_rate_pct": 29.41176470588235,
+    "profit_factor": 0.20272943037974683,
+    "net_pnl": -40.31,
+    "return_pct_on_4x_capital": -1.00775,
+    "positive_pairs": 0
+  }
+]

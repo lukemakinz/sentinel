@@ -7,10 +7,11 @@ import json
 import math
 import statistics
 
+from django.conf import settings
 from django.utils import timezone
 
 
-SNAPSHOT_VERSION = 'auction-snapshot-v1'
+SNAPSHOT_VERSION = 'auction-snapshot-v3-global-context'
 
 
 def _clip(value: float, low: float = 0.0, high: float = 1.0) -> float:
@@ -27,17 +28,9 @@ def _pct_change(current: float, previous: float) -> float | None:
     return (current / previous - 1.0) * 100.0
 
 
-def _timeframe_summary(symbol: str, interval: str, limit: int = 240) -> dict:
-    from ingester.models import Candle
-
-    rows = list(Candle.objects.filter(
-        symbol=symbol, interval=interval, is_closed=True,
-    ).order_by('-timestamp').values(
-        'timestamp', 'open', 'high', 'low', 'close', 'volume',
-    )[:limit])
-    rows.reverse()
+def _summarize_rows(interval: str, rows: list[dict], *, source: str | None = None) -> dict:
     if not rows:
-        return {'available': False, 'interval': interval}
+        return {'available': False, 'interval': interval, **({'source': source} if source else {})}
 
     closes = [float(row['close']) for row in rows]
     highs = [float(row['high']) for row in rows]
@@ -92,8 +85,21 @@ def _timeframe_summary(symbol: str, interval: str, limit: int = 240) -> dict:
         'atr_pct': atr_pct,
         'obv_change_20': obv_change_20,
         'volume_ratio_to_median20': volume_ratio,
-        '_recent_rows': rows[-96:],
+        '_recent_rows': rows[-240:],
+        **({'source': source} if source else {}),
     }
+
+
+def _timeframe_summary(symbol: str, interval: str, limit: int = 240) -> dict:
+    from ingester.models import Candle
+
+    rows = list(Candle.objects.filter(
+        symbol=symbol, interval=interval, is_closed=True,
+    ).order_by('-timestamp').values(
+        'timestamp', 'open', 'high', 'low', 'close', 'volume',
+    )[:limit])
+    rows.reverse()
+    return _summarize_rows(interval, rows)
 
 
 def _zones(tf15: dict) -> list[dict]:
@@ -147,7 +153,24 @@ def _depth_snapshot(symbol: str, now) -> dict:
 def _flow_snapshot(symbol: str, now) -> dict:
     from ingester.models import FundingRate, Liquidation, OpenInterest, WhaleCVD, RetailCVD
 
-    oi = list(OpenInterest.objects.filter(symbol=symbol).order_by('-timestamp')[:2])
+    oi_latest = OpenInterest.objects.filter(
+        symbol=symbol,
+    ).order_by('-timestamp').first()
+    oi_previous = None
+    oi_baseline = None
+    if oi_latest is not None:
+        previous_samples = OpenInterest.objects.filter(
+            symbol=symbol,
+            timestamp__lt=oi_latest.timestamp,
+        )
+        oi_previous = previous_samples.order_by('-timestamp').first()
+        # More than one scheduler may persist a sample inside the same minute.
+        # Compare against the newest sample that represents a real 4-15 minute
+        # window instead of letting a harmless duplicate invalidate the feed.
+        oi_baseline = previous_samples.filter(
+            timestamp__gte=oi_latest.timestamp - timedelta(minutes=15),
+            timestamp__lte=oi_latest.timestamp - timedelta(minutes=4),
+        ).order_by('-timestamp').first()
     funding = FundingRate.objects.filter(symbol=symbol).order_by('-timestamp').first()
 
     def cvd_change(model):
@@ -180,15 +203,16 @@ def _flow_snapshot(symbol: str, now) -> dict:
     oi_ts = None
     oi_previous_ts = None
     oi_gap_seconds = None
-    if oi:
-        oi_ts = _iso(oi[0].timestamp)
-        if len(oi) >= 2:
-            oi_previous_ts = _iso(oi[1].timestamp)
-            oi_gap_seconds = (oi[0].timestamp - oi[1].timestamp).total_seconds()
-            if 4 * 60 <= oi_gap_seconds <= 15 * 60:
-                oi_change = _pct_change(
-                    float(oi[0].open_interest), float(oi[1].open_interest),
-                )
+    if oi_latest is not None:
+        oi_ts = _iso(oi_latest.timestamp)
+        comparison = oi_baseline or oi_previous
+        if comparison is not None:
+            oi_previous_ts = _iso(comparison.timestamp)
+            oi_gap_seconds = (oi_latest.timestamp - comparison.timestamp).total_seconds()
+        if oi_baseline is not None:
+            oi_change = _pct_change(
+                float(oi_latest.open_interest), float(oi_baseline.open_interest),
+            )
     return {
         'open_interest_change_pct': oi_change,
         'open_interest_timestamp': oi_ts,
@@ -240,8 +264,13 @@ def _age_seconds(iso_value: str | None, now) -> float | None:
         return None
 
 
+MICROSTRUCTURE_CHECKS = (
+    'order_book_fresh', 'open_interest_fresh', 'funding_fresh', 'whale_cvd_fresh',
+)
+
+
 def _data_quality(timeframes: dict, depth: dict, flow: dict,
-                  global_regime: dict, now) -> dict:
+                  global_regime: dict, now, *, candles_only: bool = False) -> dict:
     age15 = _age_seconds(timeframes['15m'].get('last_timestamp'), now)
     age1h = _age_seconds(timeframes['1h'].get('last_timestamp'), now)
     age4h = _age_seconds(timeframes['4h'].get('last_timestamp'), now)
@@ -281,6 +310,12 @@ def _data_quality(timeframes: dict, depth: dict, flow: dict,
         'order_book_fresh', 'open_interest_fresh', 'whale_cvd_fresh',
         'global_btc_4h_fresh', 'global_eth_4h_fresh',
     )
+    if candles_only:
+        # Historical replay: order book / OI / CVD history does not exist.
+        # These checks gate data availability, not M0 geometry, so replay
+        # scores candle and cross-market freshness only (documented deviation).
+        checks = {k: v for k, v in checks.items() if k not in MICROSTRUCTURE_CHECKS}
+        required = tuple(name for name in required if name not in MICROSTRUCTURE_CHECKS)
     hard_failures = [name for name in required if not checks[name]]
     score = sum(checks.values()) / len(checks)
     return {
@@ -288,6 +323,7 @@ def _data_quality(timeframes: dict, depth: dict, flow: dict,
         'checks': checks,
         'hard_failures': hard_failures,
         'tradable': not hard_failures and score >= 0.75,
+        **({'mode': 'candles_only_replay'} if candles_only else {}),
     }
 
 
@@ -351,11 +387,76 @@ def _global_regime(symbol_summaries: dict) -> dict:
     }
 
 
+def compose_snapshot(*, symbol: str, now, summaries: dict, context_summaries: dict,
+                     breadth_universe: dict | None, depth: dict, flow: dict,
+                     structural: dict, candles_only_quality: bool = False) -> dict:
+    """Pure snapshot composition shared by the live builder and historical replay.
+
+    ``summaries`` holds the M0 universe (instrument must already carry 5m and
+    1d); ``context_summaries`` additionally holds breadth-only alts.  No
+    database access happens here, so replay and live cannot drift apart.
+    """
+    from .global_context import build_global_context
+    from .strategies import strategy_registry
+    from .trend_state import build_trend_state
+
+    instrument = summaries[symbol]
+    trend_state = build_trend_state(instrument)
+    global_regime = _global_regime(summaries)
+    global_context = build_global_context(
+        context_summaries, symbol, breadth_universe=breadth_universe,
+        as_of=now,
+    )
+    quality = _data_quality(
+        instrument, depth, flow, global_regime, now,
+        candles_only=candles_only_quality,
+    )
+    zones = _zones(instrument['15m'])
+    if structural.get('fvg_zone'):
+        zone = structural['fvg_zone']
+        if isinstance(zone, (list, tuple)) and len(zone) >= 2:
+            zones.append({
+                'kind': 'FVG', 'low': float(min(zone)), 'high': float(max(zone)),
+                'source': 'latest_l1_candidate',
+            })
+    snapshot = {
+        'version': SNAPSHOT_VERSION,
+        'as_of': _iso(now),
+        'symbol': symbol,
+        'global_regime': global_regime,
+        'global_context': global_context,
+        'trend_state': trend_state,
+        'instrument': {
+            key: {k: v for k, v in value.items() if k != '_recent_rows'}
+            for key, value in instrument.items()
+        },
+        'zones': zones,
+        'structural_context': structural,
+        'order_book': depth,
+        'flow': flow,
+        'attention_interest': _attention_score(instrument['15m'], depth, flow),
+        'data_quality': quality,
+        # Short map remains the adjudicator authority contract.  The catalog
+        # gives UI/replay the versioned plugin metadata without hardcoding IDs.
+        'strategy_registry': strategy_registry.status_map(),
+        'strategy_catalog': strategy_registry.catalog(),
+        # The shadow resolver only simulates a fixed initial stop. P1/P2
+        # stay out of the registry until the resolver implements them,
+        # otherwise outcomes would be attributed to a policy never applied.
+        'allowed_management_policies': ['P0_INITIAL_STOP'],
+        'execution_authorized': False,
+    }
+    snapshot['snapshot_hash'] = sha256(json.dumps(
+        snapshot, sort_keys=True, default=str).encode()).hexdigest()[:24]
+    return snapshot
+
+
 class MarketSnapshotBuilder:
     """Builds a factual, serializable snapshot; it makes no trade decision."""
 
     def build(self, symbol: str, now=None) -> dict:
         from ingester.models import WatchedPair
+        from .trend_state import derive_closed_daily_rows
 
         now = now or timezone.now()
         symbol = symbol.upper()
@@ -369,48 +470,30 @@ class MarketSnapshotBuilder:
             for item in universe
         }
         instrument = summaries[symbol]
+        instrument['5m'] = _timeframe_summary(symbol, '5m', 240)
+        instrument['1d'] = _summarize_rows(
+            '1d', derive_closed_daily_rows(instrument['4h'].get('_recent_rows') or []),
+            source='derived_from_six_closed_4h_bars_utc',
+        )
         depth = _depth_snapshot(symbol, now)
         flow = _flow_snapshot(symbol, now)
-        global_regime = _global_regime(summaries)
-        quality = _data_quality(instrument, depth, flow, global_regime, now)
-        zones = _zones(instrument['15m'])
-        structural = _latest_structural_context(symbol, now)
-        if structural.get('fvg_zone'):
-            zone = structural['fvg_zone']
-            if isinstance(zone, (list, tuple)) and len(zone) >= 2:
-                zones.append({
-                    'kind': 'FVG', 'low': float(min(zone)), 'high': float(max(zone)),
-                    'source': 'latest_l1_candidate',
-                })
-        snapshot = {
-            'version': SNAPSHOT_VERSION,
-            'as_of': _iso(now),
-            'symbol': symbol,
-            'global_regime': global_regime,
-            'instrument': {
-                key: {k: v for k, v in value.items() if k != '_recent_rows'}
-                for key, value in instrument.items()
+        # Breadth alts feed global_context (M3) only.  They are deliberately
+        # kept out of ``summaries`` so the frozen M0 global_regime is unchanged.
+        context_summaries = dict(summaries)
+        for item in getattr(settings, 'BREADTH_PAIRS', []):
+            item = item.upper()
+            if item not in context_summaries:
+                context_summaries[item] = {'1h': _timeframe_summary(item, '1h', 220)}
+        return compose_snapshot(
+            symbol=symbol, now=now, summaries=summaries,
+            context_summaries=context_summaries,
+            breadth_universe={
+                'version': getattr(settings, 'BREADTH_UNIVERSE_VERSION', None),
+                'symbols': list(getattr(settings, 'BREADTH_PAIRS', [])),
             },
-            'zones': zones,
-            'structural_context': structural,
-            'order_book': depth,
-            'flow': flow,
-            'attention_interest': _attention_score(instrument['15m'], depth, flow),
-            'data_quality': quality,
-            'strategy_registry': {
-                'SAI1_FAILED_AUCTION': 'SHADOW_ONLY',
-                'SAI1_IFVG_FLIP': 'SHADOW_ONLY',
-                'SAI1_TREND_RETEST': 'SHADOW_ONLY',
-            },
-            # The shadow resolver only simulates a fixed initial stop. P1/P2
-            # stay out of the registry until the resolver implements them,
-            # otherwise outcomes would be attributed to a policy never applied.
-            'allowed_management_policies': ['P0_INITIAL_STOP'],
-            'execution_authorized': False,
-        }
-        snapshot['snapshot_hash'] = sha256(json.dumps(
-            snapshot, sort_keys=True, default=str).encode()).hexdigest()[:24]
-        return snapshot
+            depth=depth, flow=flow,
+            structural=_latest_structural_context(symbol, now),
+        )
 
 
 def deterministic_preflight(snapshot: dict) -> dict:

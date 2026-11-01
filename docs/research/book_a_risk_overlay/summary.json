@@ -1,0 +1,424 @@
+{
+  "baseline": {
+    "development": {
+      "name": "BOOK_A_S73_BTC",
+      "initial_capital": 250.0,
+      "final_equity": 430.9116084843395,
+      "net_pnl": 180.91160848433952,
+      "fees_paid": 2.810959095357024,
+      "rebalances": 22,
+      "calendar_days": 153,
+      "mean_calendar_day_pnl": 1.1824288136231342,
+      "max_drawdown_fraction": -0.12506245737107327,
+      "config": {
+        "name": "BOOK_A_S73_BTC",
+        "mom_lookback_days": 20,
+        "sma_gate_days": 200,
+        "top_n": 6,
+        "min_position_usd": 15.0,
+        "vol_target_annual": 0.3,
+        "rebalance_weekday": 0,
+        "taker_fee_bps": 7.0,
+        "include_btc_in_universe": true
+      },
+      "risk_overlay": null,
+      "gap_to_5_usd_day": 3.817571186376866
+    },
+    "validation": {
+      "name": "BOOK_A_S73_BTC",
+      "initial_capital": 250.0,
+      "final_equity": 230.90126215669588,
+      "net_pnl": -19.09873784330412,
+      "fees_paid": 0.5571907052454088,
+      "rebalances": 13,
+      "calendar_days": 92,
+      "mean_calendar_day_pnl": -0.2075949765576535,
+      "max_drawdown_fraction": -0.16987697024338017,
+      "config": {
+        "name": "BOOK_A_S73_BTC",
+        "mom_lookback_days": 20,
+        "sma_gate_days": 200,
+        "top_n": 6,
+        "min_position_usd": 15.0,
+        "vol_target_annual": 0.3,
+        "rebalance_weekday": 0,
+        "taker_fee_bps": 7.0,
+        "include_btc_in_universe": true
+      },
+      "risk_overlay": null,
+      "gap_to_5_usd_day": 5.207594976557654
+    }
+  },
+  "overlays": {
+    "RM_breadth_only": {
+      "development": {
+        "name": "BOOK_A_S73_BTC+RM_breadth_only",
+        "initial_capital": 250.0,
+        "final_equity": 449.7541703882854,
+        "net_pnl": 199.7541703882854,
+        "fees_paid": 3.0091600338250277,
+        "rebalances": 22,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": 1.3055828129953293,
+        "max_drawdown_fraction": -0.10637760939141118,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_breadth_only",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": true,
+          "use_vol_penalty": false,
+          "use_drawdown_throttle": false
+        },
+        "gap_to_5_usd_day": 3.694417187004671
+      },
+      "validation": {
+        "name": "BOOK_A_S73_BTC+RM_breadth_only",
+        "initial_capital": 250.0,
+        "final_equity": 246.14320869625,
+        "net_pnl": -3.8567913037499864,
+        "fees_paid": 0.34742094074589713,
+        "rebalances": 13,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.041921644605978116,
+        "max_drawdown_fraction": -0.11098056191115958,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_breadth_only",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": true,
+          "use_vol_penalty": false,
+          "use_drawdown_throttle": false
+        },
+        "gap_to_5_usd_day": 5.041921644605978
+      }
+    },
+    "RM_vol_only": {
+      "development": {
+        "name": "BOOK_A_S73_BTC+RM_vol_only",
+        "initial_capital": 250.0,
+        "final_equity": 449.7541703882854,
+        "net_pnl": 199.7541703882854,
+        "fees_paid": 3.0091600338250277,
+        "rebalances": 22,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": 1.3055828129953293,
+        "max_drawdown_fraction": -0.10637760939141118,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_vol_only",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": false,
+          "use_vol_penalty": true,
+          "use_drawdown_throttle": false
+        },
+        "gap_to_5_usd_day": 3.694417187004671
+      },
+      "validation": {
+        "name": "BOOK_A_S73_BTC+RM_vol_only",
+        "initial_capital": 250.0,
+        "final_equity": 230.90126215669588,
+        "net_pnl": -19.09873784330412,
+        "fees_paid": 0.5571907052454088,
+        "rebalances": 13,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.2075949765576535,
+        "max_drawdown_fraction": -0.16987697024338017,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_vol_only",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": false,
+          "use_vol_penalty": true,
+          "use_drawdown_throttle": false
+        },
+        "gap_to_5_usd_day": 5.207594976557654
+      }
+    },
+    "RM_drawdown_only": {
+      "development": {
+        "name": "BOOK_A_S73_BTC+RM_drawdown_only",
+        "initial_capital": 250.0,
+        "final_equity": 449.7541703882854,
+        "net_pnl": 199.7541703882854,
+        "fees_paid": 3.0091600338250277,
+        "rebalances": 22,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": 1.3055828129953293,
+        "max_drawdown_fraction": -0.10637760939141118,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_drawdown_only",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": false,
+          "use_vol_penalty": false,
+          "use_drawdown_throttle": true
+        },
+        "gap_to_5_usd_day": 3.694417187004671
+      },
+      "validation": {
+        "name": "BOOK_A_S73_BTC+RM_drawdown_only",
+        "initial_capital": 250.0,
+        "final_equity": 230.90126215669588,
+        "net_pnl": -19.09873784330412,
+        "fees_paid": 0.5571907052454088,
+        "rebalances": 13,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.2075949765576535,
+        "max_drawdown_fraction": -0.16987697024338017,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_drawdown_only",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": false,
+          "use_vol_penalty": false,
+          "use_drawdown_throttle": true
+        },
+        "gap_to_5_usd_day": 5.207594976557654
+      }
+    },
+    "RM_composite_v1": {
+      "development": {
+        "name": "BOOK_A_S73_BTC+RM_composite_v1",
+        "initial_capital": 250.0,
+        "final_equity": 449.7541703882854,
+        "net_pnl": 199.7541703882854,
+        "fees_paid": 3.0091600338250277,
+        "rebalances": 22,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": 1.3055828129953293,
+        "max_drawdown_fraction": -0.10637760939141118,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_composite_v1",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": true,
+          "use_vol_penalty": true,
+          "use_drawdown_throttle": true
+        },
+        "gap_to_5_usd_day": 3.694417187004671
+      },
+      "validation": {
+        "name": "BOOK_A_S73_BTC+RM_composite_v1",
+        "initial_capital": 250.0,
+        "final_equity": 246.14320869625,
+        "net_pnl": -3.8567913037499864,
+        "fees_paid": 0.34742094074589713,
+        "rebalances": 13,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.041921644605978116,
+        "max_drawdown_fraction": -0.11098056191115958,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_composite_v1",
+          "min_breadth_sma50": 0.35,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.1,
+          "drawdown_flat_scale": 0.18,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.85,
+          "use_breadth": true,
+          "use_vol_penalty": true,
+          "use_drawdown_throttle": true
+        },
+        "gap_to_5_usd_day": 5.041921644605978
+      }
+    },
+    "RM_composite_tight": {
+      "development": {
+        "name": "BOOK_A_S73_BTC+RM_composite_tight",
+        "initial_capital": 250.0,
+        "final_equity": 430.1115334982571,
+        "net_pnl": 180.11153349825707,
+        "fees_paid": 2.7693682560021546,
+        "rebalances": 22,
+        "calendar_days": 153,
+        "mean_calendar_day_pnl": 1.1771995653480856,
+        "max_drawdown_fraction": -0.10635806296067708,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_composite_tight",
+          "min_breadth_sma50": 0.45,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.08,
+          "drawdown_flat_scale": 0.14,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.65,
+          "use_breadth": true,
+          "use_vol_penalty": true,
+          "use_drawdown_throttle": true
+        },
+        "gap_to_5_usd_day": 3.8228004346519144
+      },
+      "validation": {
+        "name": "BOOK_A_S73_BTC+RM_composite_tight",
+        "initial_capital": 250.0,
+        "final_equity": 246.14320869625,
+        "net_pnl": -3.8567913037499864,
+        "fees_paid": 0.34742094074589713,
+        "rebalances": 13,
+        "calendar_days": 92,
+        "mean_calendar_day_pnl": -0.041921644605978116,
+        "max_drawdown_fraction": -0.11098056191115958,
+        "config": {
+          "name": "BOOK_A_S73_BTC",
+          "mom_lookback_days": 20,
+          "sma_gate_days": 200,
+          "top_n": 6,
+          "min_position_usd": 15.0,
+          "vol_target_annual": 0.3,
+          "rebalance_weekday": 0,
+          "taker_fee_bps": 7.0,
+          "include_btc_in_universe": true
+        },
+        "risk_overlay": {
+          "name": "RM_composite_tight",
+          "min_breadth_sma50": 0.45,
+          "vol_pct_soft_cap": 0.75,
+          "vol_pct_hard_cap": 0.92,
+          "drawdown_half_scale": 0.08,
+          "drawdown_flat_scale": 0.14,
+          "drawdown_half_multiplier": 0.5,
+          "max_gross_exposure": 0.65,
+          "use_breadth": true,
+          "use_vol_penalty": true,
+          "use_drawdown_throttle": true
+        },
+        "gap_to_5_usd_day": 5.041921644605978
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "protocol_version": "S20-OB-OI-PATIENT-RUNNER-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_diagnostic": "S18 (best entry so far, PF 0.884 development) averaged +0.78R on winners with breakeven/trailing activated at +1.0R and a 1.5x ATR trail. S19 tested activating EARLIER (+0.5R) and made things worse (PF 0.583): more trades were saved from full losses, but winners were cut far shorter (+0.42R). This protocol tests the OPPOSITE direction — a deliberately low-win-rate, asymmetric trend-runner philosophy: accept that most trades still lose close to -1R, but let the minority that work run much further before locking in profit, instead of capping them near +0.8R. Judged on expectancy/PF, not win rate.",
+  "hypotheses": [
+    {
+      "id": "H1_PATIENT",
+      "entry": "identical to S18 H1 (order_block_oi_confirmation_scalp, route='oi'): regime (4h EMA200 trend+slope, 1h ADX>=20) + order-block structure (displacement>=1.5xATR, volume>=1.2x avg, first-touch trigger) + OBV flow confirmation + OI confirmation (non-negative/non-positive change over 8 bars in the trade direction)",
+      "exit": "breakeven+chandelier trailing activated at +1.5R (was +1.0R in S18); trail at best-price minus 2.5x ATR (was 1.5x); 8.0R hard cap (was 5.0R); 240 minute time stop unchanged",
+      "risk": "identical stop placement to S18",
+      "one_trade_per_zone": true
+    },
+    {
+      "id": "H2_VERY_PATIENT",
+      "entry": "identical to H1",
+      "exit": "breakeven+chandelier trailing activated at +2.0R, trail at best-price minus 3.0x ATR, 10.0R hard cap, 240 minute time stop unchanged",
+      "risk": "identical to H1",
+      "one_trade_per_zone": true
+    }
+  ],
+  "single_variable_isolated": "Only partial_r (activation threshold), trail_atr (trail width) and target_r (cap) change versus S18 H1. Entry signal generation, regime, structure, flow, OI confirmation, stop placement and position sizing are byte-for-byte identical to S18.",
+  "explicit_acceptance_criterion_note": "This protocol does NOT expect or require a high win rate. A materially lower win rate than S18 (43-56% seen in S16-S19) is an accepted, expected trade-off IF expectancy/PF improves. The promotion gates below are unchanged from every prior protocol in this project (PF-based), so no special leniency is introduced for this hypothesis — it is still judged by the same honest bar.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Reuses the exact same cached klines/funding/metrics archives already downloaded for S18/S19 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. No parameter grid beyond these two named points. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

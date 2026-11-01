@@ -18,7 +18,7 @@ from .auction_adjudicator import (
     zero_analysis_cost,
 )
 from .market_intelligence import MarketSnapshotBuilder, deterministic_preflight
-from .models import AuctionAnalysis
+from .models import AuctionAnalysis, AuctionCandidate
 
 
 def analysis_cycle_key(snapshot: dict, use_ai: bool, mode: str | None = None) -> str:
@@ -105,6 +105,86 @@ def mechanical_candidate(snapshot: dict) -> dict | None:
     }
 
 
+def _candidate_episode(candidate: dict) -> AuctionCandidate:
+    """Return the single active episode for candidate geometry."""
+    now = timezone.now()
+    fingerprint = candidate['key']
+    for _attempt in range(2):
+        with transaction.atomic():
+            active = (AuctionCandidate.objects.select_for_update()
+                      .filter(active_fingerprint=fingerprint).first())
+            if active is not None and active.adjudication_expires_at > now:
+                return active
+            if active is not None:
+                active.active_fingerprint = None
+                active.save(update_fields=['active_fingerprint'])
+        try:
+            with transaction.atomic():
+                return AuctionCandidate.objects.create(
+                    fingerprint=fingerprint,
+                    active_fingerprint=fingerprint,
+                    symbol=fingerprint.split(':', 1)[0],
+                    direction=candidate['direction'],
+                    strategy_id=candidate['strategy_id'],
+                    entry_zone=candidate['entry_zone'],
+                    first_seen_at=now,
+                    adjudication_expires_at=now + CANDIDATE_REUSE,
+                )
+        except IntegrityError:
+            # Another worker won the unique active-fingerprint race.
+            continue
+    return AuctionCandidate.objects.get(active_fingerprint=fingerprint)
+
+
+def _attach_baseline(candidate: AuctionCandidate, analysis: AuctionAnalysis) -> bool:
+    """Attach exactly one outcome plan to a candidate episode."""
+    with transaction.atomic():
+        locked = AuctionCandidate.objects.select_for_update().get(pk=candidate.pk)
+        if locked.baseline_analysis_id is not None:
+            return False
+        locked.baseline_analysis = analysis
+        locked.save(update_fields=['baseline_analysis'])
+        from .shadow_auction import create_shadow_plan
+        create_shadow_plan(analysis)
+        return True
+
+
+def _attach_ai(candidate: AuctionCandidate, analysis: AuctionAnalysis) -> bool:
+    """Attach the first valid, actually model-produced verdict to the episode."""
+    runtime = analysis.runtime or {}
+    if analysis.provider not in {'openai', 'anthropic'} or runtime.get('error_type'):
+        return False
+    with transaction.atomic():
+        locked = AuctionCandidate.objects.select_for_update().get(pk=candidate.pk)
+        if locked.ai_analysis_id is not None:
+            return False
+        locked.ai_analysis = analysis
+        locked.save(update_fields=['ai_analysis'])
+        return True
+
+
+def _attach_trend_filter(candidate: AuctionCandidate, analysis: AuctionAnalysis) -> bool:
+    """Attach exactly one prospective M1 verdict to a new candidate episode."""
+    with transaction.atomic():
+        locked = AuctionCandidate.objects.select_for_update().get(pk=candidate.pk)
+        if locked.trend_filter_analysis_id is not None:
+            return False
+        locked.trend_filter_analysis = analysis
+        locked.save(update_fields=['trend_filter_analysis'])
+        return True
+
+
+def _attach_global_context(candidate: AuctionCandidate, analysis: AuctionAnalysis) -> bool:
+    """Attach exactly one prospective M3 verdict to a new candidate episode."""
+    with transaction.atomic():
+        locked = AuctionCandidate.objects.select_for_update().get(pk=candidate.pk)
+        if locked.global_context_analysis_id is not None:
+            return False
+        locked.global_context_analysis = analysis
+        locked.save(update_fields=['global_context_analysis'])
+        return True
+
+
 def _recent_adjudication(candidate_key: str):
     """Latest real (billed or valid) AI verdict on this candidate within 4h.
 
@@ -126,7 +206,8 @@ def _recent_adjudication(candidate_key: str):
     return None
 
 
-def decide_snapshot(snapshot: dict, use_ai: bool) -> tuple[AuctionDecision, dict]:
+def decide_snapshot(snapshot: dict, use_ai: bool,
+                    episode: AuctionCandidate | None = None) -> tuple[AuctionDecision, dict]:
     """Adjudicate one already-built immutable snapshot and always fail closed."""
     if use_ai:
         preflight = deterministic_preflight(snapshot)
@@ -139,7 +220,9 @@ def decide_snapshot(snapshot: dict, use_ai: bool) -> tuple[AuctionDecision, dict
                 'reason': 'no_mechanical_candidate',
                 'analysis_cost': zero_analysis_cost('no_mechanical_candidate'),
             }
-        previous = _recent_adjudication(candidate['key'])
+        previous = episode.ai_analysis if episode and episode.ai_analysis_id else None
+        if previous is None and episode is None:
+            previous = _recent_adjudication(candidate['key'])
         if previous is not None:
             return AuctionDecision(**previous.decision), {
                 'provider': None, 'model': None,
@@ -188,7 +271,7 @@ def decide_snapshot(snapshot: dict, use_ai: bool) -> tuple[AuctionDecision, dict
 
 def persist_analysis(snapshot: dict, decision: AuctionDecision, runtime: dict,
                      cycle_key: str | None = None) -> tuple[AuctionAnalysis, bool]:
-    """Persist an audit row and materialize replayable geometry for ``ARM``."""
+    """Persist one immutable audit row; candidate ownership creates plans."""
     if cycle_key:
         existing = AuctionAnalysis.objects.filter(cycle_key=cycle_key).first()
         if existing is not None:
@@ -212,9 +295,6 @@ def persist_analysis(snapshot: dict, decision: AuctionDecision, runtime: dict,
                 shadow_only=True,
                 cycle_key=cycle_key,
             )
-            if decision.action == 'ARM':
-                from .shadow_auction import create_shadow_plan
-                create_shadow_plan(analysis)
     except IntegrityError:
         if cycle_key:
             return AuctionAnalysis.objects.get(cycle_key=cycle_key), False
@@ -224,23 +304,108 @@ def persist_analysis(snapshot: dict, decision: AuctionDecision, runtime: dict,
 
 
 def record_mechanical_baseline(snapshot: dict) -> dict:
-    """Persist the no-AI control decision for this bar (once per bar)."""
+    """Persist the control decision and one plan per candidate episode."""
     from .mechanical_baseline import BASELINE_VERSION, mechanical_decision
 
     cycle_key = analysis_cycle_key(snapshot, False, mode=BASELINE_VERSION)
     decision = mechanical_decision(snapshot)
-    analysis, created = persist_analysis(snapshot, decision, {
+    candidate = mechanical_candidate(snapshot) if decision.action == 'ARM' else None
+    episode = _candidate_episode(candidate) if candidate else None
+    runtime = {
         'provider': 'mechanical',
         'model': BASELINE_VERSION,
         'prompt_version': AUCTION_PROMPT_VERSION,
         'reason': 'mechanical_baseline',
         'analysis_cost': zero_analysis_cost('mechanical_baseline'),
-    }, cycle_key)
+    }
+    if candidate and episode:
+        runtime.update({'candidate_key': candidate['key'], 'candidate_id': episode.pk})
+    analysis, created = persist_analysis(snapshot, decision, runtime, cycle_key)
+    plan_created = _attach_baseline(episode, analysis) if episode else False
+    trend_filter_result = (
+        record_trend_filter(snapshot, decision, episode)
+        if episode is not None and plan_created else None
+    )
+    global_context_result = (
+        record_global_context_filter(snapshot, decision, episode)
+        if episode is not None and plan_created else None
+    )
     return {
         'analysis_id': analysis.pk,
         'created': created,
         'action': analysis.action,
         'direction': analysis.direction,
+        'candidate_id': episode.pk if episode else None,
+        'plan_created': plan_created,
+        'trend_filter': trend_filter_result,
+        'global_context_filter': global_context_result,
+    }
+
+
+def record_trend_filter(snapshot: dict, baseline_decision: AuctionDecision,
+                        episode: AuctionCandidate) -> dict:
+    """Persist prospective M1 once, on the birth snapshot of an M0 episode."""
+    from .mechanical_baseline import TREND_FILTER_VERSION, trend_filtered_decision
+
+    decision = trend_filtered_decision(snapshot, baseline_decision)
+    cycle_key = analysis_cycle_key(snapshot, False, mode=TREND_FILTER_VERSION)
+    runtime = {
+        'provider': 'mechanical',
+        'model': TREND_FILTER_VERSION,
+        'prompt_version': AUCTION_PROMPT_VERSION,
+        'reason': 'mechanical_trend_filter',
+        'candidate_key': episode.fingerprint,
+        'candidate_id': episode.pk,
+        'analysis_cost': zero_analysis_cost('mechanical_trend_filter'),
+    }
+    analysis, created = persist_analysis(snapshot, decision, runtime, cycle_key)
+    attached = _attach_trend_filter(episode, analysis)
+    return {
+        'analysis_id': analysis.pk,
+        'created': created,
+        'attached': attached,
+        'action': analysis.action,
+        'direction': analysis.direction,
+        'version': TREND_FILTER_VERSION,
+    }
+
+
+def record_global_context_filter(snapshot: dict, baseline_decision: AuctionDecision,
+                                 episode: AuctionCandidate) -> dict:
+    """Persist prospective M3 once, on the birth snapshot of an M0 episode."""
+    from .mechanical_baseline import (
+        GLOBAL_CONTEXT_FILTER_VERSION,
+        global_context_filter_assessment,
+        global_context_filtered_decision,
+    )
+
+    assessment = global_context_filter_assessment(
+        snapshot, baseline_decision.direction,
+    )
+    decision = global_context_filtered_decision(snapshot, baseline_decision)
+    cycle_key = analysis_cycle_key(
+        snapshot, False, mode=GLOBAL_CONTEXT_FILTER_VERSION,
+    )
+    runtime = {
+        'provider': 'mechanical',
+        'model': GLOBAL_CONTEXT_FILTER_VERSION,
+        'prompt_version': AUCTION_PROMPT_VERSION,
+        'reason': 'mechanical_global_context_filter',
+        'policy_reason_code': assessment['reason_code'],
+        'global_context_assessment': assessment,
+        'candidate_key': episode.fingerprint,
+        'candidate_id': episode.pk,
+        'analysis_cost': zero_analysis_cost('mechanical_global_context_filter'),
+    }
+    analysis, created = persist_analysis(snapshot, decision, runtime, cycle_key)
+    attached = _attach_global_context(episode, analysis)
+    return {
+        'analysis_id': analysis.pk,
+        'created': created,
+        'attached': attached,
+        'action': analysis.action,
+        'direction': analysis.direction,
+        'version': GLOBAL_CONTEXT_FILTER_VERSION,
     }
 
 
@@ -270,11 +435,22 @@ def analyze_symbol(symbol: str, *, use_ai: bool, persist: bool = True,
                 'analysis_cost': zero_analysis_cost('deduplicated_no_api_call'),
             }
 
-    decision, runtime = decide_snapshot(snapshot, use_ai)
+    episode = None
+    if baseline_result and baseline_result.get('candidate_id'):
+        episode = AuctionCandidate.objects.select_related('ai_analysis').get(
+            pk=baseline_result['candidate_id'],
+        )
+    decision, runtime = decide_snapshot(snapshot, use_ai, episode=episode)
     analysis = None
     created = False
     if persist:
         analysis, created = persist_analysis(snapshot, decision, runtime, cycle_key)
+        if use_ai and runtime.get('candidate_key'):
+            if episode is None:
+                candidate = mechanical_candidate(snapshot)
+                episode = _candidate_episode(candidate) if candidate else None
+            if episode is not None:
+                _attach_ai(episode, analysis)
     return {
         'shadow_only': True,
         'execution_authorized': False,

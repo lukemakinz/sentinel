@@ -1,0 +1,53 @@
+{
+  "id": "S116_REGIME_ATLAS",
+  "version": "1.1.0",
+  "frozen_at": "2026-11-01",
+  "frozen_before_results": true,
+  "question": "Which strategies earn in which market regimes, and does a regime router that enables each strategy only where it earned in development beat always-on allocation on an untouched holdout?",
+  "regime_classifier": {
+    "input": "BTCUSDT daily closes, only bars closed before the decision day (causal)",
+    "trend": {
+      "UP": "close > SMA100 and SMA100 > SMA100 twenty days earlier",
+      "DOWN": "close < SMA100 and SMA100 < SMA100 twenty days earlier",
+      "SIDEWAYS": "otherwise"
+    },
+    "volatility": {
+      "HIGH": "20-day realized vol of daily log returns > median of its trailing 365 daily values",
+      "LOW": "otherwise"
+    },
+    "cells": "TREND x VOL = 6 cells; nothing else, no tuning"
+  },
+  "strategy_streams_stress_costs": {
+    "BOOK_A": "frozen BOOK_A_ALT_RM + BOOK_A_RISK_DEFAULT, $250, daily PnL (existing simulator)",
+    "BOOK_B": "frozen BENCH_AB_R2 Book B quiet router, $250, daily PnL (existing simulator)",
+    "BTC_SMA200_LONG": "1x long BTC from the next day when the prior daily close > SMA200, else flat; 12 bps per switch; funding paid by longs",
+    "S115_A": "new-listing short (protocol s115), $25 notional per trade, max 5 concurrent, attributed to the entry-day regime"
+  },
+  "split": {
+    "development": [
+      "2023-01-01",
+      "2025-01-01"
+    ],
+    "diagnostic": [
+      "2025-01-01",
+      "2026-09-01"
+    ],
+    "note": "Book A/B were designed by earlier project work on 2024-08..2026 data, so the 2025-2026 window is contaminated diagnostic, not a clean holdout. True out-of-sample = frozen paper-forward from 2026-11-01."
+  },
+  "router_rule": "enable a stream in a cell iff in development: >= 100 days (daily streams) or >= 50 trades (S115_A); mean > 0; weekly-aggregated t >= 2.9 (one-sided Bonferroni 0.05/24 cells); and mean > 0 separately in 2023 and in 2024",
+  "risk_layer": {
+    "per_stream_scaling": "daily streams scaled to 10% annualized vol of the sleeve using own trailing 60-day realized vol, capped at 1.0x",
+    "S115_A": "$25 per trade, at most 5 concurrent positions ($125 gross = sleeve capital); new listings skipped while full",
+    "portfolio_brake": "if portfolio equity is >10% below its peak on $500, all exposures are halved until a new peak"
+  },
+  "outputs": "atlas table (stream x cell, development and holdout), router cell map, holdout comparison, $/day at $250-per-book scale",
+  "no_parameter_search": "regime definitions, thresholds and router rule are fixed here; changes require a new protocol id",
+  "revision_note": "v1.1 frozen before any S116 result, after external review: one S115 variant only (S115_A, chosen before seeing S115 results), explicit $500 capital in 4 equal sleeves, S115 concurrency cap, Bonferroni-strength router threshold, 2025-2026 renamed diagnostic.",
+  "capital": "$500 total in 4 equal sleeves of $125 (BOOK_A, BOOK_B, BTC_SMA200_LONG, S115_A); each sleeve max 1x gross of its capital; a disabled sleeve holds cash",
+  "diagnostic_gates_all_required": [
+    "router diagnostic total PnL > 0",
+    "router diagnostic PnL > always-on equal-allocation of the same streams (same risk layer)",
+    "router diagnostic month-block bootstrap 95% lower bound of mean daily PnL > 0"
+  ],
+  "decision_meaning": "PASS only authorizes a frozen paper-forward challenger; it is not proof of edge"
+}

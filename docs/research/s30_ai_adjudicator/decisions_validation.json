@@ -1,0 +1,2110 @@
+[
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-01 10:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While ADX is very strong and there is positive OBV, the overall downward regime and mixed recent candlestick performance suggest a lack of clear conviction for a trade.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 49,
+      "cost_usd": 0.0001518
+    },
+    "context": {
+      "adx": 69.8,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 122747.5437,
+      "cvd_diff_for_regime_direction": 33623.1557,
+      "oi_change_for_regime_direction": 2674.101,
+      "rsi_for_regime_direction": 62.82,
+      "displacement_atr": 0.308,
+      "atr_pct": 0.7566,
+      "recent_candles_pct": [
+        -0.541,
+        0.183,
+        -0.169,
+        0.556,
+        0.229,
+        0.219,
+        -0.305,
+        -1.835
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-03 14:45:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the ADX indicates a strong downtrend and volume indicators are aligned with this direction, the recent candle percentage moves show mixed signals and a lack of structural displacement. This could imply indecision in the market, suggesting a PASS is safer.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 64,
+      "cost_usd": 0.00016064999999999997
+    },
+    "context": {
+      "adx": 29.46,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 153780.353,
+      "cvd_diff_for_regime_direction": 17526.7858,
+      "oi_change_for_regime_direction": 4816.195,
+      "rsi_for_regime_direction": 60.08,
+      "displacement_atr": 0.306,
+      "atr_pct": 0.6929,
+      "recent_candles_pct": [
+        0.371,
+        0.121,
+        0.096,
+        0.054,
+        0.209,
+        -0.011,
+        -0.138,
+        -1.13
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-04 00:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "Although the ADX indicates a strong trend and the volume indicators align with the down regime, the low displacement ATR and mixed recent candle performance suggest insufficient conviction for a short trade.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 51,
+      "cost_usd": 0.00015285
+    },
+    "context": {
+      "adx": 32.2,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 68889.0601,
+      "cvd_diff_for_regime_direction": 23244.876,
+      "oi_change_for_regime_direction": 60429.323,
+      "rsi_for_regime_direction": 55.89,
+      "displacement_atr": 0.083,
+      "atr_pct": 1.2549,
+      "recent_candles_pct": [
+        0.241,
+        -0.541,
+        -0.839,
+        0.035,
+        -0.103,
+        0.184,
+        -0.232,
+        -0.334
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-04 15:00:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "While the ADX indicates a trending condition and OBV and OI are aligned with the down regime, the negative CVD and high RSI suggest overextension. The mixed recent candle performance also indicates potential instability, making this a less favorable setup.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 65,
+      "cost_usd": 0.00016125
+    },
+    "context": {
+      "adx": 21.7,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 649715.3925,
+      "cvd_diff_for_regime_direction": -231.3899,
+      "oi_change_for_regime_direction": 39777.491,
+      "rsi_for_regime_direction": 77.18,
+      "displacement_atr": 0.266,
+      "atr_pct": 0.9292,
+      "recent_candles_pct": [
+        -0.12,
+        -0.325,
+        -0.955,
+        -0.655,
+        0.244,
+        -0.056,
+        -0.165,
+        -1.238
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-08 15:30:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the metrics like ADX and OBV indicate a strong trend and positive volume flows, the overall regime is 'down' and the recent price action shows mixed signals with some flat and negative movements, making it an uncertain picture.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 62,
+      "cost_usd": 0.0001596
+    },
+    "context": {
+      "adx": 29.61,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 86158.3241,
+      "cvd_diff_for_regime_direction": 15422.8446,
+      "oi_change_for_regime_direction": 32823.795,
+      "rsi_for_regime_direction": 57.01,
+      "displacement_atr": 0.141,
+      "atr_pct": 0.6429,
+      "recent_candles_pct": [
+        -0.613,
+        0.313,
+        -0.284,
+        0.004,
+        0.09,
+        0.302,
+        0.05,
+        -1.281
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-11 15:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "The high ADX indicates a strong trend, but mixed signals from cumulative volume delta (CVD) and recent candle percentages suggest uncertainty. The overall picture is not strong enough to warrant a trade.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 55,
+      "cost_usd": 0.00015510000000000003
+    },
+    "context": {
+      "adx": 34.75,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 189408.038,
+      "cvd_diff_for_regime_direction": -15599.3456,
+      "oi_change_for_regime_direction": 43525.531,
+      "rsi_for_regime_direction": 56.37,
+      "displacement_atr": 2.326,
+      "atr_pct": 0.961,
+      "recent_candles_pct": [
+        -0.319,
+        0.125,
+        0.337,
+        0.279,
+        2.215,
+        -0.805,
+        -1.226,
+        -1.022
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-12 00:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "Despite ADX being above 20 and OBV aligning with the down regime, the negative CVD and RSI below 50 indicate mixed internal support. The order-block displacement is weak, and recent price moves show inconsistency, leading to a lack of strong conviction.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 69,
+      "cost_usd": 0.0001638
+    },
+    "context": {
+      "adx": 22.92,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 3052.2196,
+      "cvd_diff_for_regime_direction": -7087.8704,
+      "oi_change_for_regime_direction": 4306.785,
+      "rsi_for_regime_direction": 45.16,
+      "displacement_atr": 0.224,
+      "atr_pct": 0.7028,
+      "recent_candles_pct": [
+        -0.481,
+        -0.195,
+        -0.55,
+        0.381,
+        -0.159,
+        0.609,
+        -0.041,
+        0.398
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-15 03:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the readings indicate a trending downward regime with strong volume support, the high RSI suggests overbought conditions. The low displacement of the ATR further indicates weak momentum in the direction of the trend. A PASS is warranted due to these mixed signals.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 65,
+      "cost_usd": 0.00016125
+    },
+    "context": {
+      "adx": 34.88,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 194183.3634,
+      "cvd_diff_for_regime_direction": 55918.9234,
+      "oi_change_for_regime_direction": 15743.914,
+      "rsi_for_regime_direction": 73.35,
+      "displacement_atr": 0.119,
+      "atr_pct": 0.53,
+      "recent_candles_pct": [
+        0.366,
+        -0.178,
+        -0.148,
+        0.06,
+        0.063,
+        -0.113,
+        -0.094,
+        -0.588
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-02-26 16:45:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the ADX is indicating a strong trend, the regime is down and the RSI is high at 70.28, suggesting potential overbought conditions. The mixed recent candle percentages also indicate volatility without a clear direction, making this a candidate to pass.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 68,
+      "cost_usd": 0.00016304999999999998
+    },
+    "context": {
+      "adx": 40.39,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 170642.6111,
+      "cvd_diff_for_regime_direction": 843.4531,
+      "oi_change_for_regime_direction": 28327.285,
+      "rsi_for_regime_direction": 70.28,
+      "displacement_atr": 0.291,
+      "atr_pct": 0.7419,
+      "recent_candles_pct": [
+        -0.413,
+        -0.416,
+        -0.982,
+        0.314,
+        0.214,
+        -0.336,
+        0.344,
+        -1.064
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-01 17:00:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "SHORT",
+    "confidence": 0.8,
+    "reasoning": "The readings indicate a strong down regime with ADX above 20, significant positive volume flow (OBV and CVD) supporting the downtrend direction, and RSI suggesting there's still room before hitting oversold conditions.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 59,
+      "cost_usd": 0.00015764999999999998
+    },
+    "context": {
+      "adx": 26.31,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 123556.2973,
+      "cvd_diff_for_regime_direction": 20960.674,
+      "oi_change_for_regime_direction": 8805.54,
+      "rsi_for_regime_direction": 60.46,
+      "displacement_atr": 0.35,
+      "atr_pct": 0.7882,
+      "recent_candles_pct": [
+        0.436,
+        0.059,
+        0.181,
+        -1.011,
+        0.273,
+        0.347,
+        -0.282,
+        -1.284
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-03 06:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While OBV and OI are supporting the down regime, the ADX is just marginally above the 20 threshold and the RSI is high, suggesting overbought conditions which can lead to a weakening trend. Additionally, recent price action shows mixed signals.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 68,
+      "cost_usd": 0.00016319999999999998
+    },
+    "context": {
+      "adx": 20.44,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 157285.1831,
+      "cvd_diff_for_regime_direction": 7146.5558,
+      "oi_change_for_regime_direction": 13759.678,
+      "rsi_for_regime_direction": 67.24,
+      "displacement_atr": 0.941,
+      "atr_pct": 0.5781,
+      "recent_candles_pct": [
+        0.036,
+        -0.053,
+        -0.217,
+        -0.212,
+        0.542,
+        -0.178,
+        -0.387,
+        -0.29
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-05 02:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Although the ADX indicates a strong downtrend and OBV supports this direction, the negative cumulative volume delta and mixed recent candles suggest a lack of conviction, making it prudent to pass.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 53,
+      "cost_usd": 0.0001542
+    },
+    "context": {
+      "adx": 34.25,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 10170.3415,
+      "cvd_diff_for_regime_direction": -4848.3896,
+      "oi_change_for_regime_direction": 10279.814,
+      "rsi_for_regime_direction": 50.88,
+      "displacement_atr": 0.638,
+      "atr_pct": 0.6776,
+      "recent_candles_pct": [
+        0.018,
+        0.203,
+        -0.151,
+        0.409,
+        -0.431,
+        -0.636,
+        -0.009,
+        0.829
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-07 04:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite the high ADX indicating a strong trend and positive OBV agreeing with the down regime, the negative cumulative volume delta and recent candle moves show mixed signals and a lack of conviction in continuing the down trend.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 58,
+      "cost_usd": 0.0001572
+    },
+    "context": {
+      "adx": 39.28,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 5560.3774,
+      "cvd_diff_for_regime_direction": -12504.5889,
+      "oi_change_for_regime_direction": 15661.65,
+      "rsi_for_regime_direction": 52.58,
+      "displacement_atr": 1.728,
+      "atr_pct": 0.3419,
+      "recent_candles_pct": [
+        -0.065,
+        -0.183,
+        -0.021,
+        0.425,
+        0.59,
+        -0.56,
+        -0.057,
+        -0.137
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-08 11:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite strong ADX and positive OI change supporting the down regime, the cumulative volume delta is negative, indicating divergence, which adds uncertainty to entering a trade.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 48,
+      "cost_usd": 0.0001512
+    },
+    "context": {
+      "adx": 42.51,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 29987.9669,
+      "cvd_diff_for_regime_direction": -6437.5838,
+      "oi_change_for_regime_direction": 9020.464,
+      "rsi_for_regime_direction": 53.94,
+      "displacement_atr": 1.24,
+      "atr_pct": 0.3885,
+      "recent_candles_pct": [
+        0.217,
+        -0.121,
+        -0.147,
+        0.14,
+        0.479,
+        -0.138,
+        0.056,
+        -0.908
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-22 18:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite the strong ADX and supportive volume indicators, the regime is down, and the RSI is high at 69.64, suggesting overbought conditions. Additionally, recent candle movements show a mixed pattern with significant volatility, indicating potential risk.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 65,
+      "cost_usd": 0.00016125
+    },
+    "context": {
+      "adx": 35.92,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 96862.8462,
+      "cvd_diff_for_regime_direction": 14082.6691,
+      "oi_change_for_regime_direction": 13446.841,
+      "rsi_for_regime_direction": 69.64,
+      "displacement_atr": 0.133,
+      "atr_pct": 0.356,
+      "recent_candles_pct": [
+        0.09,
+        0.046,
+        -0.03,
+        -0.183,
+        0.047,
+        0.026,
+        -0.082,
+        -0.638
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-22 22:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "Although the ADX indicates a strong downtrend, the negative cumulative volume delta contradicts the weakness in downside momentum, making this a mixed signal.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 45,
+      "cost_usd": 0.0001494
+    },
+    "context": {
+      "adx": 41.11,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 7286.2095,
+      "cvd_diff_for_regime_direction": -17048.3194,
+      "oi_change_for_regime_direction": 21679.266,
+      "rsi_for_regime_direction": 52.57,
+      "displacement_atr": 0.275,
+      "atr_pct": 0.5837,
+      "recent_candles_pct": [
+        0.061,
+        -0.347,
+        -0.9,
+        0.085,
+        0.161,
+        0.037,
+        -0.142,
+        0.827
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-23 08:30:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "The regime is down with strong ADX and supportive OBV, but the cumulative volume delta is negative, indicating mixed signals. The recent price movements are also choppy, suggesting a lack of clear direction.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 57,
+      "cost_usd": 0.00015659999999999998
+    },
+    "context": {
+      "adx": 42.86,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 46806.4927,
+      "cvd_diff_for_regime_direction": -4108.9157,
+      "oi_change_for_regime_direction": 4156.974,
+      "rsi_for_regime_direction": 49.82,
+      "displacement_atr": 1.314,
+      "atr_pct": 0.5634,
+      "recent_candles_pct": [
+        -1.238,
+        0.177,
+        -0.002,
+        -0.227,
+        0.748,
+        -0.15,
+        0.595,
+        -0.176
+      ]
+    }
+  },
+  {
+    "symbol": "ETHUSDT",
+    "timestamp": "2026-03-28 23:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.8,
+    "reasoning": "Despite the favorable OBV and OI conditions supporting the down regime, the high RSI value and the mixed recent price action percentages suggest potential overextension, making it wise to pass on this trade.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 55,
+      "cost_usd": 0.00015539999999999998
+    },
+    "context": {
+      "adx": 29.48,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 110245.5344,
+      "cvd_diff_for_regime_direction": 23047.1297,
+      "oi_change_for_regime_direction": 33646.428,
+      "rsi_for_regime_direction": 71.0,
+      "displacement_atr": 0.812,
+      "atr_pct": 0.3312,
+      "recent_candles_pct": [
+        -0.138,
+        -0.005,
+        -0.488,
+        -0.165,
+        0.267,
+        -0.099,
+        0.112,
+        -0.826
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-01 10:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While ADX is very high indicating strong trend strength, the regime is 'down' and recent price action shows mixed behavior with the last few candles fluctuating around. The displacement is relatively weak compared to ATR, signaling insufficient conviction for a short.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 65,
+      "cost_usd": 0.0001614
+    },
+    "context": {
+      "adx": 60.54,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 530021.3933,
+      "cvd_diff_for_regime_direction": 58525.0241,
+      "oi_change_for_regime_direction": 62324.46,
+      "rsi_for_regime_direction": 58.37,
+      "displacement_atr": 0.341,
+      "atr_pct": 0.6754,
+      "recent_candles_pct": [
+        -0.397,
+        -0.19,
+        -0.266,
+        0.476,
+        0.237,
+        -0.028,
+        -0.161,
+        -1.222
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-06 18:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Although the ADX indicates a strong downtrend (35.08) and OBV is positively aligned with the regime, the negative cumulative volume delta and relatively low RSI suggest mixed signals, making it a less compelling setup for a short trade.",
+    "usage": {
+      "prompt_tokens": 817,
+      "completion_tokens": 64,
+      "cost_usd": 0.00016094999999999998
+    },
+    "context": {
+      "adx": 35.08,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 1195239.7276,
+      "cvd_diff_for_regime_direction": -36341.4799,
+      "oi_change_for_regime_direction": 73764.24,
+      "rsi_for_regime_direction": 39.18,
+      "displacement_atr": 1.041,
+      "atr_pct": 1.3991,
+      "recent_candles_pct": [
+        1.129,
+        0.721,
+        -0.023,
+        0.046,
+        1.455,
+        -1.001,
+        -0.483,
+        -0.843
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-13 06:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "Although the mechanical filter aligns with the down regime, the high RSI indicates potential overextension, especially with mixed recent candle performance, making it a relatively unremarkable setup.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 50,
+      "cost_usd": 0.0001524
+    },
+    "context": {
+      "adx": 22.62,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 278510.3844,
+      "cvd_diff_for_regime_direction": 102251.3655,
+      "oi_change_for_regime_direction": 20461.57,
+      "rsi_for_regime_direction": 58.36,
+      "displacement_atr": 0.814,
+      "atr_pct": 0.5671,
+      "recent_candles_pct": [
+        -0.482,
+        -0.051,
+        -0.382,
+        0.179,
+        0.46,
+        -0.534,
+        0.128,
+        -0.459
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-14 12:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While there is ADX strength and positive open interest, the negative cumulative volume delta and mixed recent candle performance indicate uncertainty in continuing the downtrend.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 45,
+      "cost_usd": 0.00014925
+    },
+    "context": {
+      "adx": 42.17,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 192371.9687,
+      "cvd_diff_for_regime_direction": -4794.918,
+      "oi_change_for_regime_direction": 71945.48,
+      "rsi_for_regime_direction": 39.73,
+      "displacement_atr": 1.234,
+      "atr_pct": 0.4589,
+      "recent_candles_pct": [
+        -0.012,
+        0.956,
+        0.185,
+        -0.023,
+        0.577,
+        -0.034,
+        -0.218,
+        -0.563
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-15 09:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Although the ADX is strong and supports a trending environment, the regime is 'down' while indicators like OBV and OI are significantly bullish, indicating potential mixed signals in the current context. The recent price action shows volatility and indecision, making this a pass.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 70,
+      "cost_usd": 0.0001641
+    },
+    "context": {
+      "adx": 51.81,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 16038.823,
+      "cvd_diff_for_regime_direction": 5223.0527,
+      "oi_change_for_regime_direction": 59360.88,
+      "rsi_for_regime_direction": 40.07,
+      "displacement_atr": 1.07,
+      "atr_pct": 0.756,
+      "recent_candles_pct": [
+        -0.022,
+        0.713,
+        0.299,
+        -0.022,
+        -0.805,
+        -0.523,
+        0.156,
+        0.692
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-16 13:30:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.8,
+    "reasoning": "Although the readings show high ADX indicating trend strength and positive indicators for volume and open interest, the overall regime is 'down' and the recent price action shows mixed movements with some volatility, making this a less attractive trading opportunity.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 62,
+      "cost_usd": 0.0001596
+    },
+    "context": {
+      "adx": 31.78,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 192951.2232,
+      "cvd_diff_for_regime_direction": 91307.0457,
+      "oi_change_for_regime_direction": 26820.76,
+      "rsi_for_regime_direction": 58.66,
+      "displacement_atr": 0.05,
+      "atr_pct": 0.7118,
+      "recent_candles_pct": [
+        -0.094,
+        0.34,
+        -0.023,
+        0.925,
+        0.035,
+        -0.151,
+        0.116,
+        -1.496
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-23 14:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite strong indicators like ADX and positive volume metrics, the RSI is relatively neutral and recent price action looks mixed with volatility. This suggests a lack of clear momentum to confidently take a position in the 'down' regime.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 60,
+      "cost_usd": 0.00015825
+    },
+    "context": {
+      "adx": 34.23,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 137782.9427,
+      "cvd_diff_for_regime_direction": 68691.78,
+      "oi_change_for_regime_direction": 69695.05,
+      "rsi_for_regime_direction": 47.95,
+      "displacement_atr": 0.81,
+      "atr_pct": 0.5539,
+      "recent_candles_pct": [
+        0.774,
+        -0.074,
+        -0.124,
+        0.074,
+        0.447,
+        -0.618,
+        0.249,
+        -0.583
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-02-26 16:45:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite a strong ADX and favorable OBV, the down regime shows mixed signals with negative cumulative volume delta and choppy recent candle patterns, leading to insufficient conviction for a short position.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 53,
+      "cost_usd": 0.0001542
+    },
+    "context": {
+      "adx": 34.75,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 636897.8087,
+      "cvd_diff_for_regime_direction": -12883.6869,
+      "oi_change_for_regime_direction": 21119.44,
+      "rsi_for_regime_direction": 66.64,
+      "displacement_atr": 0.181,
+      "atr_pct": 0.8397,
+      "recent_candles_pct": [
+        -0.355,
+        -0.517,
+        -0.89,
+        0.758,
+        0.139,
+        -0.381,
+        0.371,
+        -1.179
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-06 14:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.8,
+    "reasoning": "Although the indicators show volume accumulation and a trending ADX, the high RSI reading indicates overbought conditions and the recent mixed candle patterns suggest potential price instability, warranting a PASS.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 53,
+      "cost_usd": 0.0001542
+    },
+    "context": {
+      "adx": 22.85,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 238097.7947,
+      "cvd_diff_for_regime_direction": 189514.3875,
+      "oi_change_for_regime_direction": 69875.57,
+      "rsi_for_regime_direction": 71.12,
+      "displacement_atr": 0.136,
+      "atr_pct": 0.6894,
+      "recent_candles_pct": [
+        -0.722,
+        0.219,
+        -0.668,
+        0.278,
+        0.093,
+        -0.104,
+        0.359,
+        -1.372
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-08 11:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While ADX is strong and OBV supports the down regime, the negative CVD indicates weak selling pressure, and the mixed recent price action suggests uncertainty. Therefore, it's better to pass.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 54,
+      "cost_usd": 0.0001548
+    },
+    "context": {
+      "adx": 37.68,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 319457.3499,
+      "cvd_diff_for_regime_direction": -12423.4857,
+      "oi_change_for_regime_direction": 23694.42,
+      "rsi_for_regime_direction": 52.83,
+      "displacement_atr": 1.298,
+      "atr_pct": 0.4461,
+      "recent_candles_pct": [
+        0.205,
+        -0.156,
+        -0.048,
+        0.325,
+        0.588,
+        -0.155,
+        -0.167,
+        -0.873
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-08 22:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite the strong ADX indicating a trending market, the regime is down while indicators like OBV and OI show positive readings that contradict this direction. The recent candles also suggest mixed momentum, making this a less appealing setup.",
+    "usage": {
+      "prompt_tokens": 817,
+      "completion_tokens": 61,
+      "cost_usd": 0.00015915
+    },
+    "context": {
+      "adx": 32.33,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 1148102.5341,
+      "cvd_diff_for_regime_direction": 251609.7732,
+      "oi_change_for_regime_direction": 156279.86,
+      "rsi_for_regime_direction": 60.87,
+      "displacement_atr": 0.319,
+      "atr_pct": 0.6564,
+      "recent_candles_pct": [
+        0.073,
+        0.609,
+        -0.436,
+        -0.608,
+        0.22,
+        0.244,
+        0.061,
+        -1.192
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-08 22:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "SHORT",
+    "confidence": 0.8,
+    "reasoning": "The down regime aligns with high positive readings in OBV, CVD, and OI, indicating strong bearish support. However, the recent candle patterns show mixed volatility, which tempers confidence slightly.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 56,
+      "cost_usd": 0.00015585
+    },
+    "context": {
+      "adx": 32.33,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 64749.0331,
+      "cvd_diff_for_regime_direction": 163103.218,
+      "oi_change_for_regime_direction": 182024.48,
+      "rsi_for_regime_direction": 52.13,
+      "displacement_atr": 0.086,
+      "atr_pct": 0.7121,
+      "recent_candles_pct": [
+        -0.436,
+        -0.608,
+        0.22,
+        0.244,
+        0.061,
+        -1.192,
+        0.062,
+        0.628
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-09 20:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.5,
+    "reasoning": "Although the ADX indicates a trend, the mixed signals from the cumulative volume delta and RSI suggest a lack of conviction in the downward regime, making this a candidate to pass.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 51,
+      "cost_usd": 0.00015299999999999998
+    },
+    "context": {
+      "adx": 27.87,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 581735.3394,
+      "cvd_diff_for_regime_direction": -67257.3192,
+      "oi_change_for_regime_direction": 49822.48,
+      "rsi_for_regime_direction": 43.83,
+      "displacement_atr": 2.678,
+      "atr_pct": 0.7752,
+      "recent_candles_pct": [
+        0.744,
+        -0.059,
+        -0.176,
+        -0.106,
+        2.081,
+        -0.656,
+        -0.394,
+        -0.209
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-10 18:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.8,
+    "reasoning": "Despite strong OBV and OI supporting the down regime, the relatively low displacement ATR suggests weak momentum, and the recent candles indicate potential indecision or reversal.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 48,
+      "cost_usd": 0.0001512
+    },
+    "context": {
+      "adx": 32.57,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 224666.7852,
+      "cvd_diff_for_regime_direction": 46935.0381,
+      "oi_change_for_regime_direction": 47236.15,
+      "rsi_for_regime_direction": 54.54,
+      "displacement_atr": 0.229,
+      "atr_pct": 0.8042,
+      "recent_candles_pct": [
+        0.717,
+        0.124,
+        -0.226,
+        0.011,
+        -0.17,
+        -0.442,
+        0.08,
+        -1.013
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-15 13:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the ADX indicates a trending market and volume supports the downward regime, the high RSI and recent mixed candle performance suggest potential instability and a lack of conviction in continuing lower.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 51,
+      "cost_usd": 0.00015270000000000003
+    },
+    "context": {
+      "adx": 29.31,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 319270.5953,
+      "cvd_diff_for_regime_direction": 99097.292,
+      "oi_change_for_regime_direction": 56659.1,
+      "rsi_for_regime_direction": 63.38,
+      "displacement_atr": 0.344,
+      "atr_pct": 0.298,
+      "recent_candles_pct": [
+        -0.113,
+        0.136,
+        0.192,
+        -0.26,
+        0.102,
+        -0.238,
+        0.068,
+        -0.476
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-23 12:00:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "The mixed signals from the cumulative volume delta (CVD) being negative, along with the relatively high ATR percentage indicating volatility, suggest uncertainty in the market direction despite other supporting indicators.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 52,
+      "cost_usd": 0.0001536
+    },
+    "context": {
+      "adx": 37.6,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 364512.4428,
+      "cvd_diff_for_regime_direction": -147034.2936,
+      "oi_change_for_regime_direction": 307406.39,
+      "rsi_for_regime_direction": 38.45,
+      "displacement_atr": 4.85,
+      "atr_pct": 1.0898,
+      "recent_candles_pct": [
+        0.397,
+        -0.163,
+        -0.081,
+        0.186,
+        5.464,
+        -0.452,
+        -0.465,
+        -1.268
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-25 12:30:00+00:00",
+    "side": 1,
+    "label": 1.0,
+    "verdict": "LONG",
+    "confidence": 0.8,
+    "reasoning": "The ADX is above 20 indicating a trending market, and OBV, CVD, and OI all show strong positive alignment with the up regime. Even though the recent candle percentages are mixed, the strength of the underlying metrics suggests a higher conviction for a LONG position.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 72,
+      "cost_usd": 0.00016544999999999998
+    },
+    "context": {
+      "adx": 21.35,
+      "regime": "up",
+      "obv_diff_for_regime_direction": 69114.8265,
+      "cvd_diff_for_regime_direction": 78693.732,
+      "oi_change_for_regime_direction": 55755.51,
+      "rsi_for_regime_direction": 52.35,
+      "displacement_atr": 0.244,
+      "atr_pct": 0.4436,
+      "recent_candles_pct": [
+        -0.119,
+        0.206,
+        0.065,
+        0.324,
+        0.108,
+        -0.14,
+        0.215,
+        -0.633
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-27 04:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite trending with a strong ADX and aligned OBV and OI, the 'down' regime shows mixed recent candle movements, highlighting potential choppiness. The weak displacement ATR further suggests caution in entering a short position.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 61,
+      "cost_usd": 0.000159
+    },
+    "context": {
+      "adx": 36.4,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 484420.0472,
+      "cvd_diff_for_regime_direction": 182764.5574,
+      "oi_change_for_regime_direction": 28338.69,
+      "rsi_for_regime_direction": 66.67,
+      "displacement_atr": 0.147,
+      "atr_pct": 0.3963,
+      "recent_candles_pct": [
+        -0.081,
+        -0.196,
+        0.081,
+        -0.3,
+        0.069,
+        0.046,
+        -0.127,
+        -0.718
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-27 10:45:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.5,
+    "reasoning": "While the ADX indicates a strong trend, the regime is down but the indicators (OBV, CVD, OI) show bullish signs, creating mixed signals. The recent candles are choppy, suggesting indecision in the market.",
+    "usage": {
+      "prompt_tokens": 817,
+      "completion_tokens": 64,
+      "cost_usd": 0.00016094999999999998
+    },
+    "context": {
+      "adx": 36.98,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 1977455.2407,
+      "cvd_diff_for_regime_direction": 395111.8998,
+      "oi_change_for_regime_direction": 148158.68,
+      "rsi_for_regime_direction": 76.83,
+      "displacement_atr": 0.037,
+      "atr_pct": 0.6409,
+      "recent_candles_pct": [
+        0.401,
+        -0.329,
+        0.389,
+        -0.129,
+        0.024,
+        -0.165,
+        0.165,
+        -1.964
+      ]
+    }
+  },
+  {
+    "symbol": "SOLUSDT",
+    "timestamp": "2026-03-28 23:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "SHORT",
+    "confidence": 0.85,
+    "reasoning": "The readings show alignment with the down regime, particularly the strong OBV and OI supporting downwards movement, despite the high RSI indicating overbought conditions. Recent candles also show a choppy price action, prompting a short entry at this point.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 66,
+      "cost_usd": 0.00016199999999999998
+    },
+    "context": {
+      "adx": 22.24,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 617010.9252,
+      "cvd_diff_for_regime_direction": 174769.9269,
+      "oi_change_for_regime_direction": 66315.32,
+      "rsi_for_regime_direction": 70.5,
+      "displacement_atr": 1.045,
+      "atr_pct": 0.4205,
+      "recent_candles_pct": [
+        -0.169,
+        -0.06,
+        -0.302,
+        -0.254,
+        0.425,
+        -0.097,
+        0.073,
+        -0.979
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-03 09:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite a trending ADX and positive volume indicators, the overall recent price action is mixed, showing volatility and choppy movements which reduce the conviction for a trade in the downward regime.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 52,
+      "cost_usd": 0.0001536
+    },
+    "context": {
+      "adx": 23.91,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 13009.2331,
+      "cvd_diff_for_regime_direction": 2646.0299,
+      "oi_change_for_regime_direction": 1214.55,
+      "rsi_for_regime_direction": 55.75,
+      "displacement_atr": 0.783,
+      "atr_pct": 0.4754,
+      "recent_candles_pct": [
+        -0.028,
+        0.34,
+        -0.05,
+        -0.462,
+        0.371,
+        0.081,
+        -0.299,
+        -0.762
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-05 12:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the ADX indicates a strong downtrend and volume indicators align with the down regime, the recent candles show mixed price action with significant recent losses. This suggests potential weakness and the need for further confirmation before entering a trade.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 61,
+      "cost_usd": 0.000159
+    },
+    "context": {
+      "adx": 57.41,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 77659.0705,
+      "cvd_diff_for_regime_direction": 4440.4784,
+      "oi_change_for_regime_direction": 2593.15,
+      "rsi_for_regime_direction": 64.33,
+      "displacement_atr": 1.545,
+      "atr_pct": 0.9456,
+      "recent_candles_pct": [
+        -0.553,
+        -0.614,
+        -0.541,
+        -1.624,
+        1.46,
+        -0.409,
+        -0.233,
+        -0.815
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-06 18:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Although the ADX indicates a strong trend, the regime is down with mixed recent price action and an RSI below 50, suggesting uncertainty. The high ATR percentage indicates potential volatility, leading me to pass on this trade.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 60,
+      "cost_usd": 0.0001584
+    },
+    "context": {
+      "adx": 37.01,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 43113.6734,
+      "cvd_diff_for_regime_direction": 3410.6159,
+      "oi_change_for_regime_direction": 7423.64,
+      "rsi_for_regime_direction": 43.5,
+      "displacement_atr": 0.8,
+      "atr_pct": 0.9889,
+      "recent_candles_pct": [
+        0.178,
+        0.307,
+        -0.206,
+        0.112,
+        0.785,
+        -0.039,
+        -0.492,
+        -1.023
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-10 16:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "The readings show a down regime with high volume flows supporting the downtrend, but the recent price action is mixed and shows limited momentum, suggesting that the opportunity lacks clarity for actionable trading.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 53,
+      "cost_usd": 0.0001542
+    },
+    "context": {
+      "adx": 27.64,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 2772.8822,
+      "cvd_diff_for_regime_direction": 1764.0972,
+      "oi_change_for_regime_direction": 2310.84,
+      "rsi_for_regime_direction": 58.7,
+      "displacement_atr": 0.114,
+      "atr_pct": 0.6226,
+      "recent_candles_pct": [
+        -0.89,
+        -0.141,
+        0.034,
+        0.531,
+        0.071,
+        -0.345,
+        0.583,
+        -0.347
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-11 15:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "Despite a strong ADX and positive OI change, the mixed signals from CVD and recent candles suggest a lack of clarity in direction. The down regime could be at risk due to bearish divergence.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 56,
+      "cost_usd": 0.00015585
+    },
+    "context": {
+      "adx": 47.98,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 9647.838,
+      "cvd_diff_for_regime_direction": -5139.7405,
+      "oi_change_for_regime_direction": 5341.81,
+      "rsi_for_regime_direction": 50.29,
+      "displacement_atr": 2.604,
+      "atr_pct": 0.7837,
+      "recent_candles_pct": [
+        -0.208,
+        0.324,
+        0.581,
+        0.329,
+        2.04,
+        -0.772,
+        -0.643,
+        -0.649
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-14 22:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "SHORT",
+    "confidence": 0.85,
+    "reasoning": "The ADX is strong at 33.36, confirming a trending market in a 'down' regime, and both OBV and OI show significant alignment with the downward direction. Despite a mixed RSI, the overall momentum indicators suggest a well-supported short opportunity.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 69,
+      "cost_usd": 0.00016365
+    },
+    "context": {
+      "adx": 33.36,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 5123.9895,
+      "cvd_diff_for_regime_direction": 715.5464,
+      "oi_change_for_regime_direction": 1684.35,
+      "rsi_for_regime_direction": 48.5,
+      "displacement_atr": 1.515,
+      "atr_pct": 0.3152,
+      "recent_candles_pct": [
+        -0.1,
+        0.051,
+        0.162,
+        0.273,
+        -0.476,
+        -0.15,
+        0.143,
+        0.158
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-15 14:00:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the readings indicate some bullish volume support against a downtrend, the RSI shows overbought conditions, and the overall mixed recent candle movements suggest caution. This doesn't provide a clear conviction for a trade.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 57,
+      "cost_usd": 0.00015659999999999998
+    },
+    "context": {
+      "adx": 22.76,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 41422.2037,
+      "cvd_diff_for_regime_direction": 7806.4139,
+      "oi_change_for_regime_direction": 3448.43,
+      "rsi_for_regime_direction": 70.8,
+      "displacement_atr": 1.257,
+      "atr_pct": 0.5254,
+      "recent_candles_pct": [
+        -0.226,
+        0.307,
+        -0.205,
+        -1.442,
+        0.66,
+        -0.505,
+        -0.395,
+        -0.053
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-16 13:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite a trending ADX and strong volume support for the down regime, the RSI is neutral and the recent price action shows mixed movement, suggesting uncertainty.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 46,
+      "cost_usd": 0.00014984999999999998
+    },
+    "context": {
+      "adx": 25.55,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 7684.015,
+      "cvd_diff_for_regime_direction": 4222.0297,
+      "oi_change_for_regime_direction": 6431.68,
+      "rsi_for_regime_direction": 49.49,
+      "displacement_atr": 0.773,
+      "atr_pct": 0.5119,
+      "recent_candles_pct": [
+        -0.026,
+        0.28,
+        0.173,
+        0.746,
+        0.391,
+        0.217,
+        -0.102,
+        -1.302
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-22 18:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "Despite the higher ADX indicating a trending market and positive volume indicators, the overall readings suggest mixed momentum with irregular size moves in recent candles, warranting a cautious approach.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 50,
+      "cost_usd": 0.00015225
+    },
+    "context": {
+      "adx": 27.34,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 1359.7083,
+      "cvd_diff_for_regime_direction": 315.8336,
+      "oi_change_for_regime_direction": 1402.46,
+      "rsi_for_regime_direction": 67.55,
+      "displacement_atr": 0.153,
+      "atr_pct": 0.2882,
+      "recent_candles_pct": [
+        -0.187,
+        -0.008,
+        0.184,
+        -0.375,
+        0.043,
+        -0.196,
+        0.067,
+        0.162
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-27 09:30:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.6,
+    "reasoning": "The readings show mixed signals with positive OBV but negative cumulative volume delta, indicating disagreement in volume flow. Additionally, the RSI is neutral and the recent price action shows variability, leading to an uncertain trading environment.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 58,
+      "cost_usd": 0.00015690000000000002
+    },
+    "context": {
+      "adx": 22.44,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 3723.8172,
+      "cvd_diff_for_regime_direction": -80.6745,
+      "oi_change_for_regime_direction": 204.51,
+      "rsi_for_regime_direction": 48.31,
+      "displacement_atr": 0.169,
+      "atr_pct": 0.3011,
+      "recent_candles_pct": [
+        -0.056,
+        0.164,
+        0.175,
+        -0.076,
+        -0.051,
+        0.147,
+        0.067,
+        -0.008
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-02-27 18:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "The mixed signals in the cumulative volume delta and recent price action indicate uncertainty, despite a strong ADX and positive open interest. It is prudent to pass on this trade.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 50,
+      "cost_usd": 0.0001521
+    },
+    "context": {
+      "adx": 28.95,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 678.7645,
+      "cvd_diff_for_regime_direction": -1979.579,
+      "oi_change_for_regime_direction": 2120.42,
+      "rsi_for_regime_direction": 54.3,
+      "displacement_atr": 0.092,
+      "atr_pct": 0.4602,
+      "recent_candles_pct": [
+        -0.326,
+        0.232,
+        -0.313,
+        -0.297,
+        -0.043,
+        -0.403,
+        0.293,
+        0.512
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-01 17:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the readings indicate some alignment with the down regime (positive OBV and OI changes), the recent candle movements are mixed and the structural displacement is relatively weak.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 49,
+      "cost_usd": 0.00015164999999999997
+    },
+    "context": {
+      "adx": 23.81,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 17244.7331,
+      "cvd_diff_for_regime_direction": 1357.3019,
+      "oi_change_for_regime_direction": 686.64,
+      "rsi_for_regime_direction": 56.75,
+      "displacement_atr": 0.617,
+      "atr_pct": 0.4396,
+      "recent_candles_pct": [
+        0.229,
+        -0.175,
+        0.169,
+        -0.422,
+        0.273,
+        0.095,
+        -0.165,
+        -0.78
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-01 23:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.65,
+    "reasoning": "While the ADX reading is slightly above 20, indicating a trending market, the overall trend is down with mixed recent performance and weak displacement, suggesting a lack of strong conviction for entering a trade.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 56,
+      "cost_usd": 0.00015585
+    },
+    "context": {
+      "adx": 20.9,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 2150.8887,
+      "cvd_diff_for_regime_direction": 996.3518,
+      "oi_change_for_regime_direction": 1840.66,
+      "rsi_for_regime_direction": 48.14,
+      "displacement_atr": 0.336,
+      "atr_pct": 0.5525,
+      "recent_candles_pct": [
+        -0.445,
+        -0.044,
+        0.712,
+        0.136,
+        -0.186,
+        -0.11,
+        0.741,
+        -0.118
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-05 14:45:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the ADX indicates a trending setup, the overall bearish regime conflicts with high RSI and positive OBV and CVD, suggesting mixed signals that don't justify a trade.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 50,
+      "cost_usd": 0.00015225
+    },
+    "context": {
+      "adx": 26.71,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 15024.4715,
+      "cvd_diff_for_regime_direction": 2624.566,
+      "oi_change_for_regime_direction": 4033.42,
+      "rsi_for_regime_direction": 61.63,
+      "displacement_atr": 0.334,
+      "atr_pct": 0.4632,
+      "recent_candles_pct": [
+        0.185,
+        -0.321,
+        -0.155,
+        -0.096,
+        0.155,
+        0.005,
+        -0.228,
+        -0.46
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-08 12:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite the solid ADX and positive momentum indicators like OBV, CVD, and OI, the regime is down and other factors like displacement ATR and mixed recent candles suggest uncertainty. Thus, the setup doesn't compel a clear decision.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 63,
+      "cost_usd": 0.0001599
+    },
+    "context": {
+      "adx": 40.65,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 5861.1349,
+      "cvd_diff_for_regime_direction": 579.427,
+      "oi_change_for_regime_direction": 1927.34,
+      "rsi_for_regime_direction": 59.24,
+      "displacement_atr": 0.841,
+      "atr_pct": 0.2908,
+      "recent_candles_pct": [
+        0.383,
+        -0.01,
+        -0.039,
+        -0.504,
+        0.245,
+        -0.196,
+        0.031,
+        -0.431
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-08 13:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "SHORT",
+    "confidence": 0.85,
+    "reasoning": "The high ADX reading of 39.32 indicates a strong downward trend, supported by substantial positive OBV and CVD differences. Additionally, RSI supports the downward regime, contributing to a strong conviction in shorting.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 60,
+      "cost_usd": 0.0001584
+    },
+    "context": {
+      "adx": 39.32,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 9686.4543,
+      "cvd_diff_for_regime_direction": 3855.5338,
+      "oi_change_for_regime_direction": 1544.33,
+      "rsi_for_regime_direction": 63.99,
+      "displacement_atr": 1.151,
+      "atr_pct": 0.3434,
+      "recent_candles_pct": [
+        0.245,
+        -0.196,
+        0.031,
+        -0.431,
+        0.392,
+        -0.002,
+        -0.11,
+        -0.68
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-08 22:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "SHORT",
+    "confidence": 0.85,
+    "reasoning": "The data shows a strong downward regime with high ADX, positive volume indicators supporting the direction, and relatively high RSI, indicating potential for continued downward movement despite recent mixed price action.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 52,
+      "cost_usd": 0.0001536
+    },
+    "context": {
+      "adx": 33.92,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 27155.4794,
+      "cvd_diff_for_regime_direction": 6644.4817,
+      "oi_change_for_regime_direction": 2820.85,
+      "rsi_for_regime_direction": 62.02,
+      "displacement_atr": 0.428,
+      "atr_pct": 0.3815,
+      "recent_candles_pct": [
+        0.018,
+        0.326,
+        -0.268,
+        -0.272,
+        0.164,
+        0.071,
+        -0.013,
+        -0.82
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-19 14:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.4,
+    "reasoning": "Although the down regime aligns with positive volume signals, the high RSI indicates potential overbought conditions and recent candles show mixed movement. The overall picture lacks sufficient conviction to trade.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 51,
+      "cost_usd": 0.00015270000000000003
+    },
+    "context": {
+      "adx": 35.56,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 5605.9995,
+      "cvd_diff_for_regime_direction": 505.4535,
+      "oi_change_for_regime_direction": 912.84,
+      "rsi_for_regime_direction": 68.14,
+      "displacement_atr": 0.798,
+      "atr_pct": 0.3779,
+      "recent_candles_pct": [
+        0.009,
+        -0.455,
+        -0.293,
+        0.316,
+        0.299,
+        0.084,
+        -0.251,
+        -0.405
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-22 21:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the ADX indicates a trending market, the 'down' regime alongside high RSI suggests overextension and weakness in following through. Additionally, the low displacement ATR indicates insufficient strength behind the movement, warranting a pass.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 60,
+      "cost_usd": 0.00015825
+    },
+    "context": {
+      "adx": 35.89,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 14748.0428,
+      "cvd_diff_for_regime_direction": 2320.8528,
+      "oi_change_for_regime_direction": 347.81,
+      "rsi_for_regime_direction": 69.65,
+      "displacement_atr": 0.339,
+      "atr_pct": 0.2785,
+      "recent_candles_pct": [
+        -0.016,
+        0.16,
+        -0.129,
+        0.179,
+        0.092,
+        -0.014,
+        -0.162,
+        -0.575
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-25 14:30:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While the ADX shows a trending market, positive OBV and OI changes contradict the down regime, suggesting underlying strength against the trend. The mixed recent price actions and low RSI further indicate unclear momentum.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 57,
+      "cost_usd": 0.0001563
+    },
+    "context": {
+      "adx": 28.57,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 10073.9254,
+      "cvd_diff_for_regime_direction": 27.9374,
+      "oi_change_for_regime_direction": 401.13,
+      "rsi_for_regime_direction": 49.31,
+      "displacement_atr": 0.916,
+      "atr_pct": 0.3167,
+      "recent_candles_pct": [
+        -0.006,
+        0.278,
+        0.08,
+        -0.043,
+        0.288,
+        -0.244,
+        -0.172,
+        -0.099
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-25 15:15:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "While ADX indicates a trending market, the mixed movement of recent candles and the down regime suggests a lack of clarity for a short position. The displacement is weak, indicating less conviction for entering the market.",
+    "usage": {
+      "prompt_tokens": 815,
+      "completion_tokens": 57,
+      "cost_usd": 0.00015644999999999998
+    },
+    "context": {
+      "adx": 29.17,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 13280.2754,
+      "cvd_diff_for_regime_direction": 2098.6207,
+      "oi_change_for_regime_direction": 820.69,
+      "rsi_for_regime_direction": 61.23,
+      "displacement_atr": 0.305,
+      "atr_pct": 0.3253,
+      "recent_candles_pct": [
+        -0.043,
+        0.288,
+        -0.244,
+        -0.172,
+        -0.099,
+        0.002,
+        -0.093,
+        -0.446
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-26 05:15:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Despite adequate ADX and strong OBV and OI supporting the down regime, the high RSI (70.1) indicates overbought conditions, and the recent candles show mixed momentum.",
+    "usage": {
+      "prompt_tokens": 816,
+      "completion_tokens": 54,
+      "cost_usd": 0.0001548
+    },
+    "context": {
+      "adx": 20.04,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 8115.9488,
+      "cvd_diff_for_regime_direction": 3180.6338,
+      "oi_change_for_regime_direction": 1803.06,
+      "rsi_for_regime_direction": 70.1,
+      "displacement_atr": 0.69,
+      "atr_pct": 0.2401,
+      "recent_candles_pct": [
+        -0.332,
+        0.167,
+        0.062,
+        -0.239,
+        0.165,
+        0.068,
+        -0.103,
+        -0.403
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-26 18:00:00+00:00",
+    "side": -1,
+    "label": 1.0,
+    "verdict": "SHORT",
+    "confidence": 0.85,
+    "reasoning": "All indicators indicate strong alignment with the down regime, including high ADX and positive volume flow; recent price action shows a sharp decline, supporting a short position.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 48,
+      "cost_usd": 0.0001509
+    },
+    "context": {
+      "adx": 33.5,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 7639.0714,
+      "cvd_diff_for_regime_direction": 976.7883,
+      "oi_change_for_regime_direction": 310.36,
+      "rsi_for_regime_direction": 65.4,
+      "displacement_atr": 0.637,
+      "atr_pct": 0.2611,
+      "recent_candles_pct": [
+        0.005,
+        -0.113,
+        0.201,
+        -0.067,
+        0.166,
+        0.068,
+        -0.083,
+        -0.369
+      ]
+    }
+  },
+  {
+    "symbol": "BNBUSDT",
+    "timestamp": "2026-03-26 23:30:00+00:00",
+    "side": -1,
+    "label": 0.0,
+    "verdict": "PASS",
+    "confidence": 0.7,
+    "reasoning": "Although ADX is strong and OBV is positive, the cumulative volume delta is negative, suggesting mixed sentiment. Additionally, the recent candles indicate choppy price action, making it a risky environment for a trade.",
+    "usage": {
+      "prompt_tokens": 814,
+      "completion_tokens": 58,
+      "cost_usd": 0.00015690000000000002
+    },
+    "context": {
+      "adx": 32.66,
+      "regime": "down",
+      "obv_diff_for_regime_direction": 4034.2244,
+      "cvd_diff_for_regime_direction": -140.9349,
+      "oi_change_for_regime_direction": 453.56,
+      "rsi_for_regime_direction": 52.4,
+      "displacement_atr": 0.276,
+      "atr_pct": 0.2595,
+      "recent_candles_pct": [
+        -0.017,
+        -0.022,
+        0.003,
+        -0.306,
+        0.07,
+        0.073,
+        -0.137,
+        -0.083
+      ]
+    }
+  }
+]

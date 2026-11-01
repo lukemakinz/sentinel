@@ -1,0 +1,54 @@
+{
+  "protocol_version": "S43-SESSION-FILTERED-OB-OI-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "S20 H1 (docs/research/s20_ob_oi_patient_runner) is the only route in this project's 46 prior tests with genuine edge that survived to the validation gate: development base PF 1.066 (137 fills), validation base PF 1.117 (43 fills) -- both real passes -- but validation STRESS PF 0.857, below the 1.00 gate, is the single reason it was REJECTED_AT_VALIDATION_GATE rather than promoted. Stress costs (5/8/5/5 bps maker/taker/slippage/limit-penetration vs base 2/5/2/2) model wider effective spreads and worse fills, which are disproportionately a low-liquidity-hours phenomenon on crypto perps (thin order books outside the London/NY session, more limit-penetration, more adverse selection on stops). This protocol tests whether restricting S20 H1's identical entries to the highest-liquidity UTC hours recovers the stress-cost margin, without touching the entry/exit logic itself -- entries outside the tested window are simply dropped, nothing else changes.",
+  "hypotheses": [
+    {
+      "id": "H1_WIDE_SESSION",
+      "entry_exit": "Identical to S20 H1 in every respect (order block + OI confirmation regime/structure/flow, breakeven+chandelier exit, partial_r=1.5, trail_atr=2.5, target_r=8.0) EXCEPT a signal is only taken if its entry-bar close-time hour (UTC) falls in [07:00, 20:00) -- the combined London open through US market close window, excluding the thin late-US/Asian session."
+    },
+    {
+      "id": "H2_CORE_OVERLAP",
+      "entry_exit": "Identical to H1 except the window is narrowed to [12:00, 17:00) UTC -- the core London/New York overlap, the single highest-liquidity stretch of the crypto trading day."
+    }
+  ],
+  "single_variable_isolated": "Both hypotheses reuse S20 H1's entry/exit formula completely unmodified (imported, not reimplemented) and differ from S20 H1 and from each other only in which UTC hours a signal is allowed to fire. No entry/exit parameter differs from S20 H1's frozen defaults.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Identical to S20 -- reuses the exact same cached klines/funding/metrics archives, no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. Session boundaries (07:00/20:00 UTC and 12:00/17:00 UTC) are standard, named market-session conventions chosen before any data was examined, not a scan over start/end hour combinations. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Filtering necessarily reduces the fill count relative to S20 H1's own 137/43 development/validation fills -- both routes may fall below the 40-fill development minimum, a legitimate, disclosed possible outcome given S20 H1's fills were not evenly spread across all 24 hours to begin with; not grounds to widen the window afterward.",
+    "This is a filter, not a new signal: if it passes, the underlying edge is still the same fragile one S20 H1 already showed, now on a smaller, session-restricted sample -- a pass here raises rather than resolves the standard multiple-comparisons caution already flagged twice elsewhere in this project (S24->S28, S30 dev->validation).",
+    "Session boundaries are UTC calendar hours, not a true liquidity/spread measurement from order-book data (which this project does not reconstruct anywhere) -- a reasonable, standard proxy, disclosed as such.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation."
+  ]
+}

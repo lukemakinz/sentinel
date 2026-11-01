@@ -1,0 +1,56 @@
+{
+  "protocol_version": "S37-OB-OI-PREMIUM-DISCOUNT-v1.0",
+  "status": "retrospective_diagnostic_only_no_live_trading",
+  "motivating_context": "This protocol closes out the original team brief this project's research began from: analyst + order-block trader + ICT trader + price-action trader, collaborating creatively with good risk management as the explicit goal. Order-block structure (S17+), killzone selectivity (S13/S21), price-action rejection (S8v2/S17b) and risk management (S19/S20/S22's patient breakeven+chandelier exit, sizing) were all tested extensively. The one classic ICT concept never tested standalone in the S16-S30 lineage is premium/discount: only take a long retest in the cheaper half of the recent trading range, a short retest in the more expensive half — 'buy low, sell high' relative to recent structure, not just relative to the order block itself. Its formula already exists in gates_b.check_premium_discount for the live scanner but was never wired into this causal backtest pipeline.",
+  "hypotheses": [
+    {
+      "id": "H1_HALF_RANGE",
+      "entry_exit": "identical to S20 H1 (order block + OI confirmation, regime, OBV flow, patient breakeven/chandelier exit) PLUS: the retest close must sit below the midpoint of the trailing 320-bar (80h/~3.3 day) 15m swing high/low for a long, above the midpoint for a short",
+      "swing_range": "rolling 320-bar high/low on the same 15m series S20 already computes — no new data source, no separate HTF fetch"
+    },
+    {
+      "id": "H2_OTE_ZONE",
+      "entry_exit": "identical to H1 EXCEPT the required zone is the tighter classic ICT 'optimal trade entry' band: 62-79% retracement from the recent swing extreme, not the full 50% half-range",
+      "swing_range": "identical to H1"
+    }
+  ],
+  "single_variable_isolated": "Both hypotheses add exactly one new required condition (premium/discount zone) on top of S20 H1, unchanged otherwise. H2 differs from H1 only in how tight that zone is (half-range vs 62-79% OTE band, both pre-existing, named ICT conventions — not swept parameters).",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Reuses the exact same cached klines/funding/metrics archives already downloaded for S18/S20 — no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute"
+  },
+  "selection": "Exactly H1 and H2. No parameter grid over the swing lookback (fixed at 320 bars) or OTE band (fixed at the textbook 62-79%). A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Both routes are expected to be materially more selective than S20 H1 (fewer raw candidates pass an added zone condition) and may fall below the 40-fill development minimum — a legitimate, disclosed possible outcome, not grounds to loosen the bar afterward.",
+    "Swing range is computed on the same 15m series as everything else (not a true separate HTF fetch), a simplification consistent with this project's other HTF proxies.",
+    "Same order-block, OI, ATR-freeze and no-order-book-reconstruction simplifications as S18/S20.",
+    "This is a retrospective diagnostic; not a live paper-forward result."
+  ]
+}

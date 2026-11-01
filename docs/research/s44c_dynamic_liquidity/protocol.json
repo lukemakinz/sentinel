@@ -1,0 +1,52 @@
+{
+  "protocol_version": "S44C-DYNAMIC-LIQUIDITY-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "S43 (docs/research/s43_session_filtered_ob_oi) replaced nothing about S20 H1's entry/exit logic except restricting entries to a static UTC calendar window (07:00-20:00), and that alone recovered stress-cost robustness enough to pass validation for the first time in this project's history -- though the edge later collapsed in the retrospective-evaluation window. A second external review of S43 (following the S44A OI-direction review) pointed out that a calendar window is only a crude proxy for real market activity, and proposed replacing it with a directly-measured proxy: a rolling dollar-turnover floor (current turnover >= 60th percentile of the trailing 7 days) combined with a volatility-shock ceiling (current ATR/price <= 90th percentile of the trailing 7 days), both computed causally via shift(1) before the rolling quantile so no bar's threshold uses its own value. This protocol tests that swap in isolation: everything else -- order block structure, regime, OBV, the ORIGINAL (unfixed) S43/S20 OI sign logic, exit management, universe, windows, costs -- is left byte-identical to S43, so any change in outcome is attributable to the filter swap alone. The OI-direction fix tested separately in S44A is deliberately NOT combined here (S44A showed it does not help in isolation); combining two unresolved changes in one test would make it impossible to attribute any effect to either one.",
+  "hypotheses": [
+    {
+      "id": "H1_DYNAMIC_LIQUIDITY",
+      "entry_exit": "Identical to S43 wide-session (order block + regime + OBV + original S43 OI confirmation, S20 H1's patient breakeven+chandelier exit: partial 1.5R, trail 2.5x ATR, cap 8R) EXCEPT the 07:00-20:00 UTC calendar filter is replaced by: current 15m turnover proxy (close*volume) >= the 60th percentile of the trailing 672 bars (7 days, shift(1)'d so the current bar never informs its own threshold), AND current ATR/close <= the 90th percentile of the same trailing window on the same causal basis. Requires at least 192 bars (2 days) of prior history before the filter can pass."
+    }
+  ],
+  "single_variable_isolated": "Exactly one hypothesis (no A/B route split this time -- the reviewer's own stated reason for not sweeping the two quantile thresholds applies equally to not offering a second pre-chosen threshold pair as a second hypothesis; a genuine second angle would be its own follow-up protocol, not a second route here). The only code difference from S43's wide-session route is which condition gates entry: calendar hour vs the turnover-floor + volatility-ceiling pair. OI logic is deliberately left as S43's original (unfixed) form, not S44A's, to keep this a single-variable test.",
+  "symbols": {
+    "traded": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+    "note": "Identical to S20/S43 -- reuses the exact same cached klines/funding/metrics archives, no new data source."
+  },
+  "windows": {
+    "warmup": ["2025-04-01", "2025-08-01"],
+    "development": ["2025-08-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%"
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the correlated ETH/SOL/BNB cluster",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 2, "taker": 5, "slippage": 2, "limit_penetration": 2},
+    "stress_bps": {"maker": 5, "taker": 8, "slippage": 5, "limit_penetration": 5},
+    "severe_bps": {"maker": 10, "taker": 10, "slippage": 10, "limit_penetration": 10},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute",
+    "sizing_disclosure": "Leverage and risk per trade are deliberately left unchanged from S43/S20 (5x cap, $0.50 fixed risk) for this test. Sizing/leverage changes are explicitly out of scope here -- edge must be established before it is scaled, not the other way around."
+  },
+  "selection": "Exactly one predeclared hypothesis; no sweep over the 60th/90th percentile thresholds or the 7-day/2-day lookback windows. A failing gate stops the route.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "post_hoc_diagnostic_disclosure": "In addition to the standard gate results, this protocol's write-up separately reports the profit factor of the candidate pool the liquidity filter REMOVED (order-block+regime+OBV+OI candidates with liquidity_ok=False) versus the pool it KEPT, computed on the same development window. This is an explanatory diagnostic requested alongside the hypothesis, not a promotion gate -- it does not change the pass/fail decision above, which is decided by the standard gates only.",
+  "known_limitations": [
+    "turnover_proxy = close*volume is not a real order-book measurement (no bid/ask spread or depth is reconstructed anywhere in this project); it is a standard, disclosed proxy.",
+    "This filter is materially stricter than S43's calendar window in the pre-freeze smoke check (liquidity_ok true ~29% of bars on ETHUSDT vs the calendar window's ~54% of hours), so a materially smaller fill count than S43 is a legitimate, disclosed possible outcome, not grounds to loosen the percentile thresholds afterward.",
+    "This protocol is explicitly motivated by, and directly compared against, S43's already-computed results -- disclosed rather than presented as an independent a priori test.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation."
+  ]
+}

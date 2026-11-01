@@ -1,0 +1,22 @@
+{
+  "strategy_id": "S47_CACHED_WINDOW",
+  "parent": "S47_OI_STATE_TRANSITION",
+  "traded": [
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "target_r": 2.5,
+  "max_hold_minutes": 240,
+  "trailing": false,
+  "disclosure": "cached-window characterization of frozen S47 signal; not the 6-fold historical gate; not live approval"
+}

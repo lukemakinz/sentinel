@@ -1,0 +1,54 @@
+{
+  "strategy_id": "S96_ASYMMETRIC_RESIDUAL_REVERSAL_V1",
+  "status": "FROZEN_BEFORE_REPLAY",
+  "frozen_at_utc": "2026-10-13T14:00:00Z",
+  "professional_basis": "Market-neutral statistical arbitrage: estimate each alt's BTC beta, trade only an extreme idiosyncratic negative shock, and hedge systematic BTC direction. Negative shocks are singled out because recent residual-reversal research reports faster reversal than positive shocks.",
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT", "ADAUSDT", "AVAXUSDT"],
+  "hedge": "BTCUSDT USD-M perpetual",
+  "data": {
+    "source": "Binance public USD-M checksumed 1m and actual funding archives",
+    "signal": "complete 1h bars",
+    "execution": "both legs at first actual 1m open after signal",
+    "warmup_start": "2024-08-01T00:00:00Z",
+    "historical_development": ["2025-05-01T00:00:00Z", "2026-09-01T00:00:00Z"],
+    "prospective_t0": "2026-10-14T00:00:00Z"
+  },
+  "signal": {
+    "rolling_beta_hours": 720,
+    "rolling_residual_z_hours": 720,
+    "all_estimators_exclude_current_hour": true,
+    "beta_range": [0.20, 2.00],
+    "entry_z_maximum": -3.00,
+    "minimum_negative_hourly_residual_pct": -1.50,
+    "minimum_relative_volume": 1.50,
+    "maximum_taker_buy_fraction": 0.42,
+    "positive_shocks": "never traded",
+    "symbol_choice": "most negative z times relative volume; deterministic universe tie-break"
+  },
+  "position": {
+    "alt_leg": "long $60 notional",
+    "btc_leg": "short beta times $60 notional, capped at $120",
+    "maximum_open_pairs": 1,
+    "cooldown_hours": 24,
+    "exit_z": -0.50,
+    "stop_z": -5.00,
+    "hard_pair_stop_usd": 4.0,
+    "maximum_hold_hours": 24,
+    "drawdown_halt_pct": 6.0
+  },
+  "cost_scenarios_bps_each_leg_each_side": {
+    "base": {"fee": 5, "slippage": 2},
+    "stress": {"fee": 8, "slippage": 5},
+    "severe": {"fee": 10, "slippage": 10}
+  },
+  "historical_gate": {
+    "minimum_stress_trades": 30,
+    "minimum_stress_profit_factor": 1.15,
+    "minimum_stress_mean_net_r": 0.08,
+    "stress_pnl_positive": true,
+    "severe_pnl_nonnegative": true,
+    "maximum_drawdown_pct": 6.0,
+    "leave_one_symbol_out_positive": true
+  },
+  "claim_policy": "Historical data are development-only. Passing permits paper-forward only; no guarantee of profit."
+}

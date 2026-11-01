@@ -150,17 +150,72 @@ def prune_agg_trades():
     return {'deleted': deleted, 'retention_days': retention_days}
 
 
+_INTERVAL_SECONDS = {'1m': 60, '5m': 300, '15m': 900, '1h': 3600, '4h': 14400}
+
+
+def repair_missed_candle_closes(grace_seconds: int = 90, lookback_hours: int = 48) -> dict:
+    """Re-fetch bars whose close time passed but whose close event was lost.
+
+    A WebSocket reconnect can drop the final kline update; the row then stays
+    ``is_closed=False`` forever and every closed-only consumer (trend state,
+    global context, replays) sees a silent hole.  REST is authoritative.
+    """
+    from .binance_rest import BinanceRESTClient
+    from .models import Candle
+
+    now = timezone.now()
+    stale = {}
+    rows = Candle.objects.filter(
+        is_closed=False, timestamp__gte=now - timedelta(hours=lookback_hours),
+        interval__in=list(_INTERVAL_SECONDS),
+    ).values_list('symbol', 'interval', 'timestamp')
+    for symbol, interval, ts in rows:
+        close_at = ts + timedelta(seconds=_INTERVAL_SECONDS[interval] + grace_seconds)
+        if close_at <= now:
+            key = (symbol, interval)
+            stale[key] = min(stale.get(key, ts), ts)
+    if not stale:
+        return {'repaired_series': 0}
+    client = BinanceRESTClient()
+    for (symbol, interval), oldest in stale.items():
+        try:
+            # Start at the oldest hole so gaps older than one page still heal;
+            # each run advances up to 1500 bars.
+            client.fetch_historical_candles(
+                symbol, interval, 1500, start_ms=int(oldest.timestamp() * 1000),
+            )
+        except Exception as exc:  # one bad series must not stop the others
+            logger.error('Candle repair failed %s %s: %s', symbol, interval, exc)
+    logger.warning('Repaired missed candle closes: %s', sorted(stale))
+    return {'repaired_series': len(stale)}
+
+
 @shared_task(name='ingester.backfill_candles')
 def backfill_candles():
-    """Backfill historical candles on startup — runs once."""
+    """Backfill evaluated instruments and warm the frozen breadth context."""
     from .binance_rest import BinanceRESTClient
     client = BinanceRESTClient()
     intervals = ['1m', '5m', '15m', '1h', '4h']
-    for symbol in _market_data_symbols():
+    market_symbols = _market_data_symbols()
+    for symbol in market_symbols:
         for interval in intervals:
             try:
                 limit = 500 if interval in ['1m', '5m'] else 200
                 client.fetch_historical_candles(symbol, interval, limit)
             except Exception as e:
                 logger.error(f"Backfill error {symbol} {interval}: {e}")
+    # M3 must not spend its first two days treating an under-warmed SMA50 as
+    # neutral breadth.  Context-only pairs receive enough closed bars for all
+    # trend features, but still never receive trades, OI or depth.
+    breadth_symbols = [
+        symbol for symbol in getattr(settings, 'BREADTH_PAIRS', [])
+        if symbol not in set(market_symbols)
+    ]
+    for symbol in breadth_symbols:
+        for interval in getattr(settings, 'BREADTH_INTERVALS', ['15m', '1h', '4h']):
+            try:
+                limit = 220 if interval in {'1h', '4h'} else 100
+                client.fetch_historical_candles(symbol, interval, limit)
+            except Exception as e:
+                logger.error(f"Breadth backfill error {symbol} {interval}: {e}")
     logger.info("Historical candle backfill complete")

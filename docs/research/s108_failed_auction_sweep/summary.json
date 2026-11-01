@@ -1,0 +1,1553 @@
+{
+  "protocol_sha256": "be2455c8ee6bdd7012aa21dd88dbde6fa9205d94b2086474fe0101f9666c0932",
+  "strategy_config": {
+    "decision_minutes": 15,
+    "atr_period": 14,
+    "volume_lookback": 20,
+    "liquidity_lookback_bars": 96,
+    "level_touch_tolerance_atr": 0.25,
+    "minimum_level_touches": 2,
+    "sweep_buffer_atr": 0.02,
+    "confirmation_buffer_atr": 0.03,
+    "confirmation_window_bars": 3,
+    "ema4h_span": 50,
+    "oi_lookback_minutes": 60,
+    "minimum_sweep_oi_change_pct": 0.05,
+    "minimum_sweep_relative_volume": 1.1,
+    "sweep_sell_taker_ratio": 0.48,
+    "sweep_buy_taker_ratio": 0.52,
+    "confirmation_buy_taker_ratio": 0.52,
+    "confirmation_sell_taker_ratio": 0.48,
+    "funding_lookback_days": 7,
+    "maximum_long_mean_funding": 5e-05,
+    "minimum_short_mean_funding": -5e-05,
+    "maximum_metrics_age_minutes": 15.0,
+    "stop_buffer_atr": 0.2,
+    "minimum_stop_atr": 1.25,
+    "maximum_stop_atr": 3.5,
+    "minimum_target_r": 1.8,
+    "maximum_target_r": 3.0,
+    "target_front_run_fraction": 0.9,
+    "max_hold_minutes": 1440,
+    "risk_scale": 0.5
+  },
+  "regime_config": {
+    "btc_symbol": "BTCUSDT",
+    "long_sma_days": 200,
+    "long_momentum_days": 84,
+    "down_ema_days": 50,
+    "down_fast_momentum_days": 28,
+    "down_slow_momentum_days": 84,
+    "up_breadth_threshold": 0.5,
+    "down_breadth_threshold": 0.3333333333333333,
+    "confirmation_days": 2
+  },
+  "regime_occupancy": {
+    "SIDEWAYS": 0.4420849420849421,
+    "DOWN": 0.28378378378378377,
+    "UP": 0.27413127413127414
+  },
+  "universes": {
+    "combined": {
+      "symbols": [
+        "BTCUSDT",
+        "ETHUSDT",
+        "SOLUSDT",
+        "BNBUSDT",
+        "XRPUSDT",
+        "DOGEUSDT"
+      ],
+      "signal_counts": {
+        "BTCUSDT": 0,
+        "ETHUSDT": 2,
+        "SOLUSDT": 3,
+        "BNBUSDT": 1,
+        "XRPUSDT": 1,
+        "DOGEUSDT": 2
+      },
+      "signal_diagnostics": {
+        "BTCUSDT": {
+          "armed": 3,
+          "short_armed": 2,
+          "armed_expired_or_regime_flip": 3,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "ETHUSDT": {
+          "armed": 13,
+          "long_armed": 3,
+          "armed_expired_or_regime_flip": 11,
+          "short_armed": 10,
+          "signals": 2,
+          "short_signals": 2,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "SOLUSDT": {
+          "armed": 9,
+          "long_armed": 4,
+          "signals": 3,
+          "long_signals": 2,
+          "short_armed": 5,
+          "short_signals": 1,
+          "armed_expired_or_regime_flip": 6,
+          "confirmation_without_flow_flip": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "BNBUSDT": {
+          "armed": 3,
+          "short_armed": 3,
+          "armed_expired_or_regime_flip": 2,
+          "signals": 1,
+          "short_signals": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "XRPUSDT": {
+          "armed": 6,
+          "short_armed": 5,
+          "armed_expired_or_regime_flip": 4,
+          "confirmation_without_flow_flip": 1,
+          "signals": 1,
+          "short_signals": 1,
+          "blocked_target_space": 1,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "DOGEUSDT": {
+          "armed": 9,
+          "long_armed": 1,
+          "confirmation_without_flow_flip": 3,
+          "armed_expired_or_regime_flip": 7,
+          "short_armed": 8,
+          "signals": 2,
+          "short_signals": 2,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        }
+      },
+      "replays": {
+        "base": {
+          "trades": 8,
+          "wins": 5,
+          "win_rate_pct": 62.5,
+          "profit_factor": 3.8303377121058007,
+          "net_pnl": 2.117665798178791,
+          "return_pct": 0.4235331596357472,
+          "max_drawdown_pct": 0.19103145260679355,
+          "mean_net_r": 1.0588328990893956,
+          "fees": 0.22077894368947115,
+          "funding_pnl": -0.0030278464964911584,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 0,
+              "net_pnl": 0.0,
+              "gross_profit": 0.0
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": 0.557577838516977,
+              "gross_profit": 0.557577838516977
+            },
+            "SOLUSDT": {
+              "trades": 3,
+              "net_pnl": 1.0152958558151681,
+              "gross_profit": 1.2646784478269524
+            },
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25,
+              "gross_profit": 0.0
+            },
+            "XRPUSDT": {
+              "trades": 1,
+              "net_pnl": 0.5426494526346914,
+              "gross_profit": 0.5426494526346914
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.25214265121195467,
+              "gross_profit": 0.5009625755010347
+            }
+          },
+          "represented_symbols": 5,
+          "diagnostics": {
+            "signals": 9,
+            "entries": 8,
+            "entries_SOLUSDT": 3,
+            "entries_ETHUSDT": 1,
+            "blocked_open_position": 1,
+            "entries_BNBUSDT": 1,
+            "entries_DOGEUSDT": 2,
+            "entries_XRPUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "stress": {
+          "trades": 8,
+          "wins": 5,
+          "win_rate_pct": 62.5,
+          "profit_factor": 3.1331481102869208,
+          "net_pnl": 1.5964011161114513,
+          "return_pct": 0.31928022322229577,
+          "max_drawdown_pct": 0.18329711843448893,
+          "mean_net_r": 0.7982005580557257,
+          "fees": 0.3082282395153504,
+          "funding_pnl": -0.0027712274122599478,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 0,
+              "net_pnl": 0.0,
+              "gross_profit": 0.0
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": 0.44354717606842087,
+              "gross_profit": 0.44354717606842087
+            },
+            "SOLUSDT": {
+              "trades": 3,
+              "net_pnl": 0.8596394330207318,
+              "gross_profit": 1.1090661763689127
+            },
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25,
+              "gross_profit": 0.0
+            },
+            "XRPUSDT": {
+              "trades": 1,
+              "net_pnl": 0.42316405898225185,
+              "gross_profit": 0.42316405898225185
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.12005044804004683,
+              "gross_profit": 0.36900170451895065
+            }
+          },
+          "represented_symbols": 5,
+          "diagnostics": {
+            "signals": 9,
+            "entries": 8,
+            "entries_SOLUSDT": 3,
+            "entries_ETHUSDT": 1,
+            "blocked_open_position": 1,
+            "entries_BNBUSDT": 1,
+            "entries_DOGEUSDT": 2,
+            "entries_XRPUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "severe": {
+          "trades": 8,
+          "wins": 5,
+          "win_rate_pct": 62.5,
+          "profit_factor": 2.5261677120721338,
+          "net_pnl": 1.142401644881943,
+          "return_pct": 0.22848032897639925,
+          "max_drawdown_pct": 0.17564318033819193,
+          "mean_net_r": 0.5712008224409715,
+          "fees": 0.3363112826699575,
+          "funding_pnl": -0.0025203337106677816,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 0,
+              "net_pnl": 0.0,
+              "gross_profit": 0.0
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": 0.3455646671744148,
+              "gross_profit": 0.3455646671744148
+            },
+            "SOLUSDT": {
+              "trades": 3,
+              "net_pnl": 0.7095096913889734,
+              "gross_profit": 0.9589805783582506
+            },
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25,
+              "gross_profit": 0.0
+            },
+            "XRPUSDT": {
+              "trades": 1,
+              "net_pnl": 0.32259515841167286,
+              "gross_profit": 0.32259515841167286
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.014732127906881942,
+              "gross_profit": 0.26380390492232664
+            }
+          },
+          "represented_symbols": 5,
+          "diagnostics": {
+            "signals": 9,
+            "entries": 8,
+            "entries_SOLUSDT": 3,
+            "entries_ETHUSDT": 1,
+            "blocked_open_position": 1,
+            "entries_BNBUSDT": 1,
+            "entries_DOGEUSDT": 2,
+            "entries_XRPUSDT": 1
+          },
+          "drawdown_halted": false
+        }
+      },
+      "slices": {
+        "development": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": 0.3804519466254419,
+            "return_on_start_nav_pct": 0.07609038932508838,
+            "usd_per_calendar_day": 0.0024866140302316465,
+            "max_continuous_drawdown_pct": 0.04987651840235863,
+            "annualized_sharpe": 1.0441866095988963,
+            "positive_month_share": 0.2,
+            "trades": 2
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": 0.30099948938874377,
+            "return_on_start_nav_pct": 0.06019989787774875,
+            "usd_per_calendar_day": 0.0019673169241094363,
+            "max_continuous_drawdown_pct": 0.04988534866963157,
+            "annualized_sharpe": 0.8990132927614424,
+            "positive_month_share": 0.2,
+            "trades": 2
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": 0.22461255703979077,
+            "return_on_start_nav_pct": 0.04492251140795815,
+            "usd_per_calendar_day": 0.0014680559283646456,
+            "max_continuous_drawdown_pct": 0.04989417739384994,
+            "annualized_sharpe": 0.7297704412708333,
+            "positive_month_share": 0.2,
+            "trades": 2
+          }
+        },
+        "former_validation_now_diagnostic": {
+          "base": {
+            "start_nav": 500.38045194662544,
+            "net_pnl": 1.1924217477067032,
+            "return_on_start_nav_pct": 0.23830302384272523,
+            "usd_per_calendar_day": 0.01296110595333373,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 2.8265245703922757,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 2
+          },
+          "stress": {
+            "start_nav": 500.30099948938874,
+            "net_pnl": 1.0021871197004089,
+            "return_on_start_nav_pct": 0.20031683341093642,
+            "usd_per_calendar_day": 0.01089333825761314,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 2.8137205604005544,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 2
+          },
+          "severe": {
+            "start_nav": 500.2246125570398,
+            "net_pnl": 0.8304618015235974,
+            "return_on_start_nav_pct": 0.16601778094813383,
+            "usd_per_calendar_day": 0.009026758712213015,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 2.7927437995439255,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 2
+          }
+        },
+        "retrospective": {
+          "base": {
+            "start_nav": 501.57287369433215,
+            "net_pnl": 0.5447921038466461,
+            "return_on_start_nav_pct": 0.1086167399432874,
+            "usd_per_calendar_day": 0.002241942814183729,
+            "max_continuous_drawdown_pct": 0.05119253977083904,
+            "annualized_sharpe": 1.1024760515158016,
+            "positive_month_share": 0.125,
+            "trades": 4
+          },
+          "stress": {
+            "start_nav": 501.30318660908915,
+            "net_pnl": 0.2932145070222987,
+            "return_on_start_nav_pct": 0.05849045345306058,
+            "usd_per_calendar_day": 0.0012066440618201592,
+            "max_continuous_drawdown_pct": 0.0498700201151836,
+            "annualized_sharpe": 0.7882262962731461,
+            "positive_month_share": 0.125,
+            "trades": 4
+          },
+          "severe": {
+            "start_nav": 501.0550743585634,
+            "net_pnl": 0.0873272863185548,
+            "return_on_start_nav_pct": 0.01742868015663722,
+            "usd_per_calendar_day": 0.000359371548636028,
+            "max_continuous_drawdown_pct": 0.04989471473171303,
+            "annualized_sharpe": 0.3117703525673699,
+            "positive_month_share": 0.125,
+            "trades": 4
+          }
+        },
+        "opened_design_month": {
+          "base": {
+            "start_nav": 502.1176657981788,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 501.59640111611145,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 501.14240164488194,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        }
+      },
+      "stress_direction": {
+        "LONG": {
+          "trades": 2,
+          "wins": 1,
+          "net_pnl": 0.30099948938874377,
+          "mean_r": 0.6019989787774875
+        },
+        "SHORT": {
+          "trades": 6,
+          "wins": 4,
+          "net_pnl": 1.2954016267227075,
+          "mean_r": 0.8636010844818051
+        }
+      },
+      "stress_bootstrap": {
+        "method": "circular_28d_blocks",
+        "samples": 5000,
+        "p10_terminal_pnl": 0.23052250500251165,
+        "p50_terminal_pnl": 1.5200690221468847,
+        "p90_terminal_pnl": 3.065897720205709,
+        "observed_terminal_pnl": 1.5964011161114513
+      },
+      "stress_monthly_dispersion": {
+        "months": 17,
+        "positive_months": 4,
+        "positive_month_share": 0.23529411764705882,
+        "largest_positive_month_share_of_positive_pnl": 0.26654858179813595,
+        "best_month_pnl": 0.558639943631988,
+        "worst_month_pnl": -0.25,
+        "monthly_pnl": {
+          "2025-05-31 00:00:00+00:00": -0.24942674334818093,
+          "2025-06-30 00:00:00+00:00": 0.0,
+          "2025-07-31 00:00:00+00:00": 0.0,
+          "2025-08-31 00:00:00+00:00": 0.0,
+          "2025-09-30 00:00:00+00:00": 0.5504262327369247,
+          "2025-10-31 00:00:00+00:00": 0.44354717606842087,
+          "2025-11-30 00:00:00+00:00": 0.558639943631988,
+          "2025-12-31 00:00:00+00:00": 0.0,
+          "2026-01-31 00:00:00+00:00": 0.0,
+          "2026-02-28 00:00:00+00:00": -0.25,
+          "2026-03-31 00:00:00+00:00": 0.0,
+          "2026-04-30 00:00:00+00:00": 0.0,
+          "2026-05-31 00:00:00+00:00": 0.0,
+          "2026-06-30 00:00:00+00:00": 0.5432145070222987,
+          "2026-07-31 00:00:00+00:00": 0.0,
+          "2026-08-31 00:00:00+00:00": 0.0,
+          "2026-09-30 00:00:00+00:00": 0.0
+        }
+      }
+    },
+    "primary": {
+      "symbols": [
+        "BTCUSDT",
+        "ETHUSDT",
+        "SOLUSDT"
+      ],
+      "signal_counts": {
+        "BTCUSDT": 0,
+        "ETHUSDT": 2,
+        "SOLUSDT": 3
+      },
+      "signal_diagnostics": {
+        "BTCUSDT": {
+          "armed": 3,
+          "short_armed": 2,
+          "armed_expired_or_regime_flip": 3,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "ETHUSDT": {
+          "armed": 13,
+          "long_armed": 3,
+          "armed_expired_or_regime_flip": 11,
+          "short_armed": 10,
+          "signals": 2,
+          "short_signals": 2,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "SOLUSDT": {
+          "armed": 9,
+          "long_armed": 4,
+          "signals": 3,
+          "long_signals": 2,
+          "short_armed": 5,
+          "short_signals": 1,
+          "armed_expired_or_regime_flip": 6,
+          "confirmation_without_flow_flip": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        }
+      },
+      "replays": {
+        "base": {
+          "trades": 4,
+          "wins": 3,
+          "win_rate_pct": 75.0,
+          "profit_factor": 7.30707092120456,
+          "net_pnl": 1.572873694332145,
+          "return_pct": 0.3145747388664244,
+          "max_drawdown_pct": 0.09533016007702289,
+          "mean_net_r": 1.572873694332145,
+          "fees": 0.09034050564143867,
+          "funding_pnl": -0.004207922207414461,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 0,
+              "net_pnl": 0.0,
+              "gross_profit": 0.0
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": 0.557577838516977,
+              "gross_profit": 0.557577838516977
+            },
+            "SOLUSDT": {
+              "trades": 3,
+              "net_pnl": 1.0152958558151681,
+              "gross_profit": 1.2646784478269524
+            }
+          },
+          "represented_symbols": 2,
+          "diagnostics": {
+            "signals": 5,
+            "entries": 4,
+            "entries_SOLUSDT": 3,
+            "entries_ETHUSDT": 1,
+            "blocked_open_position": 1
+          },
+          "drawdown_halted": false
+        },
+        "stress": {
+          "trades": 4,
+          "wins": 3,
+          "win_rate_pct": 75.0,
+          "profit_factor": 6.224726874094661,
+          "net_pnl": 1.3031866090891526,
+          "return_pct": 0.26063732181782484,
+          "max_drawdown_pct": 0.09272536685538402,
+          "mean_net_r": 1.3031866090891526,
+          "fees": 0.1293100383428666,
+          "funding_pnl": -0.00381997093336959,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 0,
+              "net_pnl": 0.0,
+              "gross_profit": 0.0
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": 0.44354717606842087,
+              "gross_profit": 0.44354717606842087
+            },
+            "SOLUSDT": {
+              "trades": 3,
+              "net_pnl": 0.8596394330207318,
+              "gross_profit": 1.1090661763689127
+            }
+          },
+          "represented_symbols": 2,
+          "diagnostics": {
+            "signals": 5,
+            "entries": 4,
+            "entries_SOLUSDT": 3,
+            "entries_ETHUSDT": 1,
+            "blocked_open_position": 1
+          },
+          "drawdown_halted": false
+        },
+        "severe": {
+          "trades": 4,
+          "wins": 3,
+          "win_rate_pct": 75.0,
+          "profit_factor": 5.229248436084338,
+          "net_pnl": 1.0550743585633882,
+          "return_pct": 0.21101487171266697,
+          "max_drawdown_pct": 0.08999529791170469,
+          "mean_net_r": 1.0550743585633882,
+          "fees": 0.14420377964295988,
+          "funding_pnl": -0.003448556695208684,
+          "per_symbol": {
+            "BTCUSDT": {
+              "trades": 0,
+              "net_pnl": 0.0,
+              "gross_profit": 0.0
+            },
+            "ETHUSDT": {
+              "trades": 1,
+              "net_pnl": 0.3455646671744148,
+              "gross_profit": 0.3455646671744148
+            },
+            "SOLUSDT": {
+              "trades": 3,
+              "net_pnl": 0.7095096913889734,
+              "gross_profit": 0.9589805783582506
+            }
+          },
+          "represented_symbols": 2,
+          "diagnostics": {
+            "signals": 5,
+            "entries": 4,
+            "entries_SOLUSDT": 3,
+            "entries_ETHUSDT": 1,
+            "blocked_open_position": 1
+          },
+          "drawdown_halted": false
+        }
+      },
+      "slices": {
+        "development": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": 0.3804519466254419,
+            "return_on_start_nav_pct": 0.07609038932508838,
+            "usd_per_calendar_day": 0.0024866140302316465,
+            "max_continuous_drawdown_pct": 0.04987651840235863,
+            "annualized_sharpe": 1.0441866095988963,
+            "positive_month_share": 0.2,
+            "trades": 2
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": 0.30099948938874377,
+            "return_on_start_nav_pct": 0.06019989787774875,
+            "usd_per_calendar_day": 0.0019673169241094363,
+            "max_continuous_drawdown_pct": 0.04988534866963157,
+            "annualized_sharpe": 0.8990132927614424,
+            "positive_month_share": 0.2,
+            "trades": 2
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": 0.22461255703979077,
+            "return_on_start_nav_pct": 0.04492251140795815,
+            "usd_per_calendar_day": 0.0014680559283646456,
+            "max_continuous_drawdown_pct": 0.04989417739384994,
+            "annualized_sharpe": 0.7297704412708333,
+            "positive_month_share": 0.2,
+            "trades": 2
+          }
+        },
+        "former_validation_now_diagnostic": {
+          "base": {
+            "start_nav": 500.38045194662544,
+            "net_pnl": 1.1924217477067032,
+            "return_on_start_nav_pct": 0.23830302384272523,
+            "usd_per_calendar_day": 0.01296110595333373,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 2.8265245703922757,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 2
+          },
+          "stress": {
+            "start_nav": 500.30099948938874,
+            "net_pnl": 1.0021871197004089,
+            "return_on_start_nav_pct": 0.20031683341093642,
+            "usd_per_calendar_day": 0.01089333825761314,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 2.8137205604005544,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 2
+          },
+          "severe": {
+            "start_nav": 500.2246125570398,
+            "net_pnl": 0.8304618015235974,
+            "return_on_start_nav_pct": 0.16601778094813383,
+            "usd_per_calendar_day": 0.009026758712213015,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 2.7927437995439255,
+            "positive_month_share": 0.6666666666666666,
+            "trades": 2
+          }
+        },
+        "retrospective": {
+          "base": {
+            "start_nav": 501.57287369433215,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 501.30318660908915,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 501.0550743585634,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        },
+        "opened_design_month": {
+          "base": {
+            "start_nav": 501.57287369433215,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 501.30318660908915,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 501.0550743585634,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        }
+      },
+      "stress_direction": {
+        "LONG": {
+          "trades": 2,
+          "wins": 1,
+          "net_pnl": 0.30099948938874377,
+          "mean_r": 0.6019989787774875
+        },
+        "SHORT": {
+          "trades": 2,
+          "wins": 2,
+          "net_pnl": 1.0021871197004089,
+          "mean_r": 2.0043742394008177
+        }
+      },
+      "stress_bootstrap": {
+        "method": "circular_28d_blocks",
+        "samples": 5000,
+        "p10_terminal_pnl": 0.0585238627792819,
+        "p50_terminal_pnl": 1.1884870729953718,
+        "p90_terminal_pnl": 2.5652209995189423,
+        "observed_terminal_pnl": 1.3031866090891526
+      },
+      "stress_monthly_dispersion": {
+        "months": 17,
+        "positive_months": 3,
+        "positive_month_share": 0.17647058823529413,
+        "largest_positive_month_share_of_positive_pnl": 0.35980622139763274,
+        "best_month_pnl": 0.558639943631988,
+        "worst_month_pnl": -0.24942674334818093,
+        "monthly_pnl": {
+          "2025-05-31 00:00:00+00:00": -0.24942674334818093,
+          "2025-06-30 00:00:00+00:00": 0.0,
+          "2025-07-31 00:00:00+00:00": 0.0,
+          "2025-08-31 00:00:00+00:00": 0.0,
+          "2025-09-30 00:00:00+00:00": 0.5504262327369247,
+          "2025-10-31 00:00:00+00:00": 0.44354717606842087,
+          "2025-11-30 00:00:00+00:00": 0.558639943631988,
+          "2025-12-31 00:00:00+00:00": 0.0,
+          "2026-01-31 00:00:00+00:00": 0.0,
+          "2026-02-28 00:00:00+00:00": 0.0,
+          "2026-03-31 00:00:00+00:00": 0.0,
+          "2026-04-30 00:00:00+00:00": 0.0,
+          "2026-05-31 00:00:00+00:00": 0.0,
+          "2026-06-30 00:00:00+00:00": 0.0,
+          "2026-07-31 00:00:00+00:00": 0.0,
+          "2026-08-31 00:00:00+00:00": 0.0,
+          "2026-09-30 00:00:00+00:00": 0.0
+        }
+      }
+    },
+    "portability": {
+      "symbols": [
+        "BNBUSDT",
+        "XRPUSDT",
+        "DOGEUSDT"
+      ],
+      "signal_counts": {
+        "BNBUSDT": 1,
+        "XRPUSDT": 1,
+        "DOGEUSDT": 2
+      },
+      "signal_diagnostics": {
+        "BNBUSDT": {
+          "armed": 3,
+          "short_armed": 3,
+          "armed_expired_or_regime_flip": 2,
+          "signals": 1,
+          "short_signals": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "XRPUSDT": {
+          "armed": 6,
+          "short_armed": 5,
+          "armed_expired_or_regime_flip": 4,
+          "confirmation_without_flow_flip": 1,
+          "signals": 1,
+          "short_signals": 1,
+          "blocked_target_space": 1,
+          "long_armed": 1,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        },
+        "DOGEUSDT": {
+          "armed": 9,
+          "long_armed": 1,
+          "confirmation_without_flow_flip": 3,
+          "armed_expired_or_regime_flip": 7,
+          "short_armed": 8,
+          "signals": 2,
+          "short_signals": 2,
+          "config": {
+            "decision_minutes": 15,
+            "atr_period": 14,
+            "volume_lookback": 20,
+            "liquidity_lookback_bars": 96,
+            "level_touch_tolerance_atr": 0.25,
+            "minimum_level_touches": 2,
+            "sweep_buffer_atr": 0.02,
+            "confirmation_buffer_atr": 0.03,
+            "confirmation_window_bars": 3,
+            "ema4h_span": 50,
+            "oi_lookback_minutes": 60,
+            "minimum_sweep_oi_change_pct": 0.05,
+            "minimum_sweep_relative_volume": 1.1,
+            "sweep_sell_taker_ratio": 0.48,
+            "sweep_buy_taker_ratio": 0.52,
+            "confirmation_buy_taker_ratio": 0.52,
+            "confirmation_sell_taker_ratio": 0.48,
+            "funding_lookback_days": 7,
+            "maximum_long_mean_funding": 5e-05,
+            "minimum_short_mean_funding": -5e-05,
+            "maximum_metrics_age_minutes": 15.0,
+            "stop_buffer_atr": 0.2,
+            "minimum_stop_atr": 1.25,
+            "maximum_stop_atr": 3.5,
+            "minimum_target_r": 1.8,
+            "maximum_target_r": 3.0,
+            "target_front_run_fraction": 0.9,
+            "max_hold_minutes": 1440,
+            "risk_scale": 0.5
+          }
+        }
+      },
+      "replays": {
+        "base": {
+          "trades": 4,
+          "wins": 2,
+          "win_rate_pct": 50.0,
+          "profit_factor": 2.0921618750956785,
+          "net_pnl": 0.5447921038466461,
+          "return_pct": 0.10895842076932283,
+          "max_drawdown_pct": 0.19163197673114363,
+          "mean_net_r": 0.5447921038466461,
+          "fees": 0.13043843804803248,
+          "funding_pnl": 0.0011800757109233023,
+          "per_symbol": {
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25,
+              "gross_profit": 0.0
+            },
+            "XRPUSDT": {
+              "trades": 1,
+              "net_pnl": 0.5426494526346914,
+              "gross_profit": 0.5426494526346914
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.25214265121195467,
+              "gross_profit": 0.5009625755010347
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 4,
+            "entries": 4,
+            "entries_BNBUSDT": 1,
+            "entries_DOGEUSDT": 2,
+            "entries_XRPUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "stress": {
+          "trades": 4,
+          "wins": 2,
+          "win_rate_pct": 50.0,
+          "profit_factor": 1.5876616266917771,
+          "net_pnl": 0.2932145070222987,
+          "return_pct": 0.05864290140444872,
+          "max_drawdown_pct": 0.18377458809742953,
+          "mean_net_r": 0.2932145070222987,
+          "fees": 0.1789182011724838,
+          "funding_pnl": 0.0010487435211096424,
+          "per_symbol": {
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25,
+              "gross_profit": 0.0
+            },
+            "XRPUSDT": {
+              "trades": 1,
+              "net_pnl": 0.42316405898225185,
+              "gross_profit": 0.42316405898225185
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.12005044804004683,
+              "gross_profit": 0.36900170451895065
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 4,
+            "entries": 4,
+            "entries_BNBUSDT": 1,
+            "entries_DOGEUSDT": 2,
+            "entries_XRPUSDT": 1
+          },
+          "drawdown_halted": false
+        },
+        "severe": {
+          "trades": 4,
+          "wins": 2,
+          "win_rate_pct": 50.0,
+          "profit_factor": 1.174979412462052,
+          "net_pnl": 0.0873272863185548,
+          "return_pct": 0.01746545726371007,
+          "max_drawdown_pct": 0.17601364475520187,
+          "mean_net_r": 0.08732728631855485,
+          "fees": 0.19210750302699764,
+          "funding_pnl": 0.0009282229845409026,
+          "per_symbol": {
+            "BNBUSDT": {
+              "trades": 1,
+              "net_pnl": -0.25,
+              "gross_profit": 0.0
+            },
+            "XRPUSDT": {
+              "trades": 1,
+              "net_pnl": 0.32259515841167286,
+              "gross_profit": 0.32259515841167286
+            },
+            "DOGEUSDT": {
+              "trades": 2,
+              "net_pnl": 0.014732127906881942,
+              "gross_profit": 0.26380390492232664
+            }
+          },
+          "represented_symbols": 3,
+          "diagnostics": {
+            "signals": 4,
+            "entries": 4,
+            "entries_BNBUSDT": 1,
+            "entries_DOGEUSDT": 2,
+            "entries_XRPUSDT": 1
+          },
+          "drawdown_halted": false
+        }
+      },
+      "slices": {
+        "development": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        },
+        "former_validation_now_diagnostic": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        },
+        "retrospective": {
+          "base": {
+            "start_nav": 500.0,
+            "net_pnl": 0.5447921038466461,
+            "return_on_start_nav_pct": 0.10895842076932923,
+            "usd_per_calendar_day": 0.002241942814183729,
+            "max_continuous_drawdown_pct": 0.05135357638826887,
+            "annualized_sharpe": 1.1024765486913062,
+            "positive_month_share": 0.125,
+            "trades": 4
+          },
+          "stress": {
+            "start_nav": 500.0,
+            "net_pnl": 0.2932145070222987,
+            "return_on_start_nav_pct": 0.05864290140445974,
+            "usd_per_calendar_day": 0.0012066440618201592,
+            "max_continuous_drawdown_pct": 0.04999999999999449,
+            "annualized_sharpe": 0.7882268508559761,
+            "positive_month_share": 0.125,
+            "trades": 4
+          },
+          "severe": {
+            "start_nav": 500.0,
+            "net_pnl": 0.0873272863185548,
+            "return_on_start_nav_pct": 0.01746545726371096,
+            "usd_per_calendar_day": 0.000359371548636028,
+            "max_continuous_drawdown_pct": 0.04999999999999449,
+            "annualized_sharpe": 0.31177101263165063,
+            "positive_month_share": 0.125,
+            "trades": 4
+          }
+        },
+        "opened_design_month": {
+          "base": {
+            "start_nav": 500.54479210384665,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "stress": {
+            "start_nav": 500.2932145070223,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          },
+          "severe": {
+            "start_nav": 500.08732728631855,
+            "net_pnl": 0.0,
+            "return_on_start_nav_pct": 0.0,
+            "usd_per_calendar_day": 0.0,
+            "max_continuous_drawdown_pct": 0.0,
+            "annualized_sharpe": 0.0,
+            "positive_month_share": 0.0,
+            "trades": 0
+          }
+        }
+      },
+      "stress_direction": {
+        "LONG": {
+          "trades": 0,
+          "wins": 0,
+          "net_pnl": 0.0,
+          "mean_r": 0.0
+        },
+        "SHORT": {
+          "trades": 4,
+          "wins": 2,
+          "net_pnl": 0.2932145070222987,
+          "mean_r": 0.2932145070222987
+        }
+      },
+      "stress_bootstrap": {
+        "method": "circular_28d_blocks",
+        "samples": 5000,
+        "p10_terminal_pnl": -0.3257493038980215,
+        "p50_terminal_pnl": 0.29321450702224183,
+        "p90_terminal_pnl": 1.087563254902875,
+        "observed_terminal_pnl": 0.2932145070222987
+      },
+      "stress_monthly_dispersion": {
+        "months": 17,
+        "positive_months": 1,
+        "positive_month_share": 0.058823529411764705,
+        "largest_positive_month_share_of_positive_pnl": 1.0,
+        "best_month_pnl": 0.5432145070222987,
+        "worst_month_pnl": -0.25,
+        "monthly_pnl": {
+          "2025-05-31 00:00:00+00:00": 0.0,
+          "2025-06-30 00:00:00+00:00": 0.0,
+          "2025-07-31 00:00:00+00:00": 0.0,
+          "2025-08-31 00:00:00+00:00": 0.0,
+          "2025-09-30 00:00:00+00:00": 0.0,
+          "2025-10-31 00:00:00+00:00": 0.0,
+          "2025-11-30 00:00:00+00:00": 0.0,
+          "2025-12-31 00:00:00+00:00": 0.0,
+          "2026-01-31 00:00:00+00:00": 0.0,
+          "2026-02-28 00:00:00+00:00": -0.25,
+          "2026-03-31 00:00:00+00:00": 0.0,
+          "2026-04-30 00:00:00+00:00": 0.0,
+          "2026-05-31 00:00:00+00:00": 0.0,
+          "2026-06-30 00:00:00+00:00": 0.5432145070222987,
+          "2026-07-31 00:00:00+00:00": 0.0,
+          "2026-08-31 00:00:00+00:00": 0.0,
+          "2026-09-30 00:00:00+00:00": 0.0
+        }
+      }
+    }
+  },
+  "leave_one_out_stress_pnl": {
+    "BTCUSDT": 1.5964011161114513,
+    "ETHUSDT": 1.1528539400430304,
+    "SOLUSDT": 0.9466554361541171,
+    "BNBUSDT": 1.8464011161114513,
+    "XRPUSDT": 1.1732370571291995,
+    "DOGEUSDT": 1.4763506680714045
+  },
+  "live_enabled": false,
+  "historical_gate": {
+    "checks": {
+      "combined_minimum_18_stress_fills": false,
+      "combined_stress_positive": true,
+      "combined_stress_pf_above_1_15": true,
+      "combined_stress_dd_at_most_5pct": true,
+      "combined_severe_positive": true,
+      "at_least_five_longs_and_shorts": false,
+      "long_and_short_non_negative": true,
+      "at_least_three_symbols": true,
+      "four_of_six_leave_one_out_positive": true,
+      "primary_and_portability_minimum_six_stress_fills": false,
+      "primary_and_portability_stress_non_negative": true,
+      "primary_and_portability_severe_non_negative": true,
+      "three_of_four_positive_stress_slices": true,
+      "no_stress_slice_below_minus_1usd": true,
+      "bootstrap_p10_positive": true
+    },
+    "passed": false,
+    "stress_slice_pnl": {
+      "development": 0.30099948938874377,
+      "former_validation_now_diagnostic": 1.0021871197004089,
+      "retrospective": 0.2932145070222987,
+      "opened_design_month": 0.0
+    }
+  },
+  "decision": "REJECTED_AT_HISTORICAL_GATE",
+  "paper_forward": {
+    "minimum_calendar_days": 180,
+    "minimum_fills": 24,
+    "requires_both_directions": true,
+    "live_enabled": false
+  }
+}

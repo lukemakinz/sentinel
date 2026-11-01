@@ -9,7 +9,7 @@ HELP = (
     'Sentinel — komendy:\n'
     '/status — feed, pauza, budżet AI, otwarte setupy\n'
     '/scan [SYMBOL] — setup search teraz (ok. 20 s)\n'
-    '/raport — wyniki dziennika setupów i shadow (AI vs baseline)\n'
+    '/raport — setupy, M0/M1/M2/M3 i post-mortem shadow\n'
     '/koszt — wydatki AI dziś i w 7 dni\n'
     '/paper — paper-forward Book A+B od 2026-10-27\n'
     '/pauza — wstrzymaj analizy, AI i dziennik\n'
@@ -68,7 +68,9 @@ def cmd_report(_args) -> str:
     from l2_agents.management.commands.auction_shadow_report import build_report
 
     journal = journal_summary()
-    shadow = build_report()['paired_comparison']
+    auction_report = build_report()
+    shadow = auction_report['paired_comparison']
+    learning = auction_report['learning_postmortems']
 
     def line(name, s):
         if not s.get('filled_closed', s.get('closed')):
@@ -83,9 +85,16 @@ def cmd_report(_args) -> str:
         line('• ścisłe RR≥1:3', journal['strict_rr_1_3']),
         line('• wszystkie', journal['all_setups_to_tp1']),
         f"• sweepy: {episodes['total']}, z MSS {episodes['reached_mss']}, bez MSS {episodes['no_mss']}",
+        *variant_lines(journal['variants']),
         'Shadow:',
-        line('• AI', shadow['ai']),
-        line('• baseline', shadow['mechanical_baseline']),
+        line('• M0 baseline', shadow['m0_mechanical_baseline']),
+        line('• M1 + trend', shadow['m1_trend_filter']),
+        line('• M2 AI', shadow['m2_ai']),
+        line('• M3 + global ctx', auction_report['global_context_comparison']['m3_global_context']),
+        f"• global ctx: {(auction_report.get('latest_global_context') or {}).get('state', 'brak')}",
+        f"• post-mortem: {learning['records']} rekordów; "
+        + (', '.join(f'{key}={value}' for key, value in learning['diagnoses'].items())
+           or 'brak zamkniętych diagnoz'),
         'Min. ~100 zamkniętych, zanim wyciągniemy wnioski.',
     ])
 
@@ -99,6 +108,15 @@ def cmd_paper(_args) -> str:
     if not path.exists():
         return 'Paper-forward jeszcze nie przeliczony (raz na dobę ok. 03:00 UTC).'
     return format_report(json.loads(path.read_text()))
+
+
+def variant_lines(variants: dict) -> list[str]:
+    ranked = sorted(((k, v) for k, v in variants.items() if v['closed'] >= 10),
+                    key=lambda kv: -kv[1]['mean_net_r'])
+    if not ranked:
+        return ['• warianty wejścia/wyjścia: za mało zamkniętych (min. 10)']
+    return ['• najlepsze warianty (śr. R): ' + ', '.join(
+        f"{k} {v['mean_net_r']:+.2f}R/{v['closed']}" for k, v in ranked[:3])]
 
 
 def cmd_cost(_args) -> str:

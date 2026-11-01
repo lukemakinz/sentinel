@@ -11,6 +11,8 @@ import SystemStats from '../components/SystemStats';
 import ExchangeControlPanel from '../components/ExchangeControlPanel';
 import NextActionPanel from '../components/NextActionPanel';
 import StrategyPulsePanel from '../components/StrategyPulsePanel';
+import MTFWidget from '../components/MTFWidget';
+import AuctionLearningPanel from '../components/AuctionLearningPanel';
 import { Activity, Radio, Cpu, Bell, Radar, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 
 const PAIRS = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT'];
@@ -178,6 +180,21 @@ export default function Dashboard() {
                             ))}
                         </div>
                     </div>
+
+                    <div className="glass-panel p-5">
+                        <div className="flex items-start justify-between gap-4 mb-4">
+                            <div>
+                                <p className="text-[10px] uppercase tracking-[0.28em] text-gray-600 font-mono">Trend State v1</p>
+                                <h3 className="text-sm font-bold text-white mt-1">{selectedSymbol} — nauka top-down</h3>
+                            </div>
+                            <span className="text-[9px] uppercase tracking-widest text-[#D4AF37] border border-[#D4AF37]/20 bg-[#D4AF37]/10 rounded-full px-2 py-1 font-mono">
+                                research only
+                            </span>
+                        </div>
+                        <MTFWidget symbol={selectedSymbol} />
+                    </div>
+
+                    <AuctionLearningPanel symbol={selectedSymbol} />
 
                     <div>
                         <h3 className="text-sm uppercase tracking-widest text-[#9CA3AF] font-bold mb-3 flex items-center gap-2">

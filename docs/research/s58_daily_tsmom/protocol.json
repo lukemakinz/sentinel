@@ -1,0 +1,25 @@
+{
+  "strategy_id": "S58_DAILY_TSMOM",
+  "traded": [
+    "BTCUSDT",
+    "SOLUSDT",
+    "XRPUSDT"
+  ],
+  "windows": {
+    "development": [
+      "2025-05-01",
+      "2025-10-01"
+    ],
+    "validation": [
+      "2025-10-01",
+      "2026-01-01"
+    ]
+  },
+  "routes": [
+    "tsmom_20",
+    "tsmom_10"
+  ],
+  "target_r": 2.5,
+  "trailing": false,
+  "disclosure": "cached-window historical characterization; not live approval"
+}

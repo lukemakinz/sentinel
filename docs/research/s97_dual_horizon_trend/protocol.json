@@ -1,0 +1,63 @@
+{
+  "status": "frozen_before_market_data_load",
+  "strategy_id": "S97_DUAL_HORIZON_TREND",
+  "capital_usd": 500.0,
+  "hypothesis": "Slow trends that agree over 28 and 112 completed daily candles persist long enough to survive crypto futures costs; a funding veto removes only positions whose 28-day mean adverse funding exceeds 1 bp per settlement.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "BNBUSDT", "XRPUSDT", "DOGEUSDT"],
+  "data": {
+    "source": "checksum-verified public Binance USD-M monthly archives",
+    "candles": "1d",
+    "funding": "historical fundingRate settlements",
+    "warmup_start": "2022-04-04T00:00:00Z",
+    "execution_start": "2023-01-02T00:00:00Z",
+    "end_exclusive": "2026-09-01T00:00:00Z"
+  },
+  "diagnostic_slices": {
+    "development": ["2023-01-02T00:00:00Z", "2024-01-01T00:00:00Z"],
+    "validation": ["2024-01-01T00:00:00Z", "2025-01-06T00:00:00Z"],
+    "retrospective_evaluation": ["2025-01-06T00:00:00Z", "2026-09-01T00:00:00Z"]
+  },
+  "signal": {
+    "decision": "Monday 00:00 UTC using only candles with close_time strictly before the decision",
+    "direction": "Long when both 28d and 112d returns are positive; short when both are negative; otherwise flat.",
+    "strength": "minimum of absolute 28d and 112d return divided by 28d daily volatility times square-root horizon",
+    "funding_veto": "Skip when direction times mean realized funding over the prior 28 days is greater than +0.0001 per settlement.",
+    "selection": "At most the three strongest assets; require at least two; deterministic universe order breaks exact ties."
+  },
+  "portfolio": {
+    "base_weights": "inverse 28d annualized volatility",
+    "single_asset_cap": 0.45,
+    "covariance": "sample covariance of the selected signed daily returns over 60 completed days, annualized by 365",
+    "volatility_target_annual": 0.25,
+    "gross_cap": 1.0,
+    "rebalance": "weekly; unchanged quantities drift between Monday rebalances"
+  },
+  "execution": {
+    "entry_and_rebalance": "Monday daily open",
+    "turnover": "cost only the signed quantity delta; never close and reopen an unchanged holding",
+    "funding_mark_proxy": "same UTC day's futures close",
+    "base_bps_per_traded_notional": {"fee": 5.0, "slippage": 2.0},
+    "stress_bps_per_traded_notional": {"fee": 8.0, "slippage": 5.0},
+    "severe_bps_per_traded_notional": {"fee": 10.0, "slippage": 10.0},
+    "end_of_study": "liquidate all positions at the final close with scenario costs"
+  },
+  "robustness": {
+    "predeclared_neighbor_horizons": [[21, 84], [35, 140]],
+    "leave_one_symbol_out": "rerun stress after excluding each asset",
+    "uncertainty_diagnostic": "5000 deterministic circular 28-day block bootstraps of full-period stress daily returns; report 10th/50th/90th terminal PnL percentiles but do not use this diagnostic to tune parameters",
+    "continuous_ledger": "run once from 2023-01-02 through 2026-09-01; slices never reset cash, holdings or risk state"
+  },
+  "historical_gate": {
+    "full_stress": "net PnL > 0, Sharpe >= 0.50, max drawdown <= 15%, positive-month share >= 45%",
+    "time_dispersion": "development and validation stress PnL > 0; retrospective evaluation stress PnL >= 0; largest positive month <= 60% of total positive monthly PnL",
+    "cost_survival": "full severe net PnL > 0",
+    "neighbors": "both predeclared neighboring horizon pairs must have positive full-period stress PnL",
+    "symbol_robustness": "at least five of six leave-one-symbol-out stress replays must remain profitable",
+    "promotion": "A pass means paper-forward challenger only for at least 26 weekly decisions and 180 days; live remains disabled."
+  },
+  "disclosures": [
+    "All historical dates have potentially been exposed elsewhere in this research program; none is claimed as pristine OOS.",
+    "Daily bars cannot reproduce intraday funding mark prices; the same-day close proxy is explicit and funding attribution will be reported separately.",
+    "No parameter grid or post-result threshold adjustment is permitted for S97."
+  ]
+}

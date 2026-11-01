@@ -1,0 +1,4627 @@
+{
+  "summary": {
+    "trades": 64,
+    "days": 31.0,
+    "trades_per_day": 2.064516129032258,
+    "days_at_least_3_pct": 32.25806451612903,
+    "days_at_least_4_pct": 19.35483870967742,
+    "zero_trade_days": 7,
+    "win_rate_pct": 29.6875,
+    "profit_factor": 0.3439142586362014,
+    "net_pnl": -471.74459485641637,
+    "return_pct": -4.717445948564158,
+    "max_drawdown_pct": 4.739126230952806,
+    "mean_net_r": -0.3013407807546674,
+    "fees": 279.43970536481856,
+    "funding_pnl": -0.27078999375429275,
+    "gross_pnl_after_slippage": -192.03409949784628,
+    "diagnostics": {
+      "signals": 134,
+      "entries": 64,
+      "blocked_open_position": 33,
+      "blocked_reward_cost_or_target": 32,
+      "blocked_stop_width_or_gap": 5
+    }
+  },
+  "trades": [
+    {
+      "opened_at": "2026-08-01 05:45:00+00:00",
+      "closed_at": "2026-08-01 07:11:00+00:00",
+      "side": "SHORT",
+      "entry": 1864.5070240000002,
+      "initial_stop": 1870.8074252293386,
+      "quantity": 2.9265756059416868,
+      "pnl": -25.0,
+      "gross_pnl": -19.53361242024455,
+      "fees": 5.466387579755454,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.0,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-01 07:11:00+00:00",
+          "price": 1871.1815867143844,
+          "quantity": 2.9265756059416868,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-01 17:00:00+00:00",
+      "closed_at": "2026-08-01 17:41:00+00:00",
+      "side": "SHORT",
+      "entry": 1867.5464160000001,
+      "initial_stop": 1873.4559862289823,
+      "quantity": 3.057958673289879,
+      "pnl": 17.834196678848457,
+      "gross_pnl": 23.533309784534573,
+      "fees": 5.699113105686362,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.7151557565453015,
+      "setup": "continuation",
+      "score": 3,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-01 17:37:00+00:00",
+          "price": 1859.0537970686582,
+          "quantity": 1.2231834693159518,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-01 17:41:00+00:00",
+          "price": 1860.3818986967108,
+          "quantity": 1.8347752039739273,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-01 23:15:00+00:00",
+      "closed_at": "2026-08-02 00:45:00+00:00",
+      "side": "SHORT",
+      "entry": 1845.170892,
+      "initial_stop": 1849.2807340921495,
+      "quantity": 3.948420292794221,
+      "pnl": -6.917767406717758,
+      "gross_pnl": 0.16559674708005737,
+      "fees": 7.285427395272475,
+      "funding_pnl": 0.20206324147530433,
+      "r_multiple": -0.2769091239006808,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-02 00:45:00+00:00",
+          "price": 1845.128952,
+          "quantity": 3.948420292794221,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-02 23:30:00+00:00",
+      "closed_at": "2026-08-03 00:29:00+00:00",
+      "side": "LONG",
+      "entry": 1883.386602,
+      "initial_stop": 1874.0790677792038,
+      "quantity": 2.1594167300166593,
+      "pnl": -25.371707242951743,
+      "gross_pnl": -20.90822865005733,
+      "fees": 4.056562423122999,
+      "funding_pnl": -0.4069161697708793,
+      "r_multiple": -1.0162996024512523,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-03 00:29:00+00:00",
+          "price": 1873.704251965648,
+          "quantity": 2.1594167300166593,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-03 10:45:00+00:00",
+      "closed_at": "2026-08-03 12:15:00+00:00",
+      "side": "SHORT",
+      "entry": 1846.000726,
+      "initial_stop": 1854.5982158507259,
+      "quantity": 2.301654940670605,
+      "pnl": 8.699184568384226,
+      "gross_pnl": 12.94157047462733,
+      "fees": 4.24238590624211,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.34934573604773744,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-03 12:15:00+00:00",
+          "price": 1840.378002,
+          "quantity": 2.301654940670605,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-06 00:15:00+00:00",
+      "closed_at": "2026-08-06 01:26:00+00:00",
+      "side": "LONG",
+      "entry": 1909.8919019999998,
+      "initial_stop": 1905.0806269932712,
+      "quantity": 3.510501407715634,
+      "pnl": -24.923109766494235,
+      "gross_pnl": -18.22754532860252,
+      "fees": 6.695564437891388,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.000000000000013,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-06 01:26:00+00:00",
+          "price": 1904.6996108678725,
+          "quantity": 3.510501407715634,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-06 08:30:00+00:00",
+      "closed_at": "2026-08-06 09:15:00+00:00",
+      "side": "LONG",
+      "entry": 1913.102544,
+      "initial_stop": 1906.304772151211,
+      "quantity": 2.7353993097310316,
+      "pnl": -24.86080199207754,
+      "gross_pnl": -19.637521374462622,
+      "fees": 5.22328061761505,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999947,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-06 09:15:00+00:00",
+          "price": 1905.9235111967807,
+          "quantity": 2.7353993097310316,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-07 15:45:00+00:00",
+      "closed_at": "2026-08-07 16:57:00+00:00",
+      "side": "LONG",
+      "entry": 1919.9939219999999,
+      "initial_stop": 1910.4839629262947,
+      "quantity": 2.1003160885533965,
+      "pnl": -24.944602054758434,
+      "gross_pnl": -20.776444084838566,
+      "fees": 4.022205902258916,
+      "funding_pnl": -0.145952067659522,
+      "r_multiple": -1.0058854844008398,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-07 16:57:00+00:00",
+          "price": 1910.1018661337096,
+          "quantity": 2.1003160885533965,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-07 21:45:00+00:00",
+      "closed_at": "2026-08-07 23:15:00+00:00",
+      "side": "LONG",
+      "entry": 1917.7434719999999,
+      "initial_stop": 1910.8384170750974,
+      "quantity": 2.6883405690066025,
+      "pnl": -13.529501991435609,
+      "gross_pnl": -8.378143486454082,
+      "fees": 5.15135850498195,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.5469495555609428,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-07 23:15:00+00:00",
+          "price": 1914.626998,
+          "quantity": 2.6883405690066025,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-08 09:45:00+00:00",
+      "closed_at": "2026-08-08 11:15:00+00:00",
+      "side": "LONG",
+      "entry": 1918.993722,
+      "initial_stop": 1914.8988792025518,
+      "quantity": 3.8630331988448012,
+      "pnl": -0.4938723534014571,
+      "gross_pnl": 6.922725465791637,
+      "fees": 7.4165978191936475,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.019992837105926944,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-08 11:15:00+00:00",
+          "price": 1920.7857660000002,
+          "quantity": 3.8630331988448012,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-10 05:00:00+00:00",
+      "closed_at": "2026-08-10 05:38:00+00:00",
+      "side": "SHORT",
+      "entry": 1914.297064,
+      "initial_stop": 1921.497632071616,
+      "quantity": 2.5993203796468776,
+      "pnl": -24.701230046097407,
+      "gross_pnl": -19.715500924482864,
+      "fees": 4.985729121615625,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999563,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-10 05:38:00+00:00",
+          "price": 1921.8819315980302,
+          "quantity": 2.5993203796468776,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-10 09:00:00+00:00",
+      "closed_at": "2026-08-10 09:31:00+00:00",
+      "side": "LONG",
+      "entry": 1926.3852,
+      "initial_stop": 1921.4376306615154,
+      "quantity": 3.3959366573390186,
+      "pnl": -24.639476970982287,
+      "gross_pnl": -18.10664817823701,
+      "fees": 6.532828792746239,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.999999999999961,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-10 09:31:00+00:00",
+          "price": 1921.053343135383,
+          "quantity": 3.3959366573390186,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-11 04:45:00+00:00",
+      "closed_at": "2026-08-11 06:15:00+00:00",
+      "side": "SHORT",
+      "entry": 1876.644596,
+      "initial_stop": 1881.776226971169,
+      "quantity": 3.3270066370018396,
+      "pnl": 3.1096345157802716,
+      "gross_pnl": 9.348569257338642,
+      "fees": 6.238934741556967,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.1265216826504275,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-11 06:15:00+00:00",
+          "price": 1873.834692,
+          "quantity": 3.3270066370018396,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-11 13:45:00+00:00",
+      "closed_at": "2026-08-11 14:24:00+00:00",
+      "side": "LONG",
+      "entry": 1889.8779,
+      "initial_stop": 1881.6372865324881,
+      "quantity": 2.3409310284229914,
+      "pnl": -24.585652364845373,
+      "gross_pnl": -20.17166438099485,
+      "fees": 4.413987983850386,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.0000000000000053,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-11 14:24:00+00:00",
+          "price": 1881.2609590751817,
+          "quantity": 2.3409310284229914,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-12 13:00:00+00:00",
+      "closed_at": "2026-08-12 13:32:00+00:00",
+      "side": "LONG",
+      "entry": 1910.962116,
+      "initial_stop": 1903.4195697523942,
+      "quantity": 2.494772409313704,
+      "pnl": -24.524188233932364,
+      "gross_pnl": -19.76665599969244,
+      "fees": 4.757532234240688,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999687,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-12 13:32:00+00:00",
+          "price": 1903.0388858384438,
+          "quantity": 2.494772409313704,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-14 13:00:00+00:00",
+      "closed_at": "2026-08-14 14:30:00+00:00",
+      "side": "SHORT",
+      "entry": 1872.155494,
+      "initial_stop": 1879.4854310385656,
+      "quantity": 2.5530452699319968,
+      "pnl": 5.595829676783978,
+      "gross_pnl": 10.370342234200336,
+      "fees": 4.7745125574168,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.22874780845154588,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-14 14:30:00+00:00",
+          "price": 1868.093544,
+          "quantity": 2.5530452699319968,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-14 15:00:00+00:00",
+      "closed_at": "2026-08-14 15:24:00+00:00",
+      "side": "SHORT",
+      "entry": 1865.636798,
+      "initial_stop": 1873.6888684425796,
+      "quantity": 2.377166100203648,
+      "pnl": -24.47686733754017,
+      "gross_pnl": -20.03192282462986,
+      "fees": 4.444944512910396,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999966,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-14 15:24:00+00:00",
+          "price": 1874.063606216268,
+          "quantity": 2.377166100203648,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-17 10:30:00+00:00",
+      "closed_at": "2026-08-17 12:00:00+00:00",
+      "side": "LONG",
+      "entry": 1898.249574,
+      "initial_stop": 1890.480919240658,
+      "quantity": 2.4316156092551737,
+      "pnl": 7.827046239490301,
+      "gross_pnl": 12.449084075929155,
+      "fees": 4.6220378364383485,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.32057463843412987,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-17 12:00:00+00:00",
+          "price": 1903.36925,
+          "quantity": 2.4316156092551737,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-17 13:45:00+00:00",
+      "closed_at": "2026-08-17 15:15:00+00:00",
+      "side": "LONG",
+      "entry": 1904.0707380000001,
+      "initial_stop": 1894.3340743391284,
+      "quantity": 2.0338053534479212,
+      "pnl": -4.648123759256123,
+      "gross_pnl": -0.7760025002188753,
+      "fees": 3.872121259037825,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.19022212302913663,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-17 15:15:00+00:00",
+          "price": 1903.689186,
+          "quantity": 2.0338053534479212,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-17 17:30:00+00:00",
+      "closed_at": "2026-08-17 19:00:00+00:00",
+      "side": "LONG",
+      "entry": 1908.111546,
+      "initial_stop": 1902.739778898902,
+      "quantity": 3.189482413430224,
+      "pnl": -4.08826216678608,
+      "gross_pnl": 1.998625364726984,
+      "fees": 6.08688753151252,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.1673896724740308,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-17 19:00:00+00:00",
+          "price": 1908.7381759999998,
+          "quantity": 3.189482413430224,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-17 19:30:00+00:00",
+      "closed_at": "2026-08-17 20:20:00+00:00",
+      "side": "LONG",
+      "entry": 1909.101744,
+      "initial_stop": 1904.7691502346945,
+      "quantity": 3.6876620750875566,
+      "pnl": -24.41340181998021,
+      "gross_pnl": -17.381970706500965,
+      "fees": 7.031431113479064,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.0000000000000073,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-17 20:20:00+00:00",
+          "price": 1904.3881964046477,
+          "quantity": 3.6876620750875566,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-17 20:45:00+00:00",
+      "closed_at": "2026-08-17 22:15:00+00:00",
+      "side": "LONG",
+      "entry": 1910.041932,
+      "initial_stop": 1903.0169406945215,
+      "quantity": 2.6151784113303744,
+      "pnl": -20.52888513540711,
+      "gross_pnl": -15.54155548784957,
+      "fees": 4.987329647558235,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.8429933741762462,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-17 22:15:00+00:00",
+          "price": 1904.0991040000001,
+          "quantity": 2.6151784113303744,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-17 23:15:00+00:00",
+      "closed_at": "2026-08-17 23:42:00+00:00",
+      "side": "LONG",
+      "entry": 1907.591442,
+      "initial_stop": 1901.9312388067362,
+      "quantity": 3.0585972218564326,
+      "pnl": 13.544103968617492,
+      "gross_pnl": 19.388352029570683,
+      "fees": 5.844248060953091,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.5573465402040078,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-17 23:32:00+00:00",
+          "price": 1915.6985304405375,
+          "quantity": 1.2234388887425731,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-17 23:42:00+00:00",
+          "price": 1912.7516641923125,
+          "quantity": 1.8351583331138595,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-18 08:00:00+00:00",
+      "closed_at": "2026-08-18 09:30:00+00:00",
+      "side": "SHORT",
+      "entry": 1897.3104620000001,
+      "initial_stop": 1902.753292040694,
+      "quantity": 3.1507195321338433,
+      "pnl": -0.803703686400695,
+      "gross_pnl": 5.171603642923228,
+      "fees": 5.975307329323825,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.03302678360163188,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-18 09:30:00+00:00",
+          "price": 1895.669058,
+          "quantity": 3.1507195321338433,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-18 22:30:00+00:00",
+      "closed_at": "2026-08-19 00:00:00+00:00",
+      "side": "LONG",
+      "entry": 1914.092742,
+      "initial_stop": 1909.6672392401745,
+      "quantity": 3.621438247492261,
+      "pnl": 2.5655475896528515,
+      "gross_pnl": 9.502067288423518,
+      "fees": 6.936519698770348,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.10543535275564127,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-19 00:00:00+00:00",
+          "price": 1916.71658,
+          "quantity": 3.621438247492261,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-19 01:15:00+00:00",
+      "closed_at": "2026-08-19 01:26:00+00:00",
+      "side": "LONG",
+      "entry": 1915.963116,
+      "initial_stop": 1911.1604906221082,
+      "quantity": 3.4289276721461386,
+      "pnl": -24.33931097227105,
+      "gross_pnl": -17.77850127564531,
+      "fees": 6.5608096966259195,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999926,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-19 01:26:00+00:00",
+          "price": 1910.7782585239838,
+          "quantity": 3.4289276721461386,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-19 05:15:00+00:00",
+      "closed_at": "2026-08-19 06:02:00+00:00",
+      "side": "LONG",
+      "entry": 1912.652454,
+      "initial_stop": 1908.4595447940435,
+      "quantity": 3.7438070901467038,
+      "pnl": -24.278462694841437,
+      "gross_pnl": -17.126424088613167,
+      "fees": 7.152038606227386,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.0000000000000362,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-19 06:02:00+00:00",
+          "price": 1908.0778528850847,
+          "quantity": 3.7438070901467038,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-20 03:45:00+00:00",
+      "closed_at": "2026-08-20 05:15:00+00:00",
+      "side": "LONG",
+      "entry": 2250.760062,
+      "initial_stop": 2218.567332479297,
+      "quantity": 0.6944981940596553,
+      "pnl": -2.9860846554929594,
+      "gross_pnl": -1.4236476810135614,
+      "fees": 1.562436974480091,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.12330140563518732,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-20 05:15:00+00:00",
+          "price": 2248.710168,
+          "quantity": 0.6944981940596553,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-20 06:45:00+00:00",
+      "closed_at": "2026-08-20 08:15:00+00:00",
+      "side": "LONG",
+      "entry": 2262.05232,
+      "initial_stop": 2235.796946180241,
+      "quantity": 0.8362441858969606,
+      "pnl": 15.64038891448945,
+      "gross_pnl": 17.729161138062274,
+      "fees": 1.900492681363762,
+      "funding_pnl": -0.18827954221051477,
+      "r_multiple": 0.6460220673665328,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-20 08:15:00+00:00",
+          "price": 2283.253258,
+          "quantity": 0.8362441858969606,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-20 13:00:00+00:00",
+      "closed_at": "2026-08-20 13:37:00+00:00",
+      "side": "LONG",
+      "entry": 2290.0279140000002,
+      "initial_stop": 2263.8556738203397,
+      "quantity": 0.8390295338184194,
+      "pnl": -24.249402298750283,
+      "gross_pnl": -22.339170831051884,
+      "fees": 1.9102314676990617,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999728,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-20 13:37:00+00:00",
+          "price": 2263.4029026855756,
+          "quantity": 0.8390295338184194,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-20 15:15:00+00:00",
+      "closed_at": "2026-08-20 16:44:00+00:00",
+      "side": "LONG",
+      "entry": 2297.469402,
+      "initial_stop": 2267.1932442666907,
+      "quantity": 0.7327334875377449,
+      "pnl": 37.71356976133393,
+      "gross_pnl": 39.587165440147245,
+      "fees": 1.703226350158791,
+      "funding_pnl": -0.17036932865437615,
+      "r_multiple": 1.5591349230181695,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TARGET",
+      "exits": [
+        {
+          "timestamp": "2026-08-20 16:42:00+00:00",
+          "price": 2342.415061872244,
+          "quantity": 0.29309339501509796,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-20 16:44:00+00:00",
+          "price": 2357.550113123126,
+          "quantity": 0.43964009252264696,
+          "reason": "TARGET"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-20 19:30:00+00:00",
+      "closed_at": "2026-08-20 21:00:00+00:00",
+      "side": "LONG",
+      "entry": 2327.21535,
+      "initial_stop": 2307.566601039037,
+      "quantity": 1.0827397895310793,
+      "pnl": -13.48120494297109,
+      "gross_pnl": -10.966919744589555,
+      "fees": 2.514285198380202,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.5551690534203924,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-20 21:00:00+00:00",
+          "price": 2317.08649,
+          "quantity": 1.0827397895310793,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-20 23:15:00+00:00",
+      "closed_at": "2026-08-21 00:41:00+00:00",
+      "side": "LONG",
+      "entry": 2322.01431,
+      "initial_stop": 2307.1232599121004,
+      "quantity": 1.372593911669008,
+      "pnl": 17.141727087666368,
+      "gross_pnl": 20.627574424239135,
+      "fees": 3.197496491926432,
+      "funding_pnl": -0.28835084464684746,
+      "r_multiple": 0.706894008590939,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-21 00:19:00+00:00",
+          "price": 2343.882014954823,
+          "quantity": 0.5490375646676032,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-21 00:41:00+00:00",
+          "price": 2332.4827897614205,
+          "quantity": 0.8235563470014048,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-21 12:45:00+00:00",
+      "closed_at": "2026-08-21 14:15:00+00:00",
+      "side": "LONG",
+      "entry": 2394.438792,
+      "initial_stop": 2361.1084199851985,
+      "quantity": 0.6714241552234057,
+      "pnl": -12.623259924461308,
+      "gross_pnl": -11.021086424521272,
+      "fees": 1.6021734999404913,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.5196422159227438,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-21 14:15:00+00:00",
+          "price": 2378.0243,
+          "quantity": 0.6714241552234057,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-21 14:30:00+00:00",
+      "closed_at": "2026-08-21 16:00:00+00:00",
+      "side": "LONG",
+      "entry": 2392.4784,
+      "initial_stop": 2364.5849916516045,
+      "quantity": 0.7891024644988566,
+      "pnl": -1.8303396562805574,
+      "gross_pnl": 0.05759974529371469,
+      "fees": 1.887939401572928,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.07544477222154311,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-21 16:00:00+00:00",
+          "price": 2392.551394,
+          "quantity": 0.7891024644988566,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-22 13:00:00+00:00",
+      "closed_at": "2026-08-22 14:30:00+00:00",
+      "side": "SHORT",
+      "entry": 2426.8145400000003,
+      "initial_stop": 2440.329879190322,
+      "quantity": 1.4756800690727372,
+      "pnl": 5.765320782305935,
+      "gross_pnl": 9.34185170446829,
+      "fees": 3.576530922161689,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.23768559374164783,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-22 14:30:00+00:00",
+          "price": 2420.484,
+          "quantity": 1.4756800690727372,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-22 14:45:00+00:00",
+      "closed_at": "2026-08-22 16:15:00+00:00",
+      "side": "SHORT",
+      "entry": 2411.1276780000003,
+      "initial_stop": 2433.25302409306,
+      "quantity": 0.969484544404075,
+      "pnl": -5.290324205174329,
+      "gross_pnl": -3.184861432697777,
+      "fees": 2.3391434491222345,
+      "funding_pnl": 0.23368067664498068,
+      "r_multiple": -0.21797349292263818,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-22 16:15:00+00:00",
+          "price": 2414.412786,
+          "quantity": 0.969484544404075,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-22 17:30:00+00:00",
+      "closed_at": "2026-08-22 17:52:00+00:00",
+      "side": "SHORT",
+      "entry": 2418.0163000000002,
+      "initial_stop": 2431.0887570697832,
+      "quantity": 1.5176470953588932,
+      "pnl": -24.257267515258718,
+      "gross_pnl": -20.577283459305,
+      "fees": 3.679984055955111,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999425,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-22 17:52:00+00:00",
+          "price": 2431.574974821197,
+          "quantity": 1.5176470953588932,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-22 22:45:00+00:00",
+      "closed_at": "2026-08-23 00:15:00+00:00",
+      "side": "SHORT",
+      "entry": 2412.997304,
+      "initial_stop": 2426.6619517221643,
+      "quantity": 1.460262391016058,
+      "pnl": -14.371057938831655,
+      "gross_pnl": -11.195440401598862,
+      "fees": 3.529206932855141,
+      "funding_pnl": 0.3535893956230193,
+      "r_multiple": -0.5939282163103488,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-23 00:15:00+00:00",
+          "price": 2420.6640359999997,
+          "quantity": 1.460262391016058,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-23 00:15:00+00:00",
+      "closed_at": "2026-08-23 00:25:00+00:00",
+      "side": "SHORT",
+      "entry": 2419.695964,
+      "initial_stop": 2428.0435450139435,
+      "quantity": 2.146224388117332,
+      "pnl": -24.160696701623237,
+      "gross_pnl": -18.958007208254884,
+      "fees": 5.202689493370006,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999316,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-23 00:25:00+00:00",
+          "price": 2428.5291537229464,
+          "quantity": 2.146224388117332,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-23 02:00:00+00:00",
+      "closed_at": "2026-08-23 03:30:00+00:00",
+      "side": "SHORT",
+      "entry": 2421.845534,
+      "initial_stop": 2434.299446458204,
+      "quantity": 1.5681017988925625,
+      "pnl": 10.31138424182609,
+      "gross_pnl": 14.102033563549126,
+      "fees": 3.790649321723544,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.4278530308029623,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-23 03:30:00+00:00",
+          "price": 2412.852474,
+          "quantity": 1.5681017988925625,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-23 03:30:00+00:00",
+      "closed_at": "2026-08-23 04:49:00+00:00",
+      "side": "SHORT",
+      "entry": 2411.887526,
+      "initial_stop": 2425.1540477784392,
+      "quantity": 1.4919976569514262,
+      "pnl": 31.334861961893694,
+      "gross_pnl": 34.915934532250716,
+      "fees": 3.5810725703562465,
+      "funding_pnl": 0.0,
+      "r_multiple": 1.2987965930378176,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TARGET",
+      "exits": [
+        {
+          "timestamp": "2026-08-23 04:46:00+00:00",
+          "price": 2392.4661408810075,
+          "quantity": 0.5967990627805705,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-23 04:49:00+00:00",
+          "price": 2385.83155333961,
+          "quantity": 0.8951985941708557,
+          "reason": "TARGET"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-23 08:00:00+00:00",
+      "closed_at": "2026-08-23 08:10:00+00:00",
+      "side": "SHORT",
+      "entry": 2387.82234,
+      "initial_stop": 2399.110437613806,
+      "quantity": 1.7091547660815707,
+      "pnl": -24.20441057538119,
+      "gross_pnl": -20.113196044390882,
+      "fees": 4.0912145309892445,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.0000000000000437,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-23 08:10:00+00:00",
+          "price": 2399.5902597013287,
+          "quantity": 1.7091547660815707,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-23 15:45:00+00:00",
+      "closed_at": "2026-08-23 17:15:00+00:00",
+      "side": "LONG",
+      "entry": 2446.149132,
+      "initial_stop": 2417.2321128309018,
+      "quantity": 0.758480912477565,
+      "pnl": -2.1148783293629094,
+      "gross_pnl": -0.07466486102445055,
+      "fees": 1.8553200932650515,
+      "funding_pnl": -0.18489337507283107,
+      "r_multiple": -0.08759472864256565,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-23 17:15:00+00:00",
+          "price": 2446.050692,
+          "quantity": 0.758480912477565,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-24 16:30:00+00:00",
+      "closed_at": "2026-08-24 16:55:00+00:00",
+      "side": "LONG",
+      "entry": 2498.7396479999998,
+      "initial_stop": 2474.0252942992897,
+      "quantity": 0.8715781281420683,
+      "pnl": -24.138612353117423,
+      "gross_pnl": -21.971751403701912,
+      "fees": 2.1668609494163595,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999649,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-24 16:55:00+00:00",
+          "price": 2473.53048924043,
+          "quantity": 0.8715781281420683,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-25 05:15:00+00:00",
+      "closed_at": "2026-08-25 06:45:00+00:00",
+      "side": "LONG",
+      "entry": 2499.939888,
+      "initial_stop": 2485.1064624174987,
+      "quantity": 1.3509870402680988,
+      "pnl": 0.10575304719168344,
+      "gross_pnl": 3.4848818782682343,
+      "fees": 3.3791288310764163,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.004392054144282435,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-25 06:45:00+00:00",
+          "price": 2502.519396,
+          "quantity": 1.3509870402680988,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-25 09:30:00+00:00",
+      "closed_at": "2026-08-25 09:53:00+00:00",
+      "side": "SHORT",
+      "entry": 2485.75275,
+      "initial_stop": 2494.5876785439063,
+      "quantity": 2.0363657844418395,
+      "pnl": 26.331946824646366,
+      "gross_pnl": 31.378159593532093,
+      "fees": 5.046212768885444,
+      "funding_pnl": 0.0,
+      "r_multiple": 1.093586136721032,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TARGET",
+      "exits": [
+        {
+          "timestamp": "2026-08-25 09:52:00+00:00",
+          "price": 2472.9948572555777,
+          "quantity": 0.8145463137767358,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-25 09:53:00+00:00",
+          "price": 2468.57650949077,
+          "quantity": 1.2218194706651038,
+          "reason": "TARGET"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-25 23:30:00+00:00",
+      "closed_at": "2026-08-25 23:53:00+00:00",
+      "side": "SHORT",
+      "entry": 2450.799742,
+      "initial_stop": 2457.916407546187,
+      "quantity": 2.3993554120142653,
+      "pnl": 23.70026049525768,
+      "gross_pnl": 29.565817211382708,
+      "fees": 5.865556716125174,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.9816064880023898,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TARGET",
+      "exits": [
+        {
+          "timestamp": "2026-08-25 23:49:00+00:00",
+          "price": 2440.612768629456,
+          "quantity": 0.9597421648057062,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-25 23:53:00+00:00",
+          "price": 2437.0537241898073,
+          "quantity": 1.439613247208559,
+          "reason": "TARGET"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-26 05:00:00+00:00",
+      "closed_at": "2026-08-26 06:30:00+00:00",
+      "side": "SHORT",
+      "entry": 2455.278846,
+      "initial_stop": 2471.0031390299855,
+      "quantity": 1.2955659952375795,
+      "pnl": -4.376468564514653,
+      "gross_pnl": -1.1948953351432925,
+      "fees": 3.1815732293713377,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.18081882966032486,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-26 06:30:00+00:00",
+          "price": 2456.201142,
+          "quantity": 1.2955659952375795,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-26 09:00:00+00:00",
+      "closed_at": "2026-08-26 10:30:00+00:00",
+      "side": "SHORT",
+      "entry": 2454.818938,
+      "initial_stop": 2467.1206733653694,
+      "quantity": 1.585741562971919,
+      "pnl": -2.880182143935599,
+      "gross_pnl": 1.0120202654884722,
+      "fees": 3.892202409424442,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.11905185319774762,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-26 10:30:00+00:00",
+          "price": 2454.180738,
+          "quantity": 1.585741562971919,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-26 12:30:00+00:00",
+      "closed_at": "2026-08-26 12:31:00+00:00",
+      "side": "LONG",
+      "entry": 2470.514004,
+      "initial_stop": 2454.4941254226637,
+      "quantity": 1.2747284659025733,
+      "pnl": -24.185469096382803,
+      "gross_pnl": -21.046757949046867,
+      "fees": 3.1387111473352207,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.0000000000000298,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-26 12:31:00+00:00",
+          "price": 2454.003226597579,
+          "quantity": 1.2747284659025733,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-26 13:15:00+00:00",
+      "closed_at": "2026-08-26 14:45:00+00:00",
+      "side": "SHORT",
+      "entry": 2444.301042,
+      "initial_stop": 2472.2170249440264,
+      "quantity": 0.7815302761834613,
+      "pnl": -1.752097003349263,
+      "gross_pnl": 0.15811920547733815,
+      "fees": 1.9102162088270436,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.07262576619495006,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-26 14:45:00+00:00",
+          "price": 2444.098722,
+          "quantity": 0.7815302761834613,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-26 15:45:00+00:00",
+      "closed_at": "2026-08-26 17:15:00+00:00",
+      "side": "SHORT",
+      "entry": 2446.670568,
+      "initial_stop": 2457.284680132521,
+      "quantity": 1.7790968051426266,
+      "pnl": -4.720188345243514,
+      "gross_pnl": -0.6916167666121229,
+      "fees": 4.353209599148602,
+      "funding_pnl": 0.3246380205173737,
+      "r_multiple": -0.19569096197952873,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-26 17:15:00+00:00",
+          "price": 2447.059314,
+          "quantity": 1.7790968051426266,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-27 01:30:00+00:00",
+      "closed_at": "2026-08-27 03:00:00+00:00",
+      "side": "LONG",
+      "entry": 2502.7004399999996,
+      "initial_stop": 2482.9546624965765,
+      "quantity": 1.060430181639106,
+      "pnl": -12.584360208162252,
+      "gross_pnl": -9.935388820394042,
+      "fees": 2.648971387767273,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.5219814884962718,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-27 03:00:00+00:00",
+          "price": 2493.3312339999998,
+          "quantity": 1.060430181639106,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-27 14:30:00+00:00",
+      "closed_at": "2026-08-27 16:00:00+00:00",
+      "side": "LONG",
+      "entry": 2507.721444,
+      "initial_stop": 2478.5149451098446,
+      "quantity": 0.747858667424223,
+      "pnl": 7.359334130274874,
+      "gross_pnl": 9.239375035172568,
+      "fees": 1.8800409048985744,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.30565364997703703,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-27 16:00:00+00:00",
+          "price": 2520.075884,
+          "quantity": 0.747858667424223,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-27 17:15:00+00:00",
+      "closed_at": "2026-08-27 18:03:00+00:00",
+      "side": "LONG",
+      "entry": 2528.6656319999997,
+      "initial_stop": 2512.307098840044,
+      "quantity": 1.2432524922363615,
+      "pnl": -24.095762145074332,
+      "gross_pnl": -20.962473532824912,
+      "fees": 3.133288612250021,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.9999999999999751,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-27 18:03:00+00:00",
+          "price": 2511.8046374202763,
+          "quantity": 1.2432524922363615,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-29 01:15:00+00:00",
+      "closed_at": "2026-08-29 02:45:00+00:00",
+      "side": "SHORT",
+      "entry": 2438.432216,
+      "initial_stop": 2445.8828819309656,
+      "quantity": 2.3150603325651598,
+      "pnl": -3.364050756463257,
+      "gross_pnl": 2.2799269769584214,
+      "fees": 5.643977733422081,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.139961622340964,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-29 02:45:00+00:00",
+          "price": 2437.447392,
+          "quantity": 2.3150603325651598,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-29 08:15:00+00:00",
+      "closed_at": "2026-08-29 09:45:00+00:00",
+      "side": "SHORT",
+      "entry": 2431.543594,
+      "initial_stop": 2437.7500380976835,
+      "quantity": 2.6319877413298176,
+      "pnl": -15.756784826708099,
+      "gross_pnl": -9.352315736923906,
+      "fees": 6.404469089785509,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.6557918581652684,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-29 09:45:00+00:00",
+          "price": 2435.096922,
+          "quantity": 2.6319877413298176,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-29 12:45:00+00:00",
+      "closed_at": "2026-08-29 14:15:00+00:00",
+      "side": "SHORT",
+      "entry": 2433.203262,
+      "initial_stop": 2438.703516130416,
+      "quantity": 2.847480255171196,
+      "pnl": -13.434648557778928,
+      "gross_pnl": -6.502898862984399,
+      "fees": 6.9317496947946395,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.5600635739167849,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-29 14:15:00+00:00",
+          "price": 2435.487,
+          "quantity": 2.847480255171196,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-29 18:45:00+00:00",
+      "closed_at": "2026-08-29 20:15:00+00:00",
+      "side": "LONG",
+      "entry": 2452.1503319999997,
+      "initial_stop": 2443.335153726765,
+      "quantity": 2.0384165941969767,
+      "pnl": 0.2959176667336578,
+      "gross_pnl": 5.2970701300125755,
+      "fees": 5.001152463279432,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.012353511355115587,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-29 20:15:00+00:00",
+          "price": 2454.748952,
+          "quantity": 2.0384165941969767,
+          "reason": "TIME"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-30 10:45:00+00:00",
+      "closed_at": "2026-08-30 12:07:00+00:00",
+      "side": "LONG",
+      "entry": 2457.5014020000003,
+      "initial_stop": 2450.720353432221,
+      "quantity": 2.4632112969918287,
+      "pnl": 12.408275559109825,
+      "gross_pnl": 18.470856202991214,
+      "fees": 6.062580643881155,
+      "funding_pnl": 0.0,
+      "r_multiple": 0.5179854275384801,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-30 12:06:00+00:00",
+          "price": 2467.179440256699,
+          "quantity": 0.9852845187967315,
+          "reason": "PARTIAL"
+        },
+        {
+          "timestamp": "2026-08-30 12:07:00+00:00",
+          "price": 2463.547192,
+          "quantity": 1.4779267781950973,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-31 13:00:00+00:00",
+      "closed_at": "2026-08-31 13:48:00+00:00",
+      "side": "LONG",
+      "entry": 2451.09012,
+      "initial_stop": 2440.7863349164,
+      "quantity": 1.8119469071006213,
+      "pnl": -23.98589451242333,
+      "gross_pnl": -19.554426563747462,
+      "fees": 4.4314679486770165,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.999999999999952,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-31 13:48:00+00:00",
+          "price": 2440.2981776494166,
+          "quantity": 1.8119469071006213,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-31 14:00:00+00:00",
+      "closed_at": "2026-08-31 14:42:00+00:00",
+      "side": "SHORT",
+      "entry": 2439.052092,
+      "initial_stop": 2459.7028219089107,
+      "quantity": 1.0141417310678174,
+      "pnl": -23.925929776143676,
+      "gross_pnl": -21.44166443318137,
+      "fees": 2.484265342962052,
+      "funding_pnl": 0.0,
+      "r_multiple": -1.0000000000000107,
+      "setup": "continuation",
+      "score": 4,
+      "reason": "STOP",
+      "exits": [
+        {
+          "timestamp": "2026-08-31 14:42:00+00:00",
+          "price": 2460.1947624732925,
+          "quantity": 1.0141417310678174,
+          "reason": "STOP"
+        }
+      ]
+    },
+    {
+      "opened_at": "2026-08-31 21:30:00+00:00",
+      "closed_at": "2026-08-31 23:00:00+00:00",
+      "side": "LONG",
+      "entry": 2478.1755359999997,
+      "initial_stop": 2464.1985346616007,
+      "quantity": 1.4087965614311628,
+      "pnl": -18.190575537641053,
+      "gross_pnl": -14.706683705753552,
+      "fees": 3.4838918318867518,
+      "funding_pnl": 0.0,
+      "r_multiple": -0.7621925719562074,
+      "setup": "continuation",
+      "score": 5,
+      "reason": "TIME",
+      "exits": [
+        {
+          "timestamp": "2026-08-31 23:00:00+00:00",
+          "price": 2467.736354,
+          "quantity": 1.4087965614311628,
+          "reason": "TIME"
+        }
+      ]
+    }
+  ],
+  "equity_hourly": [
+    {
+      "timestamp": "2026-08-01 00:01:00+00:00",
+      "equity": 10000.0
+    },
+    {
+      "timestamp": "2026-08-01 01:01:00+00:00",
+      "equity": 10000.0
+    },
+    {
+      "timestamp": "2026-08-01 02:01:00+00:00",
+      "equity": 10000.0
+    },
+    {
+      "timestamp": "2026-08-01 03:01:00+00:00",
+      "equity": 10000.0
+    },
+    {
+      "timestamp": "2026-08-01 04:01:00+00:00",
+      "equity": 10000.0
+    },
+    {
+      "timestamp": "2026-08-01 05:01:00+00:00",
+      "equity": 10000.0
+    },
+    {
+      "timestamp": "2026-08-01 06:01:00+00:00",
+      "equity": 9987.26339612494
+    },
+    {
+      "timestamp": "2026-08-01 07:01:00+00:00",
+      "equity": 9978.59466760043
+    },
+    {
+      "timestamp": "2026-08-01 08:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 09:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 10:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 11:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 12:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 13:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 14:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 15:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 16:01:00+00:00",
+      "equity": 9975.0
+    },
+    {
+      "timestamp": "2026-08-01 17:01:00+00:00",
+      "equity": 9967.951799829532
+    },
+    {
+      "timestamp": "2026-08-01 18:01:00+00:00",
+      "equity": 9992.834196678848
+    },
+    {
+      "timestamp": "2026-08-01 19:01:00+00:00",
+      "equity": 9992.834196678848
+    },
+    {
+      "timestamp": "2026-08-01 20:01:00+00:00",
+      "equity": 9992.834196678848
+    },
+    {
+      "timestamp": "2026-08-01 21:01:00+00:00",
+      "equity": 9992.834196678848
+    },
+    {
+      "timestamp": "2026-08-01 22:01:00+00:00",
+      "equity": 9992.834196678848
+    },
+    {
+      "timestamp": "2026-08-01 23:01:00+00:00",
+      "equity": 9992.834196678848
+    },
+    {
+      "timestamp": "2026-08-02 00:01:00+00:00",
+      "equity": 9986.034964809585
+    },
+    {
+      "timestamp": "2026-08-02 01:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 02:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 03:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 04:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 05:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 06:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 07:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 08:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 09:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 10:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 11:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 12:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 13:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 14:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 15:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 16:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 17:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 18:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 19:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 20:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 21:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 22:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-02 23:01:00+00:00",
+      "equity": 9985.91642927213
+    },
+    {
+      "timestamp": "2026-08-03 00:01:00+00:00",
+      "equity": 9980.701569682096
+    },
+    {
+      "timestamp": "2026-08-03 01:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 02:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 03:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 04:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 05:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 06:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 07:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 08:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 09:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 10:01:00+00:00",
+      "equity": 9960.544722029179
+    },
+    {
+      "timestamp": "2026-08-03 11:01:00+00:00",
+      "equity": 9955.83889656107
+    },
+    {
+      "timestamp": "2026-08-03 12:01:00+00:00",
+      "equity": 9970.579801068554
+    },
+    {
+      "timestamp": "2026-08-03 13:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 14:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 15:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 16:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 17:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 18:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 19:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 20:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 21:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 22:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-03 23:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 00:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 01:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 02:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 03:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 04:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 05:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 06:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 07:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 08:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 09:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 10:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 11:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 12:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 13:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 14:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 15:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 16:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 17:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 18:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 19:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 20:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 21:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 22:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-04 23:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 00:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 01:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 02:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 03:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 04:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 05:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 06:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 07:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 08:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 09:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 10:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 11:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 12:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 13:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 14:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 15:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 16:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 17:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 18:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 19:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 20:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 21:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 22:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-05 23:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-06 00:01:00+00:00",
+      "equity": 9969.243906597563
+    },
+    {
+      "timestamp": "2026-08-06 01:01:00+00:00",
+      "equity": 9957.368522507773
+    },
+    {
+      "timestamp": "2026-08-06 02:01:00+00:00",
+      "equity": 9944.320796831069
+    },
+    {
+      "timestamp": "2026-08-06 03:01:00+00:00",
+      "equity": 9944.320796831069
+    },
+    {
+      "timestamp": "2026-08-06 04:01:00+00:00",
+      "equity": 9944.320796831069
+    },
+    {
+      "timestamp": "2026-08-06 05:01:00+00:00",
+      "equity": 9944.320796831069
+    },
+    {
+      "timestamp": "2026-08-06 06:01:00+00:00",
+      "equity": 9944.320796831069
+    },
+    {
+      "timestamp": "2026-08-06 07:01:00+00:00",
+      "equity": 9944.320796831069
+    },
+    {
+      "timestamp": "2026-08-06 08:01:00+00:00",
+      "equity": 9944.320796831069
+    },
+    {
+      "timestamp": "2026-08-06 09:01:00+00:00",
+      "equity": 9940.549452921157
+    },
+    {
+      "timestamp": "2026-08-06 10:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 11:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 12:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 13:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 14:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 15:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 16:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 17:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 18:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 19:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 20:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 21:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 22:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-06 23:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 00:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 01:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 02:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 03:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 04:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 05:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 06:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 07:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 08:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 09:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 10:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 11:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 12:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 13:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 14:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 15:01:00+00:00",
+      "equity": 9919.459994838991
+    },
+    {
+      "timestamp": "2026-08-07 16:01:00+00:00",
+      "equity": 9910.080513105662
+    },
+    {
+      "timestamp": "2026-08-07 17:01:00+00:00",
+      "equity": 9894.515392784233
+    },
+    {
+      "timestamp": "2026-08-07 18:01:00+00:00",
+      "equity": 9894.515392784233
+    },
+    {
+      "timestamp": "2026-08-07 19:01:00+00:00",
+      "equity": 9894.515392784233
+    },
+    {
+      "timestamp": "2026-08-07 20:01:00+00:00",
+      "equity": 9894.515392784233
+    },
+    {
+      "timestamp": "2026-08-07 21:01:00+00:00",
+      "equity": 9894.515392784233
+    },
+    {
+      "timestamp": "2026-08-07 22:01:00+00:00",
+      "equity": 9878.648671463283
+    },
+    {
+      "timestamp": "2026-08-07 23:01:00+00:00",
+      "equity": 9878.057650483406
+    },
+    {
+      "timestamp": "2026-08-08 00:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 01:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 02:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 03:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 04:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 05:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 06:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 07:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 08:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 09:01:00+00:00",
+      "equity": 9880.985890792797
+    },
+    {
+      "timestamp": "2026-08-08 10:01:00+00:00",
+      "equity": 9868.486393812858
+    },
+    {
+      "timestamp": "2026-08-08 11:01:00+00:00",
+      "equity": 9879.295316306203
+    },
+    {
+      "timestamp": "2026-08-08 12:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 13:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 14:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 15:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 16:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 17:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 18:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 19:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 20:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 21:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 22:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-08 23:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 00:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 01:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 02:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 03:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 04:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 05:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 06:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 07:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 08:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 09:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 10:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 11:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 12:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 13:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 14:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 15:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 16:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 17:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 18:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 19:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 20:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 21:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 22:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-09 23:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-10 00:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-10 01:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-10 02:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-10 03:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-10 04:01:00+00:00",
+      "equity": 9880.492018439396
+    },
+    {
+      "timestamp": "2026-08-10 05:01:00+00:00",
+      "equity": 9872.692040144662
+    },
+    {
+      "timestamp": "2026-08-10 06:01:00+00:00",
+      "equity": 9855.790788393298
+    },
+    {
+      "timestamp": "2026-08-10 07:01:00+00:00",
+      "equity": 9855.790788393298
+    },
+    {
+      "timestamp": "2026-08-10 08:01:00+00:00",
+      "equity": 9855.790788393298
+    },
+    {
+      "timestamp": "2026-08-10 09:01:00+00:00",
+      "equity": 9844.699655680924
+    },
+    {
+      "timestamp": "2026-08-10 10:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 11:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 12:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 13:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 14:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 15:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 16:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 17:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 18:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 19:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 20:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 21:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 22:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-10 23:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-11 00:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-11 01:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-11 02:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-11 03:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-11 04:01:00+00:00",
+      "equity": 9831.151311422316
+    },
+    {
+      "timestamp": "2026-08-11 05:01:00+00:00",
+      "equity": 9828.83412846291
+    },
+    {
+      "timestamp": "2026-08-11 06:01:00+00:00",
+      "equity": 9835.326333417888
+    },
+    {
+      "timestamp": "2026-08-11 07:01:00+00:00",
+      "equity": 9834.260945938096
+    },
+    {
+      "timestamp": "2026-08-11 08:01:00+00:00",
+      "equity": 9834.260945938096
+    },
+    {
+      "timestamp": "2026-08-11 09:01:00+00:00",
+      "equity": 9834.260945938096
+    },
+    {
+      "timestamp": "2026-08-11 10:01:00+00:00",
+      "equity": 9834.260945938096
+    },
+    {
+      "timestamp": "2026-08-11 11:01:00+00:00",
+      "equity": 9834.260945938096
+    },
+    {
+      "timestamp": "2026-08-11 12:01:00+00:00",
+      "equity": 9834.260945938096
+    },
+    {
+      "timestamp": "2026-08-11 13:01:00+00:00",
+      "equity": 9834.260945938096
+    },
+    {
+      "timestamp": "2026-08-11 14:01:00+00:00",
+      "equity": 9826.430976261052
+    },
+    {
+      "timestamp": "2026-08-11 15:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 16:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 17:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 18:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 19:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 20:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 21:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 22:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-11 23:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 00:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 01:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 02:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 03:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 04:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 05:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 06:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 07:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 08:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 09:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 10:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 11:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 12:01:00+00:00",
+      "equity": 9809.675293573251
+    },
+    {
+      "timestamp": "2026-08-12 13:01:00+00:00",
+      "equity": 9799.9108937611
+    },
+    {
+      "timestamp": "2026-08-12 14:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 15:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 16:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 17:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 18:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 19:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 20:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 21:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 22:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-12 23:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 00:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 01:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 02:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 03:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 04:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 05:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 06:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 07:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 08:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 09:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 10:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 11:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 12:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 13:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 14:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 15:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 16:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 17:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 18:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 19:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 20:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 21:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 22:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-13 23:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 00:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 01:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 02:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 03:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 04:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 05:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 06:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 07:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 08:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 09:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 10:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 11:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 12:01:00+00:00",
+      "equity": 9785.151105339319
+    },
+    {
+      "timestamp": "2026-08-14 13:01:00+00:00",
+      "equity": 9779.096898100523
+    },
+    {
+      "timestamp": "2026-08-14 14:01:00+00:00",
+      "equity": 9786.914686030716
+    },
+    {
+      "timestamp": "2026-08-14 15:01:00+00:00",
+      "equity": 9781.515678465783
+    },
+    {
+      "timestamp": "2026-08-14 16:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-14 17:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-14 18:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-14 19:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-14 20:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-14 21:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-14 22:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-14 23:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 00:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 01:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 02:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 03:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 04:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 05:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 06:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 07:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 08:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 09:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 10:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 11:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 12:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 13:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 14:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 15:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 16:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 17:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 18:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 19:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 20:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 21:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 22:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-15 23:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 00:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 01:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 02:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 03:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 04:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 05:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 06:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 07:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 08:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 09:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 10:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 11:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 12:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 13:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 14:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 15:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 16:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 17:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 18:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 19:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 20:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 21:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 22:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-16 23:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 00:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 01:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 02:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 03:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 04:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 05:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 06:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 07:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 08:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 09:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 10:01:00+00:00",
+      "equity": 9766.270067678563
+    },
+    {
+      "timestamp": "2026-08-17 11:01:00+00:00",
+      "equity": 9779.248531007614
+    },
+    {
+      "timestamp": "2026-08-17 12:01:00+00:00",
+      "equity": 9774.097113918053
+    },
+    {
+      "timestamp": "2026-08-17 13:01:00+00:00",
+      "equity": 9774.097113918053
+    },
+    {
+      "timestamp": "2026-08-17 14:01:00+00:00",
+      "equity": 9766.563007870622
+    },
+    {
+      "timestamp": "2026-08-17 15:01:00+00:00",
+      "equity": 9775.119335640493
+    },
+    {
+      "timestamp": "2026-08-17 16:01:00+00:00",
+      "equity": 9769.448990158797
+    },
+    {
+      "timestamp": "2026-08-17 17:01:00+00:00",
+      "equity": 9769.448990158797
+    },
+    {
+      "timestamp": "2026-08-17 18:01:00+00:00",
+      "equity": 9759.049972804529
+    },
+    {
+      "timestamp": "2026-08-17 19:01:00+00:00",
+      "equity": 9765.36072799201
+    },
+    {
+      "timestamp": "2026-08-17 20:01:00+00:00",
+      "equity": 9745.483107354974
+    },
+    {
+      "timestamp": "2026-08-17 21:01:00+00:00",
+      "equity": 9725.514469730146
+    },
+    {
+      "timestamp": "2026-08-17 22:01:00+00:00",
+      "equity": 9724.129395264727
+    },
+    {
+      "timestamp": "2026-08-17 23:01:00+00:00",
+      "equity": 9720.418441036623
+    },
+    {
+      "timestamp": "2026-08-18 00:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 01:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 02:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 03:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 04:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 05:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 06:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 07:01:00+00:00",
+      "equity": 9733.96254500524
+    },
+    {
+      "timestamp": "2026-08-18 08:01:00+00:00",
+      "equity": 9726.663815096032
+    },
+    {
+      "timestamp": "2026-08-18 09:01:00+00:00",
+      "equity": 9721.461488267081
+    },
+    {
+      "timestamp": "2026-08-18 10:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 11:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 12:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 13:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 14:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 15:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 16:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 17:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 18:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 19:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 20:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 21:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 22:01:00+00:00",
+      "equity": 9733.15884131884
+    },
+    {
+      "timestamp": "2026-08-18 23:01:00+00:00",
+      "equity": 9717.666059930207
+    },
+    {
+      "timestamp": "2026-08-19 00:01:00+00:00",
+      "equity": 9735.724388908493
+    },
+    {
+      "timestamp": "2026-08-19 01:01:00+00:00",
+      "equity": 9735.724388908493
+    },
+    {
+      "timestamp": "2026-08-19 02:01:00+00:00",
+      "equity": 9711.385077936222
+    },
+    {
+      "timestamp": "2026-08-19 03:01:00+00:00",
+      "equity": 9711.385077936222
+    },
+    {
+      "timestamp": "2026-08-19 04:01:00+00:00",
+      "equity": 9711.385077936222
+    },
+    {
+      "timestamp": "2026-08-19 05:01:00+00:00",
+      "equity": 9711.385077936222
+    },
+    {
+      "timestamp": "2026-08-19 06:01:00+00:00",
+      "equity": 9692.271156035296
+    },
+    {
+      "timestamp": "2026-08-19 07:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 08:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 09:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 10:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 11:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 12:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 13:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 14:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 15:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 16:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 17:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 18:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 19:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 20:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 21:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 22:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-19 23:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-20 00:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-20 01:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-20 02:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-20 03:01:00+00:00",
+      "equity": 9687.10661524138
+    },
+    {
+      "timestamp": "2026-08-20 04:01:00+00:00",
+      "equity": 9685.702878207572
+    },
+    {
+      "timestamp": "2026-08-20 05:01:00+00:00",
+      "equity": 9684.967225365912
+    },
+    {
+      "timestamp": "2026-08-20 06:01:00+00:00",
+      "equity": 9684.120530585888
+    },
+    {
+      "timestamp": "2026-08-20 07:01:00+00:00",
+      "equity": 9680.47834670541
+    },
+    {
+      "timestamp": "2026-08-20 08:01:00+00:00",
+      "equity": 9672.35966421557
+    },
+    {
+      "timestamp": "2026-08-20 09:01:00+00:00",
+      "equity": 9699.760919500377
+    },
+    {
+      "timestamp": "2026-08-20 10:01:00+00:00",
+      "equity": 9699.760919500377
+    },
+    {
+      "timestamp": "2026-08-20 11:01:00+00:00",
+      "equity": 9699.760919500377
+    },
+    {
+      "timestamp": "2026-08-20 12:01:00+00:00",
+      "equity": 9699.760919500377
+    },
+    {
+      "timestamp": "2026-08-20 13:01:00+00:00",
+      "equity": 9694.078256910274
+    },
+    {
+      "timestamp": "2026-08-20 14:01:00+00:00",
+      "equity": 9675.511517201627
+    },
+    {
+      "timestamp": "2026-08-20 15:01:00+00:00",
+      "equity": 9675.511517201627
+    },
+    {
+      "timestamp": "2026-08-20 16:01:00+00:00",
+      "equity": 9690.118776413932
+    },
+    {
+      "timestamp": "2026-08-20 17:01:00+00:00",
+      "equity": 9713.22508696296
+    },
+    {
+      "timestamp": "2026-08-20 18:01:00+00:00",
+      "equity": 9713.22508696296
+    },
+    {
+      "timestamp": "2026-08-20 19:01:00+00:00",
+      "equity": 9713.22508696296
+    },
+    {
+      "timestamp": "2026-08-20 20:01:00+00:00",
+      "equity": 9706.289872998701
+    },
+    {
+      "timestamp": "2026-08-20 21:01:00+00:00",
+      "equity": 9699.74388201999
+    },
+    {
+      "timestamp": "2026-08-20 22:01:00+00:00",
+      "equity": 9699.74388201999
+    },
+    {
+      "timestamp": "2026-08-20 23:01:00+00:00",
+      "equity": 9699.74388201999
+    },
+    {
+      "timestamp": "2026-08-21 00:01:00+00:00",
+      "equity": 9700.81009253018
+    },
+    {
+      "timestamp": "2026-08-21 01:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 02:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 03:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 04:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 05:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 06:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 07:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 08:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 09:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 10:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 11:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 12:01:00+00:00",
+      "equity": 9716.885609107656
+    },
+    {
+      "timestamp": "2026-08-21 13:01:00+00:00",
+      "equity": 9709.18715319805
+    },
+    {
+      "timestamp": "2026-08-21 14:01:00+00:00",
+      "equity": 9707.771439782335
+    },
+    {
+      "timestamp": "2026-08-21 15:01:00+00:00",
+      "equity": 9702.19544447541
+    },
+    {
+      "timestamp": "2026-08-21 16:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-21 17:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-21 18:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-21 19:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-21 20:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-21 21:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-21 22:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-21 23:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 00:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 01:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 02:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 03:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 04:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 05:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 06:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 07:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 08:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 09:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 10:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 11:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 12:01:00+00:00",
+      "equity": 9702.432009526914
+    },
+    {
+      "timestamp": "2026-08-22 13:01:00+00:00",
+      "equity": 9696.472227559269
+    },
+    {
+      "timestamp": "2026-08-22 14:01:00+00:00",
+      "equity": 9692.913348764889
+    },
+    {
+      "timestamp": "2026-08-22 15:01:00+00:00",
+      "equity": 9705.748743026692
+    },
+    {
+      "timestamp": "2026-08-22 16:01:00+00:00",
+      "equity": 9705.662269820761
+    },
+    {
+      "timestamp": "2026-08-22 17:01:00+00:00",
+      "equity": 9702.907006104046
+    },
+    {
+      "timestamp": "2026-08-22 18:01:00+00:00",
+      "equity": 9678.649738588787
+    },
+    {
+      "timestamp": "2026-08-22 19:01:00+00:00",
+      "equity": 9678.649738588787
+    },
+    {
+      "timestamp": "2026-08-22 20:01:00+00:00",
+      "equity": 9678.649738588787
+    },
+    {
+      "timestamp": "2026-08-22 21:01:00+00:00",
+      "equity": 9678.649738588787
+    },
+    {
+      "timestamp": "2026-08-22 22:01:00+00:00",
+      "equity": 9678.649738588787
+    },
+    {
+      "timestamp": "2026-08-22 23:01:00+00:00",
+      "equity": 9677.193556518434
+    },
+    {
+      "timestamp": "2026-08-23 00:01:00+00:00",
+      "equity": 9659.821762251771
+    },
+    {
+      "timestamp": "2026-08-23 01:01:00+00:00",
+      "equity": 9640.117983948332
+    },
+    {
+      "timestamp": "2026-08-23 02:01:00+00:00",
+      "equity": 9635.773043674333
+    },
+    {
+      "timestamp": "2026-08-23 03:01:00+00:00",
+      "equity": 9644.639021566667
+    },
+    {
+      "timestamp": "2026-08-23 04:01:00+00:00",
+      "equity": 9644.34528810422
+    },
+    {
+      "timestamp": "2026-08-23 05:01:00+00:00",
+      "equity": 9681.764230152052
+    },
+    {
+      "timestamp": "2026-08-23 06:01:00+00:00",
+      "equity": 9681.764230152052
+    },
+    {
+      "timestamp": "2026-08-23 07:01:00+00:00",
+      "equity": 9681.764230152052
+    },
+    {
+      "timestamp": "2026-08-23 08:01:00+00:00",
+      "equity": 9674.869323664807
+    },
+    {
+      "timestamp": "2026-08-23 09:01:00+00:00",
+      "equity": 9657.55981957667
+    },
+    {
+      "timestamp": "2026-08-23 10:01:00+00:00",
+      "equity": 9657.55981957667
+    },
+    {
+      "timestamp": "2026-08-23 11:01:00+00:00",
+      "equity": 9657.55981957667
+    },
+    {
+      "timestamp": "2026-08-23 12:01:00+00:00",
+      "equity": 9657.55981957667
+    },
+    {
+      "timestamp": "2026-08-23 13:01:00+00:00",
+      "equity": 9657.55981957667
+    },
+    {
+      "timestamp": "2026-08-23 14:01:00+00:00",
+      "equity": 9657.55981957667
+    },
+    {
+      "timestamp": "2026-08-23 15:01:00+00:00",
+      "equity": 9657.55981957667
+    },
+    {
+      "timestamp": "2026-08-23 16:01:00+00:00",
+      "equity": 9650.556163413929
+    },
+    {
+      "timestamp": "2026-08-23 17:01:00+00:00",
+      "equity": 9659.643984533654
+    },
+    {
+      "timestamp": "2026-08-23 18:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-23 19:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-23 20:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-23 21:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-23 22:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-23 23:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 00:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 01:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 02:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 03:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 04:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 05:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 06:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 07:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 08:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 09:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 10:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 11:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 12:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 13:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 14:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 15:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 16:01:00+00:00",
+      "equity": 9655.444941247308
+    },
+    {
+      "timestamp": "2026-08-24 17:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-24 18:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-24 19:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-24 20:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-24 21:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-24 22:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-24 23:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-25 00:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-25 01:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-25 02:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-25 03:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-25 04:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-25 05:01:00+00:00",
+      "equity": 9631.30632889419
+    },
+    {
+      "timestamp": "2026-08-25 06:01:00+00:00",
+      "equity": 9638.067786459664
+    },
+    {
+      "timestamp": "2026-08-25 07:01:00+00:00",
+      "equity": 9631.412081941382
+    },
+    {
+      "timestamp": "2026-08-25 08:01:00+00:00",
+      "equity": 9631.412081941382
+    },
+    {
+      "timestamp": "2026-08-25 09:01:00+00:00",
+      "equity": 9631.412081941382
+    },
+    {
+      "timestamp": "2026-08-25 10:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 11:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 12:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 13:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 14:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 15:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 16:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 17:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 18:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 19:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 20:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 21:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 22:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-25 23:01:00+00:00",
+      "equity": 9657.744028766028
+    },
+    {
+      "timestamp": "2026-08-26 00:01:00+00:00",
+      "equity": 9681.444289261286
+    },
+    {
+      "timestamp": "2026-08-26 01:01:00+00:00",
+      "equity": 9681.444289261286
+    },
+    {
+      "timestamp": "2026-08-26 02:01:00+00:00",
+      "equity": 9681.444289261286
+    },
+    {
+      "timestamp": "2026-08-26 03:01:00+00:00",
+      "equity": 9681.444289261286
+    },
+    {
+      "timestamp": "2026-08-26 04:01:00+00:00",
+      "equity": 9681.444289261286
+    },
+    {
+      "timestamp": "2026-08-26 05:01:00+00:00",
+      "equity": 9676.562196218585
+    },
+    {
+      "timestamp": "2026-08-26 06:01:00+00:00",
+      "equity": 9665.153233633866
+    },
+    {
+      "timestamp": "2026-08-26 07:01:00+00:00",
+      "equity": 9677.067820696771
+    },
+    {
+      "timestamp": "2026-08-26 08:01:00+00:00",
+      "equity": 9677.067820696771
+    },
+    {
+      "timestamp": "2026-08-26 09:01:00+00:00",
+      "equity": 9671.91844056372
+    },
+    {
+      "timestamp": "2026-08-26 10:01:00+00:00",
+      "equity": 9685.470154428787
+    },
+    {
+      "timestamp": "2026-08-26 11:01:00+00:00",
+      "equity": 9674.187638552836
+    },
+    {
+      "timestamp": "2026-08-26 12:01:00+00:00",
+      "equity": 9674.187638552836
+    },
+    {
+      "timestamp": "2026-08-26 13:01:00+00:00",
+      "equity": 9650.002169456453
+    },
+    {
+      "timestamp": "2026-08-26 14:01:00+00:00",
+      "equity": 9638.872964121001
+    },
+    {
+      "timestamp": "2026-08-26 15:01:00+00:00",
+      "equity": 9648.250072453104
+    },
+    {
+      "timestamp": "2026-08-26 16:01:00+00:00",
+      "equity": 9640.752550040588
+    },
+    {
+      "timestamp": "2026-08-26 17:01:00+00:00",
+      "equity": 9647.375423585623
+    },
+    {
+      "timestamp": "2026-08-26 18:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-26 19:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-26 20:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-26 21:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-26 22:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-26 23:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-27 00:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-27 01:01:00+00:00",
+      "equity": 9643.52988410786
+    },
+    {
+      "timestamp": "2026-08-27 02:01:00+00:00",
+      "equity": 9637.812302052575
+    },
+    {
+      "timestamp": "2026-08-27 03:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 04:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 05:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 06:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 07:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 08:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 09:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 10:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 11:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 12:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 13:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 14:01:00+00:00",
+      "equity": 9630.945523899698
+    },
+    {
+      "timestamp": "2026-08-27 15:01:00+00:00",
+      "equity": 9635.67423798115
+    },
+    {
+      "timestamp": "2026-08-27 16:01:00+00:00",
+      "equity": 9638.304858029973
+    },
+    {
+      "timestamp": "2026-08-27 17:01:00+00:00",
+      "equity": 9638.304858029973
+    },
+    {
+      "timestamp": "2026-08-27 18:01:00+00:00",
+      "equity": 9617.517437258706
+    },
+    {
+      "timestamp": "2026-08-27 19:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-27 20:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-27 21:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-27 22:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-27 23:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 00:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 01:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 02:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 03:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 04:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 05:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 06:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 07:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 08:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 09:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 10:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 11:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 12:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 13:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 14:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 15:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 16:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 17:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 18:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 19:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 20:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 21:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 22:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-28 23:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-29 00:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-29 01:01:00+00:00",
+      "equity": 9614.209095884898
+    },
+    {
+      "timestamp": "2026-08-29 02:01:00+00:00",
+      "equity": 9597.84846412207
+    },
+    {
+      "timestamp": "2026-08-29 03:01:00+00:00",
+      "equity": 9610.845045128435
+    },
+    {
+      "timestamp": "2026-08-29 04:01:00+00:00",
+      "equity": 9610.845045128435
+    },
+    {
+      "timestamp": "2026-08-29 05:01:00+00:00",
+      "equity": 9610.845045128435
+    },
+    {
+      "timestamp": "2026-08-29 06:01:00+00:00",
+      "equity": 9610.845045128435
+    },
+    {
+      "timestamp": "2026-08-29 07:01:00+00:00",
+      "equity": 9610.845045128435
+    },
+    {
+      "timestamp": "2026-08-29 08:01:00+00:00",
+      "equity": 9610.845045128435
+    },
+    {
+      "timestamp": "2026-08-29 09:01:00+00:00",
+      "equity": 9596.90560327493
+    },
+    {
+      "timestamp": "2026-08-29 10:01:00+00:00",
+      "equity": 9595.088260301727
+    },
+    {
+      "timestamp": "2026-08-29 11:01:00+00:00",
+      "equity": 9595.088260301727
+    },
+    {
+      "timestamp": "2026-08-29 12:01:00+00:00",
+      "equity": 9595.088260301727
+    },
+    {
+      "timestamp": "2026-08-29 13:01:00+00:00",
+      "equity": 9585.699864506007
+    },
+    {
+      "timestamp": "2026-08-29 14:01:00+00:00",
+      "equity": 9582.195011761407
+    },
+    {
+      "timestamp": "2026-08-29 15:01:00+00:00",
+      "equity": 9581.653611743948
+    },
+    {
+      "timestamp": "2026-08-29 16:01:00+00:00",
+      "equity": 9581.653611743948
+    },
+    {
+      "timestamp": "2026-08-29 17:01:00+00:00",
+      "equity": 9581.653611743948
+    },
+    {
+      "timestamp": "2026-08-29 18:01:00+00:00",
+      "equity": 9581.653611743948
+    },
+    {
+      "timestamp": "2026-08-29 19:01:00+00:00",
+      "equity": 9574.066378472826
+    },
+    {
+      "timestamp": "2026-08-29 20:01:00+00:00",
+      "equity": 9574.555256050367
+    },
+    {
+      "timestamp": "2026-08-29 21:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-29 22:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-29 23:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 00:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 01:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 02:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 03:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 04:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 05:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 06:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 07:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 08:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 09:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 10:01:00+00:00",
+      "equity": 9581.949529410682
+    },
+    {
+      "timestamp": "2026-08-30 11:01:00+00:00",
+      "equity": 9577.41492037898
+    },
+    {
+      "timestamp": "2026-08-30 12:01:00+00:00",
+      "equity": 9580.048711785063
+    },
+    {
+      "timestamp": "2026-08-30 13:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 14:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 15:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 16:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 17:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 18:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 19:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 20:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 21:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 22:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-30 23:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 00:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 01:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 02:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 03:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 04:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 05:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 06:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 07:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 08:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 09:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 10:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 11:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 12:01:00+00:00",
+      "equity": 9594.357804969792
+    },
+    {
+      "timestamp": "2026-08-31 13:01:00+00:00",
+      "equity": 9592.776642580215
+    },
+    {
+      "timestamp": "2026-08-31 14:01:00+00:00",
+      "equity": 9568.471127078123
+    },
+    {
+      "timestamp": "2026-08-31 15:01:00+00:00",
+      "equity": 9546.445980681225
+    },
+    {
+      "timestamp": "2026-08-31 16:01:00+00:00",
+      "equity": 9546.445980681225
+    },
+    {
+      "timestamp": "2026-08-31 17:01:00+00:00",
+      "equity": 9546.445980681225
+    },
+    {
+      "timestamp": "2026-08-31 18:01:00+00:00",
+      "equity": 9546.445980681225
+    },
+    {
+      "timestamp": "2026-08-31 19:01:00+00:00",
+      "equity": 9546.445980681225
+    },
+    {
+      "timestamp": "2026-08-31 20:01:00+00:00",
+      "equity": 9546.445980681225
+    },
+    {
+      "timestamp": "2026-08-31 21:01:00+00:00",
+      "equity": 9546.445980681225
+    },
+    {
+      "timestamp": "2026-08-31 22:01:00+00:00",
+      "equity": 9544.19182050979
+    },
+    {
+      "timestamp": "2026-08-31 23:01:00+00:00",
+      "equity": 9528.255405143584
+    },
+    {
+      "timestamp": "2026-09-01 00:00:00+00:00",
+      "equity": 9528.255405143584
+    }
+  ],
+  "daily_entries": {
+    "2026-08-01": 3,
+    "2026-08-02": 1,
+    "2026-08-03": 1,
+    "2026-08-04": 0,
+    "2026-08-05": 0,
+    "2026-08-06": 2,
+    "2026-08-07": 2,
+    "2026-08-08": 1,
+    "2026-08-09": 0,
+    "2026-08-10": 2,
+    "2026-08-11": 2,
+    "2026-08-12": 1,
+    "2026-08-13": 0,
+    "2026-08-14": 2,
+    "2026-08-15": 0,
+    "2026-08-16": 0,
+    "2026-08-17": 6,
+    "2026-08-18": 2,
+    "2026-08-19": 2,
+    "2026-08-20": 6,
+    "2026-08-21": 2,
+    "2026-08-22": 4,
+    "2026-08-23": 5,
+    "2026-08-24": 1,
+    "2026-08-25": 3,
+    "2026-08-26": 5,
+    "2026-08-27": 3,
+    "2026-08-28": 0,
+    "2026-08-29": 4,
+    "2026-08-30": 1,
+    "2026-08-31": 3
+  }
+}

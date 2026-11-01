@@ -1,8 +1,10 @@
 import json
+from pathlib import Path
 import tempfile
 from unittest.mock import patch
 
 import pandas as pd
+import requests
 from django.test import TestCase, override_settings
 
 from backtest import bench_ab_r2_replay, paper_forward_ab
@@ -29,7 +31,14 @@ class PaperForwardTests(TestCase):
         self.assertEqual(status_for({'max_drawdown_pct': 11, 'net_pnl': 5}, 90), 'BREACH_STOP')
         self.assertEqual(status_for({'max_drawdown_pct': 1, 'net_pnl': -1}, 10), 'INSUFFICIENT')
         self.assertEqual(status_for({'max_drawdown_pct': 1, 'net_pnl': -1}, 30), 'BELOW_EXPECTATION')
-        self.assertEqual(status_for({'max_drawdown_pct': 1, 'net_pnl': 1}, 30), 'ON_TRACK')
+        self.assertEqual(status_for({'max_drawdown_pct': 1, 'net_pnl': 1}, 30), 'BELOW_EXPECTATION')
+        self.assertEqual(status_for({'max_drawdown_pct': 1, 'net_pnl': 3}, 30), 'OBSERVE')
+        self.assertEqual(status_for({
+            'max_drawdown_pct': 1, 'net_pnl': 12, 'positive_month_share': 0.67,
+        }, 90), 'ON_TRACK')
+        self.assertEqual(status_for({
+            'max_drawdown_pct': 1, 'net_pnl': 12, 'positive_month_share': 0.67,
+        }, 90, {'2026-10-27': {}}), 'DATA_REVISED')
 
     def _run(self, values, end):
         with patch.object(paper_forward_ab, 'available_bounds',
@@ -54,7 +63,18 @@ class PaperForwardTests(TestCase):
         second = self._run([1.2, -0.5, 0.3], '2026-10-30')
         self.assertEqual(list(second['revisions']), ['2026-10-27'])
         self.assertIn('zmienione dni', format_report(second))
-        self.assertIn('INSUFFICIENT', format_report(second))
+        self.assertIn('DATA_REVISED', format_report(second))
+
+    def test_unchanged_window_returns_ledger_without_replay(self):
+        first = self._run([0.2], '2026-10-28')
+        with patch.object(paper_forward_ab, 'available_bounds', return_value=(
+                pd.Timestamp('2026-10-01', tz='UTC'),
+                pd.Timestamp('2026-10-28', tz='UTC'))), \
+                patch.object(paper_forward_ab, 'load_market') as load_market:
+            second = run_paper_forward('/unused', now=pd.Timestamp('2026-10-28 12:00', tz='UTC'))
+        self.assertEqual(second['computed_at'], first['computed_at'])
+        self.assertTrue(second['unchanged'])
+        load_market.assert_not_called()
 
 
 class AvailableBoundsTests(TestCase):
@@ -74,3 +94,40 @@ class AvailableBoundsTests(TestCase):
         with patch.object(bench_ab_r2_replay, '_published', side_effect=fake):
             _, end = bench_ab_r2_replay.available_bounds(pd.Timestamp('2026-10-27 01:00', tz='UTC'))
         self.assertEqual(end, pd.Timestamp('2026-10-26', tz='UTC'))
+
+    def test_uses_checksumed_cache_when_network_is_unavailable(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            for symbol in bench_ab_r2_replay.SYMBOLS:
+                for period, stamp in [('monthly', '2026-09'), ('daily', '2026-10-27')]:
+                    if period == 'monthly':
+                        root = Path(tmp) / 'klines' / symbol / '1m'
+                    else:
+                        root = Path(tmp) / 'daily' / 'klines' / symbol / '1m'
+                    root.mkdir(parents=True, exist_ok=True)
+                    archive = root / f'{symbol}-1m-{stamp}.zip'
+                    archive.touch()
+                    Path(f'{archive}.CHECKSUM').touch()
+
+            with patch.object(bench_ab_r2_replay, '_published',
+                              side_effect=bench_ab_r2_replay.ArchiveAvailabilityError('offline')):
+                monthly_end, end = bench_ab_r2_replay.available_bounds(
+                    pd.Timestamp('2026-10-29 05:00', tz='UTC'), tmp)
+
+        self.assertEqual(monthly_end, pd.Timestamp('2026-10-01', tz='UTC'))
+        self.assertEqual(end, pd.Timestamp('2026-10-28', tz='UTC'))
+
+    def test_network_failure_is_not_reported_as_old_data(self):
+        with patch.object(bench_ab_r2_replay, '_published',
+                          side_effect=bench_ab_r2_replay.ArchiveAvailabilityError('offline')):
+            with self.assertRaises(bench_ab_r2_replay.ArchiveAvailabilityError):
+                bench_ab_r2_replay.available_bounds(
+                    pd.Timestamp('2026-10-29 05:00', tz='UTC'))
+
+    def test_probe_distinguishes_missing_archive_from_network_failure(self):
+        response = type('Response', (), {'status_code': 404})()
+        with patch('backtest.bench_ab_r2_replay.requests.head', return_value=response):
+            self.assertFalse(bench_ab_r2_replay._published('https://example.test/missing.zip'))
+        with patch('backtest.bench_ab_r2_replay.requests.head',
+                   side_effect=requests.ConnectionError('offline')):
+            with self.assertRaises(bench_ab_r2_replay.ArchiveAvailabilityError):
+                bench_ab_r2_replay._published('https://example.test/archive.zip')

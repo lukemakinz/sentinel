@@ -1,0 +1,56 @@
+{
+  "protocol_version": "S42-PAIRS-RATIO-REVERSION-v1.0",
+  "status": "frozen_before_data_load",
+  "motivating_context": "The first mechanism in this project's 44 prior tests (S13-S41) that was not a purely directional bet on absolute price. This protocol tests relative value instead: for each of ETH/BNB/SOL/XRP/ADA/SUI/DOGE priced in BTC (7 ratio 'instruments'), enter when the ratio itself -- not either leg's absolute price -- is at a 4H statistical extreme (long the ratio = long the alt/short BTC when the alt is extremely cheap relative to BTC; short the ratio when extremely expensive). Market-neutral exposure to overall crypto beta is the appeal: a losing week for the whole asset class does not by itself lose money on a ratio bet, only a move in relative strength does. Entry/exit logic (RSI 20/80 or Bollinger 2.5-sigma extreme, S20 H1's patient breakeven+chandelier exit) is copied unmodified from S40/S41 -- this protocol changes only WHAT is being measured as 'extreme' (a ratio instead of an absolute price), reusing the exact same feature/signal code.",
+  "synthetic_instrument_disclosure": "This project's execute_cluster simulator holds exactly one instrument position at a time and has no two-leg execution model. Rather than build one, each ratio is represented as a single synthetic OHLC series via interval arithmetic (high=A.high/B.low, low=A.low/B.high, open/close from each leg's own open/close -- the true achievable range of A/B within the minute, not an approximation), and traded through the existing single-instrument machinery. This is a real, disclosed simplification, not a full two-leg engine: (1) trading costs are doubled relative to S40/S41's single-leg assumptions (base 4/10/4/4 bps maker/taker/slippage/limit-penetration vs the usual 2/5/2/2) to approximate paying costs on both legs instead of one; (2) funding cost/gain on either leg is NOT modeled (a zero funding series is substituted) -- for correlated large-cap pairs over sub-week holds this is usually a second-order effect relative to price moves, but it is not exactly zero, and this is disclosed rather than quietly assumed away; (3) independent per-leg margin/liquidation mechanics are not modeled, only the combined ratio's fixed-dollar-risk stop.",
+  "hypotheses": [
+    {
+      "id": "H1_RSI_EXTREME",
+      "entry_exit": "Identical to S40/S41 H1: 4H RSI(14) of the ratio series <= 20 (long the ratio) or >= 80 (short the ratio). Stop beyond the trailing 6-bar (24h) 4H ratio swing low/high plus 0.25x ATR buffer (ATR computed on the ratio series). S20 H1's patient breakeven+chandelier exit: partial 1.5R, breakeven, chandelier trail 2.5x ATR, cap 8R, max hold 3 days. Costs doubled per the synthetic-instrument disclosure above."
+    },
+    {
+      "id": "H2_BOLLINGER_EXTREME",
+      "entry_exit": "Identical to H1 except the trigger is a 20-period Bollinger z-score of the ratio beyond +-2.5 sigma instead of RSI."
+    }
+  ],
+  "single_variable_isolated": "Identical entry/exit formulas to S40/S41's H1/H2, applied to a ratio series instead of an absolute price series, with costs doubled for the synthetic two-leg approximation (declared once, applied uniformly to both hypotheses and all cost scenarios, not tuned after seeing results).",
+  "symbols": {
+    "traded": ["ETHBTC", "BNBBTC", "SOLBTC", "XRPBTC", "ADABTC", "SUIBTC", "DOGEBTC"],
+    "note": "Each a synthetic ratio instrument built from BTCUSDT plus one of ETH/BNB/SOL/XRP/ADA/SUI/DOGE USDT-perp archives already cached for S40/S41 -- no new data source. The extended 2024-01-2026-02 development window is reused directly from S41 (not S40's original 6-month window) because S40/S41 already established that this signal class is rare enough per-instrument to need a long window for a meaningful fill count -- a methodological lesson carried forward, not a result-driven choice specific to this protocol."
+  },
+  "windows": {
+    "warmup": ["2023-12-01", "2024-01-01"],
+    "development": ["2024-01-01", "2026-02-01"],
+    "validation": ["2026-02-01", "2026-04-01"],
+    "retrospective_evaluation": ["2026-04-01", "2026-09-01"],
+    "genuine_oos": "new data after 2026-09-01 / frozen paper-forward"
+  },
+  "promotion_gates": {
+    "development_to_validation": "PF >1.05, net PnL >0, at least 40 fills",
+    "validation_to_retrospective_evaluation": "base PF >1.10, stress PF >=1.00, at least 20 base fills, at least 2/3 (of contributing) symbols net positive, no symbol >60% gross profit",
+    "paper_to_live": "at least 200 prospective candidates across three full frozen months, PF >=1.25 base and >=1.10 stress, expectancy >=0.10R, 95% session-block bootstrap lower bound >0, max DD <=4%, PLUS a genuine two-leg execution model (real margining on both legs, real funding on both legs) built and re-validated before this could ever be considered for live capital -- the synthetic single-instrument proxy is a development/validation screening tool only."
+  },
+  "execution": {
+    "capital_usd": 250,
+    "fixed_risk_usd": 0.5,
+    "leverage_cap": 5,
+    "notional_cap_usd": 125,
+    "margin_cap_usd": 25,
+    "one_global_position": "single global minute event loop with one shared cash balance, pending order and open position across the 7 synthetic ratio instruments",
+    "daily_stop_usd": 1.5,
+    "weekly_stop_usd": 4.5,
+    "base_bps": {"maker": 4, "taker": 10, "slippage": 4, "limit_penetration": 4},
+    "stress_bps": {"maker": 10, "taker": 16, "slippage": 10, "limit_penetration": 10},
+    "severe_bps": {"maker": 20, "taker": 20, "slippage": 20, "limit_penetration": 20},
+    "ambiguous_bar": "stop first; no favorable exit on limit fill minute",
+    "cost_doubling_disclosure": "All three cost tiers are exactly double S40/S41's single-instrument tiers, to approximate paying trading costs on both legs of a real pairs trade instead of one."
+  },
+  "selection": "Exactly H1 and H2, both a direct reapplication of S40/S41's already-frozen entry/exit formulas to a different underlying series -- no new parameter grid. A failing gate stops that route; choose no least-bad winner.",
+  "stress_semantics": "Stress and severe are deployability replays: higher costs and limit penetration are known before entry, so the reward/cost filter is reapplied and the fill cohort may shrink.",
+  "known_limitations": [
+    "Synthetic single-instrument proxy, not a real two-leg execution model -- see synthetic_instrument_disclosure above. A pass here is grounds for building a genuine two-leg simulator next, not for live capital.",
+    "Funding cost/gain on either leg is not modeled at all (substituted with zero) -- a real pairs position's funding differential could meaningfully help or hurt over multi-day holds and is simply unknown from this diagnostic.",
+    "BTC is the common leg in every one of the 7 ratios, so these 7 'symbols' are far less independent of each other than S40/S41's 8 absolute-price symbols were -- a single sharp BTC move affects all 7 ratios simultaneously through the denominator, inflating the appearance of breadth relative to the number of truly independent bets.",
+    "This is a retrospective diagnostic; not a live paper-forward result unless it clears every gate through retrospective_evaluation, and even then requires the real two-leg engine described in the paper_to_live gate before any live consideration."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "strategy_id": "BOOK_AB_R5_A_PLUS_CASH",
+  "status": "PROSPECTIVE_PAPER_PROTOCOL_SELECTED_FROM_CONTAMINATED_DEVELOPMENT",
+  "frozen_at_utc": "2026-10-13T16:00:00Z",
+  "capital_usd": 500,
+  "allocation": {
+    "book_a_usd": 250,
+    "cash_reserve_usd": 250,
+    "book_b_live_usd": 0,
+    "book_b_v2_shadow_usd": 250
+  },
+  "book_a": "BOOK_A_ALT_RM + BOOK_A_RISK_DEFAULT using the corrected quantity/cash ledger",
+  "modification": "Remove capital from Book B because R3 lost $63.79 under stress and R4 strict-v2 still lost $14.51. Keep v2 in shadow so it can earn prospective evidence without risking portfolio capital.",
+  "selection_disclosure": "This choice was made after inspecting all history through 2026-09-01. Historical results are development diagnostics and cannot validate the choice.",
+  "costs_book_a_one_way_turnover_bps": {"base": 7, "stress": 12, "severe": 20},
+  "prospective_t0": "2026-10-14T00:00:00Z",
+  "promotion_rule_for_book_b": "Later of 180 days and 15 closed shadow trades; positive stress PnL, PF >= 1.15, paired excess bootstrap lower bound > 0, and no worse DD/ES than R5.",
+  "claim_policy": "R5 is a risk repair, not proof of new alpha and not a guarantee of future profit."
+}

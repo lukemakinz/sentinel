@@ -1,0 +1,5377 @@
+[
+  {
+    "strategy": "S1C",
+    "symbol": "BNBUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 1,
+    "wins": 0,
+    "win_rate_pct": 0.0,
+    "profit_factor": 0.0,
+    "net_pnl": -0.26,
+    "return_pct": -0.026,
+    "max_drawdown_pct": 0.19,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 626.3412,
+        "exit_price": 626.6540574293998,
+        "position_size_usd": 392.43,
+        "margin_used": 19.62,
+        "leverage": 20,
+        "pnl": -0.26,
+        "pnl_pct": -0.0665,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-05-04 14:35:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 624.4238,
+            "ratio": 0.15,
+            "quantity": 0.09398104,
+            "pnl": 0.1391
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-04",
+          "ny",
+          623.8,
+          [
+            623.91,
+            630.54
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "BTCUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 2,
+    "wins": 1,
+    "win_rate_pct": 50.0,
+    "profit_factor": 0.16666666666666666,
+    "net_pnl": -5.1,
+    "return_pct": -0.5099999999999999,
+    "max_drawdown_pct": 0.7,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 2
+    },
+    "trades_detail": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 76529.5875,
+        "exit_price": 76812.95361739998,
+        "position_size_usd": 1388.89,
+        "margin_used": 69.44,
+        "leverage": 20,
+        "pnl": -6.12,
+        "pnl_pct": -0.4405,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-24 16:00:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-24",
+          "ny_continuation",
+          76553.675,
+          [
+            76533.1,
+            76650.0
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 73562.0875,
+        "exit_price": 73463.1230333,
+        "position_size_usd": 948.17,
+        "margin_used": 47.41,
+        "leverage": 20,
+        "pnl": 1.02,
+        "pnl_pct": 0.1078,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 15:05:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73463.123,
+            "ratio": 0.15,
+            "quantity": 0.00193341,
+            "pnl": 0.0919
+          },
+          {
+            "label": "TP2",
+            "price": 73336.1343,
+            "ratio": 0.25,
+            "quantity": 0.00322235,
+            "pnl": 0.5625
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-29",
+          "ny",
+          73158.8,
+          [
+            73670.0,
+            73752.5
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "ETHUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 4,
+    "wins": 2,
+    "win_rate_pct": 50.0,
+    "profit_factor": 2.672,
+    "net_pnl": 2.0900000000000003,
+    "return_pct": 0.20900000000000002,
+    "max_drawdown_pct": 0.34,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 4
+    },
+    "trades_detail": [
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2122.515,
+        "exit_price": 2123.5751962424997,
+        "position_size_usd": 685.93,
+        "margin_used": 34.3,
+        "leverage": 20,
+        "pnl": -0.45,
+        "pnl_pct": -0.0656,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-05-19 13:35:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2115.8888,
+            "ratio": 0.15,
+            "quantity": 0.04847519,
+            "pnl": 0.2493
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-19",
+          "ny",
+          2118.4,
+          [
+            2118.38,
+            2130.06
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2112.5813,
+        "exit_price": 2113.6365343593498,
+        "position_size_usd": 844.4,
+        "margin_used": 42.22,
+        "leverage": 20,
+        "pnl": -0.8,
+        "pnl_pct": -0.0945,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-19 15:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2110.0529,
+            "ratio": 0.15,
+            "quantity": 0.0599554,
+            "pnl": 0.063
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-19",
+          "ny",
+          2107.945,
+          [
+            2111.82,
+            2118.17
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2120.8325,
+        "exit_price": 2114.6725599999995,
+        "position_size_usd": 946.46,
+        "margin_used": 47.32,
+        "leverage": 20,
+        "pnl": 2.43,
+        "pnl_pct": 0.2564,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-05-21 13:50:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2114.6726,
+            "ratio": 0.15,
+            "quantity": 0.06694046,
+            "pnl": 0.3132
+          },
+          {
+            "label": "TP2",
+            "price": 2111.6345,
+            "ratio": 0.25,
+            "quantity": 0.11156744,
+            "pnl": 0.8611
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-21",
+          "ny",
+          2118.805,
+          [
+            2118.76,
+            2126.0
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2012.9312,
+        "exit_price": 2009.629622,
+        "position_size_usd": 920.89,
+        "margin_used": 46.04,
+        "leverage": 20,
+        "pnl": 0.91,
+        "pnl_pct": 0.0985,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 15:05:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2009.6296,
+            "ratio": 0.15,
+            "quantity": 0.06862297,
+            "pnl": 0.13
+          },
+          {
+            "label": "TP2",
+            "price": 2009.274,
+            "ratio": 0.25,
+            "quantity": 0.11437162,
+            "pnl": 0.2573
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-29",
+          "ny",
+          2004.4067,
+          [
+            2017.21,
+            2018.2
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "SOLUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 2,
+    "wins": 0,
+    "win_rate_pct": 0.0,
+    "profit_factor": 0.0,
+    "net_pnl": -5.63,
+    "return_pct": -0.563,
+    "max_drawdown_pct": 0.83,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 2
+    },
+    "trades_detail": [
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 84.5087,
+        "exit_price": 84.55091209565,
+        "position_size_usd": 967.95,
+        "margin_used": 48.4,
+        "leverage": 20,
+        "pnl": -0.74,
+        "pnl_pct": -0.0762,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-19 15:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 84.3042,
+            "ratio": 0.15,
+            "quantity": 1.71808186,
+            "pnl": 0.2499
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-19",
+          "ny",
+          84.22,
+          [
+            84.58,
+            84.75
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 81.3825,
+        "exit_price": 81.68380219999999,
+        "position_size_usd": 1110.46,
+        "margin_used": 55.52,
+        "leverage": 20,
+        "pnl": -4.89,
+        "pnl_pct": -0.4404,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 15:00:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-05-29",
+          "ny",
+          81.33,
+          [
+            81.32,
+            81.5
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "BNBUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 2,
+    "wins": 0,
+    "win_rate_pct": 0.0,
+    "profit_factor": 0.0,
+    "net_pnl": -4.68,
+    "return_pct": -0.468,
+    "max_drawdown_pct": 0.53,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 2
+    },
+    "trades_detail": [
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 626.3412,
+        "exit_price": 626.6540574293998,
+        "position_size_usd": 392.43,
+        "margin_used": 19.62,
+        "leverage": 20,
+        "pnl": -0.26,
+        "pnl_pct": -0.0665,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-05-04 14:35:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 624.4238,
+            "ratio": 0.15,
+            "quantity": 0.09398104,
+            "pnl": 0.1391
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-04",
+          "ny",
+          623.8,
+          [
+            623.91,
+            630.54
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 634.2275,
+        "exit_price": 637.1549183999999,
+        "position_size_usd": 830.32,
+        "margin_used": 41.52,
+        "leverage": 20,
+        "pnl": -4.42,
+        "pnl_pct": -0.5318,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 14:50:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-29",
+          "ny",
+          636.17,
+          [
+            634.63,
+            635.17
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "BTCUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 2,
+    "wins": 1,
+    "win_rate_pct": 50.0,
+    "profit_factor": 0.16666666666666666,
+    "net_pnl": -5.1,
+    "return_pct": -0.5099999999999999,
+    "max_drawdown_pct": 0.7,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 2
+    },
+    "trades_detail": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 76529.5875,
+        "exit_price": 76812.95361739998,
+        "position_size_usd": 1388.89,
+        "margin_used": 69.44,
+        "leverage": 20,
+        "pnl": -6.12,
+        "pnl_pct": -0.4405,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-24 16:00:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-24",
+          "ny_continuation",
+          76553.675,
+          [
+            76533.1,
+            76650.0
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 73562.0875,
+        "exit_price": 73463.1230333,
+        "position_size_usd": 948.17,
+        "margin_used": 47.41,
+        "leverage": 20,
+        "pnl": 1.02,
+        "pnl_pct": 0.1078,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 15:05:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73463.123,
+            "ratio": 0.15,
+            "quantity": 0.00193341,
+            "pnl": 0.0919
+          },
+          {
+            "label": "TP2",
+            "price": 73336.1343,
+            "ratio": 0.25,
+            "quantity": 0.00322235,
+            "pnl": 0.5625
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-29",
+          "ny",
+          73158.8,
+          [
+            73670.0,
+            73752.5
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "ETHUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 6,
+    "wins": 3,
+    "win_rate_pct": 50.0,
+    "profit_factor": 1.9090909090909094,
+    "net_pnl": 1.9000000000000001,
+    "return_pct": 0.19,
+    "max_drawdown_pct": 0.34,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 6
+    },
+    "trades_detail": [
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2122.515,
+        "exit_price": 2123.5751962424997,
+        "position_size_usd": 685.93,
+        "margin_used": 34.3,
+        "leverage": 20,
+        "pnl": -0.45,
+        "pnl_pct": -0.0656,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-05-19 13:35:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2115.8888,
+            "ratio": 0.15,
+            "quantity": 0.04847519,
+            "pnl": 0.2493
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-19",
+          "ny",
+          2118.4,
+          [
+            2118.38,
+            2130.06
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2112.6537,
+        "exit_price": 2113.7089705231497,
+        "position_size_usd": 837.57,
+        "margin_used": 41.88,
+        "leverage": 20,
+        "pnl": -0.79,
+        "pnl_pct": -0.094,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-19 15:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2110.0529,
+            "ratio": 0.15,
+            "quantity": 0.05946791,
+            "pnl": 0.0668
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-19",
+          "ny",
+          2118.4,
+          [
+            2111.82,
+            2118.17
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2120.8325,
+        "exit_price": 2114.6725599999995,
+        "position_size_usd": 946.47,
+        "margin_used": 47.32,
+        "leverage": 20,
+        "pnl": 2.43,
+        "pnl_pct": 0.2564,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-05-21 13:50:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2114.6726,
+            "ratio": 0.15,
+            "quantity": 0.06694119,
+            "pnl": 0.3132
+          },
+          {
+            "label": "TP2",
+            "price": 2111.6345,
+            "ratio": 0.25,
+            "quantity": 0.11156864,
+            "pnl": 0.8611
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-21",
+          "ny",
+          2118.805,
+          [
+            2118.76,
+            2126.0
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2126.2463,
+        "exit_price": 2127.3083600268496,
+        "position_size_usd": 858.98,
+        "margin_used": 42.95,
+        "leverage": 20,
+        "pnl": -0.85,
+        "pnl_pct": -0.0987,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-21 16:50:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2124.2922,
+            "ratio": 0.15,
+            "quantity": 0.06059817,
+            "pnl": 0.0283
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-21",
+          "ny_continuation",
+          2132.04,
+          [
+            2127.08,
+            2127.57
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2012.5338,
+        "exit_price": 2009.5925849999999,
+        "position_size_usd": 814.88,
+        "margin_used": 40.74,
+        "leverage": 20,
+        "pnl": 0.65,
+        "pnl_pct": 0.0793,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 08:20:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2009.5926,
+            "ratio": 0.15,
+            "quantity": 0.06073508,
+            "pnl": 0.0932
+          },
+          {
+            "label": "TP2",
+            "price": 2009.3473,
+            "ratio": 0.25,
+            "quantity": 0.10122513,
+            "pnl": 0.1801
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-29",
+          "london",
+          2020.33,
+          [
+            2014.05,
+            2017.2
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 2012.9312,
+        "exit_price": 2009.629622,
+        "position_size_usd": 920.71,
+        "margin_used": 46.04,
+        "leverage": 20,
+        "pnl": 0.91,
+        "pnl_pct": 0.0985,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 15:05:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 2009.6296,
+            "ratio": 0.15,
+            "quantity": 0.06860988,
+            "pnl": 0.13
+          },
+          {
+            "label": "TP2",
+            "price": 2009.274,
+            "ratio": 0.25,
+            "quantity": 0.11434981,
+            "pnl": 0.2573
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-29",
+          "ny",
+          2004.4067,
+          [
+            2017.21,
+            2018.2
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "SOLUSDT",
+    "phase": "develop_05",
+    "start": "2026-05-01T00:00:00+00:00",
+    "end": "2026-06-01T00:00:00+00:00",
+    "trades": 4,
+    "wins": 1,
+    "win_rate_pct": 25.0,
+    "profit_factor": 0.2912966252220248,
+    "net_pnl": -3.99,
+    "return_pct": -0.399,
+    "max_drawdown_pct": 0.56,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 4
+    },
+    "trades_detail": [
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 84.7687,
+        "exit_price": 84.4977133,
+        "position_size_usd": 654.75,
+        "margin_used": 32.74,
+        "leverage": 20,
+        "pnl": 1.64,
+        "pnl_pct": 0.2508,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-19 13:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 84.4977,
+            "ratio": 0.15,
+            "quantity": 1.15859938,
+            "pnl": 0.2454
+          },
+          {
+            "label": "TP2",
+            "price": 84.4944,
+            "ratio": 0.25,
+            "quantity": 1.93099897,
+            "pnl": 0.4153
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-19",
+          "ny",
+          84.752,
+          [
+            84.73,
+            85.08
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 84.5412,
+        "exit_price": 84.5834283294,
+        "position_size_usd": 865.55,
+        "margin_used": 43.28,
+        "leverage": 20,
+        "pnl": -0.86,
+        "pnl_pct": -0.0994,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-19 16:30:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 84.4677,
+            "ratio": 0.15,
+            "quantity": 1.53573762,
+            "pnl": 0.0221
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-19",
+          "ny_continuation",
+          84.3833,
+          [
+            84.58,
+            84.75
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 86.0125,
+        "exit_price": 86.05546324374998,
+        "position_size_usd": 690.18,
+        "margin_used": 34.51,
+        "leverage": 20,
+        "pnl": -0.37,
+        "pnl_pct": -0.053,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-21 13:55:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 85.6716,
+            "ratio": 0.15,
+            "quantity": 1.20363406,
+            "pnl": 0.3381
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-21",
+          "ny",
+          85.85,
+          [
+            86.07,
+            86.41
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 81.2675,
+        "exit_price": 81.64616459999999,
+        "position_size_usd": 820.95,
+        "margin_used": 41.05,
+        "leverage": 20,
+        "pnl": -4.4,
+        "pnl_pct": -0.5362,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-05-29 14:50:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-05-29",
+          "ny",
+          81.425,
+          [
+            81.32,
+            81.5
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "BNBUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 5,
+    "wins": 4,
+    "win_rate_pct": 80.0,
+    "profit_factor": 1.611904761904762,
+    "net_pnl": 2.57,
+    "return_pct": 0.257,
+    "max_drawdown_pct": 1.32,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 4,
+      "TIME_KILL": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 583.3913,
+        "exit_price": 573.9177444,
+        "position_size_usd": 449.57,
+        "margin_used": 22.48,
+        "leverage": 20,
+        "pnl": 5.87,
+        "pnl_pct": 1.3053,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 16:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 581.1756,
+            "ratio": 0.15,
+            "quantity": 0.11559209,
+            "pnl": 0.209
+          },
+          {
+            "label": "TP2",
+            "price": 575.3798,
+            "ratio": 0.25,
+            "quantity": 0.19265348,
+            "pnl": 1.4655
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-05",
+          "ny_continuation",
+          580.595,
+          [
+            583.71,
+            585.9
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 578.48,
+        "exit_price": 577.6688117199999,
+        "position_size_usd": 489.63,
+        "margin_used": 24.48,
+        "leverage": 20,
+        "pnl": 0.63,
+        "pnl_pct": 0.1297,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-05 17:00:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 575.3798,
+            "ratio": 0.15,
+            "quantity": 0.12696082,
+            "pnl": 0.3424
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-05",
+          "ny_continuation",
+          580.595,
+          [
+            577.97,
+            579.15
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 590.0338,
+        "exit_price": 593.2068141999999,
+        "position_size_usd": 690.44,
+        "margin_used": 34.52,
+        "leverage": 20,
+        "pnl": -4.2,
+        "pnl_pct": -0.608,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-09 15:05:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-09",
+          "ny",
+          591.8,
+          [
+            588.6,
+            592.01
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 578.2387,
+        "exit_price": 577.6370599999999,
+        "position_size_usd": 601.51,
+        "margin_used": 30.08,
+        "leverage": 20,
+        "pnl": 0.21,
+        "pnl_pct": 0.0341,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-18 16:10:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-18",
+          "ny_continuation",
+          580.9,
+          [
+            578.17,
+            581.26
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 557.3575,
+        "exit_price": 557.6359000712498,
+        "position_size_usd": 276.43,
+        "margin_used": 13.82,
+        "leverage": 20,
+        "pnl": 0.06,
+        "pnl_pct": 0.0223,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-25 14:10:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 552.3518,
+            "ratio": 0.15,
+            "quantity": 0.07439374,
+            "pnl": 0.3436
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-25",
+          "ny",
+          546.32,
+          [
+            560.09,
+            564.75
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "BTCUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 8,
+    "wins": 4,
+    "win_rate_pct": 50.0,
+    "profit_factor": 0.6110772976262934,
+    "net_pnl": -6.390000000000001,
+    "return_pct": -0.639,
+    "max_drawdown_pct": 1.73,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 7,
+      "TIME_KILL": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61173.7125,
+        "exit_price": 59665.18782224,
+        "position_size_usd": 302.66,
+        "margin_used": 15.13,
+        "leverage": 20,
+        "pnl": 7.09,
+        "pnl_pct": 2.3431,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-05 16:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 60506.5353,
+            "ratio": 0.15,
+            "quantity": 0.00074214,
+            "pnl": 0.4636
+          },
+          {
+            "label": "TP2",
+            "price": 59292.6171,
+            "ratio": 0.25,
+            "quantity": 0.0012369,
+            "pnl": 2.2749
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-05",
+          "ny_continuation",
+          61344.8,
+          [
+            61217.8,
+            61644.9
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61449.7875,
+        "exit_price": 61756.69499999999,
+        "position_size_usd": 222.15,
+        "margin_used": 11.11,
+        "leverage": 20,
+        "pnl": -1.27,
+        "pnl_pct": -0.5697,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-09 16:55:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-09",
+          "ny_continuation",
+          62377.0,
+          [
+            61511.6,
+            61620.7
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 64016.85,
+        "exit_price": 63921.909851799996,
+        "position_size_usd": 1021.32,
+        "margin_used": 51.07,
+        "leverage": 20,
+        "pnl": 0.74,
+        "pnl_pct": 0.0724,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-14 15:00:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 63947.5086,
+            "ratio": 0.15,
+            "quantity": 0.00239308,
+            "pnl": 0.0588
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-14",
+          "ny",
+          64177.9286,
+          [
+            63960.2,
+            64115.6
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 65076.325,
+        "exit_price": 65317.98463189999,
+        "position_size_usd": 1113.96,
+        "margin_used": 55.7,
+        "leverage": 20,
+        "pnl": -4.92,
+        "pnl_pct": -0.4415,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-17 13:35:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-17",
+          "ny",
+          65029.8333,
+          [
+            64991.6,
+            65208.4
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 60083.9125,
+        "exit_price": 60104.59987531999,
+        "position_size_usd": 276.19,
+        "margin_used": 13.81,
+        "leverage": 20,
+        "pnl": 0.25,
+        "pnl_pct": 0.0905,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-25 14:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 59323.9647,
+            "ratio": 0.15,
+            "quantity": 0.00068951,
+            "pnl": 0.4953
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-25",
+          "ny",
+          59060.0,
+          [
+            60227.6,
+            61163.9
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 59706.6,
+        "exit_price": 60065.36556019999,
+        "position_size_usd": 600.68,
+        "margin_used": 30.03,
+        "leverage": 20,
+        "pnl": -4.03,
+        "pnl_pct": -0.6712,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-29 15:35:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-29",
+          "ny",
+          59672.35,
+          [
+            59577.6,
+            59933.8
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 58997.375,
+        "exit_price": 59319.889428799994,
+        "position_size_usd": 1006.33,
+        "margin_used": 50.32,
+        "leverage": 20,
+        "pnl": -6.21,
+        "pnl_pct": -0.6169,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 14:00:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          58850.0,
+          [
+            59191.2,
+            59218.6
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 58745.9625,
+        "exit_price": 58582.94072630999,
+        "position_size_usd": 798.05,
+        "margin_used": 39.9,
+        "leverage": 20,
+        "pnl": 1.96,
+        "pnl_pct": 0.2457,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 15:45:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 58433.9255,
+            "ratio": 0.15,
+            "quantity": 0.00203771,
+            "pnl": 0.5524
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          58850.0,
+          [
+            58711.8,
+            58971.7
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "ETHUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 6,
+    "wins": 3,
+    "win_rate_pct": 50.0,
+    "profit_factor": 2.633663366336634,
+    "net_pnl": 14.85,
+    "return_pct": 1.485,
+    "max_drawdown_pct": 0.74,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 6
+    },
+    "trades_detail": [
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1983.815,
+        "exit_price": 1996.1987044999998,
+        "position_size_usd": 572.83,
+        "margin_used": 28.64,
+        "leverage": 20,
+        "pnl": -3.98,
+        "pnl_pct": -0.6945,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-01 17:05:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-01",
+          "ny_continuation",
+          1970.7,
+          [
+            1986.38,
+            1992.06
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1943.0375,
+        "exit_price": 1895.17760432,
+        "position_size_usd": 330.72,
+        "margin_used": 16.54,
+        "leverage": 20,
+        "pnl": 7.46,
+        "pnl_pct": 2.2554,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-02 16:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1923.893,
+            "ratio": 0.15,
+            "quantity": 0.02553115,
+            "pnl": 0.4543
+          },
+          {
+            "label": "TP2",
+            "price": 1888.7471,
+            "ratio": 0.25,
+            "quantity": 0.04255192,
+            "pnl": 2.2534
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-02",
+          "ny_continuation",
+          1954.42,
+          [
+            1947.28,
+            1958.08
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1649.1337,
+        "exit_price": 1649.9574422831497,
+        "position_size_usd": 568.18,
+        "margin_used": 28.41,
+        "leverage": 20,
+        "pnl": -0.44,
+        "pnl_pct": -0.0775,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-09 15:05:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1645.2936,
+            "ratio": 0.15,
+            "quantity": 0.05167962,
+            "pnl": 0.1389
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-09",
+          "ny",
+          1653.09,
+          [
+            1645.36,
+            1655.73
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1644.5663,
+        "exit_price": 1641.6499299199997,
+        "position_size_usd": 624.27,
+        "margin_used": 31.21,
+        "leverage": 20,
+        "pnl": 1.06,
+        "pnl_pct": 0.1703,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-09 17:00:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1634.7631,
+            "ratio": 0.15,
+            "quantity": 0.05693914,
+            "pnl": 0.4929
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-09",
+          "ny_continuation",
+          1643.65,
+          [
+            1644.91,
+            1650.32
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1628.695,
+        "exit_price": 1567.6694983950001,
+        "position_size_usd": 548.16,
+        "margin_used": 27.41,
+        "leverage": 20,
+        "pnl": 15.42,
+        "pnl_pct": 2.8134,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-24 16:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1616.885,
+            "ratio": 0.15,
+            "quantity": 0.05048471,
+            "pnl": 0.539
+          },
+          {
+            "label": "TP2",
+            "price": 1594.4872,
+            "ratio": 0.25,
+            "quantity": 0.08414118,
+            "pnl": 2.7838
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-24",
+          "ny_continuation",
+          1633.33,
+          [
+            1626.98,
+            1637.9
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1570.3987,
+        "exit_price": 1577.0554799999998,
+        "position_size_usd": 945.27,
+        "margin_used": 47.26,
+        "leverage": 20,
+        "pnl": -4.67,
+        "pnl_pct": -0.4941,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 16:05:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "ETHUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-30",
+          "ny_continuation",
+          1573.94,
+          [
+            1571.35,
+            1573.34
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "SOLUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 11,
+    "wins": 3,
+    "win_rate_pct": 27.272727272727273,
+    "profit_factor": 1.047741273100616,
+    "net_pnl": 0.9300000000000004,
+    "return_pct": 0.09300000000000004,
+    "max_drawdown_pct": 2.12,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 10,
+      "TIME_KILL": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 80.1,
+        "exit_price": 80.4804,
+        "position_size_usd": 801.0,
+        "margin_used": 40.05,
+        "leverage": 20,
+        "pnl": -4.37,
+        "pnl_pct": -0.5451,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-01 16:50:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-01",
+          "ny_continuation",
+          79.91,
+          [
+            80.26,
+            80.3
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 77.61,
+        "exit_price": 74.16901992499999,
+        "position_size_usd": 274.53,
+        "margin_used": 13.73,
+        "leverage": 20,
+        "pnl": 10.67,
+        "pnl_pct": 3.8863,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-02 16:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 76.4197,
+            "ratio": 0.15,
+            "quantity": 0.53059572,
+            "pnl": 0.603
+          },
+          {
+            "label": "TP2",
+            "price": 74.3066,
+            "ratio": 0.25,
+            "quantity": 0.88432621,
+            "pnl": 2.8747
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-02",
+          "ny_continuation",
+          78.7567,
+          [
+            77.89,
+            78.19
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 74.0088,
+        "exit_price": 72.89530248,
+        "position_size_usd": 423.07,
+        "margin_used": 21.15,
+        "leverage": 20,
+        "pnl": 5.95,
+        "pnl_pct": 1.4062,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-03 17:30:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73.2932,
+            "ratio": 0.15,
+            "quantity": 0.8574818,
+            "pnl": 0.5695
+          },
+          {
+            "label": "TP2",
+            "price": 72.7427,
+            "ratio": 0.25,
+            "quantity": 1.42913634,
+            "pnl": 1.7363
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-03",
+          "ny_continuation",
+          73.975,
+          [
+            74.11,
+            74.42
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 66.7875,
+        "exit_price": 66.82086035624998,
+        "position_size_usd": 244.39,
+        "margin_used": 12.22,
+        "leverage": 20,
+        "pnl": -0.04,
+        "pnl_pct": -0.0156,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 13:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 66.3563,
+            "ratio": 0.15,
+            "quantity": 0.54887734,
+            "pnl": 0.2111
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-05",
+          "ny",
+          66.02,
+          [
+            66.8,
+            67.44
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 65.5888,
+        "exit_price": 64.85386908,
+        "position_size_usd": 342.14,
+        "margin_used": 17.11,
+        "leverage": 20,
+        "pnl": 3.79,
+        "pnl_pct": 1.1079,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 14:35:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 64.6054,
+            "ratio": 0.15,
+            "quantity": 0.7824602,
+            "pnl": 0.7339
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-05",
+          "ny",
+          65.205,
+          [
+            65.78,
+            66.27
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 64.9013,
+        "exit_price": 65.3368716,
+        "position_size_usd": 534.22,
+        "margin_used": 26.71,
+        "leverage": 20,
+        "pnl": -3.96,
+        "pnl_pct": -0.7415,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-09 17:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-09",
+          "ny_continuation",
+          64.92,
+          [
+            65.04,
+            65.17
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 64.4237,
+        "exit_price": 64.7373727,
+        "position_size_usd": 785.54,
+        "margin_used": 39.28,
+        "leverage": 20,
+        "pnl": -4.38,
+        "pnl_pct": -0.5571,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-10 13:30:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-10",
+          "ny",
+          64.2167,
+          [
+            64.49,
+            64.58
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 72.985,
+        "exit_price": 73.42034699999999,
+        "position_size_usd": 609.49,
+        "margin_used": 30.47,
+        "leverage": 20,
+        "pnl": -4.06,
+        "pnl_pct": -0.6668,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-17 15:20:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-17",
+          "ny",
+          72.6675,
+          [
+            73.14,
+            73.26
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 66.62,
+        "exit_price": 67.09702999999999,
+        "position_size_usd": 276.74,
+        "margin_used": 13.84,
+        "leverage": 20,
+        "pnl": -2.18,
+        "pnl_pct": -0.7864,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-25 14:30:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-25",
+          "ny",
+          64.66,
+          [
+            66.73,
+            68.13
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 73.1075,
+        "exit_price": 73.14401719625,
+        "position_size_usd": 565.37,
+        "margin_used": 28.27,
+        "leverage": 20,
+        "pnl": -0.29,
+        "pnl_pct": -0.0509,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 14:00:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 72.8077,
+            "ratio": 0.15,
+            "quantity": 1.16001324,
+            "pnl": 0.2885
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          72.735,
+          [
+            73.41,
+            73.51
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 73.0463,
+        "exit_price": 73.05306007999998,
+        "position_size_usd": 588.49,
+        "margin_used": 29.42,
+        "leverage": 20,
+        "pnl": -0.2,
+        "pnl_pct": -0.034,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 15:00:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 72.8328,
+            "ratio": 0.15,
+            "quantity": 1.20845583,
+            "pnl": 0.1964
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          73.285,
+          [
+            72.84,
+            73.33
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "BNBUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 8,
+    "wins": 5,
+    "win_rate_pct": 62.5,
+    "profit_factor": 1.2208520179372198,
+    "net_pnl": 1.97,
+    "return_pct": 0.197,
+    "max_drawdown_pct": 0.98,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 7,
+      "TIME_KILL": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 644.57,
+        "exit_price": 644.891962715,
+        "position_size_usd": 857.14,
+        "margin_used": 42.86,
+        "leverage": 20,
+        "pnl": -0.68,
+        "pnl_pct": -0.079,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-03 07:10:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 643.1325,
+            "ratio": 0.15,
+            "quantity": 0.19946809,
+            "pnl": 0.1969
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-03",
+          "london",
+          642.49,
+          [
+            645.2,
+            646.28
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 590.9025,
+        "exit_price": 589.2264878499999,
+        "position_size_usd": 251.51,
+        "margin_used": 12.58,
+        "leverage": 20,
+        "pnl": 0.86,
+        "pnl_pct": 0.3421,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 07:35:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 584.1736,
+            "ratio": 0.15,
+            "quantity": 0.06384542,
+            "pnl": 0.4034
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-05",
+          "london",
+          583.59,
+          [
+            591.69,
+            596.87
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 583.3913,
+        "exit_price": 573.9177444,
+        "position_size_usd": 449.65,
+        "margin_used": 22.48,
+        "leverage": 20,
+        "pnl": 5.87,
+        "pnl_pct": 1.3053,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 16:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 581.1756,
+            "ratio": 0.15,
+            "quantity": 0.11561327,
+            "pnl": 0.2091
+          },
+          {
+            "label": "TP2",
+            "price": 575.3798,
+            "ratio": 0.25,
+            "quantity": 0.19268878,
+            "pnl": 1.4658
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-05",
+          "ny_continuation",
+          580.595,
+          [
+            583.71,
+            585.9
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 574.9825,
+        "exit_price": 565.21361897,
+        "position_size_usd": 245.71,
+        "margin_used": 12.29,
+        "leverage": 20,
+        "pnl": 3.89,
+        "pnl_pct": 1.5813,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 17:45:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 567.0738,
+            "ratio": 0.15,
+            "quantity": 0.06410065,
+            "pnl": 0.4814
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-05",
+          "ny_continuation",
+          580.595,
+          [
+            571.78,
+            578.24
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 589.3563,
+        "exit_price": 593.0087163,
+        "position_size_usd": 583.54,
+        "margin_used": 29.18,
+        "leverage": 20,
+        "pnl": -4.03,
+        "pnl_pct": -0.69,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-09 16:55:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-09",
+          "ny_continuation",
+          591.8,
+          [
+            589.12,
+            591.01
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 578.2387,
+        "exit_price": 577.6370599999999,
+        "position_size_usd": 603.68,
+        "margin_used": 30.18,
+        "leverage": 20,
+        "pnl": 0.21,
+        "pnl_pct": 0.0341,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-18 16:10:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-18",
+          "ny_continuation",
+          580.9,
+          [
+            578.17,
+            581.26
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 557.3575,
+        "exit_price": 557.6359000712498,
+        "position_size_usd": 277.42,
+        "margin_used": 13.87,
+        "leverage": 20,
+        "pnl": 0.06,
+        "pnl_pct": 0.0223,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-25 14:10:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 552.3518,
+            "ratio": 0.15,
+            "quantity": 0.0746614,
+            "pnl": 0.3448
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-25",
+          "ny",
+          546.32,
+          [
+            560.09,
+            564.75
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 553.62,
+        "exit_price": 556.5798238,
+        "position_size_usd": 695.2,
+        "margin_used": 34.76,
+        "leverage": 20,
+        "pnl": -4.21,
+        "pnl_pct": -0.6049,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-29 16:40:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-29",
+          "ny_continuation",
+          552.815,
+          [
+            553.64,
+            555.44
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "BTCUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 21,
+    "wins": 8,
+    "win_rate_pct": 38.095238095238095,
+    "profit_factor": 0.42940563086548483,
+    "net_pnl": -27.36,
+    "return_pct": -2.736,
+    "max_drawdown_pct": 3.83,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 20,
+      "TIME_KILL": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 63043.8625,
+        "exit_price": 62895.980407259995,
+        "position_size_usd": 347.41,
+        "margin_used": 17.37,
+        "leverage": 20,
+        "pnl": 1.03,
+        "pnl_pct": 0.2959,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 07:55:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 62344.7074,
+            "ratio": 0.15,
+            "quantity": 0.00082659,
+            "pnl": 0.5417
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-05",
+          "london",
+          62229.6,
+          [
+            63356.6,
+            63482.5
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61173.7125,
+        "exit_price": 59665.18782224,
+        "position_size_usd": 302.98,
+        "margin_used": 15.15,
+        "leverage": 20,
+        "pnl": 7.1,
+        "pnl_pct": 2.3431,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-05 16:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 60506.5353,
+            "ratio": 0.15,
+            "quantity": 0.00074291,
+            "pnl": 0.4641
+          },
+          {
+            "label": "TP2",
+            "price": 59292.6171,
+            "ratio": 0.25,
+            "quantity": 0.00123818,
+            "pnl": 2.2773
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-05",
+          "ny_continuation",
+          61344.8,
+          [
+            61217.8,
+            61644.9
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61038.075,
+        "exit_price": 61068.56351846249,
+        "position_size_usd": 815.52,
+        "margin_used": 40.78,
+        "leverage": 20,
+        "pnl": -0.78,
+        "pnl_pct": -0.0952,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-06 07:15:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 60967.907,
+            "ratio": 0.15,
+            "quantity": 0.00200412,
+            "pnl": 0.0551
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-06",
+          "london",
+          60907.0,
+          [
+            60919.0,
+            61136.6
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61014.65,
+        "exit_price": 61322.41245129999,
+        "position_size_usd": 748.03,
+        "margin_used": 37.4,
+        "leverage": 20,
+        "pnl": -4.3,
+        "pnl_pct": -0.5747,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-06 08:05:00+00:00",
+        "session": "london",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-06",
+          "london",
+          61087.9,
+          [
+            60919.0,
+            61136.6
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 63583.55,
+        "exit_price": 64018.47041589999,
+        "position_size_usd": 515.77,
+        "margin_used": 25.79,
+        "leverage": 20,
+        "pnl": -3.89,
+        "pnl_pct": -0.7544,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-08 13:30:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-08",
+          "ny",
+          63876.9333,
+          [
+            63582.3,
+            63598.5
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61449.7875,
+        "exit_price": 61756.69499999999,
+        "position_size_usd": 220.4,
+        "margin_used": 11.02,
+        "leverage": 20,
+        "pnl": -1.26,
+        "pnl_pct": -0.5697,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-09 16:55:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-09",
+          "ny_continuation",
+          62377.0,
+          [
+            61511.6,
+            61620.7
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61489.525,
+        "exit_price": 61717.20224669999,
+        "position_size_usd": 1108.78,
+        "margin_used": 55.44,
+        "leverage": 20,
+        "pnl": -4.88,
+        "pnl_pct": -0.4405,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-10 07:00:00+00:00",
+        "session": "london",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-10",
+          "london",
+          61522.275,
+          [
+            61496.2,
+            61518.2
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61645.6375,
+        "exit_price": 61676.42949593124,
+        "position_size_usd": 1103.36,
+        "margin_used": 55.17,
+        "leverage": 20,
+        "pnl": -1.07,
+        "pnl_pct": -0.0974,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-10 08:00:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 61583.7973,
+            "ratio": 0.15,
+            "quantity": 0.00268476,
+            "pnl": 0.0503
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-10",
+          "london",
+          61672.5,
+          [
+            61604.8,
+            61680.7
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 61507.4,
+        "exit_price": 60925.40005551999,
+        "position_size_usd": 848.2,
+        "margin_used": 42.41,
+        "leverage": 20,
+        "pnl": 5.1,
+        "pnl_pct": 0.6012,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-10 08:30:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 61452.1575,
+            "ratio": 0.15,
+            "quantity": 0.00206853,
+            "pnl": 0.0253
+          },
+          {
+            "label": "TP2",
+            "price": 61286.7255,
+            "ratio": 0.25,
+            "quantity": 0.00344754,
+            "pnl": 0.6127
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-10",
+          "london",
+          61672.5,
+          [
+            61496.2,
+            61518.2
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62760.4875,
+        "exit_price": 62678.53808215999,
+        "position_size_usd": 686.22,
+        "margin_used": 34.31,
+        "leverage": 20,
+        "pnl": 0.59,
+        "pnl_pct": 0.0858,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-11 17:25:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 62573.2393,
+            "ratio": 0.15,
+            "quantity": 0.00164009,
+            "pnl": 0.2352
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-11",
+          "ny_continuation",
+          62711.54,
+          [
+            62757.0,
+            62982.3
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 63422.0625,
+        "exit_price": 63453.74182021874,
+        "position_size_usd": 651.41,
+        "margin_used": 32.57,
+        "leverage": 20,
+        "pnl": -0.59,
+        "pnl_pct": -0.0904,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-12 08:15:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 63328.6654,
+            "ratio": 0.15,
+            "quantity": 0.00154066,
+            "pnl": 0.0756
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-12",
+          "london",
+          63024.6,
+          [
+            63499.5,
+            63655.4
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 64277.2375,
+        "exit_price": 64515.236785999994,
+        "position_size_usd": 1107.83,
+        "margin_used": 55.39,
+        "leverage": 20,
+        "pnl": -4.88,
+        "pnl_pct": -0.4405,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-14 07:20:00+00:00",
+        "session": "london",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-14",
+          "london",
+          64260.0,
+          [
+            64271.8,
+            64295.5
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 64016.85,
+        "exit_price": 63921.909851799996,
+        "position_size_usd": 1007.45,
+        "margin_used": 50.37,
+        "leverage": 20,
+        "pnl": 0.73,
+        "pnl_pct": 0.0724,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-14 15:00:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 63947.5086,
+            "ratio": 0.15,
+            "quantity": 0.00236058,
+            "pnl": 0.058
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-14",
+          "ny",
+          64177.9286,
+          [
+            63960.2,
+            64115.6
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 66713.8625,
+        "exit_price": 66062.7968,
+        "position_size_usd": 419.92,
+        "margin_used": 21.0,
+        "leverage": 20,
+        "pnl": 3.92,
+        "pnl_pct": 0.9337,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-15 17:30:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 66062.7968,
+            "ratio": 0.15,
+            "quantity": 0.00094416,
+            "pnl": 0.5709
+          },
+          {
+            "label": "TP2",
+            "price": 65989.944,
+            "ratio": 0.25,
+            "quantity": 0.0015736,
+            "pnl": 1.0662
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-15",
+          "ny_continuation",
+          67254.95,
+          [
+            66579.9,
+            66801.8
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 65914.05,
+        "exit_price": 65855.68989999998,
+        "position_size_usd": 823.05,
+        "margin_used": 41.15,
+        "leverage": 20,
+        "pnl": 0.2,
+        "pnl_pct": 0.0242,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-16 15:35:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 65855.6899,
+            "ratio": 0.15,
+            "quantity": 0.00187302,
+            "pnl": 0.0229
+          },
+          {
+            "label": "TP2",
+            "price": 65840.775,
+            "ratio": 0.25,
+            "quantity": 0.00312169,
+            "pnl": 0.0848
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-16",
+          "ny",
+          66058.9333,
+          [
+            65988.0,
+            66100.0
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 65964.35,
+        "exit_price": 66224.08983189998,
+        "position_size_usd": 1019.22,
+        "margin_used": 50.96,
+        "leverage": 20,
+        "pnl": -4.73,
+        "pnl_pct": -0.464,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-16 17:50:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-16",
+          "ny_continuation",
+          65775.0,
+          [
+            65988.0,
+            66100.0
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 65076.325,
+        "exit_price": 65317.98463189999,
+        "position_size_usd": 1098.16,
+        "margin_used": 54.91,
+        "leverage": 20,
+        "pnl": -4.85,
+        "pnl_pct": -0.4415,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-17 13:35:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-17",
+          "ny",
+          65029.8333,
+          [
+            64991.6,
+            65208.4
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 63420.075,
+        "exit_price": 63654.90050919999,
+        "position_size_usd": 1481.16,
+        "margin_used": 74.06,
+        "leverage": 20,
+        "pnl": -6.52,
+        "pnl_pct": -0.4405,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-20 14:35:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-20",
+          "ny",
+          63418.2571,
+          [
+            63441.3,
+            63555.5
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 59799.3625,
+        "exit_price": 60114.40785349999,
+        "position_size_usd": 690.12,
+        "margin_used": 34.51,
+        "leverage": 20,
+        "pnl": -4.12,
+        "pnl_pct": -0.5971,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-29 15:35:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-29",
+          "ny",
+          59984.3,
+          [
+            59920.0,
+            59923.5
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 58997.375,
+        "exit_price": 59319.889428799994,
+        "position_size_usd": 985.09,
+        "margin_used": 49.25,
+        "leverage": 20,
+        "pnl": -6.08,
+        "pnl_pct": -0.6169,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 14:00:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          58850.0,
+          [
+            59191.2,
+            59218.6
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 58745.9625,
+        "exit_price": 58582.94072630999,
+        "position_size_usd": 781.2,
+        "margin_used": 39.06,
+        "leverage": 20,
+        "pnl": 1.92,
+        "pnl_pct": 0.2457,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 15:45:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 58433.9255,
+            "ratio": 0.15,
+            "quantity": 0.00199468,
+            "pnl": 0.5407
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          58850.0,
+          [
+            58711.8,
+            58971.7
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "ETHUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 11,
+    "wins": 7,
+    "win_rate_pct": 63.63636363636363,
+    "profit_factor": 3.0509118541033433,
+    "net_pnl": 26.99,
+    "return_pct": 2.699,
+    "max_drawdown_pct": 1.15,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 11
+    },
+    "trades_detail": [
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1979.5638,
+        "exit_price": 1972.2456203450001,
+        "position_size_usd": 632.06,
+        "margin_used": 31.6,
+        "leverage": 20,
+        "pnl": 2.26,
+        "pnl_pct": 0.3573,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-01 13:15:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1972.6707,
+            "ratio": 0.15,
+            "quantity": 0.04789394,
+            "pnl": 0.2639
+          },
+          {
+            "label": "TP2",
+            "price": 1967.4455,
+            "ratio": 0.25,
+            "quantity": 0.07982324,
+            "pnl": 0.8572
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-01",
+          "ny",
+          1989.2225,
+          [
+            1975.93,
+            1986.38
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1983.815,
+        "exit_price": 1996.1987044999998,
+        "position_size_usd": 574.13,
+        "margin_used": 28.71,
+        "leverage": 20,
+        "pnl": -3.99,
+        "pnl_pct": -0.6945,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-01 17:05:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-01",
+          "ny_continuation",
+          1970.7,
+          [
+            1986.38,
+            1992.06
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1943.0375,
+        "exit_price": 1895.17760432,
+        "position_size_usd": 331.47,
+        "margin_used": 16.57,
+        "leverage": 20,
+        "pnl": 7.48,
+        "pnl_pct": 2.2554,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-02 16:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1923.893,
+            "ratio": 0.15,
+            "quantity": 0.02558881,
+            "pnl": 0.4553
+          },
+          {
+            "label": "TP2",
+            "price": 1888.7471,
+            "ratio": 0.25,
+            "quantity": 0.04264802,
+            "pnl": 2.2585
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-02",
+          "ny_continuation",
+          1954.42,
+          [
+            1947.28,
+            1958.08
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1644.5663,
+        "exit_price": 1641.6499299199997,
+        "position_size_usd": 625.95,
+        "margin_used": 31.3,
+        "leverage": 20,
+        "pnl": 1.07,
+        "pnl_pct": 0.1703,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-09 17:00:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1634.7631,
+            "ratio": 0.15,
+            "quantity": 0.05709279,
+            "pnl": 0.4942
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-09",
+          "ny_continuation",
+          1643.65,
+          [
+            1644.91,
+            1650.32
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1623.5462,
+        "exit_price": 1616.9553399999998,
+        "position_size_usd": 625.63,
+        "margin_used": 31.28,
+        "leverage": 20,
+        "pnl": 2.21,
+        "pnl_pct": 0.3534,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-10 09:55:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1616.9553,
+            "ratio": 0.15,
+            "quantity": 0.05780195,
+            "pnl": 0.3155
+          },
+          {
+            "label": "TP2",
+            "price": 1615.8342,
+            "ratio": 0.25,
+            "quantity": 0.09633658,
+            "pnl": 0.6338
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-10",
+          "london",
+          1621.485,
+          [
+            1622.77,
+            1631.5
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1695.595,
+        "exit_price": 1644.7804973599998,
+        "position_size_usd": 418.68,
+        "margin_used": 20.93,
+        "leverage": 20,
+        "pnl": 10.43,
+        "pnl_pct": 2.4901,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-23 07:20:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1672.2306,
+            "ratio": 0.15,
+            "quantity": 0.03703835,
+            "pnl": 0.8219
+          },
+          {
+            "label": "TP2",
+            "price": 1658.0221,
+            "ratio": 0.25,
+            "quantity": 0.06173059,
+            "pnl": 2.2473
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-23",
+          "london",
+          1706.1,
+          [
+            1691.69,
+            1702.37
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1662.8275,
+        "exit_price": 1658.6970399999998,
+        "position_size_usd": 574.24,
+        "margin_used": 28.71,
+        "leverage": 20,
+        "pnl": 1.03,
+        "pnl_pct": 0.1792,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-24 13:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1658.697,
+            "ratio": 0.15,
+            "quantity": 0.0518008,
+            "pnl": 0.1538
+          },
+          {
+            "label": "TP2",
+            "price": 1658.6553,
+            "ratio": 0.25,
+            "quantity": 0.08633466,
+            "pnl": 0.2599
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-24",
+          "ny",
+          1672.4025,
+          [
+            1665.0,
+            1666.08
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1628.695,
+        "exit_price": 1567.6694983950001,
+        "position_size_usd": 557.1,
+        "margin_used": 27.86,
+        "leverage": 20,
+        "pnl": 15.67,
+        "pnl_pct": 2.8134,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-24 16:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1616.885,
+            "ratio": 0.15,
+            "quantity": 0.05130802,
+            "pnl": 0.5478
+          },
+          {
+            "label": "TP2",
+            "price": 1594.4872,
+            "ratio": 0.25,
+            "quantity": 0.08551336,
+            "pnl": 2.8292
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-24",
+          "ny_continuation",
+          1633.33,
+          [
+            1626.98,
+            1637.9
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1574.7225,
+        "exit_price": 1575.50907388875,
+        "position_size_usd": 417.75,
+        "margin_used": 20.89,
+        "leverage": 20,
+        "pnl": -0.13,
+        "pnl_pct": -0.0317,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-29 14:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 1566.2447,
+            "ratio": 0.15,
+            "quantity": 0.03979313,
+            "pnl": 0.2937
+          }
+        ],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-29",
+          "ny",
+          1573.765,
+          [
+            1575.27,
+            1584.33
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1570.3987,
+        "exit_price": 1577.0554799999998,
+        "position_size_usd": 960.56,
+        "margin_used": 48.03,
+        "leverage": 20,
+        "pnl": -4.75,
+        "pnl_pct": -0.4941,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 16:05:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-30",
+          "ny_continuation",
+          1573.94,
+          [
+            1571.35,
+            1573.34
+          ]
+        ]
+      },
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1571.7112,
+        "exit_price": 1580.2450663999998,
+        "position_size_usd": 699.13,
+        "margin_used": 34.96,
+        "leverage": 20,
+        "pnl": -4.29,
+        "pnl_pct": -0.6132,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 17:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-30",
+          "ny_continuation",
+          1577.075,
+          [
+            1571.35,
+            1573.34
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "SOLUSDT",
+    "phase": "develop_06",
+    "start": "2026-06-01T00:00:00+00:00",
+    "end": "2026-07-01T00:00:00+00:00",
+    "trades": 14,
+    "wins": 4,
+    "win_rate_pct": 28.571428571428573,
+    "profit_factor": 0.8556129985228953,
+    "net_pnl": -3.909999999999999,
+    "return_pct": -0.3909999999999999,
+    "max_drawdown_pct": 3.09,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 13,
+      "TIME_KILL": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 80.5725,
+        "exit_price": 80.16608599999998,
+        "position_size_usd": 559.53,
+        "margin_used": 27.98,
+        "leverage": 20,
+        "pnl": 2.62,
+        "pnl_pct": 0.4675,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-01 13:15:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 79.9899,
+            "ratio": 0.15,
+            "quantity": 1.04166667,
+            "pnl": 0.5484
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-01",
+          "ny",
+          81.015,
+          [
+            80.49,
+            80.87
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 77.61,
+        "exit_price": 74.16901992499999,
+        "position_size_usd": 276.46,
+        "margin_used": 13.82,
+        "leverage": 20,
+        "pnl": 10.74,
+        "pnl_pct": 3.8863,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-02 16:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 76.4197,
+            "ratio": 0.15,
+            "quantity": 0.53431673,
+            "pnl": 0.6073
+          },
+          {
+            "label": "TP2",
+            "price": 74.3066,
+            "ratio": 0.25,
+            "quantity": 0.89052789,
+            "pnl": 2.8948
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-02",
+          "ny_continuation",
+          78.7567,
+          [
+            77.89,
+            78.19
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 74.0088,
+        "exit_price": 72.89530248,
+        "position_size_usd": 426.04,
+        "margin_used": 21.3,
+        "leverage": 20,
+        "pnl": 5.99,
+        "pnl_pct": 1.4062,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-03 17:30:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73.2932,
+            "ratio": 0.15,
+            "quantity": 0.86349523,
+            "pnl": 0.5735
+          },
+          {
+            "label": "TP2",
+            "price": 72.7427,
+            "ratio": 0.25,
+            "quantity": 1.43915871,
+            "pnl": 1.7485
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-03",
+          "ny_continuation",
+          73.975,
+          [
+            74.11,
+            74.42
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 66.7875,
+        "exit_price": 66.82086035624998,
+        "position_size_usd": 246.1,
+        "margin_used": 12.31,
+        "leverage": 20,
+        "pnl": -0.04,
+        "pnl_pct": -0.0156,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 13:30:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 66.3563,
+            "ratio": 0.15,
+            "quantity": 0.55272656,
+            "pnl": 0.2126
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-05",
+          "ny",
+          66.02,
+          [
+            66.8,
+            67.44
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 65.5888,
+        "exit_price": 64.85386908,
+        "position_size_usd": 344.54,
+        "margin_used": 17.23,
+        "leverage": 20,
+        "pnl": 3.82,
+        "pnl_pct": 1.1079,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-05 14:35:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 64.6054,
+            "ratio": 0.15,
+            "quantity": 0.78794751,
+            "pnl": 0.739
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-05",
+          "ny",
+          65.205,
+          [
+            65.78,
+            66.27
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 62.6238,
+        "exit_price": 63.258395199999995,
+        "position_size_usd": 420.5,
+        "margin_used": 21.02,
+        "leverage": 20,
+        "pnl": -4.56,
+        "pnl_pct": -1.0839,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-06 07:05:00+00:00",
+        "session": "london",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-06",
+          "london",
+          62.575,
+          [
+            62.57,
+            62.98
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 64.9013,
+        "exit_price": 65.3368716,
+        "position_size_usd": 535.57,
+        "margin_used": 26.78,
+        "leverage": 20,
+        "pnl": -3.97,
+        "pnl_pct": -0.7415,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-09 17:15:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-09",
+          "ny_continuation",
+          64.92,
+          [
+            65.04,
+            65.17
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 64.4237,
+        "exit_price": 64.7373727,
+        "position_size_usd": 787.52,
+        "margin_used": 39.38,
+        "leverage": 20,
+        "pnl": -4.39,
+        "pnl_pct": -0.5571,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-10 13:30:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-10",
+          "ny",
+          64.2167,
+          [
+            64.49,
+            64.58
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 64.8575,
+        "exit_price": 65.5477823,
+        "position_size_usd": 314.6,
+        "margin_used": 15.73,
+        "leverage": 20,
+        "pnl": -3.57,
+        "pnl_pct": -1.1348,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-06-10 14:45:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-10",
+          "ny",
+          65.1567,
+          [
+            64.36,
+            65.38
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 72.9875,
+        "exit_price": 73.4168435,
+        "position_size_usd": 619.15,
+        "margin_used": 30.96,
+        "leverage": 20,
+        "pnl": -4.08,
+        "pnl_pct": -0.6585,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-17 15:20:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-17",
+          "ny",
+          72.6675,
+          [
+            73.14,
+            73.26
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 66.62,
+        "exit_price": 67.09702999999999,
+        "position_size_usd": 276.45,
+        "margin_used": 13.82,
+        "leverage": 20,
+        "pnl": -2.17,
+        "pnl_pct": -0.7864,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-25 14:30:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-25",
+          "ny",
+          64.66,
+          [
+            66.73,
+            68.13
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 73.1075,
+        "exit_price": 73.14401719625,
+        "position_size_usd": 564.79,
+        "margin_used": 28.24,
+        "leverage": 20,
+        "pnl": -0.29,
+        "pnl_pct": -0.0509,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 14:00:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 72.8077,
+            "ratio": 0.15,
+            "quantity": 1.15881462,
+            "pnl": 0.2882
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          72.735,
+          [
+            73.41,
+            73.51
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 73.0463,
+        "exit_price": 73.05306007999998,
+        "position_size_usd": 587.88,
+        "margin_used": 29.39,
+        "leverage": 20,
+        "pnl": -0.2,
+        "pnl_pct": -0.034,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 15:00:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 72.8328,
+            "ratio": 0.15,
+            "quantity": 1.20720716,
+            "pnl": 0.1962
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-30",
+          "ny",
+          73.285,
+          [
+            72.84,
+            73.33
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 73.3837,
+        "exit_price": 73.92094709999999,
+        "position_size_usd": 475.03,
+        "margin_used": 23.75,
+        "leverage": 20,
+        "pnl": -3.81,
+        "pnl_pct": -0.8025,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-06-30 16:50:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-06-30",
+          "ny_continuation",
+          73.285,
+          [
+            73.34,
+            73.75
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "BNBUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 3,
+    "wins": 0,
+    "win_rate_pct": 0.0,
+    "profit_factor": 0.0,
+    "net_pnl": -14.440000000000001,
+    "return_pct": -1.4440000000000002,
+    "max_drawdown_pct": 1.71,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 3
+    },
+    "trades_detail": [
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 578.6275,
+        "exit_price": 581.9700886999999,
+        "position_size_usd": 943.0,
+        "margin_used": 47.15,
+        "leverage": 20,
+        "pnl": -6.11,
+        "pnl_pct": -0.648,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-06 14:25:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-06",
+          "ny",
+          577.815,
+          [
+            580.55,
+            580.91
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 561.8588,
+        "exit_price": 564.4121482999999,
+        "position_size_usd": 842.06,
+        "margin_used": 42.1,
+        "leverage": 20,
+        "pnl": -4.42,
+        "pnl_pct": -0.5247,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-24 15:10:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-24",
+          "ny",
+          563.52,
+          [
+            562.46,
+            563.11
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 571.2775,
+        "exit_price": 574.9193449999999,
+        "position_size_usd": 552.82,
+        "margin_used": 27.64,
+        "leverage": 20,
+        "pnl": -3.91,
+        "pnl_pct": -0.7078,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-07-27 16:25:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-27",
+          "ny_continuation",
+          569.32,
+          [
+            570.16,
+            574.0
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "BTCUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 6,
+    "wins": 1,
+    "win_rate_pct": 16.666666666666668,
+    "profit_factor": 0.009913258983890954,
+    "net_pnl": -15.98,
+    "return_pct": -1.598,
+    "max_drawdown_pct": 1.91,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 4,
+      "TIME_KILL": 2
+    },
+    "trades_detail": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62159.5625,
+        "exit_price": 62572.810900599994,
+        "position_size_usd": 797.51,
+        "margin_used": 39.88,
+        "leverage": 20,
+        "pnl": -5.86,
+        "pnl_pct": -0.7352,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-06 14:25:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-06",
+          "ny",
+          62410.1,
+          [
+            62141.7,
+            62461.4
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62252.3375,
+        "exit_price": 62179.61749999999,
+        "position_size_usd": 331.78,
+        "margin_used": 16.59,
+        "leverage": 20,
+        "pnl": 0.16,
+        "pnl_pct": 0.0469,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-07-08 17:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-08",
+          "ny_continuation",
+          61697.45,
+          [
+            62133.7,
+            62756.2
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 64823.55,
+        "exit_price": 65091.32339709999,
+        "position_size_usd": 953.7,
+        "margin_used": 47.69,
+        "leverage": 20,
+        "pnl": -4.61,
+        "pnl_pct": -0.4833,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-20 15:10:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-20",
+          "ny",
+          64740.55,
+          [
+            64807.2,
+            64970.8
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 63160.4625,
+        "exit_price": 63132.86979999999,
+        "position_size_usd": 1099.65,
+        "margin_used": 54.98,
+        "leverage": 20,
+        "pnl": -0.18,
+        "pnl_pct": -0.0166,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-28 14:00:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 63132.8698,
+            "ratio": 0.15,
+            "quantity": 0.00261156,
+            "pnl": -0.0434
+          },
+          {
+            "label": "TP2",
+            "price": 63108.4454,
+            "ratio": 0.25,
+            "quantity": 0.0043526,
+            "pnl": 0.0341
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-28",
+          "ny",
+          63159.55,
+          [
+            63098.3,
+            63277.0
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 63835.2375,
+        "exit_price": 64071.600192599995,
+        "position_size_usd": 1099.45,
+        "margin_used": 54.97,
+        "leverage": 20,
+        "pnl": -4.84,
+        "pnl_pct": -0.4405,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-29 17:10:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-29",
+          "ny_continuation",
+          63853.2,
+          [
+            63811.6,
+            63891.3
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62904.8,
+        "exit_price": 63016.95399999999,
+        "position_size_usd": 260.13,
+        "margin_used": 13.01,
+        "leverage": 20,
+        "pnl": -0.65,
+        "pnl_pct": -0.2484,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-31 16:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-31",
+          "ny_continuation",
+          63576.4,
+          [
+            62733.0,
+            63216.2
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "ETHUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 0,
+    "wins": 0,
+    "win_rate_pct": 0,
+    "profit_factor": null,
+    "net_pnl": 0,
+    "return_pct": 0.0,
+    "max_drawdown_pct": 0.0,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {},
+    "trades_detail": []
+  },
+  {
+    "strategy": "S1C",
+    "symbol": "SOLUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 2,
+    "wins": 2,
+    "win_rate_pct": 100.0,
+    "profit_factor": null,
+    "net_pnl": 3.3299999999999996,
+    "return_pct": 0.33299999999999996,
+    "max_drawdown_pct": 0.31,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 2
+    },
+    "trades_detail": [
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 74.5113,
+        "exit_price": 73.75368,
+        "position_size_usd": 342.16,
+        "margin_used": 17.11,
+        "leverage": 20,
+        "pnl": 3.28,
+        "pnl_pct": 0.9574,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-28 15:40:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73.7537,
+            "ratio": 0.15,
+            "quantity": 0.68881065,
+            "pnl": 0.4862
+          },
+          {
+            "label": "TP2",
+            "price": 73.7236,
+            "ratio": 0.25,
+            "quantity": 1.14801776,
+            "pnl": 0.8448
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-28",
+          "ny",
+          73.36,
+          [
+            74.7,
+            75.11
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 73.2812,
+        "exit_price": 73.23507191,
+        "position_size_usd": 926.35,
+        "margin_used": 46.32,
+        "leverage": 20,
+        "pnl": 0.05,
+        "pnl_pct": 0.0057,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1C",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-07-31 16:50:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73.1731,
+            "ratio": 0.15,
+            "quantity": 1.89615327,
+            "pnl": 0.1078
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1C",
+          "SHORT",
+          "2026-07-31",
+          "ny_continuation",
+          73.1,
+          [
+            73.25,
+            73.46
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "BNBUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 4,
+    "wins": 1,
+    "win_rate_pct": 25.0,
+    "profit_factor": 0.4378181818181818,
+    "net_pnl": -7.73,
+    "return_pct": -0.773,
+    "max_drawdown_pct": 1.15,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 4
+    },
+    "trades_detail": [
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 578.6275,
+        "exit_price": 581.9700886999999,
+        "position_size_usd": 943.0,
+        "margin_used": 47.15,
+        "leverage": 20,
+        "pnl": -6.11,
+        "pnl_pct": -0.648,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-06 14:25:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-06",
+          "ny",
+          577.815,
+          [
+            580.55,
+            580.91
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 570.6587,
+        "exit_price": 567.5402733,
+        "position_size_usd": 1211.08,
+        "margin_used": 60.55,
+        "leverage": 20,
+        "pnl": 6.02,
+        "pnl_pct": 0.4971,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-13 07:25:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 567.5403,
+            "ratio": 0.15,
+            "quantity": 0.31833671,
+            "pnl": 0.866
+          },
+          {
+            "label": "TP2",
+            "price": 567.0765,
+            "ratio": 0.25,
+            "quantity": 0.53056119,
+            "pnl": 1.6896
+          }
+        ],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-13",
+          "london",
+          569.8633,
+          [
+            570.5,
+            572.01
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 562.4062,
+        "exit_price": 567.0877211999999,
+        "position_size_usd": 409.98,
+        "margin_used": 20.5,
+        "leverage": 20,
+        "pnl": -3.7,
+        "pnl_pct": -0.9028,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-24 15:30:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-24",
+          "ny",
+          566.2567,
+          [
+            562.46,
+            563.11
+          ]
+        ]
+      },
+      {
+        "symbol": "BNBUSDT",
+        "side": "SHORT",
+        "entry_price": 571.2775,
+        "exit_price": 574.9193449999999,
+        "position_size_usd": 556.59,
+        "margin_used": 27.83,
+        "leverage": 20,
+        "pnl": -3.94,
+        "pnl_pct": -0.7078,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-07-27 16:25:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BNBUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-27",
+          "ny_continuation",
+          569.32,
+          [
+            570.16,
+            574.0
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "BTCUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 8,
+    "wins": 2,
+    "win_rate_pct": 25.0,
+    "profit_factor": 0.039440203562340966,
+    "net_pnl": -22.650000000000002,
+    "return_pct": -2.265,
+    "max_drawdown_pct": 2.57,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 6,
+      "TIME_KILL": 2
+    },
+    "trades_detail": [
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62159.5625,
+        "exit_price": 62572.810900599994,
+        "position_size_usd": 797.51,
+        "margin_used": 39.88,
+        "leverage": 20,
+        "pnl": -5.86,
+        "pnl_pct": -0.7352,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-06 14:25:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-06",
+          "ny",
+          62410.1,
+          [
+            62141.7,
+            62461.4
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62894.925,
+        "exit_price": 63127.80604129999,
+        "position_size_usd": 1380.75,
+        "margin_used": 69.04,
+        "leverage": 20,
+        "pnl": -6.08,
+        "pnl_pct": -0.4405,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-06 15:50:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-06",
+          "ny",
+          62410.1,
+          [
+            62860.7,
+            62936.5
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62252.3375,
+        "exit_price": 62179.61749999999,
+        "position_size_usd": 329.76,
+        "margin_used": 16.49,
+        "leverage": 20,
+        "pnl": 0.15,
+        "pnl_pct": 0.0469,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-07-08 17:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-08",
+          "ny_continuation",
+          61697.45,
+          [
+            62133.7,
+            62756.2
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 63092.625,
+        "exit_price": 63124.13976618749,
+        "position_size_usd": 719.41,
+        "margin_used": 35.97,
+        "leverage": 20,
+        "pnl": -0.54,
+        "pnl_pct": -0.0747,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-13 08:40:00+00:00",
+        "session": "london",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 62933.871,
+            "ratio": 0.15,
+            "quantity": 0.00171037,
+            "pnl": 0.1961
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-13",
+          "london",
+          62871.0,
+          [
+            63093.6,
+            63309.0
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 64623.9125,
+        "exit_price": 64503.426667679996,
+        "position_size_usd": 1097.41,
+        "margin_used": 54.87,
+        "leverage": 20,
+        "pnl": 0.78,
+        "pnl_pct": 0.0714,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-16 16:30:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 64576.512,
+            "ratio": 0.15,
+            "quantity": 0.00254723,
+            "pnl": 0.0056
+          },
+          {
+            "label": "TP2",
+            "price": 64576.2617,
+            "ratio": 0.25,
+            "quantity": 0.00424539,
+            "pnl": 0.0103
+          }
+        ],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-16",
+          "ny_continuation",
+          64684.0,
+          [
+            64610.0,
+            64733.7
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62873.9375,
+        "exit_price": 63264.89559389999,
+        "position_size_usd": 853.28,
+        "margin_used": 42.66,
+        "leverage": 20,
+        "pnl": -5.91,
+        "pnl_pct": -0.6921,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-17 13:55:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-17",
+          "ny",
+          63160.85,
+          [
+            62933.5,
+            63037.0
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 64823.55,
+        "exit_price": 65091.32339709999,
+        "position_size_usd": 942.44,
+        "margin_used": 47.12,
+        "leverage": 20,
+        "pnl": -4.55,
+        "pnl_pct": -0.4833,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-20 15:10:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-20",
+          "ny",
+          64740.55,
+          [
+            64807.2,
+            64970.8
+          ]
+        ]
+      },
+      {
+        "symbol": "BTCUSDT",
+        "side": "SHORT",
+        "entry_price": 62904.8,
+        "exit_price": 63016.95399999999,
+        "position_size_usd": 258.37,
+        "margin_used": 12.92,
+        "leverage": 20,
+        "pnl": -0.64,
+        "pnl_pct": -0.2484,
+        "close_reason": "TIME_KILL",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-31 16:20:00+00:00",
+        "session": "ny_continuation",
+        "partials": [],
+        "setup_id": [
+          "BTCUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-31",
+          "ny_continuation",
+          63576.4,
+          [
+            62733.0,
+            63216.2
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "ETHUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 1,
+    "wins": 0,
+    "win_rate_pct": 0.0,
+    "profit_factor": 0.0,
+    "net_pnl": -5.52,
+    "return_pct": -0.552,
+    "max_drawdown_pct": 0.55,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 1
+    },
+    "trades_detail": [
+      {
+        "symbol": "ETHUSDT",
+        "side": "SHORT",
+        "entry_price": 1744.6575,
+        "exit_price": 1752.7167657999998,
+        "position_size_usd": 1037.12,
+        "margin_used": 51.86,
+        "leverage": 20,
+        "pnl": -5.52,
+        "pnl_pct": -0.5322,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-06 13:40:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "ETHUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-06",
+          "ny",
+          1747.27,
+          [
+            1746.97,
+            1749.11
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "strategy": "S1CF",
+    "symbol": "SOLUSDT",
+    "phase": "validation_07",
+    "start": "2026-07-01T00:00:00+00:00",
+    "end": "2026-08-01T00:00:00+00:00",
+    "trades": 4,
+    "wins": 2,
+    "win_rate_pct": 50.0,
+    "profit_factor": 0.4280155642023346,
+    "net_pnl": -4.41,
+    "return_pct": -0.441,
+    "max_drawdown_pct": 1.04,
+    "open_positions_at_end": 0,
+    "pending_orders_at_end": 0,
+    "close_reasons": {
+      "STOP_LOSS": 4
+    },
+    "trades_detail": [
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 74.99,
+        "exit_price": 75.50753209999999,
+        "position_size_usd": 508.87,
+        "margin_used": 25.44,
+        "leverage": 20,
+        "pnl": -3.87,
+        "pnl_pct": -0.7605,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-01 08:05:00+00:00",
+        "session": "london",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-01",
+          "london",
+          74.97,
+          [
+            75.14,
+            75.32
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 74.0113,
+        "exit_price": 74.53135689999999,
+        "position_size_usd": 496.35,
+        "margin_used": 24.82,
+        "leverage": 20,
+        "pnl": -3.84,
+        "pnl_pct": -0.773,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-17 13:55:00+00:00",
+        "session": "ny",
+        "partials": [],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-17",
+          "ny",
+          74.39,
+          [
+            73.85,
+            74.32
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 74.5113,
+        "exit_price": 73.75368,
+        "position_size_usd": 339.52,
+        "margin_used": 16.98,
+        "leverage": 20,
+        "pnl": 3.25,
+        "pnl_pct": 0.9574,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "HYBRID",
+        "opened_at": "2026-07-28 15:40:00+00:00",
+        "session": "ny",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73.7537,
+            "ratio": 0.15,
+            "quantity": 0.68350216,
+            "pnl": 0.4824
+          },
+          {
+            "label": "TP2",
+            "price": 73.7236,
+            "ratio": 0.25,
+            "quantity": 1.13917027,
+            "pnl": 0.8383
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-28",
+          "ny",
+          73.36,
+          [
+            74.7,
+            75.11
+          ]
+        ]
+      },
+      {
+        "symbol": "SOLUSDT",
+        "side": "SHORT",
+        "entry_price": 73.2812,
+        "exit_price": 73.23507191,
+        "position_size_usd": 919.21,
+        "margin_used": 45.96,
+        "leverage": 20,
+        "pnl": 0.05,
+        "pnl_pct": 0.0057,
+        "close_reason": "STOP_LOSS",
+        "strategy": "S1CF",
+        "stop_profile": "tight",
+        "entry_mode": "LIMIT",
+        "opened_at": "2026-07-31 16:50:00+00:00",
+        "session": "ny_continuation",
+        "partials": [
+          {
+            "label": "TP1",
+            "price": 73.1731,
+            "ratio": 0.15,
+            "quantity": 1.88154009,
+            "pnl": 0.107
+          }
+        ],
+        "setup_id": [
+          "SOLUSDT",
+          "S1CF",
+          "SHORT",
+          "2026-07-31",
+          "ny_continuation",
+          73.1,
+          [
+            73.25,
+            73.46
+          ]
+        ]
+      }
+    ]
+  }
+]
