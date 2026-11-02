@@ -1,0 +1,43 @@
+{
+  "id": "S118_TF_ROBUSTNESS_CONFLUENCE",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-01",
+  "frozen_before_results": true,
+  "question": "Is the with-trend double-bottom/top + divergence idea profitable on some timeframe and parameter neighbourhood, better than random entries, and which confluence features (if any) carry information?",
+  "known_before_freeze": "H3B 1h (w=3, e=0.5, d=2, 2R/72h) base results and S117 (entries ~ random; long no-target holds looked better in-sample) were seen. H1 trend pullback v1/v2 and H3 v1 were rejected by another session.",
+  "universe": ["BTCUSDT", "ETHUSDT", "SOLUSDT", "AVAXUSDT", "XRPUSDT", "ADAUSDT", "DOGEUSDT", "MATICUSDT", "LINKUSDT", "BNBUSDT"],
+  "period": ["2024-01-01", "2026-10-01"],
+  "detector": {
+    "logic": "H3B logic (pivot pair, equal extremes, RSI divergence, neckline height >= 1 ATR, first close beyond neckline within 24 pattern bars, latest confirmed pivot only, with-trend on the higher TF via EMA20/EMA50 of its last 300 closed bars)",
+    "indicators": "RSI14 (Wilder) and ATR14 computed causally on the full history up to each bar",
+    "timeframe_pairs": {"15m": "trend 1h", "1h": "trend 4h", "4h": "trend 1d"},
+    "risk_band_pct": {"15m": [0.6, 3.0], "1h": [1.0, 6.0], "4h": [2.0, 12.0]},
+    "entry_grid": {"pivot_width": [2, 3, 5], "equal_tolerance_atr": [0.25, 0.5, 1.0], "min_divergence_rsi": [0, 2, 5]},
+    "fixed": "separation 5-60 bars, height >= 1 ATR, break within 24 bars, stop buffer 0.25 ATR beyond the farther extreme"
+  },
+  "execution": {
+    "entry": "market at the first 1m close at/after bar close + 3 min; no trade if that close is already beyond the stop",
+    "exits": {
+      "E1": "target 2R, max hold 72 pattern bars",
+      "E2": "no target, max hold 168 pattern bars"
+    },
+    "fills": "resolver conventions: same-bar stop first, target maker no slippage, stop/time taker with slippage, hold = minutes - 1 bars",
+    "costs": "taker 5 bps, maker 2 bps, slippage 10 bps (stress) for all selection and gates",
+    "one_position_per_symbol": true
+  },
+  "configs": "3 TF x 27 entry x 2 exits = 162",
+  "steps_1_2_selection": {
+    "walk_forward": "fold 1: best stress mean net R on 2024 -> evaluate 2025; fold 2: best on 2024-2025 -> evaluate 2026; selection over all 162 configs (a config needs >= 30 train trades)",
+    "plateau": "share of the chosen config's 26 entry-grid neighbours (same TF, same exit) with positive train mean",
+    "random_control": "for each OOS trade, 20 random entries (same symbol, year, direction, risk_pct, exit); difference with day-block bootstrap 95% CI",
+    "pass": "OOS stress mean > 0 with 95% CI lower bound > 0 AND random-control difference CI lower bound > 0 AND plateau share >= 0.5 in both folds"
+  },
+  "step_3_confluence": {
+    "trade_set": "the walk-forward fold-2 chosen config if steps 1-2 pass; otherwise the H3B-like reference config (1h, w=3, e=0.5, d=2, E2) as a diagnostic",
+    "features_at_entry": ["trend_strength_htf ((EMA20-EMA50)/ATR on trend TF, sign-adjusted)", "daily_trend (close vs SMA200 1d, sign-adjusted %)", "adx14_pattern_tf", "break_volume_ratio (break bar volume / median of prior 20)", "rsi_at_p2", "divergence_size", "pattern_height_atr", "risk_pct", "atr_percentile_1y (pattern TF)", "utc_hour_bucket (0-7, 8-15, 16-23)", "btc_alignment (BTC 4h trend agrees, for non-BTC symbols)", "funding_at_entry (last settled, sign-adjusted so positive = paid to us)"],
+    "method": "development = 2024-2025 trades: Spearman correlation of each feature with net R, 10,000-permutation p-values, Benjamini-Hochberg FDR 10%. Each surviving feature becomes a filter 'keep the favourable two terciles' (tercile cut points from development), evaluated on 2026 vs unfiltered with day-block bootstrap.",
+    "reading": "features that fail FDR are reported as uninformative and must not be used as discretionary confluence"
+  },
+  "decision_meaning": "PASS authorizes a new frozen plugin protocol evaluated forward (shadow/paper) only",
+  "no_further_search": "any change requires a new protocol id"
+}

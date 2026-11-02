@@ -97,3 +97,4 @@ docs/research/**/*.parquet
 # Local DB backups and regenerable research artifacts
 *.sqlite3.bak*
 docs/research/auction_replay_v1/records_*.json
+docs/research/s118_tf_robustness_confluence/trades.csv.gz

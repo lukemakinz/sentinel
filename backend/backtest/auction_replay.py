@@ -35,7 +35,10 @@ import pandas as pd
 import requests
 
 from .broad_universe import INDEX_SYMBOLS, NON_ALT_BASES, daily_klines, list_usdt_perpetuals
-from .scalp_data import BASE_URL, COLUMNS
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+from .scalp_data import BASE_URL, COLUMNS, _get_with_read_retries
 
 REPLAY_VERSION = 'auction-replay-v1.2-intraday-management'
 ARM_LATENCY = timedelta(minutes=3)
@@ -44,7 +47,7 @@ CANDIDATE_REUSE = timedelta(hours=4)  # mirrors auction_service.CANDIDATE_REUSE
 BREADTH_SIZE = 20
 BREADTH_MIN_LISTING_DAYS = 730
 STALE_BREADTH_AFTER = timedelta(hours=2)
-INTERVAL_MINUTES = {'1m': 1, '5m': 5, '15m': 15, '1h': 60, '4h': 240}
+INTERVAL_MINUTES = {'1m': 1, '5m': 5, '15m': 15, '1h': 60, '4h': 240, '1d': 1440}
 LIMITS = {'15m': 100, '1h': 220, '4h': 220, '5m': 240}  # = live _timeframe_summary limits
 RECENT_BARS = 300  # raw closed bars exposed to structure-detecting plugins
 REPLAY_ASSUMPTIONS = {
@@ -73,11 +76,15 @@ def interval_klines(symbol: str, interval: str, month: str, cache: str) -> pd.Da
     path = Path(cache) / relative
     checksum_path = path.with_suffix('.zip.CHECKSUM')
     if not path.exists() or not checksum_path.exists():
-        response = requests.get(f'{BASE_URL}/{relative}', timeout=60)
+        # Retries: Binance occasionally resets connections during bulk downloads.
+        session = requests.Session()
+        session.mount('https://', HTTPAdapter(max_retries=Retry(
+            total=3, backoff_factor=1, status_forcelist=[429, 500, 502, 503, 504])))
+        response = _get_with_read_retries(session, f'{BASE_URL}/{relative}', timeout=60)
         if response.status_code == 404:
             return None
         response.raise_for_status()
-        checksum = requests.get(f'{BASE_URL}/{relative}.CHECKSUM', timeout=30)
+        checksum = _get_with_read_retries(session, f'{BASE_URL}/{relative}.CHECKSUM', timeout=30)
         checksum.raise_for_status()
         if sha256(response.content).hexdigest() != checksum.text.split()[0]:
             raise ValueError(f'Checksum mismatch: {relative}')
