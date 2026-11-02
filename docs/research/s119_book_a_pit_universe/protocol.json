@@ -1,0 +1,24 @@
+{
+  "id": "S119_BOOK_A_PIT_UNIVERSE",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-02",
+  "frozen_before_results": true,
+  "question": "Is Book A (the only strategy that survived the project's tests) a real trend-following edge, or an artefact of its hindsight-selected 5-coin universe (SOL, XRP, DOGE, BNB, ETH)?",
+  "rules": "frozen BOOK_A_ALT_RM + BOOK_A_RISK_DEFAULT unchanged: BTC > SMA200 gate, top 6 by 20-day momentum (> 0), inverse-vol weights, 30% vol target, weekly Monday rebalance, $15 minimum position, $250 capital, risk overlay",
+  "only_change": "universe = ETHUSDT + the point-in-time top-20 alt list of the current calendar quarter (docs/research/auction_replay_v1/breadth_by_quarter.json: USDT perps listed >= 730 days, ranked by prior-month median daily quote volume, delisted symbols included)",
+  "control": "the same simulator and data on the fixed 5-coin Book A universe",
+  "data": "Binance daily kline archives (closes; Book A uses daily closes only), re-indexed to the simulator's end-of-day convention, forward-filled after delisting",
+  "known_simplifications": [
+    "quarterly universe changes are applied at the next weekly rebalance; holdings outside the new universe are sold then",
+    "a delisted coin is valued at its last close until the next rebalance sells it"
+  ],
+  "period": ["2024-01-01", "2026-10-01"],
+  "costs": {"base_taker_bps": 7, "stress_taker_bps": 12},
+  "gates_stress_all_required": [
+    "total PnL > 0",
+    "month-block bootstrap 95% lower bound of mean daily PnL > 0",
+    "PnL > 0 in each of 2024, 2025 and 2026 (Jan-Sep)"
+  ],
+  "reading": "PASS = Book A's logic generalises beyond its hindsight universe -> worth strengthening and scaling. FAIL = Book A's historical result is not evidence of a durable edge.",
+  "no_parameter_search": "one configuration; any change requires a new id"
+}

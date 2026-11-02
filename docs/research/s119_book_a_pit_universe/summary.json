@@ -1,0 +1,131 @@
+{
+  "protocol": "S119_BOOK_A_PIT_UNIVERSE v1.0.0",
+  "pit_symbols_ever": [
+    "1000PEPEUSDT",
+    "1000SHIBUSDT",
+    "AAVEUSDT",
+    "ADAUSDT",
+    "APEUSDT",
+    "APTUSDT",
+    "ARBUSDT",
+    "ATOMUSDT",
+    "AVAXUSDT",
+    "BAKEUSDT",
+    "BCHUSDT",
+    "BNBUSDT",
+    "CRVUSDT",
+    "DOGEUSDT",
+    "DOTUSDT",
+    "DYDXUSDT",
+    "ENAUSDT",
+    "ENSUSDT",
+    "EOSUSDT",
+    "ETCUSDT",
+    "FETUSDT",
+    "FILUSDT",
+    "FTMUSDT",
+    "GALAUSDT",
+    "HBARUSDT",
+    "ICPUSDT",
+    "INJUSDT",
+    "JASMYUSDT",
+    "LINKUSDT",
+    "LPTUSDT",
+    "LTCUSDT",
+    "LUNA2USDT",
+    "MATICUSDT",
+    "NEARUSDT",
+    "ONDOUSDT",
+    "OPUSDT",
+    "PEOPLEUSDT",
+    "REEFUSDT",
+    "RUNEUSDT",
+    "RVNUSDT",
+    "SOLUSDT",
+    "SUIUSDT",
+    "TAOUSDT",
+    "THETAUSDT",
+    "TRBUSDT",
+    "TRXUSDT",
+    "UNIUSDT",
+    "WIFUSDT",
+    "WLDUSDT",
+    "XLMUSDT",
+    "XRPUSDT",
+    "ZECUSDT",
+    "ZRXUSDT"
+  ],
+  "fixed_universe": [
+    "SOLUSDT",
+    "XRPUSDT",
+    "DOGEUSDT",
+    "BNBUSDT",
+    "ETHUSDT"
+  ],
+  "base": {
+    "fixed_5_hindsight": {
+      "total_usd": 159.41,
+      "usd_per_day": 0.1588,
+      "return_pct": 63.76,
+      "sharpe": 1.39,
+      "max_dd_usd": -55.8,
+      "by_year_usd": {
+        "2024": 49.48,
+        "2025": 83.71,
+        "2026": 26.22
+      },
+      "month_block_lower95_usd_per_day": 0.0172,
+      "positive_months_share": 0.303
+    },
+    "pit_20": {
+      "total_usd": 19.13,
+      "usd_per_day": 0.0191,
+      "return_pct": 7.65,
+      "sharpe": 0.38,
+      "max_dd_usd": -27.79,
+      "by_year_usd": {
+        "2024": 7.32,
+        "2025": 6.75,
+        "2026": 5.06
+      },
+      "month_block_lower95_usd_per_day": -0.0252,
+      "positive_months_share": 0.242
+    }
+  },
+  "stress": {
+    "fixed_5_hindsight": {
+      "total_usd": 160.11,
+      "usd_per_day": 0.1595,
+      "return_pct": 64.05,
+      "sharpe": 1.38,
+      "max_dd_usd": -56.11,
+      "by_year_usd": {
+        "2024": 48.14,
+        "2025": 86.04,
+        "2026": 25.94
+      },
+      "month_block_lower95_usd_per_day": 0.0196,
+      "positive_months_share": 0.303
+    },
+    "pit_20": {
+      "total_usd": 15.46,
+      "usd_per_day": 0.0154,
+      "return_pct": 6.18,
+      "sharpe": 0.32,
+      "max_dd_usd": -27.75,
+      "by_year_usd": {
+        "2024": 7.01,
+        "2025": 5.23,
+        "2026": 3.22
+      },
+      "month_block_lower95_usd_per_day": -0.0284,
+      "positive_months_share": 0.242
+    }
+  },
+  "gates": {
+    "total_positive": true,
+    "bootstrap_lower_above_zero": false,
+    "every_year_positive": true
+  },
+  "decision": "REJECTED"
+}

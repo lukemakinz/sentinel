@@ -48,6 +48,8 @@ def simulate_book_a(
     funding: dict[str, pd.Series] | None = None,
     funding_multiplier: float = 1.0,
     quantity_steps: dict[str, float] | None = None,
+    panel: pd.DataFrame | None = None,
+    config_for_day=None,
 ) -> BookASimResult:
     """``funding``/``quantity_steps`` default off so frozen results are unchanged.
 
@@ -55,7 +57,10 @@ def simulate_book_a(
     positive rates on their notional at each settlement inside the day.
     ``quantity_steps`` rounds rebalance quantities to exchange contract sizes.
     """
-    full_panel = build_daily_panel(minutes_by_symbol, config)
+    # ``panel`` (daily closes, end-of-day index) and ``config_for_day`` (a
+    # point-in-time universe per rebalance day) are research hooks; both
+    # default to the frozen behaviour.
+    full_panel = panel if panel is not None else build_daily_panel(minutes_by_symbol, config)
     panel = full_panel.loc[(full_panel.index >= start) & (full_panel.index < end)]
     if panel.empty:
         raise ValueError('Empty panel for simulation window')
@@ -109,10 +114,11 @@ def simulate_book_a(
         peak_equity = max(peak_equity, equity)
 
         if day in rebalance_set:
-            target = target_weights_for_day(full_panel, day, config)
+            day_config = config_for_day(day) if config_for_day is not None else config
+            target = target_weights_for_day(full_panel, day, day_config)
             if risk is not None:
                 ind = compute_risk_indicators(
-                    full_panel, day, config, equity=equity, peak_equity=peak_equity,
+                    full_panel, day, day_config, equity=equity, peak_equity=peak_equity,
                 )
                 mult = exposure_multiplier(ind, risk)
                 target = _scale_weights(target, mult)

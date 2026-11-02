@@ -1,0 +1,31 @@
+{
+  "id": "S120_S20_ENTRY_LAB_V1",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-02",
+  "frozen_before_results": true,
+  "status": "RETROSPECTIVE_WALK_FORWARD_DIAGNOSTIC_ONLY",
+  "question": "Does waiting for a causal liquidity or structure event improve the frozen S20 OB+OI candidate stream enough to survive stress costs?",
+  "parent": "S20_ob_oi_patient_runner: frozen OB + OI candidates, structural stop, activation at 1.5R, 2.5 ATR trail, 8R cap, 240 minute maximum hold",
+  "universe": ["ETHUSDT", "SOLUSDT", "BNBUSDT"],
+  "data": "same checksum-verifiable Binance minute, funding and 5m metrics archives as S20",
+  "entry_policies": {
+    "MARKET_TOUCH": "control: unchanged parent signal, market at the next executable 1m open",
+    "SWEEP_RECLAIM": "parent touch bar must sweep the prior eight completed 15m lows/highs and close directionally back through that level; parent market timing unchanged",
+    "MSS_BREAK": "within 30 minutes after the parent signal, the first completed 5m directional candle must close beyond the touch-bar high/low by 0.03 ATR; market at the next 1m open",
+    "MSS_RETEST": "same MSS confirmation, then a 30-minute resting limit at the broken touch-bar high/low; no market chase"
+  },
+  "isolated_variable": "Only entry timing/price changes. Parent candidate formation, direction, stop, sizing, risk halts and S20 patient-runner management are identical.",
+  "walk_forward_folds": [
+    {"train": ["2025-08-01", "2026-02-01"], "test": ["2026-02-01", "2026-04-01"]},
+    {"train": ["2025-08-01", "2026-04-01"], "test": ["2026-04-01", "2026-09-01"]}
+  ],
+  "selection_on_train_stress": "eligible requires >=40 fills, net PnL >0, PF >1.05 and mean net R >0; choose highest mean net R, then PF, then fixed policy order; if none passes choose CASH",
+  "costs_bps": {
+    "base": {"maker_entry": 2, "taker_entry_exit": 5, "slippage": 2},
+    "stress": {"maker_entry": 5, "taker_entry_exit": 8, "slippage": 5},
+    "severe": {"maker_entry": 10, "taker_entry_exit": 10, "slippage": 10}
+  },
+  "combined_oos_gate_per_fixed_policy": "at least 40 fills, net PnL >0, PF >1.0, mean net R >0, positive stress PnL in both test folds, and one-sided day-block bootstrap lower bound above zero at alpha 0.0125 (Bonferroni for four policies)",
+  "research_sequence": "Stage A only. Stops and management are not searched. Only an entry policy passing the combined OOS gate may enter a separately frozen Stage B stop/management study.",
+  "no_parameter_search": "Exactly four predeclared policies and one parameter set. All four count as trials; failure closes S120 v1."
+}
