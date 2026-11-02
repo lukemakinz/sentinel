@@ -166,3 +166,37 @@ class AuctionShadowPlan(models.Model):
 
     def __str__(self):
         return f"{self.symbol} {self.direction} {self.strategy_id} [{self.state}]"
+
+
+class TradeIdea(models.Model):
+    """User's discretionary trade idea: assessed by Sentinel, then resolved on 1m data.
+
+    Journal only: never sent to an exchange.  Lets the user measure whether
+    their own decisions (and Sentinel's verdicts) carry an edge.
+    """
+    VERDICTS = [('GREEN', 'GREEN'), ('YELLOW', 'YELLOW'), ('RED', 'RED')]
+    STATES = [('PENDING', 'PENDING'), ('TRIGGERED', 'TRIGGERED'),
+              ('CLOSED', 'CLOSED'), ('EXPIRED', 'EXPIRED')]
+
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    source = models.CharField(max_length=20, default='telegram')
+    symbol = models.CharField(max_length=20, db_index=True)
+    direction = models.CharField(max_length=5)
+    entry = models.FloatField()
+    stop = models.FloatField()
+    target = models.FloatField(null=True, blank=True)
+    risk_usd = models.FloatField(default=1.25)
+    verdict = models.CharField(max_length=6, choices=VERDICTS)
+    assessment = models.JSONField(default=dict)
+    state = models.CharField(max_length=10, choices=STATES, default='PENDING', db_index=True)
+    triggered_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
+    exit_price = models.FloatField(null=True, blank=True)
+    exit_reason = models.CharField(max_length=20, blank=True)
+    net_r = models.FloatField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'#{self.pk} {self.symbol} {self.direction} {self.verdict} {self.state}'

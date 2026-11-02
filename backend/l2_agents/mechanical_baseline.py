@@ -67,6 +67,27 @@ def mechanical_decision(snapshot: dict) -> AuctionDecision:
     return decision
 
 
+def trend_alignment_score(snapshot: dict, direction: str) -> tuple[float | None, list[str]]:
+    """Frozen M1 score in [-1, 1] for ``direction``; None without 4h + one of 1h/1d."""
+    states = (snapshot.get('trend_state') or {}).get('timeframes') or {}
+    weights = {'1h': 0.25, '4h': 0.45, '1d': 0.30}
+    signs = {'UP': 1.0, 'DOWN': -1.0, 'RANGE': 0.0}
+    available = {
+        interval: state for interval, state in states.items()
+        if interval in weights and state.get('available')
+        and state.get('direction') in signs
+    }
+    if len(available) < 2 or '4h' not in available:
+        return None, sorted(available)
+    weight_total = sum(weights[interval] for interval in available)
+    market_score = sum(
+        weights[interval] * signs[state['direction']]
+        * float(state.get('strength_0_100') or 0.0) / 100.0
+        for interval, state in available.items()
+    ) / weight_total
+    return (1.0 if direction == 'LONG' else -1.0) * market_score, sorted(available)
+
+
 def trend_filtered_decision(
     snapshot: dict, baseline: AuctionDecision | None = None,
 ) -> AuctionDecision:
@@ -80,27 +101,11 @@ def trend_filtered_decision(
     if baseline.action != 'ARM':
         return baseline
 
-    states = (snapshot.get('trend_state') or {}).get('timeframes') or {}
-    weights = {'1h': 0.25, '4h': 0.45, '1d': 0.30}
-    signs = {'UP': 1.0, 'DOWN': -1.0, 'RANGE': 0.0}
-    available = {
-        interval: state for interval, state in states.items()
-        if interval in weights and state.get('available')
-        and state.get('direction') in signs
-    }
-    if len(available) < 2 or '4h' not in available:
+    aligned_score, available = trend_alignment_score(snapshot, baseline.direction)
+    if aligned_score is None:
         return _trend_filter_pass(
             snapshot, 'M1 requires 4h and at least one of 1h/1d trend states.',
         )
-
-    weight_total = sum(weights[interval] for interval in available)
-    market_score = sum(
-        weights[interval] * signs[state['direction']]
-        * float(state.get('strength_0_100') or 0.0) / 100.0
-        for interval, state in available.items()
-    ) / weight_total
-    candidate_sign = 1.0 if baseline.direction == 'LONG' else -1.0
-    aligned_score = candidate_sign * market_score
     evidence = (
         f'M1 higher-timeframe aligned score {aligned_score:+.3f} '
         f'(minimum -0.250; {", ".join(sorted(available))}).'

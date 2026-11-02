@@ -481,7 +481,7 @@ class BinanceWebSocketClient:
             recalculate_whale_threshold,
         )
 
-        last_prune_day = last_paper_day = None
+        last_prune_day = last_paper_day = last_s121_day = None
         while self.running:
             try:
                 await asyncio.to_thread(recalculate_whale_threshold.run)
@@ -504,6 +504,24 @@ class BinanceWebSocketClient:
                         last_paper_day = now.date()
             except Exception as exc:
                 logger.error('Maintenance loop error: %s', exc, exc_info=True)
+            # S121 forward paper tracker: once per UTC day after 01:00, after the
+            # daily bar closes.  REST/IO-bound, isolated from the loop above.
+            try:
+                now = datetime.now(timezone.utc)
+                if (now.hour >= 1 and last_s121_day != now.date()
+                        and getattr(settings, 'S121_FORWARD_ENABLED', True)):
+                    from backtest.s121_listing_forward import run as run_s121
+                    s121 = await asyncio.to_thread(run_s121)
+                    logger.warning('S121 forward: %s', s121)
+                    last_s121_day = now.date()
+            except Exception as exc:
+                logger.error('S121 forward error: %s', exc, exc_info=True)
+            # Hourly: resolve the user's journaled trade ideas on 1m data.
+            try:
+                from l2_agents.trade_ideas import resolve_open_ideas
+                await asyncio.to_thread(resolve_open_ideas)
+            except Exception as exc:
+                logger.error('Trade idea resolver error: %s', exc, exc_info=True)
             try:
                 await asyncio.wait_for(self._stop_event.wait(), timeout=3600)
                 return

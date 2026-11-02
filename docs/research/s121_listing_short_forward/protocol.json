@@ -1,0 +1,24 @@
+{
+  "id": "S121_LISTING_SHORT_FUNDING_GUARD_FORWARD",
+  "version": "1.0.0",
+  "frozen_at": "2026-11-02",
+  "evaluation": "FORWARD ONLY. Eligible listings: Binance USD-M USDT perpetuals with onboardDate >= 2026-11-02 00:00 UTC. No historical backtest of this rule is used as evidence (the guard was motivated by S115 results).",
+  "motivation": "S115: new listings drift down (median short +4-7%, BTC-hedged positive) but squeeze tails paid through deeply negative funding destroyed the mean (e.g. FUNUSDT -36.7% funding in 5 days).",
+  "rules": {
+    "universe": "new USDT perpetuals excluding BTC/ETH, stablecoin/commodity bases and index symbols",
+    "entry": "paper short at the open of the 2nd daily bar after listing (first bar may be partial), $25 notional",
+    "entry_guard": "skip the listing if the sum of funding settled during the first daily bar is < -0.10% (shorts already crowded)",
+    "stop": "+35% above entry, checked on daily highs; fill at max(stop, bar open)",
+    "funding_exit": "exit at the daily close on the first day cumulative funding since entry is <= -3.0%",
+    "time_exit": "close of the 14th daily bar after entry",
+    "concurrency": "at most 5 open paper positions; later listings skipped while full",
+    "costs": "5 bps taker per side + 30 bps slippage per side (stress), actual settled funding"
+  },
+  "data": "Binance public REST daily klines and funding history, recomputed statelessly every day",
+  "review": {
+    "first_look": "after 30 closed trades (status only, no rule changes)",
+    "gate": "after >= 50 closed trades: mean net return > 0 with month-block bootstrap 95% lower bound > 0 and BTC-hedged mean > 0",
+    "kill": "stop the forward early if 20 consecutive closed trades have mean net < -5%"
+  },
+  "live_trading": "never enabled by this protocol; a pass only authorizes a separate small-capital proposal"
+}

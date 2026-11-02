@@ -12,6 +12,8 @@ HELP = (
     '/raport — setupy, M0/M1/M2/M3 i post-mortem shadow\n'
     '/koszt — wydatki AI dziś i w 7 dni\n'
     '/paper — paper-forward Book A+B od 2026-10-27\n'
+    '/ocen SYMBOL long|short WEJŚCIE STOP [TARGET] [RYZYKO$] — ocena Twojego pomysłu + dziennik\n'
+    '/dziennik — wyniki Twoich pomysłów (czy masz przewagę?)\n'
     '/pauza — wstrzymaj analizy, AI i dziennik\n'
     '/stop — awaryjny HALT handlu (odblokowanie tylko z CLI)\n'
     '/wznow — wznów\n'
@@ -95,8 +97,24 @@ def cmd_report(_args) -> str:
         f"• post-mortem: {learning['records']} rekordów; "
         + (', '.join(f'{key}={value}' for key, value in learning['diagnoses'].items())
            or 'brak zamkniętych diagnoz'),
+        _s121_line(),
         'Min. ~100 zamkniętych, zanim wyciągniemy wnioski.',
     ])
+
+
+def _s121_line() -> str:
+    """Forward paper status of S121 (new-listing short with funding guard)."""
+    import json
+
+    from backtest.s121_listing_forward import paper_dir
+
+    path = paper_dir() / 'state.json'
+    if not path.exists():
+        return '• S121 listingi (paper): brak danych'
+    s = json.loads(path.read_text())['summary']
+    mean = f"{s['mean_net_pct']}%" if s['mean_net_pct'] is not None else '—'
+    return (f"• S121 listingi (paper): {s['listings_tracked']} wykrytych, {s['open']} otw., "
+            f"{s['closed']} zamkn., śr. {mean}, ${s['paper_pnl_usd']}")
 
 
 def cmd_paper(_args) -> str:
@@ -149,10 +167,58 @@ def cmd_resume(_args, by='telegram') -> str:
     return '▶️ Wznowiono.'
 
 
+VERDICT_ICON = {'GREEN': '🟢', 'YELLOW': '🟡', 'RED': '🔴'}
+
+
+def cmd_assess(args) -> str:
+    from l2_agents.trade_ideas import create_idea
+
+    if len(args) < 4:
+        return 'Użycie: /ocen SOL long 145 141 [152] [ryzyko$]\nnp. /ocen BTC short 98000 99500 95000'
+    symbol, direction = args[0], args[1].upper()
+    numbers = [float(x.replace(',', '.')) for x in args[2:6]]
+    entry, stop = numbers[0], numbers[1]
+    target = numbers[2] if len(numbers) > 2 else None
+    risk_usd = numbers[3] if len(numbers) > 3 else 1.25
+    idea = create_idea(symbol, direction, entry, stop, target, risk_usd)
+    a = idea.assessment
+    lines = [
+        f"{VERDICT_ICON[idea.verdict]} {idea.verdict} — {idea.symbol} {idea.direction} (#{idea.pk})",
+        f"Wejście {entry} ({a['order_type']}), stop {stop} ({a['risk_pct']}%), "
+        + (f"target {target} ({a['rr']}R)" if target else 'bez targetu'),
+        f"Koszt: {a['cost_r']}R · Trend M1: {a['m1_aligned']} · Kontekst M3: {a['m3_status']} ({a['m3_aligned']})",
+        f"Rynek: {a['global_state']} · reżim trendu: {a['trend_regime']}",
+        f"Pozycja przy ryzyku ${a['risk_usd']}: {a['quantity']:.6g} szt. ≈ ${a['notional_usd']}",
+    ]
+    lines += [f'🔴 {r}' for r in a['red']] + [f'🟡 {r}' for r in a['yellow']]
+    lines.append('Zapisano w dzienniku; wynik policzę automatycznie (paper, bez zleceń).')
+    return '\n'.join(lines)
+
+
+def cmd_journal(_args) -> str:
+    from l2_agents.models import TradeIdea
+    from l2_agents.trade_ideas import journal_stats
+
+    s = journal_stats()
+    c = s['closed']
+    lines = [f"Dziennik pomysłów: {s['ideas']} (czeka {s['pending']}, otwarte {s['open']}, "
+             f"wygasłe {s['expired']}, zamknięte {c['n']})"]
+    if c['n']:
+        lines.append(f"Wynik: śr. {c['mean_r']}R, WR {c['win_rate']}, suma {c['total_r']}R")
+        for verdict, b in s['by_verdict'].items():
+            if b['n']:
+                lines.append(f"  {VERDICT_ICON[verdict]} {verdict}: {b['n']} szt., śr. {b['mean_r']}R")
+    for idea in TradeIdea.objects.all()[:5]:
+        r = f"{idea.net_r:+.2f}R" if idea.net_r is not None else idea.state
+        lines.append(f"#{idea.pk} {idea.symbol} {idea.direction} {VERDICT_ICON[idea.verdict]} → {r}")
+    lines.append('Wnioski dopiero po ~30 zamkniętych pomysłach.')
+    return '\n'.join(lines)
+
+
 COMMANDS = {
     '/start': lambda _a: HELP, '/help': lambda _a: HELP,
     '/status': cmd_status, '/scan': cmd_scan, '/raport': cmd_report,
-    '/koszt': cmd_cost, '/paper': cmd_paper, '/pauza': cmd_pause, '/stop': cmd_stop, '/wznow': cmd_resume,
+    '/koszt': cmd_cost, '/paper': cmd_paper, '/ocen': cmd_assess, '/dziennik': cmd_journal, '/pauza': cmd_pause, '/stop': cmd_stop, '/wznow': cmd_resume,
 }
 
 

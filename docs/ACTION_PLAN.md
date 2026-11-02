@@ -39,7 +39,16 @@ Aktualny opis strategii i architektury do przekazania dalej:
      nie zawiera archiwalnego executed-flow/absorption.
    - Następny niezależny eksperyment: H2 session expansion. Potem właściwy H3
      range failed auction z flow; nie stroić H1 ani double-sweep na tej historii.
-10. `ALT_BREADTH_BINANCE` z historycznym składem koszyka; test, czy poprawia Book A.
+   - S120 Entry Lab zamknął ostatnią uzasadnioną próbę ratowania S20 OB+OI:
+     MARKET_TOUCH, SWEEP_RECLAIM, MSS_BREAK i MSS_RETEST wybrane wyłącznie na
+     wcześniejszych foldach. Oba foldy wybrały CASH. Połączony stress OOS:
+     MARKET −$16,53/127 filli, MSS −$5,86/58, retest −$5,45/45; sweep +$0,39,
+     ale tylko 8 filli, przeciwny znak foldów i bootstrap lower −0,884R.
+     Brak Stage B stop/TP dla S20 — wejście nie przeszło bramki.
+10. ✅ S119 PIT universe sprawdził Book A na ETH + kwartalnym top-20 altów:
+    stress +$15,46 / +0,0154 dziennie i dodatni każdy rok, ale Sharpe 0,32,
+    tylko 24,2% dodatnich miesięcy i month-block lower −$0,0284/dzień.
+    **REJECTED**; stałe hindsight-5 nie może być traktowane jako dowód edge.
 11. Rejestr hipotez z budżetem (1–2/mies.) i Deflated Sharpe w każdym raporcie.
 12. ✅ Codzienny paper-forward z CLI i pętli ingestera; pierwszy ledger: 2026-10-27, 1 dzień, `INSUFFICIENT`, $0,00. Composite Book A+B nie może być promowany, dopóki Book B łamie limit 0,5% ryzyka.
 13. ✅ S114 zamknięty na pełnym point-in-time universe 48/48: STRICT, EXTERNAL i ABSORB_CVD `REJECTED`; bez kolejnych retrospektywnych wariantów tej rodziny.

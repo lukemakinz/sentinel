@@ -154,6 +154,21 @@ economics gate, change a stop, invent a target or promote a policy.
 - H2 session expansion is next. The contracted H3 range failed auction remains
   a separate future test and must include flow/absorption as specified above.
 
+### Update — 2026-11-02
+
+S120 tested whether the closest-to-breakeven historical intraday family, S20
+OB+OI, was being entered at the wrong moment. Four preregistered policies used
+the identical parent candidates, structural stops, sizing and patient runner:
+market on touch, touch-bar liquidity sweep/reclaim, later 5m MSS break, and a
+post-MSS limit retest. Selection was stress-cost expanding walk-forward.
+
+Neither training fold qualified any policy, so both selected cash. Combined
+disjoint stress OOS results were: market −0.350R/trade (127 fills), MSS break
+−0.205R (58), MSS retest −0.243R (45). Sweep/reclaim was +0.098R but only eight
+fills, changed sign between folds, and had a Bonferroni-corrected day-bootstrap
+lower bound of −0.884R. S20 is therefore closed; stop/TP tuning is not allowed
+to rescue it. H2 session expansion remains the next independent mechanism.
+
 ## Wymienny silnik strategii
 
 Każde H1/H2/H3 jest osobnym, wersjonowanym pluginem, a nie kolejną gałęzią
